@@ -178,8 +178,8 @@ npm run dev
 ```bash
 NEXTAUTH_SECRET="IfBvEpoXetsQVqiCAwOTxkdJNSlzYcgm"
 NEXTAUTH_URL="https://referenciales.cl"
-GOOGLE_CLIENT_ID="110126794045-9m5e7o7ksvro2kugkbn9po897cu4rkjh.apps.googleusercontent.com"
-GOOGLE_CLIENT_SECRET="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"
+GOOGLE_CLIENT_ID="[TU_GOOGLE_CLIENT_ID]"
+GOOGLE_CLIENT_SECRET="[TU_GOOGLE_CLIENT_SECRET]"
 NEXTAUTH_DEBUG="false"
 ```
 
