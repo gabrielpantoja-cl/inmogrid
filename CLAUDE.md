@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**IMPORTANT**: Nexus Core is an open data initiative that democratizes access to real estate information in Chile. We believe that property transaction data, being of public origin (Conservador de Bienes Raíces), should remain accessible to the entire community. Our platform uses modern technology and free software principles to ensure that this vital information is not concentrated in the hands of a few, but serves the informed development of the Chilean real estate market and the exercise of citizen rights.
+**IMPORTANT**: degux is an open data initiative that democratizes access to real estate information in Chile. We believe that property transaction data, being of public origin (Conservador de Bienes Raíces), should remain accessible to the entire community. Our platform uses modern technology and free software principles to ensure that this vital information is not concentrated in the hands of a few, but serves the informed development of the Chilean real estate market and the exercise of citizen rights.
 
-**Nexus Core - Ecosistema Digital Colaborativo** is a comprehensive Next.js 15 platform for the Chilean real estate ecosystem. It features:
+**degux - Ecosistema Digital Colaborativo** is a comprehensive Next.js 15 platform for the Chilean real estate ecosystem. It features:
 
 - **Public API**: Unauthenticated endpoints for external integrations (geospatial data, market statistics)
 - **User Profiles**: Professional profiles with bio, profession, company, networking capabilities
@@ -59,7 +59,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Kanban sales pipeline
 - Performance reports
 
-**Full details**: See `docs/01-introduccion/Plan_Trabajo_Ecosistema_Digital_V3.md`
+**Full details**: See `docs/01-introduccion/Plan_Trabajo_Ecosistema_Digital_V4.md`
 
 ## Development Commands
 
@@ -123,15 +123,15 @@ VPS Digital Ocean (VPS_IP_REDACTED)
 │  ├─ N8N Web (Port 5678)
 │  ├─ N8N PostgreSQL (Port 5432)
 │  └─ N8N Redis
-├─ Nexus Core Stack
-│  ├─ Nexus DB PostgreSQL (Port 5433) ← DEDICATED
-│  └─ Nexus App (Port 3000) - To deploy
+├─ degux Stack
+│  ├─ degux DB PostgreSQL (Port 5433) ← DEDICATED
+│  └─ degux App (Port 3000) - To deploy
 └─ Portainer (Port 9443) - Docker management
 ```
 
 **Database Isolation:**
 - **Port 5432**: N8N database (workflows, scrapers) - ISOLATED
-- **Port 5433**: Nexus Core database (app data) - DEDICATED
+- **Port 5433**: degux database (app data) - DEDICATED
 - No cross-database dependencies for failure isolation
 
 ### Directory Structure (src/)
@@ -224,10 +224,10 @@ import { authOptions } from '../../../lib/auth.config'
 **Database Connection:**
 ```env
 # Local development (if using local PostgreSQL)
-POSTGRES_PRISMA_URL="postgresql://user:pass@localhost:5432/nexus_dev?schema=public"
+POSTGRES_PRISMA_URL="postgresql://user:pass@localhost:5432/degux_dev?schema=public"
 
 # VPS PostgreSQL dedicated (production/staging)
-POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@VPS_IP_REDACTED:5433/nexus_core?schema=public&sslmode=require"
+POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5433/degux_core?schema=public&sslmode=require"
 ```
 
 **Migration Guidelines:**
@@ -338,12 +338,12 @@ For detailed documentation, see `docs/ADVANCED_STATISTICS_MODULE_GUIDE.md`
 ### Required Variables
 ```env
 # Database (VPS PostgreSQL dedicated)
-POSTGRES_PRISMA_URL=postgresql://nexus_user:PASSWORD@VPS_IP_REDACTED:5433/nexus_core?schema=public&sslmode=require
+POSTGRES_PRISMA_URL=postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5433/degux_core?schema=public&sslmode=require
 
 # NextAuth.js (Google OAuth)
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-NEXTAUTH_URL=https://referenciales.cl
+NEXTAUTH_URL=https://degux.cl
 NEXTAUTH_SECRET=your_secure_random_secret  # min 32 chars
 
 # Google Maps API (Geocoding)
@@ -356,11 +356,11 @@ N8N_WEBHOOK_SECRET=your_webhook_secret
 
 ### Google OAuth Setup
 - Authorized redirect URIs must include:
-  - `https://referenciales.cl/api/auth/callback/google`
+  - `https://degux.cl/api/auth/callback/google`
   - `http://localhost:3000/api/auth/callback/google`
 
 ### Google Maps API Restrictions
-- Restrict to specific domains: `referenciales.cl`, `localhost`
+- Restrict to specific domains: `degux.cl`, `localhost`
 - Restrict to Geocoding API only
 - Set daily quota limits
 
@@ -368,7 +368,7 @@ N8N_WEBHOOK_SECRET=your_webhook_secret
 
 This project uses 7 specialized Claude Code agents for development:
 
-1. **nexus-core-orchestrator**: Master coordinator for multi-agent workflows
+1. **degux-orchestrator**: Master coordinator for multi-agent workflows
 2. **api-developer-agent**: RESTful API design and implementation
 3. **database-manager-agent**: PostgreSQL dedicated management, RLS policies
 4. **data-ingestion-agent**: N8N workflows and Chilean data validation
@@ -396,7 +396,7 @@ npm run prisma:reset
 
 # Check VPS PostgreSQL dedicated (port 5433)
 # SSH to VPS and run:
-docker exec nexus-db psql -U nexus_user -d nexus_core -c "\dt"
+docker exec degux-db psql -U degux_user -d degux_core -c "\dt"
 ```
 
 ### Build/Type Errors
@@ -445,8 +445,8 @@ npm run dev
 # Check all Docker containers
 docker ps
 
-# Check Nexus Core database
-docker exec nexus-db psql -U nexus_user -d nexus_core -c "SELECT version();"
+# Check degux database
+docker exec degux-db psql -U degux_user -d degux_core -c "SELECT version();"
 
 # Check N8N
 docker logs n8n
@@ -457,9 +457,9 @@ sudo systemctl status nginx
 ```
 
 ### Backup Strategy
-- **PostgreSQL Nexus Core**: Automated daily backups at 3 AM
+- **PostgreSQL degux**: Automated daily backups at 3 AM
 - **Retention**: 7 daily, 4 weekly, 6 monthly
-- **Location**: `/home/gabriel/vps-do/nexus-core/backups/`
+- **Location**: `/home/gabriel/vps-do/degux/backups/`
 - **Restore**: See `InfrastructureAgent.md` for procedures
 
 **Infrastructure Agent**: Use `infrastructure-agent` for VPS management tasks
@@ -486,7 +486,7 @@ sudo systemctl status nginx
 ## References
 
 ### Documentation
-- **Project Plan**: `docs/01-introduccion/Plan_Trabajo_Ecosistema_Digital_V3.md` - Complete development roadmap
+- **Project Plan**: `docs/01-introduccion/Plan_Trabajo_Ecosistema_Digital_V4.md` - Complete development roadmap
 - **README**: `README.md` - Project overview and setup instructions
 - **Authentication**: `docs/AUTHENTICATION_GUIDE.md` - Auth debugging guide
 - **Public API**: `docs/PUBLIC_API_GUIDE.md` - API integration guide
@@ -495,7 +495,7 @@ sudo systemctl status nginx
 - **Database Schema**: `docs/DATABASE_SCHEMA_GUIDE.md` - Schema structure
 
 ### Specialized Agents
-- **Orchestrator**: `.claude/agents/nexus-core-orchestrator.md`
+- **Orchestrator**: `.claude/agents/degux-orchestrator.md`
 - **API Development**: `.claude/agents/APIDeveloperAgent.md`
 - **Database Management**: `.claude/agents/DatabaseManagerAgent.md`
 - **Data Ingestion**: `.claude/agents/DataIngestionAgent.md`
@@ -505,8 +505,8 @@ sudo systemctl status nginx
 
 ### VPS Documentation
 - **Infrastructure Docs**: `vps-do-docs/` directory
-- **Docker Compose**: `/home/gabriel/vps-do/nexus-core/docker-compose.yml` (on VPS)
-- **Nginx Config**: `/etc/nginx/sites-available/referenciales.cl` (on VPS)
+- **Docker Compose**: `/home/gabriel/vps-do/degux/docker-compose.yml` (on VPS)
+- **Nginx Config**: `/etc/nginx/sites-available/degux.cl` (on VPS)
 
 ### External Resources
 - **Prisma Docs**: https://www.prisma.io/docs
