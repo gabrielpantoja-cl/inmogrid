@@ -1,10 +1,17 @@
-# Plan de Trabajo: P&P Technologies - Ecosistema Digital Colaborativo V4.0
+# Plan de Trabajo: P&P Technologies - Ecosistema Digital Colaborativo V4.1
 
 **Fecha:** 01 de Octubre, 2025
 **Autores:** Gabriel & Mona
-**Versión:** 4.0 - Integración de Investigación de Mercado (Gemini Deep Research)
+**Versión:** 4.1 - Modelo Sin Suscripciones + Monetización de Blog
 **Proyecto:** Nexus Core (P&P Technologies / Pantoja & Partners)
 **Repositorio:** https://github.com/gabrielpantoja-cl/new-project-nexus-core
+
+**Changelog V4.1:**
+- ✅ Eliminación total de planes de suscripción recurrentes
+- ✅ Capa 2: Licencias perpetuas + soporte on-demand
+- ✅ Capa 4: Sistema de créditos prepago (sin expiración)
+- ✅ Capa 5 (NUEVA): Blog y contenido premium con sponsorships
+- ✅ Proyección de revenue actualizada: $10-14M CLP/mes (18 meses)
 
 ---
 
@@ -643,12 +650,12 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 
 ---
 
-### 🔜 Fase 3: Blog y Centro de Datos (Nov-Dic 2025)
-**Duración:** 2 semanas
-**Prioridad:** MEDIA
-**Objetivo:** SEO y educación
+### 🔜 Fase 3: Blog, Centro de Datos y Monetización de Contenido (Nov-Dic 2025)
+**Duración:** 3-4 semanas
+**Prioridad:** ALTA (Revenue stream clave)
+**Objetivo:** SEO, educación y generación de ingresos
 
-#### Funcionalidades:
+#### Funcionalidades Core:
 
 **Blog Sistema:**
 - [ ] Modelo BlogPost con MDX support
@@ -656,6 +663,7 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 - [ ] Sistema de tags y categorías
 - [ ] SEO metadata por post
 - [ ] Sitemap automático
+- [ ] Sistema de comentarios (Disqus o custom)
 
 **Data Stories:**
 - [ ] Integración con datos de referenciales
@@ -663,10 +671,79 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 - [ ] Reportes de mercado automatizados (N8N)
 - [ ] Export a PDF de análisis
 
-**Contenido Inicial:**
-- [ ] 10 posts educativos base
-- [ ] 3 data stories sobre mercado Los Ríos
+**Contenido Inicial Gratuito:**
+- [ ] 15 posts educativos base
+- [ ] 5 data stories sobre mercado Los Ríos
 - [ ] Guía completa de tasaciones MOP
+- [ ] Serie "Introducción al Mercado Inmobiliario" (5 capítulos)
+
+#### Funcionalidades de Monetización (NUEVO):
+
+**Sistema de Contenido Premium:**
+- [ ] Modelo ContentProduct (eBooks, webinars, reportes)
+- [ ] Integración con Flow o Transbank para pagos
+- [ ] Sistema de descargas protegidas (PDF con watermark)
+- [ ] Acceso temporal a contenido premium (links con expiración)
+
+**eBooks y Guías:**
+- [ ] Editor MDX to PDF (automático)
+- [ ] Templates profesionales para eBooks
+- [ ] Sistema de preventa (early access con descuento)
+- [ ] 3 eBooks iniciales:
+  - "Guía Completa de Tasaciones MOP"
+  - "Manual del Corredor Moderno"
+  - "Inversión en Parcelas de Agrado"
+
+**Webinars y Masterclasses:**
+- [ ] Integración con Zoom o Google Meet
+- [ ] Sistema de registro y pagos
+- [ ] Grabaciones protegidas (streaming con DRM básico)
+- [ ] Certificados de asistencia automatizados
+
+**Newsletter System:**
+- [ ] Modelo Newsletter + Subscriber
+- [ ] Integración con N8N para envío masivo
+- [ ] Sistema de sponsors en newsletter
+- [ ] Templates HTML responsivos
+- [ ] Analytics de apertura y clicks
+
+**Sistema de Sponsorships:**
+- [ ] Panel de administración de sponsors
+- [ ] Gestión de contratos y renovaciones
+- [ ] Placement automático de logos/menciones
+- [ ] Reportes de métricas para sponsors (views, clicks)
+
+**Lead Generation:**
+- [ ] Formularios de contacto especializados
+- [ ] CTA estratégicos en posts (tasaciones, estudios custom)
+- [ ] Sistema de scoring de leads
+- [ ] Integración con N8N para follow-up automático
+
+#### Integraciones:
+
+**Pagos:**
+- [ ] Flow API para Chile (eBooks, webinars)
+- [ ] Webhooks para confirmación de pagos
+- [ ] Panel de ventas y reportes
+
+**Analytics:**
+- [ ] Google Analytics 4
+- [ ] Heatmaps (Hotjar o similar)
+- [ ] Conversión tracking (free to paid)
+
+**Marketing:**
+- [ ] Meta Pixel (Facebook/Instagram ads)
+- [ ] LinkedIn Insight Tag
+- [ ] Email marketing (Mailchimp o Brevo)
+
+#### Métricas de Éxito:
+
+**6 meses post-lanzamiento:**
+- [ ] 10,000+ suscriptores newsletter
+- [ ] 50,000+ pageviews/mes
+- [ ] 20+ ventas de contenido premium/mes
+- [ ] 2-3 sponsors activos
+- [ ] $1.5M+ CLP/mes en revenue del blog
 
 ---
 
@@ -744,11 +821,11 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 
 ---
 
-## 💰 Modelo de Monetización Multicapa (ACTUALIZADO V4)
+## 💰 Modelo de Monetización Multicapa SIN SUSCRIPCIONES (ACTUALIZADO V4)
 
-**Filosofía Central**: El core del MLS debe ser **gratuito y open source** para lograr adopción masiva y convertirse en el estándar de facto. Monetización a través de servicios de valor agregado construidos sobre la infraestructura gratuita.
+**Filosofía Central**: El core del MLS debe ser **gratuito y open source** para lograr adopción masiva y convertirse en el estándar de facto. Monetización a través de servicios de valor agregado construidos sobre la infraestructura gratuita, **sin planes de suscripción recurrentes**.
 
-### Estrategia de 4 Capas (Validada por Investigación)
+### Estrategia de 5 Capas (Validada por Investigación)
 
 #### **Capa 1: Plataforma Central - MLS Abierto** 🆓
 **Estado**: GRATUITO Y OPEN SOURCE (NO NEGOCIABLE)
@@ -770,7 +847,7 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 
 ---
 
-#### **Capa 2: Servicios Empresariales Premium** 💼
+#### **Capa 2: Servicios Empresariales Premium (Pay-per-Use)** 💼
 **Target**: Grandes corredoras (Fuenzalida, Engel & Völkers, Procasa)
 
 **Servicios:**
@@ -782,9 +859,20 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 - Capacitación personalizada de equipos
 - Integraciones custom con sistemas legacy
 
-**Modelo de Ingresos:**
-- **Tier Enterprise**: $200.000-500.000 CLP/mes
-- **Tier Corporate**: $500.000-1.000.000 CLP/mes
+**Modelo de Ingresos (SIN SUSCRIPCIONES):**
+- **Licencia Perpetua Enterprise**: $2.500.000-5.000.000 CLP (pago único)
+  - Incluye: Acceso de por vida, updates de seguridad
+  - No incluye: Soporte técnico (se cobra aparte)
+
+- **Paquetes de Soporte (on-demand)**:
+  - Support Básico: $50.000 CLP/ticket
+  - Support Prioritario: $150.000 CLP/ticket con SLA 4h
+  - Capacitación: $300.000 CLP/sesión (hasta 20 personas)
+
+- **Servicios de Integración**:
+  - Integración custom: $800.000-2.500.000 CLP (proyecto único)
+  - White-labeling setup: $1.500.000 CLP (una vez)
+  - Despliegue on-premise: $2.000.000 CLP (setup) + hosting propio
 
 **Timeline:** Fase 2-3 (Q4 2025 - Q1 2026)
 
@@ -802,16 +890,17 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 - Inspecciones técnicas
 - Gestión de documentación CBR/SII
 
-**Modelo de Ingresos:**
-- Comisión del 10-15% por transacción
-- Fee de verificación/certificación de proveedores
-- Featured placement para proveedores premium
+**Modelo de Ingresos (Comisión por Éxito):**
+- Comisión del 12-18% por transacción completada
+- Fee de verificación de proveedores: $80.000 CLP (anual, por proveedor)
+- Featured placement: $150.000 CLP/mes por categoría
+- Boost de visibilidad puntual: $30.000 CLP/semana
 
 **Timeline:** Fase 3-4 (Q1-Q2 2026)
 
 ---
 
-#### **Capa 4: Inteligencia de Mercado y Datos** 📊
+#### **Capa 4: Inteligencia de Mercado y Datos (Pay-per-Query)** 📊
 **Target**: Clientes institucionales (bancos, desarrolladores, fondos, gobierno)
 
 **Productos de Datos:**
@@ -827,12 +916,81 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 - Sin información personal identificable
 - Agregación mínima por zona geográfica
 
-**Modelo de Ingresos:**
-- **Reportes estándar**: $100.000-300.000 CLP c/u
-- **Suscripción Data API**: $500.000-2.000.000 CLP/mes
-- **Estudios custom**: $3.000.000-10.000.000 CLP
+**Modelo de Ingresos (SIN SUSCRIPCIONES):**
+
+**Paquetes de Créditos Prepago (sin expiración):**
+- Paquete Starter: $200.000 CLP = 1,000 créditos
+- Paquete Professional: $800.000 CLP = 5,000 créditos (+25% bonus)
+- Paquete Enterprise: $3.000.000 CLP = 25,000 créditos (+50% bonus)
+
+**Consumo de Créditos por Acción:**
+- Query API básica (1 propiedad): 1 crédito
+- Query API avanzada (geoespacial): 5 créditos
+- Reporte estándar (PDF): 100-300 créditos
+- Dataset completo regional: 1,000 créditos
+- Estudio custom: 3,000-10,000 créditos (proyecto)
+
+**Reportes Individuales (Pago Único):**
+- Reporte de Mercado Comunal: $120.000 CLP
+- Análisis de Valorización Sectorial: $250.000 CLP
+- Benchmarking de Corredores: $180.000 CLP
+- Estudios de mercado custom: $3.500.000-12.000.000 CLP
 
 **Timeline:** Fase 4-5 (Q2-Q3 2026)
+
+---
+
+#### **Capa 5: Blog y Contenido Premium (NUEVA)** 📝
+**Target**: Profesionales del sector, inversionistas, público general
+
+**Contenido Gratuito (Lead Generation):**
+- Artículos educativos sobre mercado inmobiliario
+- Data stories con visualizaciones interactivas
+- Análisis de tendencias regionales mensuales
+- Guías básicas de tasación y legal
+- Noticias del sector
+
+**Contenido Premium (Pago Único):**
+- **eBooks y Guías Profesionales**:
+  - "Guía Completa de Tasaciones MOP": $25.000 CLP
+  - "Manual del Corredor Moderno": $35.000 CLP
+  - "Inversión en Parcelas de Agrado": $30.000 CLP
+
+- **Webinars y Masterclasses**:
+  - Webinar grabado: $15.000 CLP/acceso
+  - Masterclass en vivo: $45.000 CLP/persona
+  - Paquete 5 webinars: $60.000 CLP (20% descuento)
+
+- **Reportes de Investigación Exclusivos**:
+  - Reporte Trimestral de Mercado Nacional: $80.000 CLP
+  - Análisis Deep Dive por Región: $120.000 CLP
+  - Pronósticos Anuales: $200.000 CLP
+
+**Modelo de Sponsorships (Ingresos Recurrentes Pasivos):**
+- **Sponsor de Newsletter Semanal**: $300.000 CLP/mes
+  - Mención en newsletter (10,000+ suscriptores proyectados)
+  - 1 artículo sponsor por mes
+
+- **Sponsor de Categoría de Blog**: $200.000 CLP/mes
+  - Logo en sección específica (ej: "Financiamiento")
+  - 2 artículos sponsor por mes
+
+- **Sponsor de Data Story**: $150.000 CLP/publicación
+  - Co-branding en visualización interactiva
+  - Mención en redes sociales
+
+**Lead Generation para Revenue Streams Principales:**
+- CTA a servicios de tasación (conversión a clientes)
+- Formularios de contacto para estudios custom
+- Afiliados a servicios del marketplace (comisión 5-10%)
+
+**Timeline:** Fase 3 (Nov-Dic 2025)
+
+**Proyección de Ingresos (6 meses post-lanzamiento):**
+- Contenido Premium: $400.000-800.000 CLP/mes
+- Sponsorships: $600.000-1.200.000 CLP/mes
+- Lead Generation (conversiones): $300.000-600.000 CLP/mes
+- **Total Capa Blog**: $1.300.000-2.600.000 CLP/mes
 
 ---
 
@@ -850,21 +1008,48 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 
 ---
 
-### Proyección de Revenue Streams (18 meses)
+### Proyección de Revenue Streams SIN SUSCRIPCIONES (18 meses)
 
-| Trimestre | Capa 1 (MLS Core) | Capa 2 (Enterprise) | Capa 3 (Marketplace) | Capa 4 (Datos) | Total Nuevo |
-|-----------|-------------------|---------------------|----------------------|----------------|-------------|
-| Q4 2025 | $0 | $0 | $0 | $0 | $0 |
-| Q1 2026 | $0 | $0 | $0 | $0 | $0 |
-| Q2 2026 | $0 | $500K CLP | $200K CLP | $0 | $700K CLP |
-| Q3 2026 | $0 | $1.5M CLP | $600K CLP | $500K CLP | $2.6M CLP |
-| Q4 2026 | $0 | $3M CLP | $1.2M CLP | $1.5M CLP | $5.7M CLP |
+| Trimestre | Capa 1 (MLS) | Capa 2 (Enterprise) | Capa 3 (Marketplace) | Capa 4 (Datos) | Capa 5 (Blog) | Total Nuevo |
+|-----------|--------------|---------------------|----------------------|----------------|---------------|-------------|
+| Q4 2025 | $0 | $0 | $0 | $0 | $0 | $0 |
+| Q1 2026 | $0 | $500K CLP¹ | $0 | $0 | $800K CLP² | $1.3M CLP |
+| Q2 2026 | $0 | $1.2M CLP | $400K CLP | $600K CLP | $1.5M CLP | $3.7M CLP |
+| Q3 2026 | $0 | $800K CLP³ | $1.2M CLP | $1.8M CLP | $2.0M CLP | $5.8M CLP |
+| Q4 2026 | $0 | $1.5M CLP | $2.5M CLP | $3.2M CLP | $2.4M CLP | $9.6M CLP |
 
-**Objetivo conservador 12 meses**: $2-3M CLP/mes en nuevos revenue streams
-**Objetivo conservador 18 meses**: $5-7M CLP/mes en nuevos revenue streams
+**Notas:**
+- ¹ Q1: 1 licencia perpetua vendida ($2.5M one-time) prorrateado
+- ² Q1: Lanzamiento blog + primeros sponsors
+- ³ Variación natural (pagos únicos no recurrentes)
+
+**Modelo de Ingresos por Capa:**
+- **Capa 2**: Pagos únicos (licencias, integraciones, soporte on-demand)
+- **Capa 3**: Comisiones por transacción + fees anuales de verificación
+- **Capa 4**: Créditos prepago + reportes individuales
+- **Capa 5**: Contenido premium + sponsorships (único ingreso mensual recurrente, pero pasivo)
+
+**Ventajas del Modelo Sin Suscripciones:**
+- ✅ Menor fricción de adopción (sin compromiso mensual)
+- ✅ Pagos únicos más altos por cliente
+- ✅ Ingresos más estables vía comisiones (Capa 3)
+- ✅ Alineación de incentivos (éxito del cliente = nuestro éxito)
+- ✅ Diferenciación clara vs. competencia (KiteProp, Wasi)
+
+**Objetivo conservador 12 meses**: $3-4M CLP/mes en nuevos revenue streams
+**Objetivo conservador 18 meses**: $8-10M CLP/mes en nuevos revenue streams
 
 **Revenue base actual (tasaciones)**: ~$2-4M CLP/mes (mantener)
-**Revenue total proyectado (18 meses)**: ~$7-11M CLP/mes
+**Revenue total proyectado (18 meses)**: ~$10-14M CLP/mes
+
+**Proyección de Costos de Infraestructura:**
+- VPS Digital Ocean: $50 USD/mes (~$45.000 CLP)
+- Cloudflare/CDN: $20 USD/mes (~$18.000 CLP)
+- Almacenamiento imágenes: $30 USD/mes (~$27.000 CLP)
+- APIs externas (geocoding): $50 USD/mes (~$45.000 CLP)
+- **Total infraestructura**: ~$135.000 CLP/mes
+
+**Break-even**: Alcanzable en Q1 2026 con blog + primera venta enterprise
 
 ---
 
@@ -1209,9 +1394,9 @@ Trigger (diario) →
 
 ---
 
-## 📋 Resumen de Cambios V3 → V4
+## 📋 Resumen de Cambios V3 → V4 → V4.1
 
-### Cambios Estratégicos Fundamentales:
+### Cambios Estratégicos Fundamentales (V3 → V4):
 
 1. **Visión Ampliada**: De "PropTech regional" a "InfraTech del mercado inmobiliario chileno"
    - Concepto clave: "El GitHub del Sector Inmobiliario"
@@ -1221,11 +1406,12 @@ Trigger (diario) →
    - Nuevos modelos: MLSListing, CollaborationRequest
    - Nuevas APIs: Colaboración, ofertas de comisión
 
-3. **Modelo de Monetización Multicapa**: De "freemium genérico" a estrategia de 4 capas clara
+3. **Modelo de Monetización Multicapa**: De "freemium genérico" a estrategia de 5 capas clara
    - Capa 1: MLS Core (gratuito, open source) - NO NEGOCIABLE
-   - Capa 2: Servicios Enterprise (grandes corredoras)
-   - Capa 3: Marketplace B2B (ecosistema)
-   - Capa 4: Inteligencia de Mercado (institucionales)
+   - Capa 2: Servicios Enterprise (pay-per-use, sin suscripciones)
+   - Capa 3: Marketplace B2B (comisiones)
+   - Capa 4: Inteligencia de Mercado (créditos prepago)
+   - Capa 5: Blog y Contenido Premium (NUEVA - sponsorships + contenido)
 
 4. **Nuevas Oportunidades Identificadas**:
    - Parcelas Rurales (Fase 3-4): "Zillow para el Chile Rural"
@@ -1267,6 +1453,77 @@ Trigger (diario) →
 
 ---
 
+### Cambios Críticos V4 → V4.1 (Modelo Sin Suscripciones):
+
+**Fecha:** 01 de Octubre, 2025 - Revisión del Modelo de Monetización
+
+**Cambios Fundamentales:**
+
+1. **Eliminación TOTAL de Planes de Suscripción**
+   - **Antes (V4)**: Suscripciones mensuales en Capa 2 y Capa 4
+   - **Ahora (V4.1)**: Modelo 100% sin suscripciones recurrentes
+
+2. **Capa 2 - Servicios Enterprise Rediseñados**
+   - Licencias perpetuas (pago único): $2.5M-5M CLP
+   - Soporte on-demand: $50K-150K CLP/ticket
+   - Integraciones custom: $800K-2.5M CLP (proyecto)
+   - **Ventaja**: Pago único más alto, sin fricción de renovaciones
+
+3. **Capa 4 - Datos con Sistema de Créditos Prepago**
+   - **Antes**: Suscripción API $500K-2M CLP/mes
+   - **Ahora**: Paquetes de créditos sin expiración
+     - Starter: $200K = 1,000 créditos
+     - Professional: $800K = 5,000 créditos (+25% bonus)
+     - Enterprise: $3M = 25,000 créditos (+50% bonus)
+   - Reportes individuales: $120K-250K CLP (pago único)
+
+4. **Capa 5 - Blog y Contenido Premium (NUEVA)**
+   - **Contenido Premium**: eBooks ($25K-35K CLP), webinars ($15K-45K CLP)
+   - **Sponsorships**: Newsletter ($300K/mes), categorías ($200K/mes)
+   - **Proyección**: $1.3M-2.6M CLP/mes en 6 meses
+   - **Único ingreso recurrente**: Sponsorships (pasivo, no suscripción de usuarios)
+
+5. **Fase 3 Expandida**
+   - **Duración**: 2 semanas → 3-4 semanas
+   - **Prioridad**: MEDIA → ALTA (revenue stream clave)
+   - **Nuevos entregables**: Sistema de pagos, newsletter, sponsorships, lead gen
+
+**Ventajas Estratégicas del Nuevo Modelo:**
+
+✅ **Menor Fricción de Adopción**
+- No hay compromisos mensuales que generen resistencia
+- Empresas pagan solo por lo que necesitan, cuando lo necesitan
+
+✅ **Mayor Valor por Transacción**
+- Licencias perpetuas: $2.5M-5M (vs $200K-1M mensual)
+- Pagos únicos más altos = mejor flujo de caja inicial
+
+✅ **Alineación de Incentivos**
+- Modelo de comisiones (Capa 3): ganamos cuando el cliente gana
+- Créditos prepago: cliente controla su inversión
+
+✅ **Diferenciación Clara vs. Competencia**
+- KiteProp/Wasi: suscripciones obligatorias
+- Nexus Core: pago por uso real, sin lock-in
+
+✅ **Sostenibilidad de Infraestructura**
+- Costos fijos: ~$135K CLP/mes
+- Break-even alcanzable en Q1 2026 con blog + 1 venta enterprise
+- Múltiples revenue streams independientes
+
+**Proyección Actualizada:**
+- **12 meses**: $3-4M CLP/mes (vs $2-3M anterior)
+- **18 meses**: $8-10M CLP/mes (vs $5-7M anterior)
+- **Total proyectado**: $10-14M CLP/mes (vs $7-11M anterior)
+
+**Próximos Pasos Inmediatos:**
+1. Validar pricing con 3-5 corredoras grandes (Fase 2)
+2. Diseñar sistema de créditos prepago (backend)
+3. Planificar contenido premium para blog (Q1 2026)
+4. Contactar potenciales sponsors (bancos, desarrolladores)
+
+---
+
 ## 📚 Referencias y Fuentes
 
 ### Documentación Interna:
@@ -1291,10 +1548,15 @@ Trigger (diario) →
 
 **Siguiente Revisión:** 07 de Octubre, 2025
 **Responsable Seguimiento:** Gabriel & Mona (alternando weekly)
-**Versión del Documento:** 4.0
+**Versión del Documento:** 4.1
 **Estado del Proyecto:** Fase 1 - 40% Completado
 
 ---
 
 *Documento viviente - actualizar conforme progresa el proyecto*
-*Última actualización: 01 de Octubre, 2025 - Integración Investigación Gemini Deep Research*
+
+**Historial de Versiones:**
+- **V4.1** (01 Oct 2025): Modelo sin suscripciones + monetización de blog
+- **V4.0** (01 Oct 2025): Integración investigación Gemini Deep Research
+- **V3.0** (30 Sep 2025): Arquitectura técnica completa y roadmap detallado
+- **V2.0** (Sep 2025): Primera versión con infraestructura VPS documentada
