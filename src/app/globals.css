@@ -5,8 +5,8 @@
 
 /* Variables CSS personalizadas */
 :root {
-  --primary: #00204A;
-  --primary-foreground: #ffffff;
+  --primary: #EFB810;
+  --primary-foreground: #424242;
   --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
   --background: #ffffff;
@@ -19,7 +19,7 @@
   --destructive-foreground: #fef2f2;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #00204A;
+  --ring: #EFB810;
   --radius: 0.5rem;
 }
 
@@ -302,9 +302,9 @@ img {
 }
 
 .gradient-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, #0369a1 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, #b4820b 100%);
 }
 
 .shadow-primary {
-  box-shadow: 0 4px 20px rgba(0, 32, 74, 0.15);
+  box-shadow: 0 4px 20px rgba(239, 184, 16, 0.15);
 }
