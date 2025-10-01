@@ -111,8 +111,8 @@ Recursos adicionales y compliance
 
 ### 👥 Equipo y Contacto
 - **Lead Developer:** Gabriel Pantoja
-- **Repositorio:** [GitHub](https://github.com/TheCuriousSloth/degux.cl)
-- **Issues:** [GitHub Issues](https://github.com/TheCuriousSloth/degux.cl/issues)
+- **Repositorio:** [GitHub](https://github.com/gabrielpantoja-cl/degux.cl)
+- **Issues:** [GitHub Issues](https://github.com/gabrielpantoja-cl/degux.cl/issues)
 - **WhatsApp:** +56 9 3176 9472
 
 ---
@@ -123,7 +123,7 @@ Recursos adicionales y compliance
 
 ```bash
 # 1. Clonar repositorio
-git clone https://github.com/TheCuriousSloth/degux.cl.git
+git clone https://github.com/gabrielpantoja-cl/degux.cl.git
 cd degux.cl
 
 # 2. Instalar dependencias
@@ -193,15 +193,15 @@ Acceder al módulo de estadísticas avanzadas:
 
 ### 🔗 Enlaces Importantes
 - **🌐 Aplicación:** [https://degux.cl](https://degux.cl)
-- **🔧 Dashboard:** [https://degux.cl/dashboard](https://degux.cl/dashboard)
+- **🔧 Dashboard:** [https://degux.cl/dashboard](https://degux.cl)
 - **📊 Estadísticas:** [https://degux.cl/dashboard/estadisticas](https://degux.cl/dashboard/estadisticas)
 - **🔌 API Docs:** [https://degux.cl/api/public/docs](https://degux.cl/api/public/docs)
-- **💾 GitHub:** [https://github.com/TheCuriousSloth/degux.cl](https://github.com/TheCurousSloth/degux.cl)
+- **💾 GitHub:** [https://github.com/gabrielpantoja-cl/degux.cl](https://github.com/gabrielpantoja-cl/degux.cl)
 
 ### 📞 Soporte
 - **📧 Email:** desarrollo@degux.cl
 - **💬 WhatsApp:** +56 9 3176 9472
-- **🐛 Issues:** [GitHub Issues](https://github.com/TheCuriousSloth/degux.cl/issues)
+- **🐛 Issues:** [GitHub Issues](https://github.com/gabrielpantoja-cl/degux.cl/issues)
 - **📖 Docs:** Esta documentación (siempre actualizada)
 
 ---
