@@ -59,7 +59,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Kanban sales pipeline
 - Performance reports
 
-**Full details**: See `Plan_Trabajo_Ecosistema_Digital_V3.md`
+**Full details**: See `docs/01-introduccion/Plan_Trabajo_Ecosistema_Digital_V3.md`
 
 ## Development Commands
 
@@ -486,7 +486,7 @@ sudo systemctl status nginx
 ## References
 
 ### Documentation
-- **Project Plan**: `Plan_Trabajo_Ecosistema_Digital_V3.md` - Complete development roadmap
+- **Project Plan**: `docs/01-introduccion/Plan_Trabajo_Ecosistema_Digital_V3.md` - Complete development roadmap
 - **README**: `README.md` - Project overview and setup instructions
 - **Authentication**: `docs/AUTHENTICATION_GUIDE.md` - Auth debugging guide
 - **Public API**: `docs/PUBLIC_API_GUIDE.md` - API integration guide

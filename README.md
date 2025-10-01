@@ -645,7 +645,7 @@ Si quieres integrar la API pública:
 ## 📚 Documentación Adicional
 
 ### Guías Técnicas
-- **[Plan de Trabajo V3](Plan_Trabajo_Ecosistema_Digital_V3.md)** - Roadmap completo
+- **[Plan de Trabajo V3](docs/01-introduccion/Plan_Trabajo_Ecosistema_Digital_V3.md)** - Roadmap completo
 - **[Guía de Autenticación](docs/GUIA-DEFINITIVA-AUTENTICACION.md)** - Debugging OAuth
 - **[Estadísticas Avanzadas](docs/ADVANCED_STATISTICS_MODULE_GUIDE.md)** - Módulo completo
 - **[Guía de Integración API](docs/integration-examples/integration-guide.md)** - Ejemplos externos
