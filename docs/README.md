@@ -1,10 +1,10 @@
-# 📚 Documentación Técnica - Referenciales.cl
+# 📚 Documentación Técnica - Degux.cl
 
 ## 🎯 Introducción
 
-Bienvenido a la documentación técnica completa de **Referenciales.cl**, la iniciativa de datos abiertos que democratiza el acceso a información inmobiliaria en Chile. Esta documentación está diseñada para desarrolladores, arquitectos de software y stakeholders técnicos que necesiten comprender, mantener y escalar el proyecto.
+Bienvenido a la documentación técnica completa de **Degux.cl**, una plataforma digital innovadora. Esta documentación está diseñada para desarrolladores, arquitectos de software y stakeholders técnicos que necesiten comprender, mantener y escalar el proyecto.
 
-> **¿Qué es Referenciales.cl?** Una plataforma colaborativa de datos abiertos que democratiza el acceso a información inmobiliaria en Chile. Creemos que los datos sobre transacciones de propiedades, siendo de origen público (Conservador de Bienes Raíces), deben permanecer accesibles para toda la comunidad, utilizando tecnología moderna y principios de software libre para garantizar que esta información vital sirva al desarrollo informado del mercado inmobiliario chileno y al ejercicio de derechos ciudadanos.
+> **¿Qué es Degux.cl?** Una plataforma web moderna construida con Next.js, diseñada para [DESCRIBIR EL PROPÓSITO PRINCIPAL AQUÍ]. Nuestra misión es utilizar tecnología de vanguardia y principios de software de código abierto para ofrecer una solución robusta y escalable.
 
 ---
 
@@ -16,7 +16,7 @@ Conceptos fundamentales y visión general del proyecto
 - **Arquitectura General** - Overview técnico de alto nivel
 - **Tecnologías** - Stack tecnológico y justificación
 
-### 💻 [02. Desarrollo](./02-desarrollo/)  
+### 💻 [02. Desarrollo](./02-desarrollo/)
 Guías para configurar y desarrollar en el proyecto
 - **[Guía de Desarrollo](./02-desarrollo/index.md)** - Setup completo y comandos esenciales
 - **Configuración de Entorno** - Variables y dependencias
@@ -111,8 +111,8 @@ Recursos adicionales y compliance
 
 ### 👥 Equipo y Contacto
 - **Lead Developer:** Gabriel Pantoja
-- **Repositorio:** [GitHub](https://github.com/TheCuriousSloth/referenciales.cl)
-- **Issues:** [GitHub Issues](https://github.com/TheCuriousSloth/referenciales.cl/issues)
+- **Repositorio:** [GitHub](https://github.com/TheCuriousSloth/degux.cl)
+- **Issues:** [GitHub Issues](https://github.com/TheCuriousSloth/degux.cl/issues)
 - **WhatsApp:** +56 9 3176 9472
 
 ---
@@ -123,8 +123,8 @@ Recursos adicionales y compliance
 
 ```bash
 # 1. Clonar repositorio
-git clone https://github.com/TheCuriousSloth/referenciales.cl.git
-cd referenciales.cl
+git clone https://github.com/TheCuriousSloth/degux.cl.git
+cd degux.cl
 
 # 2. Instalar dependencias
 npm install
@@ -145,7 +145,7 @@ npm run dev
 
 ```javascript
 // Ejemplo básico de uso de API pública
-const response = await fetch('https://referenciales.cl/api/public/map-data?comuna=santiago&limit=10');
+const response = await fetch('https://degux.cl/api/public/map-data?comuna=santiago&limit=10');
 const data = await response.json();
 
 if (data.success) {
@@ -159,9 +159,9 @@ if (data.success) {
 ### 📊 Para Analytics
 
 Acceder al módulo de estadísticas avanzadas:
-1. **Login:** [https://referenciales.cl/auth/signin](https://referenciales.cl/auth/signin)
-2. **Dashboard:** [https://referenciales.cl/dashboard](https://referenciales.cl/dashboard)
-3. **Estadísticas:** [https://referenciales.cl/dashboard/estadisticas](https://referenciales.cl/dashboard/estadisticas)
+1. **Login:** [https://degux.cl/auth/signin](https://degux.cl/auth/signin)
+2. **Dashboard:** [https://degux.cl/dashboard](https://degux.cl/dashboard)
+3. **Estadísticas:** [https://degux.cl/dashboard/estadisticas](https://degux.cl/dashboard/estadisticas)
 
 ---
 
@@ -192,16 +192,16 @@ Acceder al módulo de estadísticas avanzadas:
 ## ⚡ Accesos Rápidos
 
 ### 🔗 Enlaces Importantes
-- **🌐 Aplicación:** [https://referenciales.cl](https://referenciales.cl)
-- **🔧 Dashboard:** [https://referenciales.cl/dashboard](https://referenciales.cl/dashboard)
-- **📊 Estadísticas:** [https://referenciales.cl/dashboard/estadisticas](https://referenciales.cl/dashboard/estadisticas)
-- **🔌 API Docs:** [https://referenciales.cl/api/public/docs](https://referenciales.cl/api/public/docs)
-- **💾 GitHub:** [https://github.com/TheCuriousSloth/referenciales.cl](https://github.com/TheCuriousSloth/referenciales.cl)
+- **🌐 Aplicación:** [https://degux.cl](https://degux.cl)
+- **🔧 Dashboard:** [https://degux.cl/dashboard](https://degux.cl/dashboard)
+- **📊 Estadísticas:** [https://degux.cl/dashboard/estadisticas](https://degux.cl/dashboard/estadisticas)
+- **🔌 API Docs:** [https://degux.cl/api/public/docs](https://degux.cl/api/public/docs)
+- **💾 GitHub:** [https://github.com/TheCuriousSloth/degux.cl](https://github.com/TheCurousSloth/degux.cl)
 
 ### 📞 Soporte
-- **📧 Email:** desarrollo@referenciales.cl
-- **💬 WhatsApp:** +56 9 3176 9472  
-- **🐛 Issues:** [GitHub Issues](https://github.com/TheCuriousSloth/referenciales.cl/issues)
+- **📧 Email:** desarrollo@degux.cl
+- **💬 WhatsApp:** +56 9 3176 9472
+- **🐛 Issues:** [GitHub Issues](https://github.com/TheCuriousSloth/degux.cl/issues)
 - **📖 Docs:** Esta documentación (siempre actualizada)
 
 ---
@@ -232,8 +232,8 @@ Acceder al módulo de estadísticas avanzadas:
 
 **🏠 Hecho con ❤️ para el mercado inmobiliario chileno**
 
-*Última actualización: 28 de Agosto de 2025*  
-*Versión de la documentación: 2.0*  
+*Última actualización: 28 de Agosto de 2025*
+*Versión de la documentación: 2.0*
 *Estado: ✅ Completa y actualizada*
 
 </div>
