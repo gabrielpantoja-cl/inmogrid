@@ -1,23 +1,43 @@
-# Plan de Trabajo: P&P Technologies - Ecosistema Digital Colaborativo V3.0
+# Plan de Trabajo: P&P Technologies - Ecosistema Digital Colaborativo V4.0
 
-**Fecha:** 30 de Septiembre, 2025
+**Fecha:** 01 de Octubre, 2025
 **Autores:** Gabriel & Mona
-**Versión:** 3.0 - Actualización con Infraestructura Real
+**Versión:** 4.0 - Integración de Investigación de Mercado (Gemini Deep Research)
 **Proyecto:** Nexus Core (P&P Technologies / Pantoja & Partners)
 **Repositorio:** https://github.com/gabrielpantoja-cl/new-project-nexus-core
 
 ---
 
-## 🎯 Visión del Ecosistema Digital Colaborativo
+## 🎯 Visión del Ecosistema Digital Colaborativo (ACTUALIZADA)
 
-Transformar de **PropTech regional** a **InfraTech del Sur de Chile**: ser la infraestructura base de datos inmobiliarios para Valdivia, Los Ríos y zona sur, expandiendo gradualmente a nivel nacional.
+Transformar de **PropTech regional** a **InfraTech del mercado inmobiliario chileno**: construir la infraestructura colaborativa y de código abierto que democratice el acceso a datos inmobiliarios, comenzando por Los Ríos y expandiendo a nivel nacional.
 
-### Concepto Clave: **Ecosistema Digital Colaborativo**
+### Concepto Clave: **"El GitHub del Sector Inmobiliario Chileno"**
+
+Basados en investigación profunda del mercado (Gemini Deep Research - Oct 2025), validamos que el mercado chileno presenta tres brechas críticas de infraestructura:
+
+1. **Abismo de Colaboración**: Ausencia de un verdadero MLS (Multiple Listing Service) abierto
+2. **Frontera Rural**: Asimetría de información en parcelas de agrado
+3. **Nicho Experto**: Complejidad en tasaciones de expropiación
+
+### Pilares Estratégicos (Validados por Investigación)
+
 - **Plataforma abierta** donde usuarios suben datos y acceden a análisis gratuitos
 - **Crowdsourced data**: Los usuarios aportan datos, todos se benefician del conocimiento colectivo
-- **API-first**: Otros desarrolladores pueden construir encima de nuestra infraestructura
-- **Freemium radical**: Tasaciones gratuitas por sistema open source, monetización vía servicios enterprise
-- **Datos como activo**: `referenciales-cl` se convierte en la "Bloomberg del mercado inmobiliario del sur de Chile"
+- **API-first**: Otros desarrolladores pueden construir encima de nuestra infraestructura (integraciones con CRMs existentes como KiteProp, Wasi)
+- **Freemium radical**: Core gratuito y open source, monetización vía servicios de valor agregado
+- **MLS como estándar de facto**: Posicionar nuestro esquema de datos como el estándar de la industria
+- **Datos como activo**: `referenciales-cl` se convierte en la "Bloomberg del mercado inmobiliario chileno"
+
+### Diferenciador Clave vs Competencia
+
+**No somos otro portal inmobiliario**, somos **infraestructura colaborativa**:
+
+- **Vs. Portal Inmobiliario/Yapo**: Ellos venden visibilidad. Nosotros facilitamos colaboración entre corredores.
+- **Vs. KiteProp/Wasi**: Ellos son CRMs cerrados con "MLS" propietario. Nosotros somos protocolo abierto compatible con todos.
+- **Vs. Houm**: Ellos son verticales (arriendo/venta). Nosotros somos infraestructura horizontal.
+
+**Nuestra ventaja**: En un mercado con caída del 18% en ventas y desconfianza generalizada hacia corredores, una plataforma **gratuita, abierta y colaborativa** resuelve el problema estructural de fragmentación y crea efectos de red imposibles de replicar.
 
 ---
 
@@ -386,7 +406,80 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 
 ---
 
-## 🛠️ Roadmap Técnico del Ecosistema (ACTUALIZADO)
+## 🔍 Validación de Mercado y Oportunidades Estratégicas
+
+### Contexto Macroeconómico (Q1 2025)
+
+**Mercado en Contracción** - Paradójicamente, una oportunidad:
+- Ventas de viviendas cayeron 18% (Q1 2025)
+- Precios a la baja: -4.3% departamentos RM, -3.5% casas
+- Sobreoferta: 36 meses para agotar stock nacional
+- **Implicación**: Corredores buscan eficiencias operativas y reducir costos → **momento perfecto para adopción de herramientas gratuitas**
+
+**Ecosistema PropTech Maduro pero Fragmentado**:
+- Startups chilenas reconocidas en Latam (Houm, BReal, ComunidadFeliz)
+- 65% de inmobiliarias implementando transacciones digitales
+- **Brecha**: Innovaciones verticales, pero falta infraestructura colaborativa horizontal
+
+### Tres Oportunidades Estratégicas Identificadas
+
+#### 🥇 **Oportunidad 1: MLS Abierto (PRIORIDAD MÁXIMA)**
+**El Abismo de Colaboración**
+
+**Problema**: Chile no tiene un verdadero Multiple Listing Service (MLS)
+- KiteProp y Wasi ofrecen "MLS" cerrado solo para sus clientes
+- Corredores fragmentados en silos propietarios
+- Colaboración ineficiente y manual entre competidores
+- Larga cola de corredores independientes desatendidos
+
+**Solución**: "El GitHub del Sector Inmobiliario"
+- Base de datos de listados centralizada y gratuita
+- APIs abiertas para integración con cualquier CRM
+- Sistema de gobernanza y reputación de corredores
+- Esquema de datos estandarizado → estándar de facto de la industria
+
+**Por qué es la oportunidad #1**:
+- **Efectos de red**: Cada corredor aumenta valor para todos
+- **Máximo impacto**: Resuelve problema fundamental del mercado masivo
+- **Barrera de entrada**: Una vez lograda masa crítica, imposible de replicar
+- **Alineación**: Es infraestructura pura, no aplicación vertical
+
+#### 🥈 **Oportunidad 2: Parcelas Rurales (NICHO EXPANSIÓN)**
+**La Frontera Rural**
+
+**Problema**: Boom de parcelas de agrado con alta asimetría de información
+- Subdivisiones en zona gris legal (Artículo 55 LGUC)
+- Falta de servicios básicos (APR, electricidad, internet)
+- Problemas ambientales no supervisados
+- Fraude sobre condiciones legales
+
+**Solución**: "Zillow para el Chile Rural"
+- Motor de debida diligencia y verificación
+- Mapeo de acceso a servicios (APR, electricidad, fibra)
+- Verificación de permisos SAG y normativas CONAF
+- Marketplace de expertos locales verificados
+
+**Enfoque**: Fase 3-4, post-consolidación MLS urbano
+
+#### 🥉 **Oportunidad 3: Tasaciones Expropiación (NICHO EXPERTO)**
+**El Nicho Experto**
+
+**Problema**: Desequilibrio de poder en expropiaciones
+- Proceso complejo regido por DL 2.186
+- Estado con procesos estandarizados y expertos
+- Propietarios sin conocimiento para defender indemnización
+
+**Solución**: Herramienta de empoderamiento para propietarios
+- Navegador de procesos con alertas de plazos
+- Centro de datos de ventas comparables
+- Marketplace de peritos independientes
+- Gestión documental de caso
+
+**Enfoque**: Fase 5, nicho especializado de alto valor
+
+---
+
+## 🛠️ Roadmap Técnico del Ecosistema (ACTUALIZADO V4)
 
 ### ✅ Fase 0: Infraestructura Base (COMPLETADA)
 **Duración:** Agosto 2025
@@ -405,10 +498,12 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 
 ---
 
-### 🔄 Fase 1: Perfiles de Usuario (EN PROGRESO)
-**Duración:** Septiembre-Octubre 2025 (1-2 semanas)
-**Prioridad:** ALTA
-**Estado:** 🔄 50% Completado
+### 🔄 Fase 1: Perfiles + MLS Core (EN PROGRESO - AMPLIADA)
+**Duración:** Septiembre-Octubre 2025 (3-4 semanas)
+**Prioridad:** CRÍTICA
+**Estado:** 🔄 40% Completado
+
+**CAMBIO ESTRATÉGICO**: Integrar MLS abierto desde Fase 1, no como feature posterior
 
 #### ✅ Tareas Completadas:
 - [x] Diseño de modelos Prisma (User, Property, Connection)
@@ -424,9 +519,9 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 - [ ] Configurar backups automáticos (cron)
 - [ ] Actualizar connection string en proyecto local
 
-#### 🔜 Tareas Pendientes:
+#### 🔜 Tareas Pendientes (ACTUALIZADAS):
 
-**Backend (Gabriel):**
+**A. Backend - Perfiles (Gabriel):**
 - [ ] Crear API endpoints:
   - `GET /api/users/profile` - Obtener perfil actual
   - `PUT /api/users/profile` - Actualizar perfil
@@ -436,32 +531,79 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
   - `PUT /api/properties/[id]` - Editar propiedad
   - `DELETE /api/properties/[id]` - Eliminar propiedad
 
-**Frontend (Mona + Gabriel):**
+**B. Backend - MLS Core (Gabriel) - NUEVO:**
+- [ ] **API de Colaboración MLS:**
+  - `GET /api/mls/listings` - Listado completo MLS (filtrable)
+  - `POST /api/mls/listings` - Publicar en MLS
+  - `PUT /api/mls/listings/[id]` - Actualizar listado MLS
+  - `GET /api/mls/collaboration-offers` - Ver ofertas de comisión
+  - `POST /api/mls/collaboration-requests` - Solicitar colaboración
+  - `GET /api/mls/my-collaborations` - Mis colaboraciones activas
+
+- [ ] **Modelos Prisma MLS adicionales:**
+  ```prisma
+  MLSListing {
+    id, propertyId, ownerId
+    commissionOffer, commissionType (percentage, flat)
+    collaborationRules, status (open, in_collaboration, closed)
+    visibility (public, network, private)
+  }
+
+  CollaborationRequest {
+    id, listingId, requesterId, status
+    proposedTerms, message
+  }
+  ```
+
+**C. Frontend - Perfiles (Mona + Gabriel):**
 - [ ] Página `/dashboard/perfil` - Editar mi perfil
   - Formulario con bio, profesión, empresa, contacto
   - Upload de avatar
   - Toggle de perfil público/privado
+  - **Sección "Mi Reputación MLS"** (historial, calificaciones)
 
 - [ ] Página `/networking/[userId]` - Perfil público
   - Vista read-only del perfil
   - Listado de propiedades del usuario
   - Botón "Conectar"
+  - **Badge de reputación MLS** (transacciones completadas, rating)
 
-- [ ] Sección `/networking/mis-propiedades`
+**D. Frontend - MLS Hub (Mona + Gabriel) - NUEVO:**
+- [ ] Página `/mls` - Hub principal MLS
+  - Vista grid/lista de todos los listados MLS
+  - Filtros avanzados (región, tipo, rango precio, comisión)
+  - Indicador de "Ofertas de colaboración disponibles"
+  - Búsqueda por corredor/agencia
+
+- [ ] Página `/mls/[id]` - Detalle de listado MLS
+  - Info completa de propiedad
+  - Oferta de comisión del owner
+  - Botón "Solicitar colaboración"
+  - Historial de solicitudes (si eres owner)
+
+- [ ] Sección `/dashboard/mis-propiedades`
   - CRUD completo de propiedades
   - Upload de imágenes (múltiples)
   - Mapa para seleccionar ubicación
-  - Preview de cómo se ve en perfil público
+  - **Toggle "Publicar en MLS"** con config de comisión
+
+**E. Sistema de Reputación (Gabriel):**
+- [ ] Rating system post-transacción
+- [ ] Perfil público con badges y métricas
+- [ ] Sistema de reportes de mala conducta
 
 **Integración:**
-- [ ] Actualizar navegación del dashboard
-- [ ] Testing de flujo completo
-- [ ] Documentación de APIs
+- [ ] Actualizar navegación del dashboard (agregar "MLS Hub")
+- [ ] Testing de flujo completo (perfil + MLS + colaboración)
+- [ ] Documentación completa de APIs públicas MLS
 
-**Entregables:**
-- Sistema funcional de perfiles profesionales
-- Usuarios pueden publicar y gestionar propiedades
-- Perfiles públicos accesibles vía URL
+**Entregables Fase 1 (Ampliados):**
+- ✅ Sistema funcional de perfiles profesionales
+- ✅ Usuarios pueden publicar y gestionar propiedades
+- ✅ Perfiles públicos accesibles vía URL
+- 🆕 **MLS abierto operativo con colaboración entre corredores**
+- 🆕 **APIs públicas MLS documentadas para integraciones externas**
+- 🆕 **Sistema de reputación básico funcionando**
 
 ---
 
@@ -602,33 +744,127 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:PASSWORD@nexus-db:5432/nexus_core?s
 
 ---
 
-## 💰 Modelo de Monetización Bootstrap (Sin Funding)
+## 💰 Modelo de Monetización Multicapa (ACTUALIZADO V4)
 
-### ✅ Revenue Streams Actuales (Mantener)
+**Filosofía Central**: El core del MLS debe ser **gratuito y open source** para lograr adopción masiva y convertirse en el estándar de facto. Monetización a través de servicios de valor agregado construidos sobre la infraestructura gratuita.
+
+### Estrategia de 4 Capas (Validada por Investigación)
+
+#### **Capa 1: Plataforma Central - MLS Abierto** 🆓
+**Estado**: GRATUITO Y OPEN SOURCE (NO NEGOCIABLE)
+
+**Componentes:**
+- Base de datos de listados centralizada
+- APIs abiertas para integración
+- Interfaz web básica para corredores
+- Sistema de perfiles y reputación
+- Colaboración básica entre corredores
+
+**Objetivo Estratégico:**
+- Lograr dominio del mercado (>50% de listados nacionales)
+- Convertirse en hub central de datos inmobiliarios
+- Establecer esquema de datos como estándar de la industria
+- Crear efectos de red insuperables
+
+**Modelo de Ingresos:** $0 (Inversión en adquisición de mercado)
+
+---
+
+#### **Capa 2: Servicios Empresariales Premium** 💼
+**Target**: Grandes corredoras (Fuenzalida, Engel & Völkers, Procasa)
+
+**Servicios:**
+- Soporte técnico dedicado 24/7
+- Gestión avanzada de usuarios y permisos
+- Opciones de despliegue on-premise (datos sensibles)
+- White-labeling de la plataforma
+- SLA garantizado de uptime
+- Capacitación personalizada de equipos
+- Integraciones custom con sistemas legacy
+
+**Modelo de Ingresos:**
+- **Tier Enterprise**: $200.000-500.000 CLP/mes
+- **Tier Corporate**: $500.000-1.000.000 CLP/mes
+
+**Timeline:** Fase 2-3 (Q4 2025 - Q1 2026)
+
+---
+
+#### **Capa 3: Marketplace de Servicios B2B** 🛒
+**Target**: Todo el ecosistema (corredores, vendedores, compradores)
+
+**Servicios Curados:**
+- Fotografía profesional de propiedades
+- Tours virtuales 360° y videos drone
+- Servicios legales (contratos, due diligence)
+- Tasaciones certificadas (bancos/legal)
+- Home staging y mejoras pre-venta
+- Inspecciones técnicas
+- Gestión de documentación CBR/SII
+
+**Modelo de Ingresos:**
+- Comisión del 10-15% por transacción
+- Fee de verificación/certificación de proveedores
+- Featured placement para proveedores premium
+
+**Timeline:** Fase 3-4 (Q1-Q2 2026)
+
+---
+
+#### **Capa 4: Inteligencia de Mercado y Datos** 📊
+**Target**: Clientes institucionales (bancos, desarrolladores, fondos, gobierno)
+
+**Productos de Datos:**
+- Reportes de tendencias de precios por zona
+- Análisis de demanda y tiempo de venta
+- Predicciones de valorización de sectores
+- Benchmarking de desempeño de corredores
+- Datos de mercado en tiempo real (API)
+- Estudios de mercado customizados
+
+**Datos Agregados y Anonimizados:**
+- Cumplimiento total con Ley 19.628 (protección de datos)
+- Sin información personal identificable
+- Agregación mínima por zona geográfica
+
+**Modelo de Ingresos:**
+- **Reportes estándar**: $100.000-300.000 CLP c/u
+- **Suscripción Data API**: $500.000-2.000.000 CLP/mes
+- **Estudios custom**: $3.000.000-10.000.000 CLP
+
+**Timeline:** Fase 4-5 (Q2-Q3 2026)
+
+---
+
+### ✅ Revenue Streams Actuales (Mantener y Complementar)
+
+**Base Revenue (Conservadora):**
 1. **Tasaciones MOP** - Contratos gubernamentales de expropiación
 2. **Tasaciones privadas** - Clientes particulares y empresas
 3. **Corretaje tradicional** - Propiedades en venta
 
-### ✅ Nuevos Revenue Streams (Escalables)
+**Sinergias con Plataforma:**
+- Tasaciones MOP automatizadas parcialmente con datos de plataforma
+- Tasaciones privadas usando motor de valuación propio (datos crowdsourced)
+- Corretaje potenciado con MLS (mayor alcance)
 
-#### 1. **Freemium Tasaciones**
-- **Free:** Tasaciones básicas automáticas (contribuyendo datos)
-- **Pro:** Tasaciones certificadas para bancos/legal ($20.000-50.000 CLP)
-- **Enterprise:** API access para bancos/financieras
+---
 
-#### 2. **Suscripciones CRM** (Post Fase 5)
-- **Free:** Hasta 10 clientes, pipeline básico
-- **Profesional:** $15.000 CLP/mes - Clientes ilimitados + automatizaciones
-- **Equipo:** $40.000 CLP/mes - Multi-usuario + reportes avanzados
+### Proyección de Revenue Streams (18 meses)
 
-#### 3. **Data Services B2B**
-- Licencias de datos agregados a bancos
-- Reports de mercado zona sur ($100.000-300.000 CLP)
-- Consultoría en automatización de tasaciones
+| Trimestre | Capa 1 (MLS Core) | Capa 2 (Enterprise) | Capa 3 (Marketplace) | Capa 4 (Datos) | Total Nuevo |
+|-----------|-------------------|---------------------|----------------------|----------------|-------------|
+| Q4 2025 | $0 | $0 | $0 | $0 | $0 |
+| Q1 2026 | $0 | $0 | $0 | $0 | $0 |
+| Q2 2026 | $0 | $500K CLP | $200K CLP | $0 | $700K CLP |
+| Q3 2026 | $0 | $1.5M CLP | $600K CLP | $500K CLP | $2.6M CLP |
+| Q4 2026 | $0 | $3M CLP | $1.2M CLP | $1.5M CLP | $5.7M CLP |
 
-#### 4. **Featured Listings** (Post Fase 1)
-- Propiedades destacadas en perfiles: $5.000 CLP/mes
-- Aparecer primero en directorio profesionales: $10.000 CLP/mes
+**Objetivo conservador 12 meses**: $2-3M CLP/mes en nuevos revenue streams
+**Objetivo conservador 18 meses**: $5-7M CLP/mes en nuevos revenue streams
+
+**Revenue base actual (tasaciones)**: ~$2-4M CLP/mes (mantener)
+**Revenue total proyectado (18 meses)**: ~$7-11M CLP/mes
 
 ---
 
@@ -792,7 +1028,79 @@ Trigger (diario) →
 
 ---
 
-## ❓ Decisiones Pendientes
+## 🚀 Estrategia de Salida al Mercado (Go-to-Market)
+
+### Principio Central: Construir Confianza en un Mercado Escéptico
+
+**Contexto**: Investigación revela desconfianza generalizada hacia corredores (Reddit, foros). Estrategia de código abierto es señal de neutralidad y compromiso con comunidad.
+
+### Fase 1: Construir el Núcleo y Evangelizar (Meses 1-6)
+**Objetivo**: MVP + Comunidad fundadora
+
+**Acciones:**
+- Desarrollo de MLS Core (Capa 1 completa)
+- Evangelización con corredores independientes Los Ríos/Valdivia
+- Positioning: "Movimiento para empoderar corredores independientes vs. grandes firmas"
+- Eventos locales: Charlas, talleres de adopción tecnológica
+- Content marketing: Blog sobre problemas del corretaje actual
+
+**Meta:** 50 corredores fundadores (early adopters)
+
+---
+
+### Fase 2: Apuntar a la "Larga Cola" (Meses 7-12)
+**Objetivo**: Alcanzar masa crítica regional
+
+**Target**: Corredores independientes y agencias pequeñas (<10 agentes)
+- Segmento más desatendido por CRMs tradicionales
+- Mayor beneficio de herramienta colaborativa gratuita
+- Casos de éxito = marketing más poderoso
+
+**Acciones:**
+- Lanzamiento público plataforma
+- Programa de referidos (corredor que invita, gana badges)
+- Soporte proactivo y onboarding personalizado
+- Videos tutoriales y documentación exhaustiva
+- Casos de estudio de corredores exitosos
+
+**Meta:** 200-500 corredores activos, 1000+ propiedades en MLS
+
+**KPI Crítico:** % de listados del mercado Los Ríos en plataforma (>30%)
+
+---
+
+### Fase 3: Alcanzar Masa Crítica y Atraer Grandes (Meses 13-18)
+**Objetivo**: Convertirse en indispensable
+
+**Dinámica**: Cuando plataforma contiene % significativo del mercado, grandes corredoras **deben** unirse para tener visibilidad completa.
+
+**Acciones:**
+- Expansión a otras regiones (Valparaíso, Biobío, RM)
+- Introducir Capa 2 (Servicios Enterprise) para grandes
+- Lanzar Capa 3 (Marketplace de Servicios B2B)
+- Partnership con asociaciones gremiales (COPROCH, Colegio Inmobiliario)
+
+**Meta:** 1000+ corredores, 5000+ propiedades, 3-5 grandes corredoras
+
+**Milestone:** Ser reconocido como "el MLS de Chile"
+
+---
+
+### Posicionamiento Regulatorio Proactivo
+
+**Oportunidad**: Ausencia de Registro Nacional de Corredores (Ley 18.796 derogada)
+
+**Estrategia:**
+1. **Llenar el vacío**: Convertirnos en registro *de facto* basado en mérito
+2. **Anticipar futura regulación**: Proyectos de ley en trámite para crear registro formal
+3. **Engagement proactivo**: Contactar legisladores y proponer nuestra plataforma como base tecnológica de futuro registro público
+4. **Alineación**: Nueva Ley Copropiedad (21.442) muestra impulso gubernamental hacia digitalización
+
+**Resultado**: Convertir potencial amenaza regulatoria en oportunidad estratégica
+
+---
+
+## ❓ Decisiones Pendientes (ACTUALIZADAS)
 
 ### ✅ Decisiones Tomadas Recientemente:
 1. **Base de datos para Fase 1:** ✅ **RESUELTO** → PostgreSQL Dedicado en VPS
@@ -800,19 +1108,46 @@ Trigger (diario) →
    - Puerto: 5433 (aislado de N8N en 5432)
    - Beneficios: $0 costo, control total, aislamiento, PostGIS incluido
 
+2. **Estrategia de producto:** ✅ **RESUELTO** → MLS Abierto como core desde Fase 1
+   - Validado por investigación Gemini Deep Research
+   - Máximo impacto, efectos de red, barrera de entrada insuperable
+
+3. **Modelo de monetización:** ✅ **RESUELTO** → Estrategia de 4 capas
+   - Capa 1 gratuita y open source (no negociable)
+   - Monetización vía Capas 2-4 (Enterprise, Marketplace, Datos)
+
 ### 🔴 Prioridad ALTA (Decidir esta semana):
-2. **Nombre definitivo de la plataforma:** Nexus Core vs Urbe Libre vs otros
-3. **Pricing modelo freemium:** ¿Cuándo empezar a cobrar?
+4. **Nombre definitivo de la plataforma:**
+   - Opciones: Nexus Core, Referenciales.cl, MLS Chile, InfraProperty
+   - Consideración: ¿Enfatizar "MLS" en el nombre para claridad de propuesta?
+
+5. **Licencia Open Source:**
+   - Opciones: MIT (permisiva), AGPL (copyleft), Apache 2.0
+   - Consideración: Proteger contra forks comerciales vs. maximizar adopción
 
 ### 🟡 Prioridad MEDIA (Decidir próximo mes):
-4. **Tech stack long-term:** ¿Mantener React/Next.js o migrar?
-5. **Storage de imágenes:** Cloudinary vs S3 vs Supabase Storage
-6. **Hosting producción:** VPS actual vs Vercel/Netlify para frontend
+6. **Tech stack long-term:** ✅ **Mantener** React/Next.js (validado)
+   - Ecosistema maduro, talento disponible, rápida iteración
+
+7. **Storage de imágenes:** Cloudinary vs S3 vs Supabase Storage
+   - Consideración: CDN global, costo escala, transformaciones
+
+8. **Hosting producción app:** VPS actual vs Vercel/Netlify
+   - DB en VPS (ya decidido), ¿App también VPS o edge deployment?
+
+9. **Expansión geográfica timing:**
+   - ¿Consolidar Los Ríos primero (6 meses) o expandir rápido (3 meses)?
+   - Trade-off: Profundidad regional vs. cobertura nacional
 
 ### 🟢 Prioridad BAJA (Decidir en 3+ meses):
-7. **Legal:** ¿Crear nueva empresa o seguir con estructura actual?
-8. **Timeline funding:** ¿Cuándo buscar primera ronda?
-9. **Mercado expansión:** ¿Solo Valdivia o nacional desde el inicio?
+10. **Legal:** ¿Crear nueva empresa o seguir con estructura actual?
+    - Consideración: SpA tecnológica separada vs. línea de negocio dentro P&P
+
+11. **Timeline funding:** ¿Bootstrap indefinido o buscar primera ronda?
+    - Milestone para considerar funding: 1000+ corredores activos
+
+12. **Nichos de expansión:** ¿Cuándo atacar Parcelas Rurales y Expropiaciones?
+    - Timeline tentativo: Post-Fase 3 (consolidación MLS urbano)
 
 ---
 
@@ -854,8 +1189,9 @@ Trigger (diario) →
 
 ---
 
-## 🎉 Logros Recientes (Septiembre 2025)
+## 🎉 Logros Recientes (Septiembre-Octubre 2025)
 
+**Septiembre:**
 - ✅ Infraestructura VPS completamente operativa
 - ✅ N8N + scraping de 2 portales funcionando
 - ✅ Schema Prisma Fase 1 diseñado y validado
@@ -863,11 +1199,102 @@ Trigger (diario) →
 - ✅ Plan de Trabajo V3 con progreso real documentado
 - ✅ Decisión arquitectónica de base de datos evaluada
 
+**Octubre - Hitos V4:**
+- ✅ Investigación profunda de mercado completada (Gemini Deep Research)
+- ✅ Validación de 3 oportunidades estratégicas
+- ✅ Redefinición como InfraTech (vs PropTech)
+- ✅ MLS Abierto identificado como diferenciador clave
+- ✅ Modelo de monetización multicapa definido
+- ✅ Estrategia Go-to-Market estructurada
+
+---
+
+## 📋 Resumen de Cambios V3 → V4
+
+### Cambios Estratégicos Fundamentales:
+
+1. **Visión Ampliada**: De "PropTech regional" a "InfraTech del mercado inmobiliario chileno"
+   - Concepto clave: "El GitHub del Sector Inmobiliario"
+
+2. **MLS Abierto como Core**: Elevado de "feature" a "pilar fundamental"
+   - Integrado en Fase 1, no como desarrollo posterior
+   - Nuevos modelos: MLSListing, CollaborationRequest
+   - Nuevas APIs: Colaboración, ofertas de comisión
+
+3. **Modelo de Monetización Multicapa**: De "freemium genérico" a estrategia de 4 capas clara
+   - Capa 1: MLS Core (gratuito, open source) - NO NEGOCIABLE
+   - Capa 2: Servicios Enterprise (grandes corredoras)
+   - Capa 3: Marketplace B2B (ecosistema)
+   - Capa 4: Inteligencia de Mercado (institucionales)
+
+4. **Nuevas Oportunidades Identificadas**:
+   - Parcelas Rurales (Fase 3-4): "Zillow para el Chile Rural"
+   - Tasaciones Expropiación (Fase 5): Herramienta de empoderamiento
+
+5. **Estrategia Go-to-Market Estructurada**: De indefinido a roadmap de 18 meses
+   - Meses 1-6: MVP + 50 corredores fundadores
+   - Meses 7-12: 200-500 corredores, >30% mercado Los Ríos
+   - Meses 13-18: 1000+ corredores, 3-5 grandes corredoras
+
+6. **Posicionamiento Competitivo Claro**: Diferenciación explícita vs competencia
+   - No somos portal (vs. Portal Inmobiliario/Yapo)
+   - No somos CRM cerrado (vs. KiteProp/Wasi)
+   - No somos vertical (vs. Houm)
+   - Somos **infraestructura horizontal abierta**
+
+### Cambios Operacionales:
+
+1. **Fase 1 Ampliada**: De 1-2 semanas a 3-4 semanas
+   - Scope aumentado: Perfiles + MLS Core + Reputación
+   - Estado ajustado: 50% → 40% (scope creció)
+
+2. **Nuevas Decisiones Estratégicas Resueltas**:
+   - Estrategia de producto (MLS como core)
+   - Modelo de monetización (4 capas)
+   - Tech stack long-term (mantener Next.js)
+
+3. **Nuevas Decisiones Pendientes Identificadas**:
+   - Licencia open source (MIT vs AGPL)
+   - Nombre con énfasis en "MLS"
+   - Timing expansión geográfica
+
+### Validación de Mercado:
+
+- ✅ Contexto macroeconómico: Contracción del 18% = momento perfecto para adopción gratuita
+- ✅ Problema fragmentación: Validado (KiteProp/Wasi son jardines amurallados)
+- ✅ Desconfianza en corredores: Documentada (Reddit, foros)
+- ✅ Vacío regulatorio: Oportunidad para ser registro de facto
+
+---
+
+## 📚 Referencias y Fuentes
+
+### Documentación Interna:
+- **Plan de Trabajo V3**: Versión anterior (30 Sep 2025)
+- **Investigación Gemini**: `docs/09-research/gemini-deep-research/Nichos Inmobiliarios Chile_ PropTech Colaborativo.md`
+
+### Fuentes de Investigación (Informe Gemini):
+- Cámara Chilena de la Construcción: Caída 18% ventas Q1 2025
+- PropTech Latam: Reconocimiento startups chilenas
+- Reddit Chile: Análisis de quejas sobre corredores
+- Ley 18.796: Derogación Registro Nacional de Corredores
+- Ley 21.442: Nueva Ley Copropiedad (digitalización)
+- Multiple Listing Service (Wikipedia, NAR, Investopedia)
+
+### Próximos Pasos de Investigación:
+- [ ] Entrevistas con 10 corredores independientes Los Ríos
+- [ ] Análisis de competencia: KiteProp, Wasi (pricing, features)
+- [ ] Benchmark MLS internacionales (España, Argentina, México)
+- [ ] Validación pricing Capa 2 con grandes corredoras
+
 ---
 
 **Siguiente Revisión:** 07 de Octubre, 2025
 **Responsable Seguimiento:** Gabriel & Mona (alternando weekly)
+**Versión del Documento:** 4.0
+**Estado del Proyecto:** Fase 1 - 40% Completado
 
 ---
 
 *Documento viviente - actualizar conforme progresa el proyecto*
+*Última actualización: 01 de Octubre, 2025 - Integración Investigación Gemini Deep Research*
