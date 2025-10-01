@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { fetchGithubStars } from '../lib/githubStars';
 
 // Agregar icono de GitHub y contador de estrellas
-const GITHUB_REPO_URL = 'https://github.com/TheCuriousSloth/referenciales.cl';
+const GITHUB_REPO_URL = 'https://github.com/TheCuriousSloth/degux';
 const GITHUB_STARS = 1; // Actualizar dinámicamente si se desea
 
 export default function Page() {
@@ -23,7 +23,7 @@ export default function Page() {
   const [githubStars, setGithubStars] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchGithubStars('TheCuriousSloth/referenciales.cl').then(setGithubStars);
+    fetchGithubStars('TheCuriousSloth/degux').then(setGithubStars);
   }, []);
 
   // ✅ ELIMINADO: useEffect que causaba redirects automáticos
@@ -106,7 +106,7 @@ export default function Page() {
           
           <div className="space-y-4">
             <h1 className={`${lusitana.className} text-2xl text-gray-800 md:text-4xl md:leading-normal font-bold`}>
-              Bienvenido a <span className="text-primary">referenciales.cl</span>
+              Bienvenido a <span className="text-primary">degux.cl</span>
             </h1>
             <p className="text-lg text-gray-600 md:text-xl">
               Una base de datos colaborativa para la tasación inmobiliaria en Chile.
