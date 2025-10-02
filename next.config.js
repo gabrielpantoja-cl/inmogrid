@@ -60,7 +60,7 @@ const nextConfig = {
       base-uri 'self';
       form-action 'self';
       frame-ancestors 'none';
-      connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://vercel.live/ https://vitals.vercel-insights.com https://api.openai.com https://api.github.com;
+      connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://vercel.live/ https://vitals.vercel-insights.com https://api.openai.com https://api.github.com ws://127.0.0.1:* ws://localhost:*;
       block-all-mixed-content;
       upgrade-insecure-requests;
     `;
