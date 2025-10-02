@@ -19,7 +19,7 @@ Referenciales.cl utiliza un stack tecnológico moderno y robusto, seleccionado e
 - ✅ **Server Components**: Renderizado optimizado y SEO
 - ✅ **Built-in optimization**: Image, font, y script optimization
 - ✅ **TypeScript native**: Soporte completo sin configuración
-- ✅ **Vercel integration**: Deploy seamless
+- ✅ **Cloud Hosting integration**: Deploy seamless
 
 **Características utilizadas:**
 - **App Router**: Estructura de páginas moderna
@@ -315,19 +315,19 @@ const chatCompletion = await openai.chat.completions.create({
 
 ### 📊 Analytics & Monitoring
 
-#### **Vercel Analytics** - Web Analytics
+#### **Application Analytics** - Web Analytics
 ```json
-"@vercel/analytics": "^1.0.0"
+"@application/analytics": "^1.0.0"
 ```
-**¿Por qué Vercel Analytics?**
+**¿Por qué Application Analytics?**
 - ✅ **Privacy-first**: GDPR compliant
 - ✅ **Real-time**: Métricas en tiempo real
 - ✅ **Core Web Vitals**: Performance tracking
 - ✅ **Zero config**: Setup automático
 
-#### **Vercel Speed Insights** - Performance
+#### **Application Speed Insights** - Performance
 ```json
-"@vercel/speed-insights": "^1.0.0"
+"@application/speed-insights": "^1.0.0"
 ```
 **¿Por qué Speed Insights?**
 - ✅ **Real User Monitoring**: Datos reales
@@ -388,8 +388,8 @@ describe('ReferencialForm', () => {
 
 ### 🚀 Deployment & Infrastructure
 
-#### **Vercel** - Hosting Platform
-**¿Por qué Vercel?**
+#### **Cloud Hosting Platform** - Hosting Platform
+**¿Por qué Cloud Hosting Platform?**
 - ✅ **Serverless**: Scaling automático
 - ✅ **Edge Network**: CDN global
 - ✅ **Preview deployments**: Deploy por PR

@@ -3,9 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Highlight.js styles para code syntax highlighting */
-@import 'highlight.js/styles/github.css';
-
 /* Variables CSS personalizadas */
 :root {
   --primary: #EFB810;

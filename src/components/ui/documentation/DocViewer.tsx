@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import rehypeHighlight from 'rehype-highlight';
-import 'highlight.js/styles/github.css'; // Estilo de syntax highlighting
+import '@/styles/highlight.css';
 
 interface DocViewerProps {
   content: string;

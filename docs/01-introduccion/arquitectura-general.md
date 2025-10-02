@@ -545,23 +545,23 @@ class GoogleGeocodingService implements GeocodingService {
 ### 🏗️ Production Stack
 
 #### Infrastructure
-- **Hosting**: Vercel (Serverless)
+- **Hosting**: Cloud Hosting (Serverless)
 - **Database**: Neon (PostgreSQL + PostGIS)
-- **CDN**: Vercel Edge Network
-- **Monitoring**: Vercel Analytics
+- **CDN**: Global Edge Network
+- **Monitoring**: Application Monitoring
 - **Domain**: Custom domain with SSL
 
 #### Environment Separation
 ```
 Development  → Local + Neon Development DB
-Staging      → Vercel Preview + Neon Staging DB  
-Production   → Vercel Production + Neon Production DB
+Staging      → Preview Deployment + Neon Staging DB  
+Production   → Production Deployment + Neon Production DB
 ```
 
 #### CI/CD Pipeline
 ```yaml
 # .github/workflows/deploy.yml
-name: Deploy to Vercel
+name: Deploy to Cloud Hosting
 on:
   push:
     branches: [ main ]
@@ -577,7 +577,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run test
-      - uses: vercel/action@v1
+      - run: deploy-to-cloud-hosting-action@v1
 ```
 
 ---
