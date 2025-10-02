@@ -1,601 +1,726 @@
-# 🚀 Degux - Próximos Pasos
+# 🚀 Estado del Deployment - degux.cl
 
-**Roadmap de implementación para completar el deployment de Degux**
+**Última actualización**: 01 de Octubre, 2025 - 23:30
+**Sesión**: Deployment inicial a producción
 
 ---
 
-## ✅ Estado Actual (Completado)
+## 📊 Estado Actual del VPS
 
-### Infraestructura Base
-- [x] VPS configurado y accesible (VPS_IP_REDACTED)
-- [x] Dominio degux.cl comprado y activo (1 año)
-- [x] Base de datos PostgreSQL + PostGIS configurada
-- [x] Usuario `degux_user` creado con permisos correctos
-- [x] PostGIS 3.4 habilitado y funcionando
-- [x] Scripts de backup/restore creados y probados
-- [x] Nginx configurado para degux.cl, www.degux.cl, api.degux.cl
-- [x] Configuraciones SSL preparadas (pendiente activación)
-- [x] Documentación completa de infraestructura
-- [x] Integración con contenedor n8n-db funcionando
+### ✅ Infraestructura Confirmada
 
-### Connection Strings Disponibles
+**VPS Digital Ocean** (VPS_IP_REDACTED):
+```
+/home/gabriel/
+├── vps-do/              ✅ Administración del servidor
+│   ├── degux/           ✅ Scripts y configs
+│   └── nginx/           ✅ Configuraciones Nginx
+│
+├── degux.cl/            ✅ Código de la aplicación (NUEVO)
+│   ├── src/             ✅ Next.js 15 App
+│   ├── prisma/          ✅ Database schema
+│   ├── node_modules/    🔄 1.2GB instalado (npm install en progreso)
+│   └── .env.production  ✅ Creado
+│
+├── Vegan-Wetlands/      ✅ Servidor de videojuego
+│   └── (luanti.gabrielpantoja.cl en puerto 3000)
+│
+└── landing-temp/        ✅ Landing temporal
+```
+
+**Servicios activos:**
+- ✅ Nginx (ports 80/443)
+- ✅ N8N Web (port 5678) - http://N8N_HOST_REDACTED
+- ✅ PostgreSQL (port 5432) en contenedor `n8n-db`
+  - ✅ Database: `n8n` (workflows)
+  - ✅ Database: `degux` (aplicación)
+- ✅ Portainer (port 9443)
+- ✅ pitutito.cl → localhost:3000 (luanti/Vegan-Wetlands)
+
+**Recursos VPS:**
+- Total RAM: 2GB
+- Usado: ~1.4GB
+- Disponible: ~600MB
+- Disco: 26GB disponibles de 58GB
+
+---
+
+## 🔍 Diagnóstico Realizado (01 Oct 2025)
+
+### ❌ PROBLEMA PRINCIPAL IDENTIFICADO
+
+**degux.cl muestra la página de luanti (pitutito.cl)**
+
+**Causa raíz:**
+1. ✅ DNS de degux.cl apunta a **Cloudflare** (104.21.4.42), no al VPS
+2. ❌ **NO existe configuración de Nginx** para degux.cl en `/etc/nginx/sites-available/`
+3. ✅ pitutito.cl (luanti) está configurado para puerto 3000
+4. ❌ Cuando Cloudflare proxy pasa el tráfico, Nginx no reconoce `server_name degux.cl` y sirve default (pitutito.cl)
+
+**Verificado:**
+```bash
+# DNS actual
+$ nslookup degux.cl
+Name: degux.cl
+Address: 104.21.4.42  # ← Cloudflare, NO el VPS (VPS_IP_REDACTED)
+
+# Nginx sites habilitados
+$ ls /etc/nginx/sites-enabled/
+pitutito.cl  # ← Solo este existe
+
+# Nginx sites disponibles
+$ ls /etc/nginx/sites-available/
+default
+pitutito.cl  # ← degux.cl NO EXISTE
+```
+
+**Configuración actual de pitutito.cl:**
+```nginx
+server {
+    server_name pitutito.cl www.pitutito.cl;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;  # ← Luanti (Vegan-Wetlands)
+        # ...
+    }
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/pitutito.cl/fullchain.pem;
+}
+```
+
+---
+
+## ✅ Pasos Completados HOY
+
+### 1. Repositorio Clonado ✅
+```bash
+# Ubicación: /home/gabriel/degux.cl/
+# Repo: gabrielpantoja-cl/degux.cl
+# Branch: main
+# Tamaño: 32MB (código fuente)
+# Commit: Latest from main
+```
+
+### 2. Variables de Entorno Creadas ✅
+```bash
+# Archivo: /home/gabriel/degux.cl/.env.production
+# Permisos: 600 (seguro)
+```
+
+**Contenido:**
 ```env
-# Desarrollo
-DATABASE_URL="postgresql://degux_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@VPS_IP_REDACTED:5432/degux?schema=public"
-
-# Producción
-DATABASE_URL="postgresql://degux_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@n8n-db:5432/degux?schema=public"
-```
-
----
-
-## 🎯 PASO 1: Configurar DNS del Dominio
-
-**⏱️ Tiempo estimado**: 5 minutos (+ 15-30 min de propagación)
-**👤 Responsable**: Gabriel
-**📍 Dónde**: Panel del proveedor de dominio (donde compraste degux.cl)
-
-### Acciones
-
-1. Ir al panel de control del proveedor de dominio
-2. Buscar la sección "DNS Management" o "Administrar DNS"
-3. Agregar los siguientes registros DNS:
-
-```
-Tipo    Nombre    Valor              TTL
-A       @         VPS_IP_REDACTED     3600
-A       www       VPS_IP_REDACTED     3600
-A       api       VPS_IP_REDACTED     3600
-```
-
-4. Guardar cambios
-
-### Verificación
-
-```bash
-# Esperar 15-30 minutos, luego ejecutar:
-dig degux.cl +short
-dig www.degux.cl +short
-dig api.degux.cl +short
-
-# Los tres deben devolver: VPS_IP_REDACTED
-```
-
-**⚠️ No continuar al PASO 2 hasta que el DNS esté propagado**
-
----
-
-## 🔒 PASO 2: Generar Certificados SSL
-
-**⏱️ Tiempo estimado**: 5 minutos
-**👤 Responsable**: Gabriel
-**📍 Dónde**: VPS (SSH)
-**⚠️ Prerequisito**: DNS propagado (PASO 1 completo)
-
-### Acciones
-
-```bash
-# 1. SSH al VPS
-ssh gabriel@VPS_IP_REDACTED
-
-# 2. Ir al directorio del proyecto
-cd ~/vps-do
-
-# 3. Reiniciar Nginx para cargar configs de degux.cl
-docker compose restart nginx
-
-# 4. Verificar que Nginx no tenga errores
-docker logs nginx-proxy --tail 50
-
-# 5. Generar certificados SSL con certbot
-docker compose --profile ssl-setup run --rm certbot
-
-# Deberías ver algo como:
-# Successfully received certificate.
-# Certificate is saved at: /etc/letsencrypt/live/degux.cl/fullchain.pem
-# Key is saved at:         /etc/letsencrypt/live/degux.cl/privkey.pem
-```
-
-### Verificación
-
-```bash
-# Ver certificados generados
-docker exec nginx-proxy ls -la /etc/nginx/ssl/live/degux.cl/
-
-# Deberías ver:
-# fullchain.pem
-# privkey.pem
-# cert.pem
-# chain.pem
-```
-
----
-
-## 🔐 PASO 3: Activar HTTPS en Nginx
-
-**⏱️ Tiempo estimado**: 10 minutos
-**👤 Responsable**: Gabriel
-**📍 Dónde**: VPS (SSH) + GitHub
-**⚠️ Prerequisito**: Certificados SSL generados (PASO 2 completo)
-
-### Acciones
-
-#### A. En tu máquina local
-
-```bash
-# 1. Editar configuración de degux.cl
-nano /home/gabriel/Documentos/vps-do/nginx/conf.d/degux.cl.conf
-
-# 2. Descomentar el bloque server que escucha en puerto 443 (HTTPS)
-# Buscar y descomentar desde:
-#   server {
-#       listen 443 ssl http2;
-#   ...
-#   }
-
-# 3. Descomentar la redirección HTTP → HTTPS en el bloque del puerto 80
-# Buscar y descomentar:
-#   return 301 https://$server_name$request_uri;
-
-# 4. Editar configuración de api.degux.cl
-nano /home/gabriel/Documentos/vps-do/nginx/conf.d/api.degux.cl.conf
-
-# 5. Repetir pasos 2-3 para api.degux.cl
-
-# 6. Commit y push
-git add nginx/conf.d/degux.cl.conf nginx/conf.d/api.degux.cl.conf
-git commit -m "Activar HTTPS para degux.cl y api.degux.cl"
-git push origin main
-```
-
-#### B. En el VPS
-
-```bash
-# 1. SSH al VPS
-ssh gabriel@VPS_IP_REDACTED
-
-# 2. Pull cambios
-cd ~/vps-do
-git pull origin main
-
-# 3. Reiniciar Nginx
-docker compose restart nginx
-
-# 4. Ver logs para asegurar que no hay errores
-docker logs nginx-proxy --tail 50
-```
-
-### Verificación
-
-```bash
-# Desde tu máquina local, probar HTTPS
-curl -I https://degux.cl
-curl -I https://www.degux.cl
-curl -I https://api.degux.cl
-
-# Todos deben devolver: HTTP/2 200 (o similar)
-# Y la conexión debe ser SSL/TLS
-```
-
----
-
-## 💾 PASO 4: Configurar Backups Automáticos
-
-**⏱️ Tiempo estimado**: 5 minutos
-**👤 Responsable**: Gabriel
-**📍 Dónde**: VPS (SSH)
-
-### Acciones
-
-```bash
-# 1. SSH al VPS
-ssh gabriel@VPS_IP_REDACTED
-
-# 2. Editar crontab
-crontab -e
-
-# 3. Agregar la siguiente línea al final del archivo:
-0 3 * * * /home/gabriel/vps-do/scripts/backup-degux.sh >> /var/log/degux-backup.log 2>&1
-
-# Esto ejecutará un backup diario a las 3 AM
-
-# 4. Guardar y salir (Ctrl+X, luego Y, luego Enter)
-
-# 5. Crear archivo de log
-sudo touch /var/log/degux-backup.log
-sudo chown gabriel:gabriel /var/log/degux-backup.log
-
-# 6. Probar backup manual
-cd ~/vps-do
-./scripts/backup-degux.sh
-
-# 7. Verificar que se creó el backup
-ls -lh ~/vps-do/degux/backups/
-```
-
-### Verificación
-
-```bash
-# Al día siguiente (después de las 3 AM), verificar log
-tail -f /var/log/degux-backup.log
-
-# Deberías ver algo como:
-# [YYYY-MM-DD HH:MM:SS] Backup completed: degux_backup_YYYYMMDD_HHMMSS.sql.gz
-```
-
----
-
-## 💻 PASO 5: Preparar Aplicación Web (Desarrollo Local)
-
-**⏱️ Tiempo estimado**: 30-60 minutos
-**👤 Responsable**: Gabriel
-**📍 Dónde**: Tu máquina local
-
-### Acciones
-
-#### A. Clonar y configurar repositorio
-
-```bash
-# 1. Clonar repositorio web
-git clone https://github.com/gabrielpantoja-cl/degux.cl.git
-cd degux.cl
-
-# 2. Instalar dependencias
-npm install
-
-# 3. Crear archivo .env.local
-cp .env.example .env.local
-
-# 4. Editar .env.local
-nano .env.local
-```
-
-#### B. Configurar variables de entorno
-
-```env
-# Database
-DATABASE_URL="postgresql://degux_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@VPS_IP_REDACTED:5432/degux?schema=public"
+# Database (Shared PostgreSQL in n8n-db container)
+POSTGRES_PRISMA_URL="postgresql://degux_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@n8n-db:5432/degux?schema=public"
+POSTGRES_URL="postgresql://degux_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@n8n-db:5432/degux"
 
 # NextAuth.js
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="generar_con_openssl_rand_base64_32"
+NEXTAUTH_URL="https://degux.cl"
+NEXTAUTH_SECRET="DLjnsoXolDZVeOxbGNJ6byMjwzDHIVSyLpmV1+PGzdU="
 
-# APIs externas (si las necesitas)
-GOOGLE_MAPS_API_KEY="tu_api_key"
-# ...
+# Google OAuth (PENDIENTE: Configurar credenciales reales)
+GOOGLE_CLIENT_ID="YOUR_GOOGLE_CLIENT_ID_HERE"
+GOOGLE_CLIENT_SECRET="YOUR_GOOGLE_CLIENT_SECRET_HERE"
+
+# Node Environment
+NODE_ENV="production"
 ```
 
-#### C. Configurar Prisma y ejecutar migrations
+⚠️ **PENDIENTE**: Reemplazar credenciales de Google OAuth
+
+### 3. Instalación de Dependencias 🔄
+```bash
+# Estado: EN PROGRESO (npm install)
+# node_modules: 1.2GB instalado
+# Estimado: 90% completo
+# Scripts postinstall en ejecución
+```
+
+### 4. Base de Datos Verificada ✅
+```bash
+# PostgreSQL 15.8 + PostGIS
+# Container: n8n-db
+# Database: degux
+# User: degux_user
+# Port: 5432 (interno al contenedor)
+# Conexión desde VPS: FUNCIONAL ✅
+```
+
+### 5. Agentes de Claude Code Actualizados ✅
+```bash
+# 7 agentes especializados actualizados:
+# - degux-orchestrator (renombrado)
+# - infrastructure-agent (reescrito para deployment)
+# - database-manager-agent (BD compartida)
+# - api-developer-agent
+# - security-auditor-agent
+# - data-ingestion-agent
+# - frontend-agent
+#
+# Commit: 7e62b24
+```
+
+---
+
+## 🔧 Pasos PENDIENTES para Deployment
+
+### PASO 1: Configurar Nginx para degux.cl ⏳
+
+**Prioridad**: 🔴 CRÍTICA
+**Tiempo**: 5 minutos
+**Requiere**: Acceso sudo
+
+**Comandos a ejecutar:**
 
 ```bash
-# 1. Generar cliente Prisma
+# 1. SSH al VPS
+ssh gabriel@VPS_IP_REDACTED
+
+# 2. Crear directorio para ACME challenge
+sudo mkdir -p /var/www/letsencrypt
+
+# 3. Crear configuración Nginx temporal para degux.cl
+sudo nano /etc/nginx/sites-available/degux.cl
+```
+
+**Pegar este contenido:**
+```nginx
+# degux.cl - Configuración Nginx
+# Puerto 3001 (pitutito.cl usa 3000)
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name degux.cl www.degux.cl;
+
+    # ACME challenge para Let's Encrypt
+    location /.well-known/acme-challenge/ {
+        root /var/www/letsencrypt;
+    }
+
+    # Temporal: Proxy a app en puerto 3001
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+**Habilitar y recargar:**
+```bash
+# 4. Habilitar el sitio
+sudo ln -sf /etc/nginx/sites-available/degux.cl /etc/nginx/sites-enabled/
+
+# 5. Test configuración
+sudo nginx -t
+
+# 6. Recargar Nginx
+sudo systemctl reload nginx
+
+# 7. Verificar
+curl -I http://VPS_IP_REDACTED -H "Host: degux.cl"
+```
+
+---
+
+### PASO 2: Completar npm install ⏳
+
+**Prioridad**: 🟡 ALTA
+**Tiempo**: 5 minutos (automático)
+
+```bash
+# Verificar estado actual
+ssh gabriel@VPS_IP_REDACTED
+cd ~/degux.cl
+du -sh node_modules  # Debería ser ~1.3-1.5GB cuando termine
+
+# Si no terminó, esperar o reiniciar
+npm install
+```
+
+---
+
+### PASO 3: Generar Prisma Client ⏳
+
+**Prioridad**: 🟡 ALTA
+**Tiempo**: 2 minutos
+
+```bash
+ssh gabriel@VPS_IP_REDACTED
+cd ~/degux.cl
+
+# Generar Prisma client
 npx prisma generate
-
-# 2. Ejecutar migrations iniciales
-npx prisma migrate dev --name init
-
-# 3. (Opcional) Poblar base de datos con datos de prueba
-npx prisma db seed
 ```
-
-#### D. Iniciar servidor de desarrollo
-
-```bash
-# Iniciar Next.js en modo desarrollo
-npm run dev
-
-# Abrir en navegador: http://localhost:3000
-```
-
-### Verificación
-
-- [ ] App carga correctamente en http://localhost:3000
-- [ ] Conexión a base de datos funciona
-- [ ] Prisma Studio funciona: `npx prisma studio`
-- [ ] No hay errores en la consola
 
 ---
 
-## 🌐 PASO 6: Deployment a Producción (Vercel)
+### PASO 4: Aplicar Migraciones a BD ⏳
 
-**⏱️ Tiempo estimado**: 15-30 minutos
-**👤 Responsable**: Gabriel
-**📍 Dónde**: Vercel Dashboard
-**⚠️ Prerequisito**: App funcionando en desarrollo (PASO 5 completo)
-
-### Opción A: Deploy en Vercel (Recomendado)
-
-#### Acciones
+**Prioridad**: 🟡 ALTA
+**Tiempo**: 3 minutos
 
 ```bash
-# 1. Ir a https://vercel.com/dashboard
-# 2. Clic en "Add New Project"
-# 3. Importar repositorio: gabrielpantoja-cl/degux.cl
-# 4. Configurar variables de entorno en Vercel:
+cd ~/degux.cl
 
-Environment Variables:
-  DATABASE_URL="postgresql://degux_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@VPS_IP_REDACTED:5432/degux?schema=public"
-  NEXTAUTH_URL="https://degux.cl"
-  NEXTAUTH_SECRET="tu_secret_de_produccion"
-  # ... otras variables
+# Opción 1: Push schema (desarrollo)
+npx prisma db push
 
-# 5. Deploy
-# 6. Configurar custom domain: degux.cl
+# Opción 2: Migrations (producción - recomendado)
+npx prisma migrate deploy
+
+# Verificar tablas creadas
+docker exec n8n-db psql -U degux_user -d degux -c "\dt"
 ```
 
-#### Configurar dominio personalizado en Vercel
-
-```bash
-# En Vercel Dashboard:
-# 1. Ir a Settings > Domains
-# 2. Agregar dominio: degux.cl
-# 3. Vercel te dará instrucciones DNS (probablemente CNAME)
-
-# ⚠️ IMPORTANTE: Si Vercel requiere CNAME en lugar de A record:
-# - Cambiar el registro A de degux.cl por un CNAME apuntando a tu-app.vercel.app
-# - O usar Vercel DNS directamente
-```
-
-### Opción B: Deploy en VPS (Docker)
-
-Si prefieres no usar Vercel:
-
-```bash
-# Crear docker-compose.degux-web.yml en el VPS
-# Ver sección "Deployment Docker" en degux-infrastructure-guide.md
-```
-
-### Verificación
-
-- [ ] https://degux.cl carga correctamente
-- [ ] SSL/TLS funcionando (candado verde en navegador)
-- [ ] App conecta a base de datos
-- [ ] Autenticación funciona
-- [ ] No hay errores en Vercel logs
+**Tablas esperadas:**
+- User
+- Account
+- Session
+- VerificationToken
+- Property
+- Connection
+- referenciales (ya existe)
 
 ---
 
-## 📊 PASO 7: Configurar N8N Workflows (Opcional pero Recomendado)
+### PASO 5: Build de Next.js ⏳
 
-**⏱️ Tiempo estimado**: 1-2 horas
-**👤 Responsable**: Gabriel
-**📍 Dónde**: N8N (http://N8N_HOST_REDACTED)
-
-### Workflows Sugeridos
-
-#### 1. Scraping de portales inmobiliarios
-
-```
-Trigger (Schedule)
-  → HTTP Request (Portal Inmobiliario, Yapo, etc.)
-  → HTML Extract (datos de propiedades)
-  → PostgreSQL (insert en BD degux)
-  → Notify (Slack/Email si hay errores)
-```
-
-#### 2. Health check de Degux
-
-```
-Trigger (Schedule cada 5 min)
-  → HTTP Request (https://degux.cl/api/health)
-  → Conditional
-    → Si falla: Send alert (Slack/Email)
-    → Si OK: Log metrics
-```
-
-#### 3. Backup automático notify
-
-```
-Trigger (Schedule daily 3:10 AM)
-  → Execute Command (check backup log)
-  → Conditional
-    → Si backup OK: Send success notification
-    → Si backup falla: Send alert
-```
-
-### Acciones
+**Prioridad**: 🟡 ALTA
+**Tiempo**: 10-15 minutos
 
 ```bash
-# 1. Acceder a N8N
-# Abrir: http://N8N_HOST_REDACTED
+cd ~/degux.cl
 
-# 2. Crear credenciales para PostgreSQL degux
-# - Tipo: Postgres
-# - Host: n8n-db (desde N8N, no localhost)
-# - Port: 5432
-# - Database: degux
-# - User: degux_user
-# - Password: [tu password]
+# Build para producción
+npm run build
 
-# 3. Importar workflows desde /workflows/
-# O crear manualmente siguiendo las plantillas de arriba
-
-# 4. Activar workflows
+# Verificar que el build fue exitoso
+ls -la .next/
 ```
-
-### Verificación
-
-- [ ] Workflows activos en N8N
-- [ ] Conexión a BD degux funciona desde N8N
-- [ ] Scraping workflows ejecutan sin errores
-- [ ] Notificaciones funcionan
 
 ---
 
-## 📈 PASO 8: Monitoreo y Mantenimiento
+### PASO 6: Deploy con PM2 ⏳
 
-**⏱️ Tiempo estimado**: 30 minutos (configuración inicial)
-**👤 Responsable**: Gabriel
-**📍 Dónde**: VPS + Dashboards
+**Prioridad**: 🟡 ALTA
+**Tiempo**: 5 minutos
 
-### Acciones
-
-#### A. Configurar alertas
-
+**Instalar PM2:**
 ```bash
-# 1. Configurar Uptime Robot (gratuito)
-# https://uptimerobot.com
-# - Monitor: https://degux.cl (HTTP(s))
-# - Check interval: 5 minutos
-# - Alert contacts: tu email
+# Si no está instalado
+sudo npm install -g pm2
 
-# 2. Opcional: Configurar Grafana (si ya tienes)
-# - Agregar datasource: PostgreSQL (degux)
-# - Crear dashboard con métricas clave
+# Verificar
+pm2 --version
 ```
 
-#### B. Documentar métricas clave
-
+**Deploy de la app:**
 ```bash
-# Crear script de monitoring simple
-nano ~/vps-do/scripts/degux-status.sh
+cd ~/degux.cl
+
+# Iniciar app en puerto 3001
+PORT=3001 pm2 start npm --name "degux" -- start
+
+# Guardar configuración PM2
+pm2 save
+
+# Auto-start en reboot
+pm2 startup
+# Ejecutar el comando que PM2 te dé
+
+# Verificar
+pm2 list
+pm2 logs degux
 ```
 
+---
+
+### PASO 7: Configurar DNS (2 opciones) ⏳
+
+**Prioridad**: 🟡 ALTA
+**Tiempo**: 5 minutos + propagación
+
+**OPCIÓN A: Mantener Cloudflare (Recomendado)**
+
+Si quieres mantener Cloudflare como CDN/Proxy:
+
+1. En Cloudflare Dashboard:
+   - Ir a degux.cl → DNS
+   - Cambiar el registro A:
+     - Nombre: `@`
+     - Valor: `VPS_IP_REDACTED`
+     - Proxy status: ✅ Proxied (naranja)
+   - Guardar
+
+2. Esto mantiene las ventajas de Cloudflare (SSL, CDN, DDoS protection)
+
+**OPCIÓN B: DNS Directo al VPS**
+
+Si prefieres apuntar directamente al VPS:
+
+1. En tu proveedor de dominios:
+   - Cambiar nameservers a Cloudflare o tu DNS actual
+   - Crear registro A:
+     - Nombre: `@`
+     - Valor: `VPS_IP_REDACTED`
+     - TTL: 3600
+   - Crear registro A para www:
+     - Nombre: `www`
+     - Valor: `VPS_IP_REDACTED`
+
+**Verificar DNS:**
+```bash
+# Esperar 5-30 minutos, luego:
+nslookup degux.cl
+dig degux.cl +short
+
+# Debería devolver: VPS_IP_REDACTED (o IP de Cloudflare si usas proxy)
+```
+
+---
+
+### PASO 8: Generar SSL con Let's Encrypt ⏳
+
+**Prioridad**: 🟡 ALTA
+**Tiempo**: 5 minutos
+**Prerequisito**: DNS propagado
+
+```bash
+ssh gabriel@VPS_IP_REDACTED
+
+# Instalar certbot si no está
+sudo apt update
+sudo apt install -y certbot python3-certbot-nginx
+
+# Generar certificados
+sudo certbot certonly --webroot \
+  -w /var/www/letsencrypt \
+  -d degux.cl \
+  -d www.degux.cl \
+  --email admin@degux.cl \
+  --agree-tos \
+  --non-interactive
+
+# Verificar certificados
+sudo ls -la /etc/letsencrypt/live/degux.cl/
+```
+
+**Actualizar Nginx para HTTPS:**
+```bash
+sudo nano /etc/nginx/sites-available/degux.cl
+```
+
+**Agregar bloque HTTPS:**
+```nginx
+# HTTPS server
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name degux.cl www.degux.cl;
+
+    # SSL certificates
+    ssl_certificate /etc/letsencrypt/live/degux.cl/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/degux.cl/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/degux.cl/chain.pem;
+
+    # SSL optimization
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256';
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # Security headers
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "origin-when-cross-origin" always;
+
+    # Proxy to app
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Logs
+    access_log /var/log/nginx/degux_access.log;
+    error_log /var/log/nginx/degux_error.log;
+}
+
+# HTTP redirect to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name degux.cl www.degux.cl;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/letsencrypt;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+```
+
+**Recargar Nginx:**
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+---
+
+### PASO 9: Configurar Google OAuth ⏳
+
+**Prioridad**: 🟢 MEDIA
+**Tiempo**: 10 minutos
+
+1. Ir a Google Cloud Console: https://console.cloud.google.com
+2. Crear proyecto o seleccionar existente
+3. Habilitar Google OAuth API
+4. Crear credenciales OAuth 2.0:
+   - Tipo: Web application
+   - Authorized redirect URIs:
+     - `https://degux.cl/api/auth/callback/google`
+     - `http://localhost:3000/api/auth/callback/google` (desarrollo)
+
+5. Actualizar `.env.production`:
+```bash
+ssh gabriel@VPS_IP_REDACTED
+nano ~/degux.cl/.env.production
+
+# Reemplazar:
+GOOGLE_CLIENT_ID="tu_client_id_real"
+GOOGLE_CLIENT_SECRET="tu_client_secret_real"
+```
+
+6. Reiniciar app:
+```bash
+pm2 restart degux
+```
+
+---
+
+### PASO 10: Backups Automáticos ⏳
+
+**Prioridad**: 🟢 MEDIA
+**Tiempo**: 10 minutos
+
+```bash
+# Crear script de backup
+nano ~/scripts/backup-degux.sh
+```
+
+**Contenido:**
 ```bash
 #!/bin/bash
-# Degux Health Check
+# degux Database Backup Script
 
-echo "=== Degux Status Report ==="
-echo "Date: $(date)"
-echo ""
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="/home/gabriel/backups/degux"
+CONTAINER="n8n-db"
+DB_NAME="degux"
+DB_USER="degux_user"
+RETENTION_DAYS=7
 
-# Check database
-echo "Database size:"
-docker exec n8n-db psql -U degux_user -d degux -c "SELECT pg_size_pretty(pg_database_size('degux'));"
+# Create backup directory
+mkdir -p "$BACKUP_DIR"
 
-echo ""
-echo "Recent backups:"
-ls -lht ~/vps-do/degux/backups/ | head -5
+# Create backup
+echo "[$(date)] Starting backup of $DB_NAME..."
+docker exec $CONTAINER pg_dump -U $DB_USER $DB_NAME | gzip > \
+  "$BACKUP_DIR/degux_$TIMESTAMP.sql.gz"
 
-echo ""
-echo "App uptime:"
-curl -s -o /dev/null -w "%{http_code}" https://degux.cl
+if [ $? -eq 0 ]; then
+  echo "[$(date)] ✅ Backup successful: degux_$TIMESTAMP.sql.gz"
+else
+  echo "[$(date)] ❌ Backup failed!"
+  exit 1
+fi
+
+# Remove old backups
+find "$BACKUP_DIR" -name "degux_*.sql.gz" -mtime +$RETENTION_DAYS -delete
+echo "[$(date)] Old backups cleaned (retention: $RETENTION_DAYS days)"
+
+# Backup size
+BACKUP_SIZE=$(du -sh "$BACKUP_DIR/degux_$TIMESTAMP.sql.gz" | cut -f1)
+echo "[$(date)] Backup size: $BACKUP_SIZE"
 ```
 
-#### C. Programar chequeos semanales
-
+**Configurar cron:**
 ```bash
+chmod +x ~/scripts/backup-degux.sh
+
 # Agregar a crontab
 crontab -e
 
-# Chequeo semanal (cada lunes a las 9 AM)
-0 9 * * 1 /home/gabriel/vps-do/scripts/degux-status.sh | mail -s "Degux Weekly Status" tu@email.com
+# Agregar esta línea (backup diario a las 3 AM):
+0 3 * * * /home/gabriel/scripts/backup-degux.sh >> /var/log/degux-backup.log 2>&1
 ```
 
-### Verificación
+---
 
-- [ ] Uptime monitoring activo
-- [ ] Alertas configuradas
-- [ ] Script de status funciona
-- [ ] Recibes reportes semanales
+## 📋 Checklist de Deployment
+
+### Fase 1: Configuración Base
+- [x] Repositorio clonado en VPS
+- [x] `.env.production` creado
+- [x] Base de datos `degux` verificada
+- [ ] `npm install` completado
+- [ ] Configuración Nginx para degux.cl
+- [ ] DNS configurado
+
+### Fase 2: Aplicación
+- [ ] Prisma client generado
+- [ ] Migraciones aplicadas
+- [ ] Next.js build exitoso
+- [ ] PM2 deployment
+- [ ] App accesible en puerto 3001
+
+### Fase 3: SSL y Seguridad
+- [ ] Certificado SSL generado
+- [ ] HTTPS configurado en Nginx
+- [ ] HTTP → HTTPS redirect
+- [ ] Google OAuth configurado
+
+### Fase 4: Producción
+- [ ] degux.cl accesible vía HTTPS
+- [ ] Login funcional
+- [ ] Backups automáticos configurados
+- [ ] Monitoring básico
 
 ---
 
-## 🎉 PASO 9: Go Live Checklist
+## 🎯 Próxima Sesión - Plan de Acción
 
-**Antes de anunciar públicamente Degux, verificar:**
+**Orden sugerido para mañana:**
 
-### Seguridad
-- [ ] HTTPS funcionando en todos los dominios
-- [ ] Certificados SSL válidos y auto-renovables
-- [ ] Variables de entorno seguras (no expuestas)
-- [ ] Rate limiting configurado en API
-- [ ] CORS configurado correctamente
-- [ ] Headers de seguridad activos (HSTS, XSS, etc.)
+1. **Verificar npm install** (2 min)
+2. **Configurar Nginx** (PASO 1 - 5 min) 🔴 CRÍTICO
+3. **Generar Prisma client** (PASO 3 - 2 min)
+4. **Aplicar migraciones** (PASO 4 - 3 min)
+5. **Build Next.js** (PASO 5 - 15 min)
+6. **Deploy PM2** (PASO 6 - 5 min)
+7. **Verificar app en puerto 3001**
+8. **Configurar DNS** (PASO 7 - 5 min + esperar)
+9. **Generar SSL** (PASO 8 - 5 min)
+10. **Google OAuth** (PASO 9 - 10 min)
+11. **Backups** (PASO 10 - 10 min)
 
-### Funcionalidad
-- [ ] Registro de usuarios funciona
-- [ ] Login/Logout funciona
-- [ ] Dashboard de usuario carga
-- [ ] Mapas con PostGIS funcionan
-- [ ] API endpoints responden correctamente
-- [ ] Formularios validan datos
-
-### Performance
-- [ ] Tiempos de carga < 3 segundos
-- [ ] Imágenes optimizadas
-- [ ] Caching configurado
-- [ ] CDN activo (si usas Vercel)
-
-### Monitoring
-- [ ] Backups automáticos activos
-- [ ] Uptime monitoring configurado
-- [ ] Alertas funcionando
-- [ ] Logs accesibles
-
-### Documentación
-- [ ] README.md actualizado
-- [ ] Guías de usuario creadas
-- [ ] API documentation disponible
-- [ ] Onboarding flow funcional
+**Tiempo total estimado**: 1-2 horas
 
 ---
 
-## 📅 Timeline Estimado
+## 🔧 Comandos Útiles de Troubleshooting
 
-| Fase | Pasos | Tiempo Estimado | Puede hacerse en paralelo |
-|------|-------|-----------------|--------------------------|
-| **Fase 1: DNS y SSL** | PASO 1-3 | 1 hora (+30min propagación) | No |
-| **Fase 2: Backups** | PASO 4 | 10 minutos | Sí |
-| **Fase 3: Desarrollo** | PASO 5 | 2-4 horas | Sí |
-| **Fase 4: Deployment** | PASO 6 | 30 minutos | No (requiere PASO 5) |
-| **Fase 5: Automation** | PASO 7 | 1-2 horas | Sí |
-| **Fase 6: Monitoring** | PASO 8 | 30 minutos | Sí |
-| **Fase 7: Go Live** | PASO 9 | 1 hora | No |
-| **TOTAL** | | **5-9 horas** | |
-
-**Tiempo mínimo viable** (PASO 1-6 solo): ~4-6 horas
-
----
-
-## 🆘 Recursos de Ayuda
-
-### Documentación
-- [Guía de Infraestructura](./degux-infrastructure-guide.md)
-- [Deployment Guide](/docs/DEPLOYMENT_DEGUX.md)
-- [Database README](/degux/README.md)
-
-### Scripts Útiles
-- Setup DB: `/scripts/setup-degux-db.sh`
-- Backup: `/scripts/backup-degux.sh`
-- Restore: `/scripts/restore-degux.sh`
-- Deploy: `/scripts/deploy.sh`
-
-### Comandos Rápidos
 ```bash
-# Status general
-./scripts/deploy.sh status
+# Verificar servicios
+sudo systemctl status nginx
+pm2 status
+docker ps
 
 # Ver logs
-docker logs n8n-db -f
-docker logs nginx-proxy -f
+pm2 logs degux
+docker logs n8n-db
+sudo tail -f /var/log/nginx/degux_error.log
 
-# Conectar a BD
-docker exec -it n8n-db psql -U degux_user -d degux
+# Reiniciar servicios
+pm2 restart degux
+sudo systemctl restart nginx
+docker restart n8n-db
 
-# Backup manual
-./scripts/backup-degux.sh
+# Verificar puertos
+sudo netstat -tlnp | grep -E ':3000|:3001|:5432'
+
+# Test conexión BD
+docker exec n8n-db psql -U degux_user -d degux -c "SELECT version();"
+
+# Espacio en disco
+df -h
+du -sh ~/degux.cl/node_modules
 ```
 
 ---
 
-## 🎯 Prioridades
+## 📝 Notas Importantes
 
-**CRÍTICO (hacer ya):**
-1. ✅ PASO 1: Configurar DNS ← **EMPEZAR POR AQUÍ**
-2. ⏳ PASO 2-3: SSL/HTTPS
-3. ⏳ PASO 4: Backups automáticos
+### Arquitectura Actual del VPS
 
-**IMPORTANTE (próxima semana):**
-4. ⏳ PASO 5: Desarrollo local
-5. ⏳ PASO 6: Deployment producción
+El VPS aloja **múltiples proyectos**:
 
-**OPCIONAL (cuando haya tiempo):**
-6. ⏳ PASO 7: N8N workflows
-7. ⏳ PASO 8: Monitoring avanzado
+1. **vps-do** - Administración general del servidor
+2. **Vegan-Wetlands** - Servidor de videojuego (luanti.gabrielpantoja.cl)
+   - Usa puerto 3000
+   - Dominio: pitutito.cl
+3. **degux.cl** - Plataforma inmobiliaria (NUEVO)
+   - Usará puerto 3001
+   - Dominio: degux.cl
+
+### Base de Datos Compartida
+
+- Contenedor: `n8n-db` (PostgreSQL 15 + PostGIS)
+- Puerto: 5432 (interno)
+- Databases:
+  - `n8n` - Workflows N8N
+  - `degux` - Aplicación degux.cl ✅
+
+### Variables de Entorno Sensibles
+
+⚠️ **NO COMMITEAR** a Git:
+- `.env.production`
+- `.env.local`
+- Cualquier archivo con passwords
+
+### Puertos Usados
+
+- 80/443: Nginx
+- 3000: Luanti (pitutito.cl)
+- 3001: degux.cl (NUEVO)
+- 5432: PostgreSQL (interno)
+- 5678: N8N
+- 9443: Portainer
 
 ---
 
-**🚀 ¡La infraestructura está lista! Solo falta deployment de la aplicación.**
+## 🆘 Contactos y Referencias
 
-**Última actualización**: 01 de Octubre, 2025
+### Documentación
+- [InfrastructureAgent.md](../../.claude/agents/InfrastructureAgent.md) - Guía completa de deployment
+- [degux-infrastructure-guide.md](../03-arquitectura/degux-infrastructure-guide.md) - Arquitectura VPS
+- [CLAUDE.md](../../CLAUDE.md) - Instrucciones para Claude Code
+
+### Repositorios
+- **App**: https://github.com/gabrielpantoja-cl/degux.cl
+- **VPS Admin**: https://github.com/gabrielpantoja-cl/vps-do
+- **Luanti**: https://github.com/gabrielpantoja-cl/Vegan-Wetlands
+
+### Credenciales (Ver .env files - NO en Git)
+- Database: Ver `vps-do/.env`
+- NextAuth: Ver `degux.cl/.env.production`
+
+---
+
+**Estado**: 🟡 Deployment en progreso (50% completo)
+**Próximo paso crítico**: Configurar Nginx para degux.cl
+**Blocker actual**: Ninguno - listo para continuar
+
+**Última verificación**: 01 Oct 2025 23:30
