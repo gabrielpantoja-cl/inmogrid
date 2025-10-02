@@ -49,7 +49,7 @@ El deployment de degux.cl está **CASI COMPLETO**. La aplicación Next.js está 
 **Comando a ejecutar (requiere sudo)**:
 ```bash
 # En el VPS
-ssh gabriel@VPS_IP_REDACTED
+ssh gabriel@[IP_VPS]
 bash /home/gabriel/vps-do/scripts/generate-ssl-degux.sh
 ```
 
@@ -119,7 +119,7 @@ degux-web Container
 ### Variables de Entorno (.env)
 ```env
 # VPS: /home/gabriel/vps-do/.env
-DEGUX_NEXTAUTH_SECRET=DLjnsoXolDZVeOxbGNJ6byMjwzDHIVSyLpmV1+PGzdU=
+DEGUX_NEXTAUTH_SECRET=[YOUR_NEXTAUTH_SECRET]
 DEGUX_GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID_HERE
 DEGUX_GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET_HERE
 ```
@@ -211,6 +211,7 @@ docker exec n8n-db psql -U degux_user -d degux -c "\dt"
    ```env
    DEGUX_GOOGLE_CLIENT_ID=tu_client_id_real
    DEGUX_GOOGLE_CLIENT_SECRET=tu_client_secret_real
+   DEGUX_NEXTAUTH_SECRET=[YOUR_NEXTAUTH_SECRET]
    ```
 5. Reiniciar contenedor:
    ```bash

@@ -141,7 +141,7 @@ Degux se beneficia de la infraestructura de N8N de múltiples formas:
 ### Servidor
 
 - **Proveedor**: Digital Ocean
-- **IP**: VPS_IP_REDACTED
+- **IP**: [IP_VPS]
 - **OS**: Ubuntu 22.04 LTS
 - **Usuario SSH**: gabriel
 - **Directorio proyecto**: `/home/gabriel/vps-do`
@@ -243,12 +243,12 @@ n8n-db:
 
 **Desarrollo (desde tu máquina local):**
 ```env
-DATABASE_URL="postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5432/degux?schema=public"
+DATABASE_URL="postgresql://degux_user:[PASSWORD]@[IP_VPS]:5432/degux?schema=public"
 ```
 
 **Producción (dentro del VPS):**
 ```env
-DATABASE_URL="postgresql://degux_user:PASSWORD@n8n-db:5432/degux?schema=public"
+DATABASE_URL="postgresql://degux_user:[PASSWORD]@n8n-db:5432/degux?schema=public"
 ```
 
 ### Configuración Inicial
@@ -417,12 +417,12 @@ dig degux.cl +short
 
 #### 2. Configurar Variables de Entorno en VPS
 ```bash
-ssh gabriel@VPS_IP_REDACTED
+ssh gabriel@[IP_VPS]
 cd ~/vps-do
 nano .env
 
 # Agregar:
-DEGUX_DB_PASSWORD=bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=
+DEGUX_DB_PASSWORD=[YOUR_DB_PASSWORD]
 ```
 
 #### 3. Crear Base de Datos
@@ -668,9 +668,9 @@ docker exec nginx-proxy cat /etc/nginx/conf.d/degux.cl.conf
 - **Dominio**: https://degux.cl
 - **API**: https://api.degux.cl
 - **GitHub**: https://github.com/gabrielpantoja-cl/degux.cl.git
-- **VPS IP**: VPS_IP_REDACTED
-- **Portainer**: https://VPS_IP_REDACTED:9443
-- **N8N**: http://N8N_HOST_REDACTED
+- **VPS IP**: [IP_VPS]
+- **Portainer**: https://[URL_PORTAINER]
+- **N8N**: http://n8n.degux.cl
 
 ---
 

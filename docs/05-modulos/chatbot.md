@@ -12,7 +12,7 @@
 
 ### Problema Original
 
-El problema principal era un error de TypeScript que bloqueaba el despliegue en Vercel:
+El problema principal era un error de TypeScript que bloqueaba el despliegue en Cloud Hosting:
 
 ```typescript
 Type '{ userId: string; role: "user"; content: string; }' is not assignable to type 
@@ -171,7 +171,7 @@ POST /api/chat
 1.  **FAQs automáticas**: Respuestas predefinidas para preguntas comunes.
 2.  **IA OpenAI**: Integración con `gpt-4o-mini`.
 3.  **Logging de mensajes**: Todos los mensajes se guardan en base de datos.
-4.  **Streaming**: Respuestas en tiempo real usando Vercel AI SDK.
+4.  **Streaming**: Respuestas en tiempo real usando AI SDK.
 
 ---
 
@@ -179,7 +179,7 @@ POST /api/chat
 
 ### Para Reactivar el Chatbot
 
-1.  **Componente Frontend**: Implementar el componente frontend utilizando el `useChat` hook de Vercel AI SDK.
+1.  **Componente Frontend**: Implementar el componente frontend utilizando el `useChat` hook de AI SDK.
     ```typescript
     import { useChat } from 'ai/react';
 
@@ -252,7 +252,7 @@ POSTGRES_PRISMA_URL=postgresql://...
 
 *   **Runtime**: Node.js (Edge runtime comentado).
 *   **Modelo IA**: `gpt-4o-mini` (optimizado para costo/performance).
-*   **SDK**: Vercel AI SDK para streaming.
+*   **SDK**: AI SDK para streaming.
 *   **Base de datos**: PostgreSQL con Prisma ORM.
 
 ---

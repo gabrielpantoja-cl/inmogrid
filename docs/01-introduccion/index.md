@@ -112,7 +112,7 @@ Nexus Core se desarrolla en **5 fases** progresivas:
 
 ### Infraestructura VPS
 ```
-VPS Digital Ocean (VPS_IP_REDACTED)
+VPS Digital Ocean ([IP_VPS])
 ├─ Nginx (80/443) - Reverse proxy + SSL
 ├─ N8N Stack (port 5432 - Aislado)
 ├─ Nexus Core DB (port 5433 - Dedicado)

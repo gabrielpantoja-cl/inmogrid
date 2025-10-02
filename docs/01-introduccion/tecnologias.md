@@ -523,7 +523,7 @@ jobs:
 #### **2. Performance**
 - **Next.js 15**: App Router con Server Components
 - **PostGIS**: Índices espaciales optimizados
-- **Vercel Edge**: CDN global y edge computing
+- **Cloud Hosting Edge**: CDN global y edge computing
 - **Image optimization**: Next.js automatic optimization
 
 #### **3. Escalabilidad**

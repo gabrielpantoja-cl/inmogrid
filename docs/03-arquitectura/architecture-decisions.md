@@ -100,7 +100,7 @@ Actualizar la imagen Docker de n8n-db de `postgres:15-alpine` a `postgis/postgis
 
 ---
 
-## ADR-003: Arquitectura de deployment Vercel + VPS Database
+## ADR-003: Arquitectura de deployment Cloud Hosting + VPS Database
 
 **Fecha**: 01 de Octubre, 2025
 **Estado**: 🔄 Propuesto (pendiente de implementación)
@@ -108,7 +108,7 @@ Actualizar la imagen Docker de n8n-db de `postgres:15-alpine` a `postgis/postgis
 
 ### Decisión (Propuesta)
 
-Desplegar la aplicación Next.js en **Vercel** (frontend + API Routes) conectando a la base de datos PostgreSQL en el VPS.
+Desplegar la aplicación Next.js en **Cloud Hosting** (frontend + API Routes) conectando a la base de datos PostgreSQL en el VPS.
 
 ### Alternativas Consideradas
 
@@ -116,17 +116,17 @@ Desplegar la aplicación Next.js en **Vercel** (frontend + API Routes) conectand
    - Pros: Todo en un solo lugar, control total
    - Contras: Más recursos en VPS, gestión de deploy manual, sin edge CDN
 
-2. **Vercel + Database en VPS** (✅ recomendada)
-   - Pros: Deploy automático, edge CDN, serverless, escalabilidad, $0 en Vercel hobby plan
+2. **Cloud Hosting + Database en VPS** (✅ recomendada)
+   - Pros: Deploy automático, edge CDN, serverless, escalabilidad, $0 en hobby plan
    - Contras: Latencia de red DB (mitigada con connection pooling)
 
-3. **Todo en Vercel (con Vercel Postgres)** (rechazada)
+3. **Todo en Cloud Hosting (con Database gestionada)** (rechazada)
    - Pros: Todo serverless, cero gestión
    - Contras: $20-50/mes adicionales, vendor lock-in completo
 
 ### Justificación
 
-- Vercel es ideal para Next.js (creadores del framework)
+- Cloud Hosting es ideal para Next.js
 - Deploy automático desde GitHub
 - Edge CDN global incluido
 - $0 costo en hobby plan para desarrollo
@@ -142,9 +142,9 @@ Desplegar la aplicación Next.js en **Vercel** (frontend + API Routes) conectand
 - CI/CD integrado
 
 **Negativas:**
-- Latencia adicional DB ↔ App (VPS ↔ Vercel edge)
+- Latencia adicional DB ↔ App (VPS ↔ Cloud Hosting edge)
   - Mitigación: Connection pooling, caching en Redis, static data pre-rendering
-- Dependencia de Vercel para frontend
+- Dependencia de Cloud Hosting para frontend
   - Mitigación: Next.js es portable, se puede mover a VPS si es necesario
 
 **Estado**: Pendiente de validación con pruebas de latencia reales

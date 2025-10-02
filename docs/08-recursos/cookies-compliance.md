@@ -48,8 +48,8 @@ cookies: {
 }
 
 // src/app/layout.tsx
-import { Analytics } from '@vercel/analytics/react'; 
-import { SpeedInsights } from '@vercel/speed-insights/next'; 
+import { Analytics } from '@application/analytics/react'; 
+import { SpeedInsights } from '@application/speed-insights/next'; 
 import { GoogleAnalytics } from '@next/third-parties/google';
 ```
 
@@ -364,14 +364,14 @@ describe('Cookie Consent Banner', () => {
   - Opt-out: ✅ Funcional
 
 #### Cookies de Rendimiento (Requieren Consentimiento)
-- [ ] **Vercel Analytics**
+- [ ] **Application Analytics**
   - Propósito: ✅ Métricas de rendimiento
   - Consentimiento: ✅ Requerido y obtenido
   - Duración: ✅ 30 días
   - PII: ✅ No recolecta información personal
   - Opt-out: ✅ Funcional
 
-- [ ] **Vercel Speed Insights**
+- [ ] **Application Speed Insights**
   - Propósito: ✅ Core Web Vitals
   - Consentimiento: ✅ Requerido y obtenido
   - Datos: ✅ Solo métricas técnicas
