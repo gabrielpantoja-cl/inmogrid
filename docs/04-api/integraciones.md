@@ -300,8 +300,8 @@ if (!result.success) {
 ## 📞 Soporte
 
 - **Documentación completa**: `https://referenciales.cl/api/public/docs`
-- **GitHub**: https://github.com/TheCuriousSloth/referenciales.cl
-- **Issues**: https://github.com/TheCuriousSloth/referenciales.cl/issues
+- **GitHub**: https://github.com/gabrielpantoja-cl/degux.cl
+- **Issues**: https://github.com/gabrielpantoja-cl/degux.cl/issues
 
 ## 🎯 Ejemplos de Uso
 

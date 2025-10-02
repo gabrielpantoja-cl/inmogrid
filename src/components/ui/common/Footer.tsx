@@ -7,7 +7,8 @@ import WhatsAppIcon from '@/components/ui/common/WhatsAppIcon'; // Usa alias de 
 
 const Footer: React.FC = () => {
   // --- URLs (Asegúrate que sean correctas) ---
-  const githubDiscussionsUrl = 'https://github.com/TheCuriousSloth/referenciales.cl/discussions';
+  const githubRepoUrl = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/degux.cl';
+  const githubDiscussionsUrl = `${githubRepoUrl}/discussions`;
   const whatsappUrl = 'https://wa.me/56931769472'; // Tu número dedicado
   // --- Fin URLs ---
 

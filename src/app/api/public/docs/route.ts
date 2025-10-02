@@ -307,8 +307,8 @@ curl "https://referenciales.cl/api/public/map-config"
   support: {
     description: 'Para soporte técnico o consultas sobre la API',
     contact: {
-      github: 'https://github.com/TheCuriousSloth/referenciales.cl',
-      website: 'https://referenciales.cl',
+      github: process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/degux.cl',
+      website: 'https://degux.cl',
       email: 'Disponible en el sitio web',
     },
   },

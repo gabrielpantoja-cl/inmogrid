@@ -15,8 +15,8 @@ export function ExampleBasicUsage() {
       <GitHubStarsSimple repo="vercel/next.js" />
       
       {/* Con token para mayor rate limit */}
-      <GitHubStarsSimple 
-        repo="TheCuriousSloth/referenciales.cl" 
+      <GitHubStarsSimple
+        repo="gabrielpantoja-cl/degux.cl"
         token={process.env.GITHUB_TOKEN}
       />
       
@@ -69,7 +69,7 @@ export function ExampleCustomHook() {
 // ==========================================
 export async function ExampleDirectAPI() {
   // Obtener estrellas de tu propio repo
-  const result = await fetchGithubStarsEnhanced('TheCuriousSloth/referenciales.cl', {
+  const result = await fetchGithubStarsEnhanced('gabrielpantoja-cl/degux.cl', {
     token: process.env.GITHUB_TOKEN,
     useCache: true,
     timeout: 5000

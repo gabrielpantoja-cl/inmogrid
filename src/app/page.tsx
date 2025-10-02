@@ -12,7 +12,8 @@ import Link from 'next/link';
 import { fetchGithubStars } from '../lib/githubStars';
 
 // Agregar icono de GitHub y contador de estrellas
-const GITHUB_REPO_URL = 'https://github.com/TheCuriousSloth/degux';
+const GITHUB_REPO_URL = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/degux.cl';
+const GITHUB_REPO_FULL = `${process.env.NEXT_PUBLIC_GITHUB_REPO_OWNER || 'gabrielpantoja-cl'}/${process.env.NEXT_PUBLIC_GITHUB_REPO_NAME || 'degux.cl'}`;
 const GITHUB_STARS = 1; // Actualizar dinámicamente si se desea
 
 export default function Page() {
@@ -23,7 +24,7 @@ export default function Page() {
   const [githubStars, setGithubStars] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchGithubStars('TheCuriousSloth/degux').then(setGithubStars);
+    fetchGithubStars(GITHUB_REPO_FULL).then(setGithubStars);
   }, []);
 
   // ✅ ELIMINADO: useEffect que causaba redirects automáticos
