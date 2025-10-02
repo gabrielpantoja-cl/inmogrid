@@ -104,6 +104,8 @@
     "react-syntax-highlighter": "^15.6.6",
     "react-to-pdf": "^2.0.1",
     "recharts": "^2.15.0",
+    "rehype-highlight": "^7.0.2",
+    "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
     "remark-parse": "^11.0.0",

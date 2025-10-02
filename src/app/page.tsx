@@ -212,6 +212,91 @@ export default function Page() {
         </div>
       </div>
       
+      {/* Sección de Recursos y Documentación */}
+      <div className="mt-16 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Centro de Documentación */}
+          <Link
+            href="/docs"
+            className="group bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-xl hover:border-primary/50 transition-all transform hover:-translate-y-1"
+          >
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="text-5xl group-hover:scale-110 transition-transform">
+                📚
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
+                  Documentación
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Accede a toda la documentación del proyecto, roadmap y guías técnicas
+                </p>
+              </div>
+              <div className="mt-auto flex items-center gap-2 text-primary group-hover:gap-3 transition-all">
+                <span className="font-medium">Ver documentos</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
+
+          {/* GitHub Repository */}
+          <a
+            href={GITHUB_REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-xl hover:border-primary/50 transition-all transform hover:-translate-y-1"
+          >
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="text-5xl group-hover:scale-110 transition-transform">
+                💻
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
+                  Código Abierto
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Explora el código fuente, contribuye y revisa el desarrollo del proyecto
+                </p>
+              </div>
+              <div className="mt-auto flex items-center gap-2 text-primary group-hover:gap-3 transition-all">
+                <span className="font-medium">Ver en GitHub</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </div>
+            </div>
+          </a>
+
+          {/* API Documentation */}
+          <Link
+            href="/api-docs"
+            className="group bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-xl hover:border-primary/50 transition-all transform hover:-translate-y-1"
+          >
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="text-5xl group-hover:scale-110 transition-transform">
+                🔌
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
+                  API Pública
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Integra datos inmobiliarios en tus aplicaciones con nuestra API gratuita
+                </p>
+              </div>
+              <div className="mt-auto flex items-center gap-2 text-primary group-hover:gap-3 transition-all">
+                <span className="font-medium">Explorar API</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+
       {/* Footer con información adicional */}
       <div className="mt-12 text-center">
         <p className="text-sm text-gray-500">

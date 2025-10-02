@@ -1,4 +1,4 @@
-# Plan de Trabajo: P&P Technologies - Ecosistema Digital Colaborativo V4.1
+# Plan de Trabajo: P&P Technologies - Ecosistema Digital Colaborativo V2.1
 
 **Fecha:** 01 de Octubre, 2025
 **Autores:** Gabriel & Mona
