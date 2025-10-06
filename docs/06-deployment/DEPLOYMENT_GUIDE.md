@@ -216,6 +216,59 @@ docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 
 ---
 
+### Problema: Contenedor con Imagen Antigua (GitHub Actions Falló)
+
+**Síntoma:**
+- Contenedor ejecutando versión antigua
+- Cambios pusheados a GitHub pero no reflejados en producción
+- GitHub Actions no ejecutó deployment correctamente
+
+**Diagnóstico:**
+```bash
+# 1. Verificar versión del contenedor
+docker exec degux-web cat /app/package.json | grep version
+
+# 2. Verificar último commit en VPS
+ssh gabriel@VPS_IP_REDACTED 'cd ~/degux.cl && git log -1 --oneline'
+
+# 3. Verificar último commit en GitHub
+git log -1 --oneline
+
+# 4. Comparar: si difieren, la imagen Docker no se rebuildeó
+```
+
+**Solución - Deployment Manual de Emergencia:**
+```bash
+# Desde VPS:
+ssh gabriel@VPS_IP_REDACTED
+
+# 1. Actualizar código
+cd ~/degux.cl
+git pull origin main
+
+# 2. Rebuild imagen completa (incluye todos los compose files)
+cd ~/vps-do
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
+  -f docker-compose.degux.yml build degux-web
+
+# 3. Recrear contenedor
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
+  -f docker-compose.degux.yml up -d degux-web
+
+# 4. Verificar deployment exitoso
+docker ps | grep degux-web  # Debe mostrar (healthy)
+docker logs degux-web --tail 20
+curl -I https://degux.cl/api/health  # Debe responder 200
+```
+
+**Prevención - Verificar GitHub Actions:**
+- Revisar logs del workflow en GitHub Actions tab
+- Verificar secrets configurados: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
+- Probar trigger manual del workflow
+- Configurar notificaciones de workflow fallido
+
+---
+
 ### Problema: Cambios no se reflejan
 
 **Síntoma:** Hice cambios pero degux.cl sigue mostrando versión antigua.

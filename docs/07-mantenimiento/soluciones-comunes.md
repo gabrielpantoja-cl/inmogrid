@@ -1,12 +1,55 @@
-# 🚨 Soluciones Comunes - Referenciales.cl
+# 🚨 Soluciones Comunes - degux.cl
 
 ## 📋 Guía de Troubleshooting
 
-Documentación consolidada de errores comunes y sus soluciones para el proyecto referenciales.cl.
+Documentación consolidada de errores comunes y sus soluciones para el proyecto degux.cl.
 
 ---
 
 ## 🔧 Errores Críticos Resueltos
+
+### ✅ Deployment Docker - Contenedor con Imagen Antigua
+**Fecha Resolución:** 6 de Octubre, 2025
+**Problema:** Contenedor ejecutando versión antigua, GitHub Actions falló silenciosamente
+**Síntomas:**
+- Contenedor marcado como "unhealthy"
+- Código actualizado en VPS pero imagen Docker obsoleta
+- Cambios no reflejados en producción
+
+**Solución - Deployment Manual de Emergencia:**
+```bash
+# SSH al VPS
+ssh gabriel@VPS_IP_REDACTED
+
+# 1. Actualizar código
+cd ~/degux.cl
+git pull origin main
+
+# 2. Rebuild imagen Docker (incluye todos compose files)
+cd ~/vps-do
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
+  -f docker-compose.degux.yml build degux-web
+
+# 3. Recrear contenedor
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
+  -f docker-compose.degux.yml up -d degux-web
+
+# 4. Verificar deployment
+docker ps | grep degux-web  # Debe mostrar (healthy)
+curl -I https://degux.cl/api/health  # Debe responder 200
+```
+
+**Prevención:**
+- Verificar GitHub Actions después de cada push
+- Configurar notificaciones de workflow fallido
+- Implementar health checks en el endpoint `/api/health`
+- Revisar secrets en GitHub: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
+
+**Referencias:**
+- `docs/06-deployment/DEPLOYMENT_GUIDE.md` - Guía completa
+- `docs/06-deployment/SOLUCION_DEPLOYMENT_FINAL.md` - Caso resuelto
+
+---
 
 ### ✅ CLIENT_FETCH_ERROR - NextAuth
 **Problema:** Conflicto entre NextAuth v4 y Auth.js v5  
