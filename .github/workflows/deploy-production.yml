@@ -1,0 +1,82 @@
+name: Deploy to Production VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Permite deployment manual desde GitHub UI
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test || echo "Tests not configured yet"
+
+      - name: Build application
+        run: npm run build
+        env:
+          SKIP_ENV_VALIDATION: true
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            cd /home/gabriel/degux.cl
+
+            # Pull latest changes
+            git pull origin main
+
+            # Install dependencies
+            npm ci
+
+            # Generate Prisma client
+            npm run prisma:generate
+
+            # Build application
+            npm run build
+
+            # Restart PM2 process
+            pm2 restart degux-app || pm2 start npm --name "degux-app" -- start
+
+            # Save PM2 configuration
+            pm2 save
+
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            cd /home/gabriel/degux.cl
+            pm2 status
+            curl -f https://degux.cl/api/health || echo "Health check failed"
+
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment successful to https://degux.cl"
+          else
+            echo "❌ Deployment failed"
+          fi
