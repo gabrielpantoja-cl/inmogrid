@@ -63,7 +63,7 @@ export default function AcmeLogo() {
         p-1
       `}
       role="banner"
-      aria-label="Logo de referenciales.cl"
+      aria-label="Logo de degux.cl"
     >
       {/* Circular globe container */}
       <div
@@ -78,10 +78,10 @@ export default function AcmeLogo() {
           aria-hidden="true"
         />
       </div>
-      
+
       <div className="flex flex-col items-start leading-tight">
         <h1 className="text-base font-bold tracking-tight text-white whitespace-nowrap">
-          referenciales<span className="text-white/90">.cl</span>
+          degux<span className="text-white/90">.cl</span>
         </h1>
         <p className="text-xs text-white/80 font-normal hidden sm:block">
           Base de datos colaborativa

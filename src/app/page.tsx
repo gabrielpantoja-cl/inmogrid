@@ -92,10 +92,10 @@ export default function Page() {
 
   return (
     <main className="flex min-h-screen flex-col p-4 md:p-6 bg-gray-50">
-      {/* Header con Logo y GitHub */}
+      {/* Header con Logo */}
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-primary p-4 md:h-52 shadow-lg relative">
         <AcmeLogo />
-        {/* GitHub badge en la esquina superior derecha */}
+        {/* ❌ COMENTADO: GitHub badge duplicado - se mantiene solo en sección de documentación abajo
         <a
           href={GITHUB_REPO_URL}
           target="_blank"
@@ -103,12 +103,12 @@ export default function Page() {
           className="absolute top-4 right-4 flex items-center gap-3 bg-white border-2 border-gray-300 rounded-full px-5 py-2 shadow-lg hover:bg-gray-100 transition-all z-20 min-w-[70px] min-h-[44px] text-base"
           title="Ver en GitHub"
         >
-          {/* GitHub SVG grande */}
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-800"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.48 2.87 8.28 6.84 9.63.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.36 9.36 0 0 1 12 6.84c.85.004 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2z" /></svg>
           <span className="text-gray-800 text-base font-semibold min-w-[32px] text-center">
             {githubStars !== null && githubStars >= 0 ? githubStars : <span className="animate-pulse">···</span>} <span className="ml-1">⭐</span>
           </span>
         </a>
+        */}
       </div>
       
       {/* Contenido Principal */}
@@ -261,8 +261,16 @@ export default function Page() {
             className="group bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-xl hover:border-primary/50 transition-all transform hover:-translate-y-1"
           >
             <div className="flex flex-col items-center text-center gap-4">
-              <div className="text-5xl group-hover:scale-110 transition-transform">
-                💻
+              {/* Logo oficial de GitHub */}
+              <div className="w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-full h-full text-gray-800 group-hover:text-primary transition-colors"
+                  fill="currentColor"
+                  aria-label="GitHub"
+                >
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                </svg>
               </div>
               <div>
                 <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">
