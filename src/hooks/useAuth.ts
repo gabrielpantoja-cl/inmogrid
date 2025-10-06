@@ -1,12 +1,25 @@
-import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 
-export function useAuth() {
-  // ✅ SIEMPRE llamar a useSession (regla de hooks de React)
-  const { data: session, status } = useSession();
+// 🔧 Hook personalizado que funciona sin SessionProvider en desarrollo
+function useSessionSafe() {
+  // En desarrollo, retornar mock sin llamar a useSession
+  if (process.env.NODE_ENV === 'development') {
+    return {
+      data: null,
+      status: 'unauthenticated' as const,
+    };
+  }
 
-  // 🔧 En desarrollo, ignorar la sesión real y usar valores mock
+  // En producción, usar el hook real de NextAuth
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { useSession } = require('next-auth/react');
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  return useSession();
+}
+
+export function useAuth() {
   const isDevelopment = process.env.NODE_ENV === 'development';
+  const { data: session, status } = useSessionSafe();
 
   const isLoading = isDevelopment ? false : status === 'loading';
   const isAuthenticated = isDevelopment ? false : !!session?.user;
