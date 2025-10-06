@@ -4,9 +4,9 @@ const nextConfig = {
   images: {
     // Permitir optimización de imágenes locales y externas
     domains: [
-      'localhost', 
-      'referenciales.cl', 
-      'www.referenciales.cl',
+      'localhost',
+      'degux.cl',
+      'www.degux.cl',
       'vercel.app',
       'lh3.googleusercontent.com',  // Para avatares de Google
       'avatars.githubusercontent.com', // Para avatares de GitHub (futuro)
@@ -33,7 +33,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'referenciales.cl',
+        hostname: 'degux.cl',
         port: '',
         pathname: '/**',
       },
@@ -54,7 +54,7 @@ const nextConfig = {
       default-src 'self';
       script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://vercel.live/ https://va.vercel-scripts.com;
       style-src 'self' 'unsafe-inline';
-      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://vercel.app https://referenciales.cl https://www.referenciales.cl;
+      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://vercel.app https://degux.cl https://www.degux.cl;
       font-src 'self' data:;
       object-src 'none';
       base-uri 'self';
