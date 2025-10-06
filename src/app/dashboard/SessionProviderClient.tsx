@@ -9,6 +9,12 @@ interface SessionProviderProps {
 }
 
 const SessionProviderClient: FC<SessionProviderProps> = ({ children }) => {
+  // 🔧 DESARROLLO: Sin SessionProvider para evitar llamadas a /api/auth/session
+  if (process.env.NODE_ENV === 'development') {
+    return <>{children}</>;
+  }
+
+  // ✅ PRODUCCIÓN: Con SessionProvider normal
   return <SessionProvider>{children}</SessionProvider>;
 };
 

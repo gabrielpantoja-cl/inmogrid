@@ -8,6 +8,12 @@ export async function middleware(req: NextRequest) {
 
   console.log(`🛡️ [MIDDLEWARE] ${req.method} ${pathname}`);
 
+  // 🔧 MODO DESARROLLO: Deshabilitar autenticación completa
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`🔧 [DEV MODE] Skipping auth for: ${pathname}`);
+    return NextResponse.next();
+  }
+
   // ✅ PASO 1: RUTAS COMPLETAMENTE PÚBLICAS (SIN AUTENTICACIÓN)
   const publicPaths = [
     '/api/auth/',           // NextAuth routes
