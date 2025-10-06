@@ -51,11 +51,14 @@ jobs:
             # Generate Prisma client
             npm run prisma:generate
 
+            # Clear Next.js cache before rebuild
+            rm -rf .next/cache
+
             # Build application
             npm run build
 
             # Restart PM2 process (usar npx si no está instalado globalmente)
-            npx pm2 restart degux-app || npx pm2 start npm --name "degux-app" -- start
+            npx pm2 restart degux-app --update-env || npx pm2 start npm --name "degux-app" -- start
 
             # Save PM2 configuration
             npx pm2 save
