@@ -1,26 +1,13 @@
 import { useEffect } from 'react';
-
-// 🔧 Hook personalizado que funciona sin SessionProvider en desarrollo
-function useSessionSafe() {
-  // En desarrollo, retornar mock sin llamar a useSession
-  if (process.env.NODE_ENV === 'development') {
-    return {
-      data: null,
-      status: 'unauthenticated' as const,
-    };
-  }
-
-  // En producción, usar el hook real de NextAuth
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { useSession } = require('next-auth/react');
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  return useSession();
-}
+import { useSession } from 'next-auth/react';
 
 export function useAuth() {
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  const { data: session, status } = useSessionSafe();
+  // ✅ SIEMPRE llamar useSession (cumple con reglas de hooks)
+  const { data: session, status } = useSession();
 
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
+  // En desarrollo, ignorar datos de sesión y usar valores mock
   const isLoading = isDevelopment ? false : status === 'loading';
   const isAuthenticated = isDevelopment ? false : !!session?.user;
   const user = isDevelopment ? null : session?.user;

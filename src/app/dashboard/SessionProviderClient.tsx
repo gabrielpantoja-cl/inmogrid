@@ -9,16 +9,11 @@ interface SessionProviderProps {
 }
 
 const SessionProviderClient: FC<SessionProviderProps> = ({ children }) => {
-  console.log('🔐 [SessionProviderClient] NODE_ENV:', process.env.NODE_ENV);
+  console.log('🔐 [SessionProviderClient] Rendering with SessionProvider');
 
-  // 🔧 DESARROLLO: Sin SessionProvider para evitar llamadas a /api/auth/session
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🔧 [SessionProviderClient] DEV MODE: Skipping SessionProvider');
-    return <>{children}</>;
-  }
-
-  // ✅ PRODUCCIÓN: Con SessionProvider normal
-  console.log('✅ [SessionProviderClient] PROD MODE: Using SessionProvider');
+  // ✅ SIEMPRE usar SessionProvider (requerido por useSession hook)
+  // En desarrollo, el middleware bloqueará las llamadas a /api/auth/session
+  // y useAuth retornará valores mock
   return <SessionProvider>{children}</SessionProvider>;
 };
 
