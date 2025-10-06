@@ -1,7 +1,7 @@
 // src/hooks/useReferencialMapData.ts
 
 /**
- * Hook personalizado para usar la API pública de referenciales.cl
+ * Hook personalizado para usar la API pública de degux.cl
  * Facilita la integración en aplicaciones React externas
  */
 
@@ -15,7 +15,7 @@ import type {
 } from '@/types/public-api';
 
 const DEFAULT_CONFIG: Required<APIConfig> = {
-  baseUrl: 'https://referenciales.cl/api/public',
+  baseUrl: 'https://degux.cl/api/public',
   timeout: 10000, // 10 segundos
 };
 

@@ -26,26 +26,26 @@ export const viewport: Viewport = {
 // Configuración de Metadatos (SEO, Social Sharing, etc.)
 export const metadata: Metadata = {
   title: {
-    template: '%s | Dashboard | @referenciales.cl',
-    default: 'referenciales.cl',
+    template: '%s | Dashboard | @degux.cl',
+    default: 'degux.cl',
   },
   description: 'Base de datos colaborativa.',
-  metadataBase: new URL('https://referenciales.cl/'),
-  applicationName: 'referenciales.cl',
+  metadataBase: new URL('https://degux.cl/'),
+  applicationName: 'degux.cl',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'referenciales.cl',
+    title: 'degux.cl',
   },
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  authors: [{ name: 'referenciales.cl', url: 'https://www.referenciales.cl/' }], 
-  creator: 'referenciales.cl',
-  publisher: 'referenciales.cl',
-  keywords: ['Next.js 15', 'referenciales.cl', 'Dashboard', 'nextjs.org/learn', 'Server Actions', 'tasaciones', 'inmobiliarias', 'Chile'],
+  authors: [{ name: 'degux.cl', url: 'https://www.degux.cl/' }], 
+  creator: 'degux.cl',
+  publisher: 'degux.cl',
+  keywords: ['Next.js 15', 'degux.cl', 'Dashboard', 'nextjs.org/learn', 'Server Actions', 'tasaciones', 'inmobiliarias', 'Chile'],
   icons: {
     icon: [
       { url: '/images/android/android-launchericon-512-512.png', sizes: '512x512', type: 'image/png' },
@@ -68,10 +68,10 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json', // Asegúrate de que exista y esté configurado
   openGraph: {
-    title: 'referenciales.cl Dashboard',
+    title: 'degux.cl Dashboard',
     description: 'Base de datos colaborativa.',
     url: 'https://next14-postgres.vercel.app/', // Reemplaza con tu URL de producción
-    siteName: 'referenciales.cl',
+    siteName: 'degux.cl',
     locale: 'es_CL',
     type: 'website',
     images: [
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
         url: '/images/og-image.png', // Asegúrate de que exista
         width: 1200,
         height: 630,
-        alt: 'referenciales.cl Dashboard',
+        alt: 'degux.cl Dashboard',
       },
     ],
   },
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@tu_twitter', // Reemplaza con tu handle de Twitter si tienes
     description: 'Base de datos colaborativa.',
-    title: 'referenciales.cl Dashboard',
+    title: 'degux.cl Dashboard',
     creator: '@tu_twitter', // Reemplaza con tu handle de Twitter si tienes
     images: ['/images/twitter-image.png'], // Asegúrate de que exista
   },

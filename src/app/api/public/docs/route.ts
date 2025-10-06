@@ -16,7 +16,7 @@ const documentation = {
         title: 'Obtener datos del mapa',
         code: `
 // Fetch básico
-const response = await fetch('https://referenciales.cl/api/public/map-data');
+const response = await fetch('https://degux.cl/api/public/map-data');
 const { data, metadata } = await response.json();
 
 console.log('Total de puntos:', metadata.total);
@@ -34,7 +34,7 @@ const params = new URLSearchParams({
   limit: '50'
 });
 
-const response = await fetch(\`https://referenciales.cl/api/public/map-data?\${params}\`);
+const response = await fetch(\`https://degux.cl/api/public/map-data?\${params}\`);
 const { data } = await response.json();
         `,
       },
@@ -52,7 +52,7 @@ const ReferencialMap = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://referenciales.cl/api/public/map-data');
+        const response = await fetch('https://degux.cl/api/public/map-data');
         const { data, metadata } = await response.json();
         setMapData(data);
       } catch (error) {
@@ -123,7 +123,7 @@ export default ReferencialMap;
         data: 'array of MapPoint objects',
         metadata: 'object with additional info',
       },
-      example: 'https://referenciales.cl/api/public/map-data?comuna=santiago&limit=10',
+      example: 'https://degux.cl/api/public/map-data?comuna=santiago&limit=10',
     },
     '/api/public/map-config': {
       method: 'GET',
@@ -133,7 +133,7 @@ export default ReferencialMap;
         config: 'object with API configuration',
         timestamp: 'ISO date string',
       },
-      example: 'https://referenciales.cl/api/public/map-config',
+      example: 'https://degux.cl/api/public/map-config',
     },
   },
 
@@ -191,7 +191,7 @@ export const useReferencialMapData = (filters?: MapFilters) => {
         if (filters?.anio) params.append('anio', filters.anio.toString());
         if (filters?.limit) params.append('limit', filters.limit.toString());
 
-        const url = \`https://referenciales.cl/api/public/map-data?\${params}\`;
+        const url = \`https://degux.cl/api/public/map-data?\${params}\`;
         const response = await fetch(url);
         
         if (!response.ok) {
@@ -276,7 +276,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
       title: 'JavaScript Vanilla',
       code: `
 // Obtener y mostrar datos
-fetch('https://referenciales.cl/api/public/map-data?limit=5')
+fetch('https://degux.cl/api/public/map-data?limit=5')
   .then(response => response.json())
   .then(result => {
     console.log('Datos obtenidos:', result.data);
@@ -293,13 +293,13 @@ fetch('https://referenciales.cl/api/public/map-data?limit=5')
       title: 'cURL',
       code: `
 # Obtener todos los datos
-curl "https://referenciales.cl/api/public/map-data"
+curl "https://degux.cl/api/public/map-data"
 
 # Con filtros
-curl "https://referenciales.cl/api/public/map-data?comuna=santiago&anio=2024&limit=10"
+curl "https://degux.cl/api/public/map-data?comuna=santiago&anio=2024&limit=10"
 
 # Obtener configuración
-curl "https://referenciales.cl/api/public/map-config"
+curl "https://degux.cl/api/public/map-config"
       `,
     },
   },

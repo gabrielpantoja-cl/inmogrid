@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 const mapConfig = {
   api: {
     version: '1.0.0',
-    baseUrl: 'https://referenciales.cl/api/public',
+    baseUrl: 'https://degux.cl/api/public',
     endpoints: {
       mapData: '/map-data',
       mapConfig: '/map-config',
@@ -61,7 +61,7 @@ const mapConfig = {
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 
 // Obtener datos
-const response = await fetch('https://referenciales.cl/api/public/map-data');
+const response = await fetch('https://degux.cl/api/public/map-data');
 const { data, metadata } = await response.json();
 
 // Renderizar mapa
