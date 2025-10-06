@@ -59,17 +59,17 @@ jobs:
             # Navigate to Docker compose directory
             cd /home/gabriel/vps-do
 
-            # Rebuild Docker image
+            # Rebuild Docker image (incluye TODOS los compose files)
             echo "🏗️  Building Docker image..."
-            docker compose -f docker-compose.yml -f docker-compose.degux.yml build degux-web
+            docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml build degux-web
 
             # Stop old container
             echo "⏸️  Stopping old container..."
-            docker compose -f docker-compose.yml -f docker-compose.degux.yml stop degux-web
+            docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml stop degux-web
 
             # Start new container
             echo "▶️  Starting new container..."
-            docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+            docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
 
             # Wait for container to be ready
             echo "⏳ Waiting for container to be ready..."
