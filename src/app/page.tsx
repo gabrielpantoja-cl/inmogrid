@@ -17,14 +17,22 @@ const GITHUB_REPO_FULL = `${process.env.NEXT_PUBLIC_GITHUB_REPO_OWNER || 'gabrie
 const GITHUB_STARS = 1; // Actualizar dinámicamente si se desea
 
 export default function Page() {
+  console.log('🏠 [HomePage] Rendering...');
+
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [githubStars, setGithubStars] = useState<number | null>(null);
 
+  console.log('🏠 [HomePage] Session status:', status, 'Session data:', session);
+
   useEffect(() => {
-    fetchGithubStars(GITHUB_REPO_FULL).then(setGithubStars);
+    console.log('🏠 [HomePage] useEffect - Fetching GitHub stars...');
+    fetchGithubStars(GITHUB_REPO_FULL).then((stars) => {
+      console.log('🏠 [HomePage] GitHub stars fetched:', stars);
+      setGithubStars(stars);
+    });
   }, []);
 
   // ✅ ELIMINADO: useEffect que causaba redirects automáticos
@@ -66,8 +74,9 @@ export default function Page() {
     }
   };
 
-  // Mostrar loading mientras se verifica la sesión
-  if (status === "loading") {
+  // Mostrar loading mientras se verifica la sesión (SOLO EN PRODUCCIÓN)
+  if (status === "loading" && process.env.NODE_ENV === 'production') {
+    console.log('🏠 [HomePage] Status is loading, showing spinner...');
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
         <div className="flex flex-col items-center gap-4">
@@ -77,6 +86,8 @@ export default function Page() {
       </div>
     );
   }
+
+  console.log('🏠 [HomePage] Rendering main content...');
 
   return (
     <main className="flex min-h-screen flex-col p-4 md:p-6 bg-gray-50">
