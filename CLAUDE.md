@@ -115,24 +115,35 @@ npm run api:validate     # Validate public API
 
 ### Infrastructure Architecture
 
-**VPS Services:**
+**IMPORTANT**: All services run in Docker Compose. NO native systemd services (no PM2, no native Nginx).
+
+**VPS Services (Docker Compose):**
 ```
+Internet → Cloudflare
+    ↓
 VPS Digital Ocean (VPS_IP_REDACTED)
-├─ Nginx (Ports 80/443) - Reverse proxy + SSL
-├─ N8N Stack (Isolated)
-│  ├─ N8N Web (Port 5678)
-│  ├─ N8N PostgreSQL (Port 5432)
-│  └─ N8N Redis
-├─ degux Stack
-│  ├─ degux DB PostgreSQL (Port 5433) ← DEDICATED
-│  └─ degux App (Port 3000) - To deploy
-└─ Portainer (Port 9443) - Docker management
+    ↓
+nginx-proxy (Docker) :80, :443 ← Reverse proxy + SSL
+    ↓
+┌────────────────────────────────────────┐
+│  Docker Containers (vps_network)      │
+├────────────────────────────────────────┤
+│  degux-web (Port 3000) ← degux.cl     │
+│  n8n (Port 5678)       ← N8N UI       │
+│  n8n-db (Port 5432)    ← N8N DB       │
+│  n8n-redis (Port 6379) ← N8N Cache    │
+│  portainer (9443)      ← Docker UI    │
+└────────────────────────────────────────┘
 ```
 
-**Database Isolation:**
-- **Port 5432**: N8N database (workflows, scrapers) - ISOLATED
-- **Port 5433**: degux database (app data) - DEDICATED
-- No cross-database dependencies for failure isolation
+**Database Architecture:**
+- **Port 5432**: N8N PostgreSQL (workflows data) - N8N exclusive
+- **Port 5433**: degux PostgreSQL (app data) - degux exclusive
+- Databases are isolated for security and failure containment
+
+**Deployment Method:**
+- Use `scripts/deploy-to-vps.sh` (automated Docker deployment)
+- See `docs/06-deployment/DEPLOYMENT_GUIDE.md` for details
 
 ### Directory Structure (src/)
 ```
@@ -488,6 +499,8 @@ sudo systemctl status nginx
 ### Documentation
 - **Project Plan**: `docs/01-introduccion/Plan_Trabajo_Ecosistema_Digital_V4.md` - Complete development roadmap
 - **README**: `README.md` - Project overview and setup instructions
+- **Deployment**: `docs/06-deployment/DEPLOYMENT_GUIDE.md` - Docker deployment guide
+- **VPS Architecture**: `docs/06-deployment/PUERTOS_VPS.md` - Port mapping and container architecture
 - **Authentication**: `docs/AUTHENTICATION_GUIDE.md` - Auth debugging guide
 - **Public API**: `docs/PUBLIC_API_GUIDE.md` - API integration guide
 - **Advanced Statistics**: `docs/ADVANCED_STATISTICS_MODULE_GUIDE.md` - Statistics module docs
@@ -504,9 +517,10 @@ sudo systemctl status nginx
 - **Frontend**: `.claude/agents/FrontendAgent.md`
 
 ### VPS Documentation
-- **Infrastructure Docs**: `vps-do-docs/` directory
-- **Docker Compose**: `/home/gabriel/vps-do/degux/docker-compose.yml` (on VPS)
-- **Nginx Config**: `/etc/nginx/sites-available/degux.cl` (on VPS)
+- **Docker Compose Files**: `/home/gabriel/vps-do/docker-compose*.yml` (on VPS)
+- **Nginx Configs**: `/home/gabriel/vps-do/nginx/*.conf` (mounted to nginx-proxy container)
+- **Deployment Script**: `scripts/deploy-to-vps.sh` (automated Docker deployment)
+- **IMPORTANT**: NO native Nginx in `/etc/nginx/` - all config in Docker containers
 
 ### External Resources
 - **Prisma Docs**: https://www.prisma.io/docs

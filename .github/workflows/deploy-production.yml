@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to VPS
+    name: Deploy to VPS (Docker)
     runs-on: ubuntu-latest
 
     steps:
@@ -27,12 +27,12 @@ jobs:
       - name: Run tests
         run: npm run test || echo "Tests not configured yet"
 
-      - name: Build application
+      - name: Build application (verify build works)
         run: npm run build
         env:
           SKIP_ENV_VALIDATION: true
 
-      - name: Deploy to VPS
+      - name: Deploy to VPS via Docker
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -40,28 +40,40 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
+            echo "🚀 Starting Docker deployment for degux.cl"
+
+            # Navigate to app directory
             cd /home/gabriel/degux.cl
 
             # Pull latest changes
+            echo "📥 Pulling latest code..."
             git pull origin main
 
-            # Install dependencies
-            npm ci
+            # Clean PM2 if it exists (installed by error)
+            if command -v pm2 &> /dev/null; then
+              echo "🧹 Cleaning up PM2 (not needed with Docker)..."
+              pm2 delete degux-app 2>/dev/null || true
+              pm2 kill 2>/dev/null || true
+            fi
 
-            # Generate Prisma client
-            npm run prisma:generate
+            # Navigate to Docker compose directory
+            cd /home/gabriel/vps-do
 
-            # Clear Next.js cache before rebuild
-            rm -rf .next/cache
+            # Rebuild Docker image
+            echo "🏗️  Building Docker image..."
+            docker compose -f docker-compose.yml -f docker-compose.degux.yml build degux-web
 
-            # Build application
-            npm run build
+            # Stop old container
+            echo "⏸️  Stopping old container..."
+            docker compose -f docker-compose.yml -f docker-compose.degux.yml stop degux-web
 
-            # Restart PM2 process (usar npx si no está instalado globalmente)
-            npx pm2 restart degux-app --update-env || npx pm2 start npm --name "degux-app" -- start
+            # Start new container
+            echo "▶️  Starting new container..."
+            docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 
-            # Save PM2 configuration
-            npx pm2 save
+            # Wait for container to be ready
+            echo "⏳ Waiting for container to be ready..."
+            sleep 10
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.0.3
@@ -71,15 +83,56 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            cd /home/gabriel/degux.cl
-            npx pm2 status
-            curl -f https://degux.cl/api/health || echo "Health check failed"
+            echo "🔍 Verifying deployment..."
+
+            # Check container status
+            CONTAINER_STATUS=$(docker inspect degux-web --format '{{.State.Status}}' 2>/dev/null || echo "not found")
+            HEALTH_STATUS=$(docker inspect degux-web --format '{{.State.Health.Status}}' 2>/dev/null || echo "no healthcheck")
+
+            echo "Container Status: $CONTAINER_STATUS"
+            echo "Health Status: $HEALTH_STATUS"
+
+            if [ "$CONTAINER_STATUS" != "running" ]; then
+              echo "❌ Container not running!"
+              docker logs degux-web --tail 50
+              exit 1
+            fi
+
+            # Wait for health check to pass
+            echo "⏳ Waiting for health check..."
+            sleep 5
+
+            # Test internal health endpoint
+            INTERNAL_HEALTH=$(docker exec degux-web wget -q -O- http://localhost:3000/api/health 2>&1 || echo "failed")
+
+            if echo "$INTERNAL_HEALTH" | grep -q '"status":"ok"'; then
+              echo "✅ Internal health check passed"
+            else
+              echo "⚠️  Internal health check failed: $INTERNAL_HEALTH"
+            fi
+
+            # Test public endpoint
+            PUBLIC_HEALTH=$(curl -f -s https://degux.cl/api/health 2>&1 || echo "failed")
+
+            if echo "$PUBLIC_HEALTH" | grep -q '"status":"ok"'; then
+              echo "✅ Public health check passed"
+            else
+              echo "⚠️  Public health check: $PUBLIC_HEALTH"
+            fi
+
+            # Show container logs (last 20 lines)
+            echo ""
+            echo "📋 Recent logs:"
+            docker logs degux-web --tail 20
 
       - name: Notify deployment status
         if: always()
         run: |
           if [ ${{ job.status }} == 'success' ]; then
             echo "✅ Deployment successful to https://degux.cl"
+            echo "🐳 Container: degux-web (Docker)"
+            echo "🔗 Health: https://degux.cl/api/health"
           else
             echo "❌ Deployment failed"
+            echo "Check the logs above for details"
           fi
