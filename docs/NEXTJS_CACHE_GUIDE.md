@@ -195,8 +195,89 @@ ssh gabriel@VPS_IP_REDACTED "free -h"
 # Solo hacer git pull y usar el build existente
 ```
 
+## Configuración de Headers de Cache-Control
+
+El proyecto ahora incluye headers optimizados para diferentes tipos de contenido en `next.config.js`:
+
+### Páginas HTML
+```
+Cache-Control: public, max-age=0, s-maxage=3600, stale-while-revalidate=86400
+```
+- **Browser**: No cachea (siempre verifica con servidor)
+- **CDN/Cloudflare**: Cachea 1 hora
+- **Stale-while-revalidate**: Sirve versión antigua por 24h mientras actualiza en background
+
+### Archivos Estáticos (`/_next/static/*`)
+```
+Cache-Control: public, max-age=31536000, immutable
+```
+- Cacheo indefinido (1 año) porque tienen hash en el nombre
+- `immutable`: El archivo nunca cambia
+
+### Imágenes (`/images/*`)
+```
+Cache-Control: public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000
+```
+- **Browser**: 1 día
+- **CDN**: 7 días
+- **Stale**: 30 días
+
+### API Pública
+```
+Cache-Control: public, max-age=60, s-maxage=300, stale-while-revalidate=600
+```
+- **Browser**: 1 minuto
+- **CDN**: 5 minutos
+- **Stale**: 10 minutos
+
+### APIs Privadas
+```
+Cache-Control: private, no-cache, no-store, must-revalidate
+```
+- No se cachea en absoluto
+
+## Cloudflare Configuration
+
+### Purgar Caché Manualmente
+
+1. Dashboard: https://dash.cloudflare.com
+2. Seleccionar dominio: degux.cl
+3. Caching → Configuration
+4. **Purge Everything** (o selectivo por URL)
+
+### Configuración Recomendada en Cloudflare
+
+**Caching > Configuration:**
+- Browser Cache TTL: Respect Existing Headers
+- Development Mode: OFF (salvo debugging)
+
+**Speed > Optimization:**
+- Auto Minify: HTML, CSS, JS ✓
+- Brotli: ✓
+- Early Hints: ✓
+
+**Rules > Page Rules:**
+Crear regla para `degux.cl/_next/static/*`:
+- Cache Level: Cache Everything
+- Edge Cache TTL: 1 year
+
+### Purge Automático desde GitHub Actions
+
+Agregar al workflow (requiere Cloudflare API Token):
+
+```yaml
+- name: Purge Cloudflare Cache
+  run: |
+    curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
+      -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+      -H "Content-Type: application/json" \
+      --data '{"purge_everything":true}'
+```
+
 ## Referencias
 
 - [Next.js Data Fetching and Caching](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)
 - [Incremental Static Regeneration](https://nextjs.org/docs/app/building-your-application/data-fetching/incremental-static-regeneration)
 - [Revalidating Data](https://nextjs.org/docs/app/building-your-application/data-fetching/revalidating)
+- [Cloudflare Cache Documentation](https://developers.cloudflare.com/cache/)
+- [HTTP Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
