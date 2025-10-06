@@ -64,7 +64,7 @@ export default function CookieConsentBanner() {
               <div className="flex items-center gap-2 mb-2">
                 <Shield className="h-5 w-5 text-blue-600" />
                 <h3 className="font-semibold text-gray-900">
-                  Referenciales.cl usa cookies
+                  degux.cl usa cookies
                 </h3>
               </div>
               

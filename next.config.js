@@ -52,9 +52,9 @@ const nextConfig = {
   async headers() {
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://vercel.live/ https://va.vercel-scripts.com;
+      script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com;
       style-src 'self' 'unsafe-inline';
-      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://vercel.app https://degux.cl https://www.degux.cl;
+      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://degux.cl https://www.degux.cl;
       font-src 'self' data:;
       object-src 'none';
       base-uri 'self';

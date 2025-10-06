@@ -27,7 +27,7 @@ export function DocsSidebar({ structure, selectedDoc, onDocSelect }: DocsSidebar
     <div className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto">
       <div className="mb-6">
         <h1 className="text-xl font-bold text-gray-900">📚 Documentación</h1>
-        <p className="text-sm text-gray-600 mt-2">Referenciales.cl</p>
+        <p className="text-sm text-gray-600 mt-2">degux.cl</p>
       </div>
       
       <nav className="space-y-1">

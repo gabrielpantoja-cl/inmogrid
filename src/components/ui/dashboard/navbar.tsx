@@ -86,7 +86,7 @@ export default function Navbar() {
                     <AcmeLogo />
                   </div>
                   <span className="ml-2 text-xl font-bold text-gray-900 hidden sm:block">
-                    Referenciales.cl
+                    degux.cl
                   </span>
                 </Link>
               </div>

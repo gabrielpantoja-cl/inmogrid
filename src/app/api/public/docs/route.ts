@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 const documentation = {
-  title: 'API Pública de Referenciales.cl - Documentación',
+  title: 'API Pública de degux.cl - Documentación',
   version: '1.0.0',
   description: 'API pública para acceder a los datos del mapa de referenciales inmobiliarias de Chile sin autenticación.',
   

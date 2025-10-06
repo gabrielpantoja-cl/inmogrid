@@ -18,22 +18,30 @@ export function ConditionalGoogleAnalytics() {
 }
 
 export function ConditionalVercelAnalytics() {
-  const { preferences } = useCookieConsent();
-  
+  // Deshabilitado para deployment en VPS (no Vercel)
+  // Solo usar en producción si está deployado en Vercel
+  return null;
+
+  /* const { preferences } = useCookieConsent();
+
   // Solo cargar si el usuario consintió cookies de rendimiento
   if (!preferences?.performance) {
     return null;
   }
-  
-  return <Analytics />;
+
+  return <Analytics />; */
 }
 
 export function ConditionalSpeedInsights() {
-  const { preferences } = useCookieConsent();
-  
+  // Deshabilitado para deployment en VPS (no Vercel)
+  // Solo usar en producción si está deployado en Vercel
+  return null;
+
+  /* const { preferences } = useCookieConsent();
+
   if (!preferences?.performance) {
     return null;
   }
-  
-  return <SpeedInsights />;
+
+  return <SpeedInsights />; */
 }
