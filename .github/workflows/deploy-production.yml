@@ -54,11 +54,11 @@ jobs:
             # Build application
             npm run build
 
-            # Restart PM2 process
-            pm2 restart degux-app || pm2 start npm --name "degux-app" -- start
+            # Restart PM2 process (usar npx si no está instalado globalmente)
+            npx pm2 restart degux-app || npx pm2 start npm --name "degux-app" -- start
 
             # Save PM2 configuration
-            pm2 save
+            npx pm2 save
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.0.3
@@ -69,7 +69,7 @@ jobs:
           port: 22
           script: |
             cd /home/gabriel/degux.cl
-            pm2 status
+            npx pm2 status
             curl -f https://degux.cl/api/health || echo "Health check failed"
 
       - name: Notify deployment status
