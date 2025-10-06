@@ -4,7 +4,8 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { signIn, useSession, signOut } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
+import { useAuth } from '@/hooks/useAuth';
 import AcmeLogo from '../components/ui/common/AcmeLogo';
 import OptimizedHeroImage from '../components/ui/common/OptimizedHeroImage';
 import { lusitana } from '../lib/styles/fonts';
@@ -20,12 +21,12 @@ export default function Page() {
   console.log('🏠 [HomePage] Rendering...');
 
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { isLoading: authLoading, isAuthenticated, user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [githubStars, setGithubStars] = useState<number | null>(null);
 
-  console.log('🏠 [HomePage] Session status:', status, 'Session data:', session);
+  console.log('🏠 [HomePage] Auth status:', { authLoading, isAuthenticated, user });
 
   useEffect(() => {
     console.log('🏠 [HomePage] useEffect - Fetching GitHub stars...');
@@ -75,8 +76,8 @@ export default function Page() {
   };
 
   // Mostrar loading mientras se verifica la sesión (SOLO EN PRODUCCIÓN)
-  if (status === "loading" && process.env.NODE_ENV === 'production') {
-    console.log('🏠 [HomePage] Status is loading, showing spinner...');
+  if (authLoading && process.env.NODE_ENV === 'production') {
+    console.log('🏠 [HomePage] Auth is loading, showing spinner...');
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
         <div className="flex flex-col items-center gap-4">
@@ -127,12 +128,12 @@ export default function Page() {
           
           {/* ✅ NUEVO: Mostrar diferentes opciones según el estado de sesión */}
           <div className="flex flex-col gap-4">
-            {session ? (
+            {isAuthenticated ? (
               // Usuario autenticado - mostrar opciones - MUY BUENA IDEA!!!
               <div className="space-y-4">
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                   <p className="text-green-800 font-medium">
-                    ¡Hola, {session.user?.name}!
+                    ¡Hola, {user?.name}!
                   </p>
                   <p className="text-green-600 text-sm">
                     Ya tienes sesión iniciada.

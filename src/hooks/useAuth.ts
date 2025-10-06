@@ -2,6 +2,45 @@ import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 
 export function useAuth() {
+  // 🔧 DESARROLLO: Retornar valores mock sin llamar a useSession
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔧 [useAuth] DEV MODE: Using mock auth data');
+
+    const mockSession = {
+      status: 'unauthenticated' as const,
+      data: null,
+    };
+
+    const isLoading = false;
+    const isAuthenticated = false;
+    const user = null;
+    const userRole = 'user';
+
+    const isAdmin = false;
+    const isSuperAdmin = false;
+    const isUser = true;
+
+    const canCreateReferenciales = true; // En desarrollo, permitir todo
+    const canEditReferenciales = true;
+    const canDeleteReferenciales = true;
+    const canViewSensitiveData = true;
+
+    return {
+      isLoading,
+      isAuthenticated,
+      user,
+      userRole,
+      isAdmin,
+      isSuperAdmin,
+      isUser,
+      canCreateReferenciales,
+      canEditReferenciales,
+      canDeleteReferenciales,
+      canViewSensitiveData,
+    };
+  }
+
+  // ✅ PRODUCCIÓN: Usar NextAuth real
   const { data: session, status } = useSession();
 
   const isLoading = status === 'loading';
