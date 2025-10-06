@@ -23,7 +23,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json 
+# package-lock.json  # COMENTADO: necesario para GitHub Actions deployment
 yarn.lock         
 
 # local env files
