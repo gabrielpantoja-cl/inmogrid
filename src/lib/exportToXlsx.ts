@@ -19,7 +19,7 @@ interface ExportableReferencial {
   superficie: number;
   monto: number | bigint | null;
   observaciones: string | null;
-  userId: string;
+  userId: string | null;
   conservadorId: string;
   createdAt: Date;
   updatedAt: Date;
