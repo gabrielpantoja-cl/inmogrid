@@ -12,6 +12,7 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/__mocks__/fileMock.js',
+    '^next/image$': '<rootDir>/__mocks__/next/image.tsx',
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -38,9 +39,8 @@ const customJestConfig = {
   testTimeout: 30000,
   // Next.js con next/jest maneja automáticamente TypeScript y JSX
   transformIgnorePatterns: [
-    'node_modules/(?!(.*\\.mjs$))',
+    '/node_modules/(?!next-auth|jose|@next-auth/prisma-adapter|@react-leaflet|react-leaflet|leaflet|leaflet-draw|@react-leaflet/core)/'
   ],
-  extensionsToTreatAsEsm: ['.ts', '.tsx'],
 };
 
 module.exports = createJestConfig(customJestConfig);
