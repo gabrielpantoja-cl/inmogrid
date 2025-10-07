@@ -312,7 +312,7 @@ Usuario busca propiedad en Valdivia
 1. **Maximizar uso del VPS** - Ya pagado, capacidad disponible
 2. **Aislamiento total** - Separado de N8N (seguridad y estabilidad)
 3. **Costo cero adicional** - Solo ~300MB RAM extra
-4. **Control total** - Optimización específica para Nexus Core
+4. **Control total** - Optimización específica para degux
 5. **Filosofía open source** - 100% auto-gestionado
 6. **Compliance directo** - Datos en infraestructura propia
 7. **Escalabilidad futura** - Fácil agregar replicas cuando sea necesario
@@ -517,7 +517,7 @@ POSTGRES_PRISMA_URL="postgresql://degux_user:[PASSWORD]@degux-db:5432/degux?sche
 - [x] Enums para ProfessionType, PropertyType, PropertyStatus
 - [x] Schema validado y generado con Prisma
 - [x] **Decisión de Base de Datos** → PostgreSQL Dedicado en VPS
-- [x] Diseño de arquitectura Docker para nexus-db
+- [x] Diseño de arquitectura Docker para degux-db
 - [x] Diseño de script de backups automáticos
 
 #### 🔄 Tareas en Progreso:
@@ -1085,7 +1085,7 @@ Trigger (diario) →
 
 ### GitHub Organization Setup
 - **Nombre organización:** `pp-technologies` o `pantoja-partners`
-- **Repositorio actual:** `new-project-nexus-core` (main branch configurada)
+- **Repositorio actual:** `degux.cl` (main branch configurada)
 - **Repositorio infra:** `vps-do` (VPS management)
 - **Repositorio docs:** `vps-do-docs` (documentación viviente)
 - **Colaboradores:** Gabriel (Owner/Tech Lead) + Mona (Owner/Product Lead)
@@ -1504,7 +1504,7 @@ Trigger (diario) →
 
 ✅ **Diferenciación Clara vs. Competencia**
 - KiteProp/Wasi: suscripciones obligatorias
-- Nexus Core: pago por uso real, sin lock-in
+- degux.cl: pago por uso real, sin lock-in
 
 ✅ **Sostenibilidad de Infraestructura**
 - Costos fijos: ~$135K CLP/mes
