@@ -23,7 +23,7 @@ interface User {
 type ReferencialForm = Prisma.referencialesUncheckedCreateInput & { id: string };
 
 interface FormState extends ReferencialForm {
-  userId: string;
+  userId: string | null;
   conservadorId: string;
   updatedAt: Date;
 }
