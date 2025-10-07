@@ -36,16 +36,18 @@ cleanup() {
 # Capturar Ctrl+C y otras señales
 trap cleanup SIGINT SIGTERM EXIT
 
-# Verificar si el puerto 5432 ya está en uso
-if lsof -Pi :5432 -sTCP:LISTEN -t >/dev/null 2>&1; then
-    echo -e "${YELLOW}⚠️  Puerto 5432 ya está en uso${NC}"
-    echo "Si es un túnel anterior, usa: pkill -f 'ssh -N -L 5432:localhost:5432'"
+# Verificar si el puerto 15432 ya está en uso
+if lsof -Pi :15432 -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo -e "${YELLOW}⚠️  Puerto 15432 ya está en uso${NC}"
+    echo "Si es un túnel anterior, usa: pkill -f 'ssh -N -L 15432:localhost:5432'"
     exit 1
 fi
 
-# 1. Iniciar túnel SSH en background
+# 1. Iniciar túnel SSH en background (forzar IPv4 con -4)
+# Usar puerto local 15432 para evitar conflicto con PostgreSQL local
+# Conectar a la IP interna del contenedor Docker n8n-db (172.18.0.4)
 echo -e "${BLUE}📡 Iniciando túnel SSH a base de datos N8N...${NC}"
-ssh -N -L 5432:localhost:5432 gabriel@VPS_IP_REDACTED &
+ssh -4 -N -L 127.0.0.1:15432:172.18.0.4:5432 gabriel@VPS_IP_REDACTED &
 SSH_PID=$!
 
 # Esperar a que el túnel se establezca
@@ -59,7 +61,7 @@ if ! ps -p $SSH_PID > /dev/null; then
 fi
 
 echo -e "${GREEN}✅ Túnel SSH establecido (PID: $SSH_PID)${NC}"
-echo -e "${BLUE}   localhost:5432 → VPS_IP_REDACTED:5432${NC}"
+echo -e "${BLUE}   localhost:15432 → VPS_IP_REDACTED:5432${NC}"
 echo ""
 
 # 2. Iniciar Next.js dev server
