@@ -37,6 +37,7 @@ export async function middleware(req: NextRequest) {
     '/api/auth-logs/',
     '/api/chat/',
     '/api/delete-account/',
+    '/api/conservadores/',
   ];
 
   const isProtectedApi = protectedApiPaths.some(path => pathname.startsWith(path));
