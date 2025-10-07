@@ -21,7 +21,14 @@ export const prismaMock = {
     create: jest.fn().mockImplementation(() => Promise.resolve()) as MockPrismaFunction,
     update: jest.fn().mockImplementation(() => Promise.resolve()) as MockPrismaFunction,
     delete: jest.fn().mockImplementation(() => Promise.resolve()) as MockPrismaFunction,
-  }
+    upsert: jest.fn().mockImplementation(() => Promise.resolve()) as MockPrismaFunction,
+    deleteMany: jest.fn().mockImplementation(() => Promise.resolve({ count: 0 })) as MockPrismaFunction,
+  },
+  account: {
+    deleteMany: jest.fn().mockImplementation(() => Promise.resolve({ count: 0 })) as MockPrismaFunction,
+  },
+  $queryRaw: jest.fn().mockImplementation(() => Promise.resolve([])) as MockPrismaFunction,
+  $disconnect: jest.fn().mockImplementation(() => Promise.resolve()) as MockPrismaFunction,
 } as unknown as PrismaClient;
 
 // Datos mock para pruebas
