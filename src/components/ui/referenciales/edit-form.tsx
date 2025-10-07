@@ -172,18 +172,18 @@ export default function EditReferencialForm({
             </div>
           </div>
 
-          <FormFields 
-            state={{ 
-              errors: {}, 
-              message: null, 
-              messageType: null, 
-              invalidFields: new Set(), 
-              isSubmitting 
-            }} 
-            currentUser={{ 
-              id: formState.userId, 
-              name: users.find(user => user.id === formState.userId)?.name || '' 
-            }} 
+          <FormFields
+            state={{
+              errors: {},
+              message: null,
+              messageType: null,
+              invalidFields: new Set(),
+              isSubmitting
+            }}
+            currentUser={{
+              id: formState.userId ?? '',
+              name: users.find(user => user.id === formState.userId)?.name || ''
+            }}
           />
 
           {/* Additional Fields */}
