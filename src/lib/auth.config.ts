@@ -70,10 +70,14 @@ export const authOptions: NextAuthOptions = {
         console.error('🔄 [AUTH-REDIRECT] URL parsing error:', error);
       }
       
-      // ✅ REDIRECCIÓN POR DEFECTO AL DASHBOARD
-      const defaultUrl = `${baseUrl}/dashboard`;
-      console.log('🔄 [AUTH-REDIRECT] Default redirect:', defaultUrl);
-      return defaultUrl;
+      // ✅ REDIRECCIÓN POR DEFECTO - Permitir la URL original si no es una página de inicio de sesión
+      // Esto permite el acceso anónimo a rutas como /dashboard si el middleware lo permite.
+      if (url.startsWith(`${baseUrl}/auth/signin`)) {
+        console.log('🔄 [AUTH-REDIRECT] Redirecting to signin page:', url);
+        return url;
+      }
+      console.log('🔄 [AUTH-REDIRECT] Allowing original URL:', url);
+      return url;
     },
     
     // ✅ SESSION CALLBACK - INCLUYE ROLE
