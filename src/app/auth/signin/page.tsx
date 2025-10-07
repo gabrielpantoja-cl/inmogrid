@@ -195,7 +195,7 @@ function SignInContent() {
           {/* ✅ INFORMACIÓN SOBRE LA CORRECCIÓN */}
           <div className="text-center">
             <div className="text-xs text-blue-600 bg-blue-50 p-3 rounded-md border border-blue-200">
-              ✅ Sistema de autenticación optimizado para Vercel
+              ✅ Sistema de autenticación optimizado para VPS
             </div>
           </div>
 
