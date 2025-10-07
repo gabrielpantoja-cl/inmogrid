@@ -36,11 +36,16 @@ cleanup() {
 # Capturar Ctrl+C y otras señales
 trap cleanup SIGINT SIGTERM EXIT
 
-# Verificar si el puerto 15432 ya está en uso
+# Verificar si el puerto 15432 ya está en uso y limpiarlo automáticamente
 if lsof -Pi :15432 -sTCP:LISTEN -t >/dev/null 2>&1; then
     echo -e "${YELLOW}⚠️  Puerto 15432 ya está en uso${NC}"
-    echo "Si es un túnel anterior, usa: pkill -f 'ssh -N -L 15432:localhost:5432'"
-    exit 1
+    echo -e "${BLUE}🧹 Limpiando túneles SSH anteriores...${NC}"
+
+    # Matar todos los procesos usando el puerto 15432
+    lsof -ti :15432 | xargs kill -9 2>/dev/null || true
+    sleep 2
+
+    echo -e "${GREEN}✅ Puerto 15432 liberado${NC}"
 fi
 
 # 1. Iniciar túnel SSH en background (forzar IPv4 con -4)
