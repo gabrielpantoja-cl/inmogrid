@@ -1,5 +1,4 @@
 import { getServerSession } from 'next-auth/next';
-import { redirect } from 'next/navigation';
 import { authOptions } from '@/lib/auth.config';
 import DashboardContent from './DashboardContent';
 import DisclaimerPopup from '@/components/ui/dashboard/DisclaimerPopup';
@@ -33,10 +32,10 @@ function ErrorMessage({ message }: { message: string }) {
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
 
-  // ✅ CORREGIDO: Redirigir a la página de signin, NO a la API
-  if (!session) {
-    redirect('/auth/signin');
-  }
+  // ✅ PERMITIR ACCESO ANÓNIMO - Mostrar contenido limitado si no hay sesión
+  // if (!session) {
+  //   redirect('/auth/signin');
+  // }
 
   try {
     const [latestReferenciales, totalReferenciales] = await Promise.all([

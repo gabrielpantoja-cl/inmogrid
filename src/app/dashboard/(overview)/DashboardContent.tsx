@@ -14,14 +14,14 @@ const TopCommunesChart = dynamic(
 );
 
 interface DashboardContentProps {
-  session: Session;
+  session: Session | null; // ✅ Permitir sesión nula para modo anónimo
   latestReferenciales: any[];
   totalReferenciales: number;
 }
 
-export default function DashboardContent({ 
-  session, 
-  latestReferenciales, 
+export default function DashboardContent({
+  session,
+  latestReferenciales,
 }: DashboardContentProps) {
   return (
     <main className="flex flex-col space-y-6">
@@ -35,7 +35,7 @@ export default function DashboardContent({
       {/* Contenedor principal */}
       <div className="flex flex-col space-y-6">
         {/* Bienvenida */}
-        {session?.user && (
+        {session?.user ? (
           <div className="space-y-2">
             <div className="text-lg text-primary">
               👋 ¡Hola! <span className="font-bold">{session.user.name}</span>
@@ -45,6 +45,18 @@ export default function DashboardContent({
             </div>
             <div className="text-base text-primary">
               Bienvenid@ a referenciales.cl
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-2 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="text-lg text-blue-800">
+              👤 Navegando como <span className="font-bold">Incógnito</span>
+            </div>
+            <div className="text-sm text-blue-600">
+              Estás explorando el dashboard sin autenticación.
+              <a href="/auth/signin" className="ml-1 underline hover:text-blue-700">
+                Inicia sesión
+              </a> para acceder a todas las funciones.
             </div>
           </div>
         )}

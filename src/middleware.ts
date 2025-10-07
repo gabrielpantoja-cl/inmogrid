@@ -85,15 +85,14 @@ export async function middleware(req: NextRequest) {
     );
   }
 
-  // ✅ REGLA 2: PÁGINAS PROTEGIDAS
-  console.log(`🛡️ [MIDDLEWARE] Debugging REGLA 2 - !token: ${!token}, isProtectedPage: ${isProtectedPage}, pathname: ${pathname}`);
+  // ✅ REGLA 2: PÁGINAS PROTEGIDAS - PERMITIR ACCESO ANÓNIMO AL DASHBOARD
   if (!token && isProtectedPage) {
     // Permitir acceso al dashboard si no está autenticado (modo incógnito)
     if (pathname.startsWith('/dashboard')) {
       console.log(`🛡️ [MIDDLEWARE] Unauthenticated access allowed to dashboard: ${pathname}`);
       return NextResponse.next();
     }
-    
+
     console.log(`🛡️ [MIDDLEWARE] Unauthenticated access to protected page: ${pathname}`);
     const loginUrl = new URL('/auth/signin', req.url);
     loginUrl.searchParams.set('callbackUrl', req.url);
