@@ -36,6 +36,15 @@ export default function Page() {
     });
   }, []);
 
+  // ✅ NUEVO: Redirigir automáticamente al dashboard si no está autenticado
+  // Esto simula el comportamiento de "modo incógnito" para acceso directo
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      console.log('🏠 [HomePage] Not authenticated, redirecting to /dashboard...');
+      router.push('/dashboard');
+    }
+  }, [authLoading, isAuthenticated, router]);
+
   // ✅ ELIMINADO: useEffect que causaba redirects automáticos
   // Ya no redirigimos automáticamente al dashboard, el usuario debe hacer clic
 
