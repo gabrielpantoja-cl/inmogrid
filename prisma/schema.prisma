@@ -267,3 +267,59 @@ enum ConnectionStatus {
   rejected
   blocked
 }
+
+// 🆕 MODELO PropertyListing (Ofertas scrapeadas de portales externos)
+model PropertyListing {
+  id              String   @id
+
+  // Información básica
+  title           String
+  description     String?
+  price           BigInt?
+  currency        String   @default("CLP")
+
+  // Ubicación
+  address         String?
+  commune         String
+  region          String
+  lat             Float?
+  lng             Float?
+
+  // Superficies
+  totalSurface    Float?   // Superficie de terreno
+  builtSurface    Float?   // Superficie edificada
+
+  // Características
+  bedrooms        Int?
+  bathrooms       Int?
+  parkingSpots    Int?
+  propertyType    String?
+
+  // Fuente
+  source          ListingSource  // Portal origen
+  sourceUrl       String?        // URL original
+  externalId      String?        // ID en portal origen
+
+  // Imágenes
+  images          String[]  @default([])
+  mainImage       String?
+
+  // Metadata
+  scrapedAt       DateTime  @default(now())
+  publishedAt     DateTime?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([commune, isActive])
+  @@index([source, isActive])
+  @@unique([source, externalId])
+}
+
+enum ListingSource {
+  PORTAL_INMOBILIARIO
+  TOCTOC
+  MERCADO_LIBRE
+  YAPO
+  OTRO
+}
