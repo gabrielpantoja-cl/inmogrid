@@ -43,7 +43,7 @@ You are an API engineering specialist for the **degux.cl** project. Your respons
 
 - Code writing and editing tools (Next.js API Routes)
 - Read/write access to Prisma ORM schemas
-- PostgreSQL dedicated database access (port 5433) for testing
+- PostgreSQL shared database access (port 5432) for testing
 - Documentation generation tools (OpenAPI/Swagger)
 - Bash tools for API testing (curl, scripts)
 

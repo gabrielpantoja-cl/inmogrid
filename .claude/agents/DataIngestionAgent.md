@@ -46,7 +46,7 @@ You are the data ingestion specialist for the **degux.cl** project (P&P Technolo
 - N8N web interface access (http://VPS_IP_REDACTED:5678)
 - File read/write tools for processing various data formats
 - Bash tools for running data processing scripts
-- PostgreSQL dedicated access for data insertion (port 5433)
+- PostgreSQL shared access for data insertion (port 5432, degux database)
 - External APIs: Google Maps Geocoding, SII, Descubro Data
 - Docker Compose management for N8N services
 
@@ -61,7 +61,7 @@ n8n-db:
   image: postgres:15
   container_name: n8n-db
   ports:
-    - "5432:5432"  # N8N database (isolated from degux.cl)
+    - "5432:5432"  # Shared PostgreSQL (n8n and degux databases)
 
 n8n:
   image: n8nio/n8n:latest
@@ -80,13 +80,14 @@ n8n-redis:
 
 **Access Points:**
 - **N8N Interface**: http://VPS_IP_REDACTED:5678
-- **Database**: PostgreSQL on port 5432 (N8N only)
-- **degux.cl DB**: PostgreSQL on port 5433 (separate instance)
+- **Database**: PostgreSQL on port 5432 (shared container: n8n and degux databases)
+- **N8N DB**: Database `n8n` (user: n8n)
+- **degux.cl DB**: Database `degux` (user: degux_user)
 
 **Isolation Strategy:**
-- N8N workflows write to N8N database
-- Scheduled jobs process and transfer validated data to degux.cl database
-- Complete failure isolation: N8N issues don't affect main platform
+- N8N workflows write to N8N database (`n8n`)
+- Scheduled jobs process and transfer validated data to degux database (`degux`)
+- Database-level isolation: Separate databases within shared PostgreSQL container
 
 ---
 
@@ -682,7 +683,7 @@ CREATE TABLE workflow_errors (
 ```
 
 **Error Notification:**
-- Slack channel: #nexus-data-alerts
+- Slack channel: #degux-data-alerts
 - Email: Admin on critical failures
 - Dashboard: Weekly error summary report
 
