@@ -93,13 +93,13 @@ export async function middleware(req: NextRequest) {
     );
   }
 
-  // ✅ REGLA 2: Páginas protegidas requieren autenticación
-  if (!token && (isProtectedPage || isChatbotPage)) {
+  // ✅ REGLA 2: PÁGINAS PROTEGIDAS (DESHABILITADO PARA ACCESO PÚBLICO AL DASHBOARD)
+  /* if (!token && (isProtectedPage || isChatbotPage)) {
     console.log(`🛡️ [MIDDLEWARE] Unauthenticated access to protected page: ${pathname}`);
     const loginUrl = new URL('/auth/signin', req.url);
     loginUrl.searchParams.set('callbackUrl', req.url);
     return NextResponse.redirect(loginUrl);
-  }
+  } */
 
   // ✅ REGLA 3: Rutas admin-only requieren rol admin
   if (token && isAdminOnlyPath && token.role !== 'admin' && token.role !== 'superadmin') {
