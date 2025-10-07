@@ -3,7 +3,7 @@
 **Usage:** `/security_scan`
 
 ## Description
-Executes a comprehensive security audit of the referenciales.cl project using the specialized SecurityAuditorAgent. This command performs vulnerability assessment according to OWASP guidelines and Chilean data protection requirements.
+Executes a comprehensive security audit of the degux.cl project using the specialized SecurityAuditorAgent. This command performs vulnerability assessment according to OWASP guidelines and Chilean data protection requirements.
 
 ## Command Implementation
 ```

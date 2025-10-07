@@ -1,5 +1,5 @@
 {
-  "name": "referenciales-cl",
+  "name": "degux-cl",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -42,7 +42,7 @@
     "integration:example": "echo '⚛️  Ver: docs/integration-examples/ReferencialMapComponent.tsx'",
     "docs:api": "echo '📖 API Docs: http://localhost:3000/api/public/docs'",
     "pantoja:setup": "echo '🏠 Copia ReferencialMapComponent.tsx a tu proyecto pantojapropiedades.cl'",
-    "pantoja:test": "echo '🧪 Prueba: fetch(\"https://referenciales.cl/api/public/map-data?comuna=santiago&limit=10\")'"
+    "pantoja:test": "echo '🧪 Prueba: fetch(\"https://degux.cl/api/public/map-data?comuna=santiago&limit=10\")'"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.9",

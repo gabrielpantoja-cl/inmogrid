@@ -212,7 +212,7 @@ POSTGRES_PRISMA_URL="postgresql://user:pass@host:5433/db"
 GOOGLE_MAPS_API_KEY="maps-api-key"
 
 # ✅ Restrict API key usage in Google Cloud Console
-# - Limit to specific domains (referenciales.cl, degux.cl)
+# - Limit to specific domains (degux.cl)
 # - Restrict to Geocoding API only
 # - Set daily quota limits
 ```
@@ -574,17 +574,17 @@ hostssl degux      nexus_user      0.0.0.0/0               scram-sha-256 # Produ
 # ✅ HTTPS enforcement
 server {
   listen 80;
-  server_name referenciales.cl;
+  server_name degux.cl;
   return 301 https://$host$request_uri;
 }
 
 # ✅ SSL/TLS configuration
 server {
   listen 443 ssl http2;
-  server_name referenciales.cl;
+  server_name degux.cl;
 
-  ssl_certificate /etc/letsencrypt/live/referenciales.cl/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/referenciales.cl/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/degux.cl/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/degux.cl/privkey.pem;
 
   # ✅ Strong SSL ciphers
   ssl_protocols TLSv1.2 TLSv1.3;
@@ -801,14 +801,14 @@ jobs:
 # Test 1: Horizontal privilege escalation
 # User A tries to access User B's properties
 curl -H "Authorization: Bearer USER_A_TOKEN" \
-  https://referenciales.cl/api/properties/USER_B_PROPERTY_ID
+  https://degux.cl/api/properties/USER_B_PROPERTY_ID
 
 # Expected: 403 Forbidden
 
 # Test 2: Vertical privilege escalation
 # Regular user tries admin-only endpoint
 curl -H "Authorization: Bearer USER_TOKEN" \
-  -X DELETE https://referenciales.cl/api/admin/users/123
+  -X DELETE https://degux.cl/api/admin/users/123
 
 # Expected: 403 Forbidden
 ```
@@ -816,7 +816,7 @@ curl -H "Authorization: Bearer USER_TOKEN" \
 **Input Validation Testing:**
 ```bash
 # Test 1: SQL injection attempts
-curl "https://referenciales.cl/api/public/map-data?comuna='; DROP TABLE users;--"
+curl "https://degux.cl/api/public/map-data?comuna='; DROP TABLE users;--"
 
 # Expected: Sanitized by Prisma (no effect)
 

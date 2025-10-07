@@ -3,7 +3,7 @@
 **Usage:** `/generate_api_docs`
 
 ## Description
-Generates comprehensive OpenAPI documentation for all referenciales.cl API endpoints using the specialized APIDeveloperAgent. This command creates up-to-date, interactive documentation for both public and private APIs.
+Generates comprehensive OpenAPI documentation for all degux.cl API endpoints using the specialized APIDeveloperAgent. This command creates up-to-date, interactive documentation for both public and private APIs.
 
 ## Command Implementation
 ```

@@ -1,6 +1,6 @@
-# Nexus Core - Ecosistema Digital Colaborativo 🏗️
+# degux.cl - Ecosistema Digital Colaborativo 🏗️
 
-[![Project Status: Active Development](https://img.shields.io/badge/status-active%20development-brightgreen)](https://github.com/gabrielpantoja-cl/new-project-nexus-core)
+[![Project Status: Active Development](https://img.shields.io/badge/status-active%20development-brightgreen)](https://github.com/gabrielpantoja-cl/degux.cl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![API Status](https://img.shields.io/badge/API%20P%C3%BAblica-Disponible-success)](#-api-pública)
 [![Statistics Module](https://img.shields.io/badge/Estadísticas%20Avanzadas-Completo-brightgreen)](#-módulo-de-estadísticas-avanzadas)
@@ -138,7 +138,7 @@ Portainer (9443) → Gestión independiente
 REST API sin autenticación para integración externa:
 
 ```javascript
-fetch('https://referenciales.cl/api/public/map-data?comuna=valdivia')
+fetch('https://degux.cl/api/public/map-data?comuna=valdivia')
   .then(res => res.json())
   .then(data => console.log(data));
 ```
@@ -226,7 +226,7 @@ fetch('https://referenciales.cl/api/public/map-data?comuna=valdivia')
 
 ```javascript
 // Obtener datos del mapa
-fetch('https://referenciales.cl/api/public/map-data')
+fetch('https://degux.cl/api/public/map-data')
   .then(response => response.json())
   .then(result => {
     if (result.success) {
@@ -262,7 +262,7 @@ const ReferencialMap = () => {
   const [points, setPoints] = useState([]);
 
   useEffect(() => {
-    fetch('https://referenciales.cl/api/public/map-data')
+    fetch('https://degux.cl/api/public/map-data')
       .then(res => res.json())
       .then(result => {
         if (result.success) setPoints(result.data);
@@ -504,8 +504,8 @@ Dashboard → Estadísticas → /dashboard/estadisticas
 
 1. **Clonar el repositorio:**
 ```bash
-git clone https://github.com/gabrielpantoja-cl/new-project-nexus-core.git
-cd new-project-nexus-core
+git clone https://github.com/gabrielpantoja-cl/degux.cl.git
+cd degux.cl
 ```
 
 2. **Instalar dependencias:**
@@ -638,7 +638,7 @@ Si quieres integrar la API pública:
 - 📊 **Estadísticas**: Problemas con análisis o PDFs
 - 🌐 **API**: Problemas de integración externa
 
-**[Crear nuevo issue →](https://github.com/gabrielpantoja-cl/new-project-nexus-core/issues/new)**
+**[Crear nuevo issue →](https://github.com/gabrielpantoja-cl/degux.cl/issues/new)**
 
 ---
 
@@ -664,7 +664,7 @@ Si quieres integrar la API pública:
 
 ### Organización
 - **GitHub Org:** pp-technologies (en configuración)
-- **Repositorio actual:** new-project-nexus-core
+- **Repositorio actual:** degux.cl
 - **Repositorio infra:** vps-do (privado)
 - **Docs:** vps-do-docs
 
@@ -683,7 +683,7 @@ Si estás integrando la API pública o usando el módulo de estadísticas, ¡nos
 ### Enlaces
 - **API Pública:** `/api/public`
 - **Estadísticas:** `/dashboard/estadisticas`
-- **GitHub:** [new-project-nexus-core](https://github.com/gabrielpantoja-cl/new-project-nexus-core)
+- **GitHub:** [degux.cl](https://github.com/gabrielpantoja-cl/degux.cl)
 - **VPS Status:** [vps-status.md](vps-do-docs/reports/vps-status-20250908.md)
 
 ### Contacto

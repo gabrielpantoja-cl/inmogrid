@@ -3,7 +3,7 @@
 **Usage:** `/optimize_db_queries`
 
 ## Description
-Analyzes and optimizes database queries for the referenciales.cl project using the specialized DatabaseManagerAgent. This command focuses on improving performance for spatial queries, large datasets, and frequently accessed property data.
+Analyzes and optimizes database queries for the degux.cl project using the specialized DatabaseManagerAgent. This command focuses on improving performance for spatial queries, large datasets, and frequently accessed property data.
 
 ## Command Implementation
 ```
