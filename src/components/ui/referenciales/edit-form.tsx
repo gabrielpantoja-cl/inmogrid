@@ -54,7 +54,7 @@ export default function EditReferencialForm({
 
   const [formState, setFormState] = useState<FormState>({
     id: referencial.id,
-    userId: referencial.userId,
+    userId: referencial.userId ?? null,
     fojas: referencial.fojas,
     numero: referencial.numero,
     anio: referencial.anio,
