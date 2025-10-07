@@ -6,6 +6,8 @@
     "seed": "node prisma/seed.mjs",
     "build": "npx prisma generate && next build",
     "dev": "next dev --turbo",
+    "dev:tunnel": "ssh -N -L 5432:localhost:5432 gabriel@VPS_IP_REDACTED",
+    "dev:full": "bash scripts/dev-with-tunnel.sh",
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
