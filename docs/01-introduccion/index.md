@@ -1,10 +1,10 @@
-# Introducción - Nexus Core
+# Introducción - degux.cl
 
-Este documento proporciona una visión general de **Nexus Core - Ecosistema Digital Colaborativo**, una iniciativa de datos abiertos diseñada para democratizar el acceso a información inmobiliaria en Chile.
+Este documento proporciona una visión general de **degux.cl - Ecosistema Digital Colaborativo**, una iniciativa de datos abiertos diseñada para democratizar el acceso a información inmobiliaria en Chile.
 
 ## Propósito
 
-**Nexus Core** es un ecosistema digital colaborativo y de código abierto donde profesionales del sector inmobiliario chileno pueden conectarse, compartir conocimiento, gestionar propiedades y acceder a datos transparentes del mercado. La plataforma integra múltiples herramientas profesionales en un solo lugar, fomentando la colaboración y el desarrollo informado del sector.
+**degux.cl** es un ecosistema digital colaborativo y de código abierto donde profesionales del sector inmobiliario chileno pueden conectarse, compartir conocimiento, gestionar propiedades y acceder a datos transparentes del mercado. La plataforma integra múltiples herramientas profesionales en un solo lugar, fomentando la colaboración y el desarrollo informado del sector.
 
 ### Nuestra Filosofía
 
@@ -19,7 +19,7 @@ Creemos que los datos sobre transacciones de propiedades, siendo de origen públ
 
 ## Componentes del Ecosistema
 
-Nexus Core se desarrolla en **5 fases** progresivas:
+degux.cl se desarrolla en **5 fases** progresivas:
 
 ### ✅ Fase 0: Infraestructura (COMPLETADA - Ago 2025)
 - VPS Digital Ocean con 7+ servicios activos
@@ -115,8 +115,8 @@ Nexus Core se desarrolla en **5 fases** progresivas:
 VPS Digital Ocean ([IP_VPS])
 ├─ Nginx (80/443) - Reverse proxy + SSL
 ├─ N8N Stack (port 5432 - Aislado)
-├─ Nexus Core DB (port 5433 - Dedicado)
-├─ Nexus App (port 3000 - Por desplegar)
+├─ degux DB (port 5433 - Dedicado)
+├─ degux App (port 3000 - Por desplegar)
 └─ Portainer (9443) - Docker management
 ```
 
@@ -156,7 +156,7 @@ Para entender el proyecto completo, **consulta el documento fundamental**:
 
 El proyecto utiliza **7 agentes especializados** para desarrollo:
 
-1. **nexus-core-orchestrator** - Coordinador maestro
+1. **degux-orchestrator** - Coordinador maestro
 2. **api-developer-agent** - Diseño de APIs REST
 3. **database-manager-agent** - PostgreSQL + PostGIS
 4. **data-ingestion-agent** - N8N workflows + validación de datos chilenos
@@ -176,9 +176,9 @@ El proyecto utiliza **7 agentes especializados** para desarrollo:
 3. Desarrollar interfaces de Property Management
 4. Lanzar directorio profesional público
 
-**Repositorio:** [gabrielpantoja-cl/new-project-nexus-core](https://github.com/gabrielpantoja-cl/new-project-nexus-core)
+**Repositorio:** [gabrielpantoja-cl/degux.cl](https://github.com/gabrielpantoja-cl/degux.cl)
 
 ---
 
 **Fecha de última actualización:** Octubre 2025
-**Versión del documento:** 2.0 - Actualizado para Nexus Core Ecosystem
+**Versión del documento:** 2.0 - Actualizado para degux.cl Ecosystem

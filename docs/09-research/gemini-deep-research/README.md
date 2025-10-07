@@ -26,7 +26,7 @@ Gemini 2.5 Pro con capacidad de Deep Research puede:
 - Falta de herramientas profesionales
 - Experiencia de usuario deficiente
 
-**Implicaciones para Nexus Core**:
+**Implicaciones para degux.cl**:
 - Oportunidad de modelo freemium vs paid-only
 - Foco en herramientas profesionales (CRM, estadísticas)
 - Networking peer-to-peer entre profesionales
@@ -79,7 +79,7 @@ Cada informe se genera mediante:
    - Foros y comunidades (ChileAtiende, Emol, etc.)
    - Redes sociales (Twitter, Facebook grupos)
 3. **Síntesis y categorización**: Agrupar hallazgos por temas
-4. **Análisis de implicaciones**: Cómo afecta a Nexus Core
+4. **Análisis de implicaciones**: Cómo afecta a degux.cl
 5. **Recomendaciones accionables**: Próximos pasos
 
 ---
