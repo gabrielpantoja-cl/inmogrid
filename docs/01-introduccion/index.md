@@ -126,7 +126,7 @@ Para entender el proyecto completo, **consulta el documento fundamental**:
 
 ### 📋 [Plan de Trabajo V3.0](./Plan_Trabajo_Ecosistema_Digital_V3.md)
 **Documento maestro del proyecto** que incluye:
-- Visión y transformación de referenciales.cl a Nexus Core
+- Visión y transformación de degux.cl a Nexus Core
 - Detalle completo de las 6 fases de desarrollo (0-5)
 - Arquitectura de infraestructura (VPS, Docker, N8N)
 - Decisiones técnicas clave (PostgreSQL dedicado, NextAuth, etc.)

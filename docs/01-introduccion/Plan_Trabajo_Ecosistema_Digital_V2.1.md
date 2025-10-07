@@ -34,7 +34,7 @@ Basados en investigación profunda del mercado (Gemini Deep Research - Oct 2025)
 - **API-first**: Otros desarrolladores pueden construir encima de nuestra infraestructura (integraciones con CRMs existentes como KiteProp, Wasi)
 - **Freemium radical**: Core gratuito y open source, monetización vía servicios de valor agregado
 - **MLS como estándar de facto**: Posicionar nuestro esquema de datos como el estándar de la industria
-- **Datos como activo**: `referenciales-cl` se convierte en la "Bloomberg del mercado inmobiliario chileno"
+- **Datos como activo**: `degux-cl` se convierte en la "Bloomberg del mercado inmobiliario chileno"
 
 ### Diferenciador Clave vs Competencia
 
@@ -1055,7 +1055,7 @@ POSTGRES_PRISMA_URL="postgresql://nexus_user:[PASSWORD]@nexus-db:5432/nexus_core
 
 ## 🎯 Estrategia de Crecimiento de Datos
 
-### Fuentes Principales para `referenciales-cl`:
+### Fuentes Principales para `degux-cl`:
 
 #### ✅ Ya Implementadas:
 1. **Portal Inmobiliario** - Scraping vía N8N
@@ -1303,7 +1303,7 @@ Trigger (diario) →
 
 ### 🔴 Prioridad ALTA (Decidir esta semana):
 4. **Nombre definitivo de la plataforma:**
-   - Opciones: Nexus Core, Referenciales.cl, MLS Chile, InfraProperty
+   - Opciones: Nexus Core, degux.cl, MLS Chile, InfraProperty
    - Consideración: ¿Enfatizar "MLS" en el nombre para claridad de propuesta?
 
 5. **Licencia Open Source:**

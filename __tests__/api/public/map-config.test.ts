@@ -26,7 +26,7 @@ describe('/api/public/map-config', () => {
         
         // Verificar versión de API
         expect(json.config.api.version).toBe('1.0.0');
-        expect(json.config.api.baseUrl).toBe('https://referenciales.cl/api/public');
+        expect(json.config.api.baseUrl).toBe(`${process.env.NEXT_PUBLIC_BASE_URL}/api/public`);
         
         // Verificar configuración del mapa
         expect(json.config.map.defaultCenter).toEqual([-33.4489, -70.6693]);

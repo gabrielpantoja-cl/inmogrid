@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 const mapConfig = {
   api: {
     version: '1.0.0',
-    baseUrl: 'https://degux.cl/api/public',
+    baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/public`,
     endpoints: {
       mapData: '/map-data',
       mapConfig: '/map-config',

@@ -10,7 +10,7 @@ dotenv.config({ path: envPath });
 const requiredEnvVars = [
   'POSTGRES_PRISMA_URL',
   'NEXTAUTH_SECRET',
-  'NEXTAUTH_URL'
+  'NEXT_PUBLIC_BASE_URL'
 ];
 
 export const validateTestEnvironment = () => {
@@ -51,7 +51,7 @@ export const getTestDatabaseUrl = () => {
 };
 
 export const displayTestInfo = () => {
-  console.log('\n🧪 CONFIGURACIÓN DE TESTS - REFERENCIALES.CL');
+  console.log('\n🧪 CONFIGURACIÓN DE TESTS - DEGUX.CL');
   console.log('=' .repeat(50));
   console.log(`📊 Base de datos: ${getTestDatabaseUrl().split('@')[1] || 'Neon PostgreSQL'}`);
   console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'test'}`);
