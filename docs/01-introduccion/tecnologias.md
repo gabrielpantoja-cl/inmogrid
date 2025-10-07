@@ -1,8 +1,8 @@
-# 💻 Stack Tecnológico - Referenciales.cl
+# 💻 Stack Tecnológico - degux.cl
 
 ## 🎯 Resumen Ejecutivo
 
-Referenciales.cl utiliza un stack tecnológico moderno y robusto, seleccionado específicamente para manejar datos geoespaciales, proporcionar una excelente experiencia de usuario y escalar eficientemente con el crecimiento del proyecto.
+degux.cl utiliza un stack tecnológico moderno y robusto, seleccionado específicamente para manejar datos geoespaciales, proporcionar una excelente experiencia de usuario y escalar eficientemente con el crecimiento del proyecto.
 
 ---
 
