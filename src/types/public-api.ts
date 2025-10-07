@@ -1,7 +1,7 @@
 // src/types/public-api.ts
 
 /**
- * Tipos TypeScript para la API pública de referenciales.cl
+ * Tipos TypeScript para la API pública de degux.cl
  * Usar estos tipos en aplicaciones externas para mejor type safety
  */
 

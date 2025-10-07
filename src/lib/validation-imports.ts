@@ -1,5 +1,5 @@
 /**
- * 🔍 VALIDADOR DE IMPORTACIONES - referenciales.cl
+ * 🔍 VALIDADOR DE IMPORTACIONES - degux.cl
  * 
  * Este archivo valida que todas las importaciones con alias estén funcionando correctamente
  * después de la migración al directorio src/

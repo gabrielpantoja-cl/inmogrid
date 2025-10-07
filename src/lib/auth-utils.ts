@@ -1,6 +1,6 @@
 /**
  * Utilidades de autenticación con logging mejorado
- * Autor: Claude - Sistema de autenticación robusto para referenciales.cl
+ * Autor: Claude - Sistema de autenticación robusto para degux.cl
  * Fecha: Mayo 2025
  */
 
@@ -39,7 +39,7 @@ class AuthLogger {
       details: {
         ...details,
         environment: process.env.NODE_ENV || 'unknown',
-        nextAuthUrl: process.env.NEXTAUTH_URL || 'not-set'
+        nextAuthUrl: process.env.NEXT_PUBLIC_BASE_URL || 'not-set'
       },
       userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'server',
       url: typeof window !== 'undefined' ? window.location.href : 'server'
