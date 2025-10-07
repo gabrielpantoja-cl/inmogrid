@@ -1,50 +1,55 @@
-# Plan de Trabajo: P&P Technologies - Ecosistema Digital Colaborativo V2.1
+# Plan de Trabajo: P&P Technologies - Infraestructura Nacional de Datos Inmobiliarios V5.0
 
-**Fecha:** 01 de Octubre, 2025
+**Fecha:** 07 de Octubre, 2025
 **Autores:** Gabriel & Mona
-**Versión:** 4.1 - Modelo Sin Suscripciones + Monetización de Blog
+**Versión:** 5.0 - Re-posicionamiento Estratégico como Plataforma de Investigación
 **Proyecto:** degux.cl (P&P Technologies / Pantoja & Partners)
 **Repositorio:** https://github.com/gabrielpantoja-cl/degux.cl
 
-**Changelog V4.1:**
-- ✅ Eliminación total de planes de suscripción recurrentes
-- ✅ Capa 2: Licencias perpetuas + soporte on-demand
-- ✅ Capa 4: Sistema de créditos prepago (sin expiración)
-- ✅ Capa 5 (NUEVA): Blog y contenido premium con sponsorships
-- ✅ Proyección de revenue actualizada: $10-14M CLP/mes (18 meses)
+**Changelog V5.0 (RE-POSICIONAMIENTO ESTRATÉGICO):**
+- 🎯 **CAMBIO FUNDAMENTAL**: De "MLS Colaborativo" a "Infraestructura de Investigación y Datos"
+- 🎯 Nueva Visión: "Infraestructura Nacional de Inteligencia Geoespacial Inmobiliaria"
+- ✅ Fase 1 redefinida: "Registro de Expertos Verificados (REV)" para validación de datos
+- ✅ Fase 2 redefinida: "Sistema de Validación Colaborativa + Peer Review"
+- ✅ Módulo de Estadísticas Avanzadas posicionado como producto estrella
+- ✅ Sofía RAG redefinida como "Herramienta de Consulta Legal y Estadística"
+- ✅ Capa 4 (Inteligencia de Mercado) como revenue stream principal (50-60% del total)
+- ✅ Target primario: Académicos, instituciones financieras, gobierno y tasadores
 
 ---
 
-## 🎯 Visión del Ecosistema Digital Colaborativo (ACTUALIZADA)
+## 🎯 Visión del Ecosistema Digital (V5.0 - RE-POSICIONAMIENTO ESTRATÉGICO)
 
-Transformar de **PropTech regional** a **InfraTech del mercado inmobiliario chileno**: construir la infraestructura colaborativa y de código abierto que democratice el acceso a datos inmobiliarios, comenzando por Los Ríos y expandiendo a nivel nacional.
+Transformar de **PropTech regional** a **Infraestructura Nacional de Inteligencia Geoespacial Inmobiliaria**: construir la plataforma de datos y analítica que democratice el acceso a información inmobiliaria de origen público, mitigando la asimetría de información para investigación académica, validación estadística e inteligencia de mercado institucional.
 
-### Concepto Clave: **"El GitHub del Sector Inmobiliario Chileno"**
+### Concepto Clave: **"Infraestructura Nacional de Datos Inmobiliarios para la Investigación"**
 
-Basados en investigación profunda del mercado (Gemini Deep Research - Oct 2025), validamos que el mercado chileno presenta tres brechas críticas de infraestructura:
+> **degux.cl** es la **infraestructura pública de datos inmobiliarios** para la investigación económica, validación estadística e inteligencia de mercado en Chile. Transformamos datos fragmentados del Conservador de Bienes Raíces (CBR) en conocimiento geoespacial estructurado y auditable, mitigando la asimetría de información que afecta a académicos, instituciones financieras, organismos gubernamentales y ciudadanos.
 
-1. **Abismo de Colaboración**: Ausencia de un verdadero MLS (Multiple Listing Service) abierto
-2. **Frontera Rural**: Asimetría de información en parcelas de agrado
-3. **Nicho Experto**: Complejidad en tasaciones de expropiación
+Basados en investigación profunda del mercado (Gemini Deep Research - Oct 2025) y análisis estratégico, validamos que el mercado chileno requiere:
 
-### Pilares Estratégicos (Validados por Investigación)
+1. **Centralización de Datos Transaccionales**: Base de datos PostGIS con referenciales del CBR estandarizados
+2. **Validación Algorítmica**: Crowdsourcing de experticia profesional para enriquecer metadatos
+3. **Analítica Geoespacial Avanzada**: Motor de inteligencia territorial para investigación y tasaciones
 
-- **Plataforma abierta** donde usuarios suben datos y acceden a análisis gratuitos
-- **Crowdsourced data**: Los usuarios aportan datos, todos se benefician del conocimiento colectivo
-- **API-first**: Otros desarrolladores pueden construir encima de nuestra infraestructura (integraciones con CRMs existentes como KiteProp, Wasi)
-- **Freemium radical**: Core gratuito y open source, monetización vía servicios de valor agregado
-- **MLS como estándar de facto**: Posicionar nuestro esquema de datos como el estándar de la industria
-- **Datos como activo**: `degux-cl` se convierte en la "Bloomberg del mercado inmobiliario chileno"
+### Pilares Estratégicos (Re-enfocados a Datos y Validación)
+
+- **Infraestructura de datos, no marketplace**: Core es la calidad, completitud y precisión de datos públicos del CBR
+- **Registro de Expertos Verificados (REV)**: Profesionales certificados aportan y validan metadatos, mejorando precisión algorítmica
+- **API-first para investigación**: Target primario son universidades, centros de investigación, bancos y gobierno
+- **Módulo Estadístico como producto estrella**: Análisis geoespacial en tiempo real, reportes PDF para CBR, estudios de factibilidad
+- **Datos agregados y anonimizados**: Cumplimiento con Ley 19.628, servicios de inteligencia de mercado para instituciones
+- **Sofía RAG como herramienta de consulta legal**: No es chatbot de servicio, es motor de consulta sobre normativa CBR/SII y estadísticas
 
 ### Diferenciador Clave vs Competencia
 
-**No somos otro portal inmobiliario**, somos **infraestructura colaborativa**:
+**No somos otro portal inmobiliario**, somos **infraestructura de investigación y datos**:
 
-- **Vs. Portal Inmobiliario/Yapo**: Ellos venden visibilidad. Nosotros facilitamos colaboración entre corredores.
-- **Vs. KiteProp/Wasi**: Ellos son CRMs cerrados con "MLS" propietario. Nosotros somos protocolo abierto compatible con todos.
-- **Vs. Houm**: Ellos son verticales (arriendo/venta). Nosotros somos infraestructura horizontal.
+- **Vs. Portal Inmobiliario/Yapo**: Ellos venden visibilidad de propiedades. Nosotros vendemos inteligencia de mercado.
+- **Vs. KiteProp/Wasi**: Ellos son CRMs para corredores. Nosotros somos plataforma de datos para investigadores e instituciones.
+- **Vs. Houm**: Ellos venden/arriendan propiedades. Nosotros proveemos datos para tasaciones y análisis académico.
 
-**Nuestra ventaja**: En un mercado con caída del 18% en ventas y desconfianza generalizada hacia corredores, una plataforma **gratuita, abierta y colaborativa** resuelve el problema estructural de fragmentación y crea efectos de red imposibles de replicar.
+**Nuestra ventaja**: Única plataforma chilena enfocada en **datos transaccionales del CBR como producto**, no como medio para vender propiedades. El modelo "Bloomberg del mercado inmobiliario chileno" resuelve necesidades desatendidas de bancos, gobierno, universidades y tasadores profesionales.
 
 ---
 
@@ -92,15 +97,22 @@ Basados en investigación profunda del mercado (Gemini Deep Research - Oct 2025)
 
 ### ✅ Componentes YA IMPLEMENTADOS
 
-#### 1. **Mapa con Estadísticas Avanzadas** ✅
+#### 1. **Módulo de Estadísticas Avanzadas (PRODUCTO ESTRELLA)** ✅
 - **Ruta:** `/dashboard/estadisticas`
-- **Stack:** PostGIS + React Leaflet + Recharts
-- **Features:**
-  - Selección de áreas con herramienta de círculo
-  - Estadísticas en tiempo real (precios, superficies, tendencias)
-  - 6 tipos de gráficos: scatter, tendencias, histogramas
-  - Generación de reportes PDF para CBR
-  - Integración con datos del Conservador de Bienes Raíces
+- **Stack:** PostGIS + React Leaflet + Recharts + jsPDF
+- **Posicionamiento:** Motor de analítica geoespacial para investigación y tasaciones profesionales
+- **Features Implementadas:**
+  - Selección de áreas con herramienta de círculo (queries PostGIS)
+  - Estadísticas en tiempo real (precios, superficies, tendencias de mercado)
+  - 6 tipos de gráficos interactivos: scatter, líneas de tendencia, histogramas
+  - **Generación de reportes PDF completos para revisión en CBR** (3 páginas: resumen ejecutivo, tabla completa de propiedades, campos técnicos)
+  - Integración directa con referenciales del Conservador de Bienes Raíces
+  - Exportación a Excel/CSV para análisis adicional
+- **Casos de uso:**
+  - Tasaciones MOP (Ministerio de Obras Públicas)
+  - Estudios de factibilidad para desarrolladores
+  - Informes periciales judiciales
+  - Investigación académica en economía urbana
 
 #### 2. **Data Ingestion Automatizada (N8N)** ✅
 - **Workflows activos:**
@@ -120,61 +132,78 @@ Basados en investigación profunda del mercado (Gemini Deep Research - Oct 2025)
 
 ### 🔜 Componentes EN DESARROLLO (Fase 1 - Actual)
 
-#### 4. **Sistema de Perfiles Profesionales** 🔜
+#### 4. **Registro de Expertos Verificados (REV)** 🔜
 **Estado:** Schema diseñado, pendiente aplicar a BD
-**Prioridad:** ALTA - Base para Networking y CRM
+**Prioridad:** ALTA - Base para Validación de Datos y Crowdsourcing
 
-**Modelos Prisma creados:**
+**CAMBIO ESTRATÉGICO**: De "Sistema de Perfiles Profesionales para venta" a "Registro de Expertos para validación de datos"
+
+**Modelos Prisma redefinidos:**
 ```prisma
 User {
-  // Nuevos campos de perfil
+  // Credenciales de experto
   bio, profession, company, phone
   region, commune, website, linkedin
   isPublicProfile
+  // NUEVO: Campos de experticia
+  certifications[]  // ej: "Tasador MOP", "Perito Judicial"
+  specialties[]     // ej: "Expropiaciones", "Parcelas rurales"
+  contributionScore // Puntaje por validaciones aceptadas
 
   // Relaciones
-  properties[]
+  referencialValidations[]  // Validaciones de datos aportadas
+  properties[]              // Propiedades para ingesta, NO para venta
   connectionsInitiated[]
   connectionsReceived[]
 }
 
 Property {
-  // Propiedades listadas por usuarios
+  // REDEFINIDO: Ingesta de datos brutos, NO listados de venta
   title, description, propertyType, status
   address, commune, region, lat, lng
   bedrooms, bathrooms, price
   images[], mainImage
+  // NUEVO: Campos de validación
+  isValidatedByExpert    // Boolean
+  validatedBy            // Relación a User experto
+  validationNotes        // Metadatos enriquecidos por experto
+  dataSource            // ej: "Portal Inmobiliario", "CBR", "N8N scraping"
 }
 
 Connection {
-  // Red de networking
+  // REDEFINIDO: Networking para validación de datos
   requesterId, receiverId, status, message
+  // NUEVO: Propósito de conexión
+  purpose  // ej: "Revisar tasación", "Validar clasificación catastral"
 }
 ```
 
-**Rutas a implementar:**
-- `/dashboard/perfil` - Editar mi perfil
-- `/networking/[userId]` - Perfil público
-- `/networking/mis-propiedades` - Mis propiedades
+**Rutas redefinidas:**
+- `/dashboard/perfil` - Editar perfil de experto (credenciales, especialidades)
+- `/networking/[userId]` - Perfil público de experto (historial de validaciones)
+- `/dashboard/validaciones` - Panel de contribuciones de datos
+- `/dashboard/ingesta-datos` - Importar datos brutos desde fuentes
 
-**Decisión pendiente:** Base de datos
-- **Opción A:** Neon (serverless PostgreSQL con branching)
-- **Opción B:** PostgreSQL self-hosted en VPS (ya disponible)
-- **Opción C:** Híbrido (Neon dev, VPS producción)
+**Decisión resuelta:** Base de datos
+- ✅ **PostgreSQL Dedicado en VPS** (decidido en V4)
+- Puerto 5433, aislado, PostGIS incluido
 
 ---
 
 ### 🔜 Componentes PLANIFICADOS (Fase 2-5)
 
-#### 5. **Networking - Red de Profesionales** 🔜
+#### 5. **Sistema de Validación Colaborativa + Peer Review** 🔜
 **Prioridad:** ALTA
-**Dependencia:** Perfiles de Usuario (Fase 1)
+**Dependencia:** Registro de Expertos Verificados (Fase 1)
 
-- Directorio de profesionales (corredores, tasadores, arquitectos)
-- Sistema de conexiones (estilo LinkedIn)
-- Foro de discusión por categorías
-- Sistema de mensajería privada
-- Búsqueda por región/especialidad/servicios
+**REDEFINIDO**: De "Networking para venta" a "Validación de Datos y Crowdsourcing de Experticia"
+
+- Directorio de expertos por especialidad técnica (tasadores MOP, peritos judiciales, especialistas en parcelas rurales)
+- Sistema de conexiones para validación cruzada (solicitar revisión de tasación, validar clasificación catastral)
+- Foro técnico con categorías académicas: "Metodologías de Tasación", "Interpretación de Normativa CBR", "Casos Complejos"
+- Sistema de mensajería para discutir anomalías de datos o segunda opinión técnica
+- Búsqueda por certificaciones profesionales y experiencia verificada
+- Sistema de reputación basado en precisión de contribuciones y citaciones en reportes
 
 #### 6. **Blog y Centro de Datos** 🔜
 **Prioridad:** MEDIA (SEO y educación)
@@ -185,19 +214,23 @@ Connection {
 - CMS para administradores y autores invitados
 - SEO optimizado para captar tráfico orgánico
 
-#### 7. **Sofía - Agente Bot RAG** 🔜
+#### 7. **Sofía - Herramienta de Consulta Legal y Estadística (RAG)** 🔜
 **Prioridad:** MEDIA-ALTA (Diferenciador técnico)
 **Base actual:** `/chatbot` con modelo ChatMessage
 
+**REDEFINIDO**: De "Chatbot de servicio" a "Motor de consulta sobre normativa y estadísticas"
+
 **Mejoras planificadas:**
-- Integrar Anthropic Claude con RAG
+- Integrar Anthropic Claude con RAG (Retrieval-Augmented Generation)
 - Vector DB (Supabase pgvector o Pinecone)
-- Contexto sobre:
-  - Base de datos de referenciales
-  - Documentos legales CBR/SII
-  - Preguntas frecuentes
-  - Datos de mercado en tiempo real
-- Widget flotante disponible globalmente
+- Base de conocimiento especializada:
+  - Documentos legales CBR/SII (normativas, jurisprudencia)
+  - Base de datos de referenciales históricos
+  - Literatura académica sobre tasaciones
+  - Metodologías de valuación MOP
+- Widget flotante para consultas técnicas
+- Sistema de citación de fuentes (transparencia académica)
+- Casos de uso: "¿Qué dice la normativa CBR sobre escrituras de parcelas subdivididas?", "Estadísticas de tasaciones MOP en expropiaciones 2020-2024"
 
 #### 8. **CRM Inmobiliario Completo** 🔜
 **Prioridad:** MEDIA
