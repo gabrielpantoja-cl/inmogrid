@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
 
   // ✅ PASO 1: RUTAS COMPLETAMENTE PÚBLICAS (SIN AUTENTICACIÓN)
   const publicPaths = [
-    // '/dashboard/',          // 🔓 ACCESO PÚBLICO AL DASHBOARD - Manejado explícitamente en REGLA 2
+    '/dashboard/',          // 🔓 ACCESO PÚBLICO AL DASHBOARD - Manejado explícitamente en REGLA 2
     '/api/auth/',           // NextAuth routes
     '/api/public/',         // 🆕 API pública (para pantojapropiedades.cl y otros)
     '/_next/',              // Next.js internals
