@@ -140,42 +140,40 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <CookieConsentProvider>
-          <SessionProviderClient>
-            {children}
+          {children}
 
-            {/* Componente para mostrar notificaciones (react-hot-toast) */}
-            <Toaster
-              position="top-right"
-              toastOptions={{
+          {/* Componente para mostrar notificaciones (react-hot-toast) */}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+              success: {
                 duration: 3000,
                 style: {
-                  background: '#363636',
-                  color: '#fff',
+                  background: '#22c55e',
                 },
-                success: {
-                  duration: 3000,
-                  style: {
-                    background: '#22c55e',
-                  },
+              },
+              error: {
+                duration: 3000,
+                style: {
+                  background: '#ef4444',
                 },
-                error: {
-                  duration: 3000,
-                  style: {
-                    background: '#ef4444',
-                  },
-                },
-              }}
-            />
+              },
+            }}
+          />
 
-            {/* Analytics condicionales - Solo se cargan con consentimiento */}
-            <ConditionalGoogleAnalytics />
-            <ConditionalVercelAnalytics />
-            <ConditionalSpeedInsights />
+          {/* Analytics condicionales - Solo se cargan con consentimiento */}
+          <ConditionalGoogleAnalytics />
+          <ConditionalVercelAnalytics />
+          <ConditionalSpeedInsights />
 
-            {/* Banner de consentimiento de cookies */}
-            <CookieConsentBanner />
+          {/* Banner de consentimiento de cookies */}
+          <CookieConsentBanner />
 
-          </SessionProviderClient>
         </CookieConsentProvider>
       </body>
     </html>

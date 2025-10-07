@@ -98,7 +98,7 @@ function SignInContent() {
         timestamp: new Date().toISOString()
       });
       
-      // ✅ CONFIGURACIÓN OPTIMIZADA PARA VERCEL
+      // ✅ CONFIGURACIÓN OPTIMIZADA PARA VPS
       const result = await signIn('google', {
         callbackUrl,
         redirect: true // Permitir redirección automática en producción
