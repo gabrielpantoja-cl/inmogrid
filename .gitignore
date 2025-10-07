@@ -7,6 +7,10 @@
 
 # testing
 /coverage
+playwright-report/
+playwright/.auth/
+test-results/
+.env.test.local
 
 # next.js
 /.next/
