@@ -86,6 +86,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // ✅ REGLA 2: PÁGINAS PROTEGIDAS
+  console.log(`🛡️ [MIDDLEWARE] Debugging REGLA 2 - !token: ${!token}, isProtectedPage: ${isProtectedPage}, pathname: ${pathname}`);
   if (!token && isProtectedPage) {
     // Permitir acceso al dashboard si no está autenticado (modo incógnito)
     if (pathname.startsWith('/dashboard')) {
