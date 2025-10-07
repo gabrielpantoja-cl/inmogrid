@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
 
   // ✅ PASO 1: RUTAS COMPLETAMENTE PÚBLICAS (SIN AUTENTICACIÓN)
   const publicPaths = [
-    '/dashboard/',          // 🔓 ACCESO PÚBLICO AL DASHBOARD
+    // '/dashboard/',          // 🔓 ACCESO PÚBLICO AL DASHBOARD - Manejado explícitamente en REGLA 2
     '/api/auth/',           // NextAuth routes
     '/api/public/',         // 🆕 API pública (para pantojapropiedades.cl y otros)
     '/_next/',              // Next.js internals
@@ -19,9 +19,6 @@ export async function middleware(req: NextRequest) {
     '/sitemap.xml',         
     '/_vercel/',            
     '/auth/error',          // Página de error de auth
-    '/opengraph-image.png', // OpenGraph image
-    '/static/',             // Archivos estáticos
-    '/.well-known/',        // Well-known URIs
     '/login',               // Página de login
     '/auth/signin',         // Página de signin
     '/privacy',             // Página de privacidad
@@ -88,13 +85,19 @@ export async function middleware(req: NextRequest) {
     );
   }
 
-  // ✅ REGLA 2: PÁGINAS PROTEGIDAS (DESHABILITADO PARA ACCESO PÚBLICO AL DASHBOARD)
-  /* if (!token && (isProtectedPage || isChatbotPage)) {
+  // ✅ REGLA 2: PÁGINAS PROTEGIDAS
+  if (!token && isProtectedPage) {
+    // Permitir acceso al dashboard si no está autenticado (modo incógnito)
+    if (pathname.startsWith('/dashboard')) {
+      console.log(`🛡️ [MIDDLEWARE] Unauthenticated access allowed to dashboard: ${pathname}`);
+      return NextResponse.next();
+    }
+    
     console.log(`🛡️ [MIDDLEWARE] Unauthenticated access to protected page: ${pathname}`);
     const loginUrl = new URL('/auth/signin', req.url);
     loginUrl.searchParams.set('callbackUrl', req.url);
     return NextResponse.redirect(loginUrl);
-  } */
+  }
 
   // ✅ REGLA 3: Rutas admin-only requieren rol admin
   if (token && isAdminOnlyPath && token.role !== 'admin' && token.role !== 'superadmin') {
