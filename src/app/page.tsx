@@ -177,24 +177,33 @@ export default function Page() {
                   </label>
                 </div>
                 
-                <button
-                  onClick={handleAuth}
-                  className={`flex items-center justify-center gap-3 self-start rounded-lg px-8 py-4 text-sm font-medium transition-all duration-200 md:text-base min-w-[200px] ${
-                    !acceptedTerms || isLoading 
-                      ? 'bg-gray-300 cursor-not-allowed text-gray-600 shadow-none' 
-                      : 'bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-                  }`}
-                  disabled={!acceptedTerms || isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                      <span>Procesando...</span>
-                    </>
-                  ) : (
-                    <span>Iniciar sesión con Google</span>
-                  )}
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={handleAuth}
+                    className={`flex items-center justify-center gap-3 self-start rounded-lg px-8 py-4 text-sm font-medium transition-all duration-200 md:text-base min-w-[200px] ${
+                      !acceptedTerms || isLoading
+                        ? 'bg-gray-300 cursor-not-allowed text-gray-600 shadow-none'
+                        : 'bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+                    }`}
+                    disabled={!acceptedTerms || isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                        <span>Procesando...</span>
+                      </>
+                    ) : (
+                      <span>Iniciar sesión con Google</span>
+                    )}
+                  </button>
+
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center justify-center gap-3 self-start rounded-lg bg-gray-100 hover:bg-gray-200 px-8 py-4 text-sm font-medium text-gray-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 md:text-base min-w-[200px]"
+                  >
+                    <span>Entrar como incógnito</span>
+                  </Link>
+                </div>
               </>
             )}
           </div>
