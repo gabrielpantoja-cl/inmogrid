@@ -5,7 +5,7 @@
 
 ## 1. Resumen Ejecutivo
 
-El proyecto `referenciales-cl` presenta una base de código moderna y bien estructurada, utilizando Next.js 15 con App Router y TypeScript. La salud general del código es buena, con una clara separación de responsabilidades y un stack tecnológico coherente (React, TailwindCSS, Prisma).
+El proyecto `degux-cl` (antiguamente `referenciales-cl`) presenta una base de código moderna y bien estructurada, utilizando Next.js 15 con App Router y TypeScript. La salud general del código es buena, con una clara separación de responsabilidades y un stack tecnológico coherente (React, TailwindCSS, Prisma).
 
 Sin embargo, la auditoría ha identificado varias áreas clave para la mejora, alineadas con la evolución estratégica del proyecto (documentada en `Plan_Trabajo_Ecosistema_Digital_V2.1.md`). Las recomendaciones se centran en:
 
