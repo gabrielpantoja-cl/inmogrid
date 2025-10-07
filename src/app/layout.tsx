@@ -140,7 +140,9 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <CookieConsentProvider>
-          {children}
+          <SessionProviderClient>
+            {children}
+          </SessionProviderClient>
 
           {/* Componente para mostrar notificaciones (react-hot-toast) */}
           <Toaster
