@@ -78,8 +78,8 @@ const MapaOfertas = () => {
                     // Filtrar solo los que tienen coordenadas válidas
                     const validListings = data.data.filter(
                         (listing: PropertyListingPoint) =>
-                            listing.lat !== null &&
-                            listing.lng !== null &&
+                            typeof listing.lat === 'number' &&
+                            typeof listing.lng === 'number' &&
                             !isNaN(listing.lat) &&
                             !isNaN(listing.lng)
                     );
