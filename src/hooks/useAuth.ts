@@ -5,19 +5,15 @@ export function useAuth() {
   // ✅ SIEMPRE llamar useSession (cumple con reglas de hooks)
   const { data: session, status } = useSession();
 
-  const isDevelopment = process.env.NODE_ENV === 'development';
-
-  // En desarrollo, ignorar datos de sesión y usar valores mock
-  const isLoading = isDevelopment ? false : status === 'loading';
-  const isAuthenticated = isDevelopment ? false : !!session?.user;
-  const user = isDevelopment ? null : session?.user;
-  const userRole = isDevelopment ? 'user' : (session?.user?.role || 'user');
+  // ✅ CORREGIDO: Usar NextAuth en desarrollo también
+  const isLoading = status === 'loading';
+  const isAuthenticated = !!session?.user;
+  const user = session?.user;
+  const userRole = session?.user?.role || 'user';
 
   // Log para debugging en consola
   useEffect(() => {
-    if (isDevelopment) {
-      console.log('🔧 [useAuth] DEV MODE: Using mock auth data');
-    } else if (status !== 'loading') {
+    if (status !== 'loading') {
       console.log('🔐 [USEAUTH-HOOK]', {
         status,
         isAuthenticated,
@@ -27,7 +23,7 @@ export function useAuth() {
         timestamp: new Date().toISOString()
       });
     }
-  }, [isDevelopment, status, isAuthenticated, userRole, user?.id, user?.email]);
+  }, [status, isAuthenticated, userRole, user?.id, user?.email]);
 
   const isAdmin = userRole === 'admin' || userRole === 'superadmin';
   const isSuperAdmin = userRole === 'superadmin';
