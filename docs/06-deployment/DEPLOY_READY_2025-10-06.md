@@ -183,7 +183,7 @@ curl -I https://degux.cl/
    - scripts/deploy-to-vps.sh
    - docs/06-deployment/DEPLOYMENT_GUIDE.md
    - docs/06-deployment/SOLUCION_DEPLOYMENT_FINAL.md
-   - DEPLOY_READY.md (este archivo)
+   - docs/06-deployment/DEPLOY_READY_2025-10-06.md (este archivo)
 
 ✅ Actualizados:
    - .github/workflows/deploy-production.yml (PM2 → Docker)
