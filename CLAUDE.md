@@ -536,7 +536,7 @@ sudo systemctl status nginx
 - **Nginx Configs**: `/etc/nginx/sites-available/` (Nginx nativo systemd)
 - **SSL Certificates**: `/etc/letsencrypt/` (Let's Encrypt certbot)
 - **Deployment Script**: `scripts/deploy-to-vps.sh` (automated Docker deployment)
-- **System Estado Actual**: `docs/SISTEMA_ACTUAL_2025-10-11.md` (documentación completa VPS)
+- **System Estado Actual**: `docs/06-deployment/SISTEMA_ACTUAL_2025-10-11.md` (documentación completa VPS)
 - **Postmortems**: `docs/06-deployment/POSTMORTEM_*.md` (incidentes y lecciones aprendidas)
 
 ### External Resources
