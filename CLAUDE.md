@@ -115,31 +115,46 @@ npm run api:validate     # Validate public API
 
 ### Infrastructure Architecture
 
-**IMPORTANT**: All services run in Docker Compose. NO native systemd services (no PM2, no native Nginx).
+**IMPORTANT**: Hybrid architecture with **Nginx nativo (systemd)** as reverse proxy and applications in Docker Compose.
 
-**VPS Services (Docker Compose):**
+**VPS Services Architecture:**
 ```
-Internet → Cloudflare
+Internet
     ↓
 VPS Digital Ocean (167.172.251.27)
     ↓
-nginx-proxy (Docker) :80, :443 ← Reverse proxy + SSL
+Nginx NATIVO (Ubuntu systemd) :80, :443 ← Reverse proxy + SSL (Let's Encrypt)
+    ├── /etc/nginx/sites-available/
+    │   ├── degux.cl                  → proxy_pass http://127.0.0.1:3000
+    │   ├── n8n.gabrielpantoja.cl     → proxy_pass http://127.0.0.1:5678
+    │   └── luanti.gabrielpantoja.cl  → archivos estáticos
+    └── /etc/letsencrypt/             ← Certificados SSL
     ↓
-┌────────────────────────────────────────┐
-│  Docker Containers (vps_network)      │
-├────────────────────────────────────────┤
-│  degux-web (Port 3000) ← degux.cl     │
-│  n8n (Port 5678)       ← N8N UI       │
-│  n8n-db (Port 5432)    ← N8N DB       │
-│  n8n-redis (Port 6379) ← N8N Cache    │
-│  portainer (9443)      ← Docker UI    │
-└────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────┐
+│  Docker Containers (vps_network)                      │
+├────────────────────────────────────────────────────────┤
+│  degux-web (127.0.0.1:3000)   ← degux.cl Next.js 15   │
+│  n8n (127.0.0.1:5678)         ← N8N Workflows         │
+│  n8n-db (interno:5432)        ← PostgreSQL + PostGIS  │
+│  n8n-redis (interno:6379)     ← Redis Cache           │
+│  portainer (0.0.0.0:9443)     ← Docker UI             │
+│  luanti-voxelibre-server      ← Servidor de juego     │
+└────────────────────────────────────────────────────────┘
 ```
 
+**Why Nginx Native (not Docker)?**
+- ✅ Better performance (~20MB vs ~70MB memory, 2-5ms lower latency)
+- ✅ Higher resilience (independent from Docker daemon failures)
+- ✅ Simpler SSL management with Let's Encrypt certbot
+- ✅ Proven stability (survived 2025-10-17 Docker outage)
+- See `docs/06-deployment/POSTMORTEM_2025-10-17_SERVICE_OUTAGE.md` for detailed analysis
+
 **Database Architecture:**
-- **Port 5432**: N8N PostgreSQL (workflows data) - N8N exclusive
-- **Port 5433**: degux PostgreSQL (app data) - degux exclusive
-- Databases are isolated for security and failure containment
+- **n8n-db container**: Single PostgreSQL instance with 2 databases
+  - Database `degux`: Application data (degux.cl)
+  - Database `n8n`: Workflow data (n8n automation)
+- **Port 5432**: Internal Docker network only
+- Both databases share same PostgreSQL instance for resource efficiency
 
 **Deployment Method:**
 - Use `scripts/deploy-to-vps.sh` (automated Docker deployment)
@@ -518,9 +533,11 @@ sudo systemctl status nginx
 
 ### VPS Documentation
 - **Docker Compose Files**: `/home/gabriel/vps-do/docker-compose*.yml` (on VPS)
-- **Nginx Configs**: `/home/gabriel/vps-do/nginx/*.conf` (mounted to nginx-proxy container)
+- **Nginx Configs**: `/etc/nginx/sites-available/` (Nginx nativo systemd)
+- **SSL Certificates**: `/etc/letsencrypt/` (Let's Encrypt certbot)
 - **Deployment Script**: `scripts/deploy-to-vps.sh` (automated Docker deployment)
-- **IMPORTANT**: NO native Nginx in `/etc/nginx/` - all config in Docker containers
+- **System Estado Actual**: `docs/SISTEMA_ACTUAL_2025-10-11.md` (documentación completa VPS)
+- **Postmortems**: `docs/06-deployment/POSTMORTEM_*.md` (incidentes y lecciones aprendidas)
 
 ### External Resources
 - **Prisma Docs**: https://www.prisma.io/docs
