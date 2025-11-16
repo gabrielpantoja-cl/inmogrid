@@ -1,9 +1,25 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ssh gabriel@167.172.251.27 \"curl -s -o /dev/null -w ''HTTP Status: %{http_code}\\n'' https://degux.cl/\")",
-      "Bash(npx prisma:*)"
-    ]
+      "Bash(pkill:*)",
+      "Bash(ss:*)",
+      "Bash(netstat:*)",
+      "Bash(PGPASSWORD='XFP/CQpBiQzU5/kxR1R3C3fqBBWOrQPvkBruBNOSnFU=' psql:*)",
+      "Bash(python3:*)",
+      "Bash(PGPASSWORD='bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=' psql:*)",
+      "Bash(rsync:*)",
+      "Bash(scp:*)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(PGPASSWORD='bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=' timeout 5 psql:*)",
+      "Bash(git add:*)",
+      "Bash(git restore:*)",
+      "Bash(.gitignore)",
+      "Bash(xargs git status:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [

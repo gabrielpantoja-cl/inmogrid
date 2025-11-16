@@ -59,3 +59,4 @@ backup_produccion.sql
 
 # MCP configuration
 .mcp.json
+.env.backup.*
