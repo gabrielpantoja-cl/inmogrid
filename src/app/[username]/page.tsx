@@ -213,9 +213,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         <div className="mt-16 border-t border-gray-200 pt-8 text-center text-gray-500">
           <p className="text-sm">
             Perfil en{' '}
-            <a href="/" className="font-semibold text-green-700 hover:underline">
+            <Link href="/" className="font-semibold text-green-700 hover:underline">
               degux.cl
-            </a>
+            </Link>
             {' '} - Ecosistema digital colaborativo
           </p>
           <p className="mt-2 text-xs">

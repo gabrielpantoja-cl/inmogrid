@@ -16,7 +16,9 @@
       "Bash(git restore:*)",
       "Bash(.gitignore)",
       "Bash(xargs git status:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(bash scripts/deploy-to-vps.sh:*)"
     ],
     "deny": [],
     "ask": []
