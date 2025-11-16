@@ -9,13 +9,13 @@ import SocialLinks from '@/components/ui/profile/SocialLinks';
 import PlantCard from '@/components/ui/profile/PlantCard';
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
-  const { username } = params;
+  const { username } = await params;
 
   // Obtener perfil de usuario
   const user = await prisma.user.findUnique({

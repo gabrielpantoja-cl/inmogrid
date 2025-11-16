@@ -6,13 +6,13 @@ import { prisma } from '@/lib/prisma';
 import PlantCard from '@/components/ui/profile/PlantCard';
 
 interface PlantsPageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 export default async function PlantsPage({ params }: PlantsPageProps) {
-  const { username } = params;
+  const { username } = await params;
 
   // Obtener usuario
   const user = await prisma.user.findUnique({
