@@ -1,8 +1,8 @@
-# 🗺️ API Pública de Referenciales.cl
+# 🗺️ API Pública de degux.cl
 
 ## 🎯 Descripción
 
-API REST pública para acceder a los datos del mapa de referenciales inmobiliarias de Chile sin necesidad de autenticación. Diseñada para ser integrada fácilmente en aplicaciones externas como **pantojapropiedades.cl**.
+API REST pública para acceder a los datos del mapa de degux inmobiliarias de Chile sin necesidad de autenticación. Diseñada para ser integrada fácilmente en aplicaciones externas como **pantojapropiedades.cl**.
 
 ## ✨ Características
 
@@ -15,10 +15,10 @@ API REST pública para acceder a los datos del mapa de referenciales inmobiliari
 
 ## 🚀 URLs de Producción
 
-- **Base URL**: `https://referenciales.cl/api/public`
-- **Datos del mapa**: `https://referenciales.cl/api/public/map-data`
-- **Configuración**: `https://referenciales.cl/api/public/map-config`
-- **Documentación**: `https://referenciales.cl/api/public/docs`
+- **Base URL**: `https://degux.cl/api/public`
+- **Datos del mapa**: `https://degux.cl/api/public/map-data`
+- **Configuración**: `https://degux.cl/api/public/map-config`
+- **Documentación**: `https://degux.cl/api/public/docs`
 
 ## 📊 Endpoints
 
@@ -33,7 +33,7 @@ Obtiene todos los datos del mapa de referenciales inmobiliarias.
 
 **Ejemplo de request:**
 ```bash
-curl "https://referenciales.cl/api/public/map-data?comuna=santiago&anio=2024&limit=10"
+curl "https://degux.cl/api/public/map-data?comuna=santiago&anio=2024&limit=10"
 ```
 
 **Ejemplo de response:**
@@ -63,7 +63,7 @@ curl "https://referenciales.cl/api/public/map-data?comuna=santiago&anio=2024&lim
     "timestamp": "2025-06-18T10:30:00.000Z",
     "center": [-33.4489, -70.6693],
     "defaultZoom": 10,
-    "attribution": "Datos proporcionados por referenciales.cl"
+    "attribution": "Datos proporcionados por degux.cl"
   }
 }
 ```
@@ -79,7 +79,7 @@ Obtiene la configuración del mapa y metadatos de la API.
   "config": {
     "api": {
       "version": "1.0.0",
-      "baseUrl": "https://referenciales.cl/api/public",
+      "baseUrl": "https://degux.cl/api/public",
       "endpoints": {
         "mapData": "/map-data",
         "mapConfig": "/map-config"
@@ -122,7 +122,7 @@ interface MapPoint {
   // ... más campos
 }
 
-const useReferenciales = (comuna?: string) => {
+const useDeguxData = (comuna?: string) => {
   const [data, setData] = useState<MapPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -131,7 +131,7 @@ const useReferenciales = (comuna?: string) => {
       try {
         const params = comuna ? `?comuna=${comuna}` : '';
         const response = await fetch(
-          `https://referenciales.cl/api/public/map-data${params}`
+          `https://degux.cl/api/public/map-data${params}`
         );
         const result = await response.json();
         
@@ -153,7 +153,7 @@ const useReferenciales = (comuna?: string) => {
 
 // Uso
 function MyComponent() {
-  const { data, loading } = useReferenciales('santiago');
+  const { data, loading } = useDeguxData('santiago');
   
   if (loading) return <div>Cargando...</div>;
   
@@ -175,7 +175,7 @@ function MyComponent() {
 
 ```javascript
 // Obtener datos básicos
-fetch('https://referenciales.cl/api/public/map-data?limit=10')
+fetch('https://degux.cl/api/public/map-data?limit=10')
   .then(response => response.json())
   .then(result => {
     if (result.success) {
@@ -194,11 +194,11 @@ fetch('https://referenciales.cl/api/public/map-data?limit=10')
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { useEffect, useState } from 'react';
 
-const ReferencialMap = () => {
+const DeguxMap = () => {
   const [points, setPoints] = useState([]);
 
   useEffect(() => {
-    fetch('https://referenciales.cl/api/public/map-data')
+    fetch('https://degux.cl/api/public/map-data')
       .then(res => res.json())
       .then(result => {
         if (result.success) setPoints(result.data);
@@ -231,7 +231,7 @@ const ReferencialMap = () => {
 
 ```typescript
 interface MapPoint {
-  id: string;                    // ID único del referencial
+  id: string;                    // ID único del degux
   lat: number;                   // Latitud
   lng: number;                   // Longitud
   fojas?: string;                // Número de fojas
@@ -285,7 +285,7 @@ interface APIError {
 
 **Ejemplo de manejo:**
 ```javascript
-const response = await fetch('https://referenciales.cl/api/public/map-data');
+const response = await fetch('https://degux.cl/api/public/map-data');
 const result = await response.json();
 
 if (!result.success) {
@@ -299,7 +299,7 @@ if (!result.success) {
 
 ## 📞 Soporte
 
-- **Documentación completa**: `https://referenciales.cl/api/public/docs`
+- **Documentación completa**: `https://degux.cl/api/public/docs`
 - **GitHub**: https://github.com/gabrielpantoja-cl/degux.cl
 - **Issues**: https://github.com/gabrielpantoja-cl/degux.cl/issues
 
@@ -309,7 +309,7 @@ if (!result.success) {
 ```javascript
 async function createComunaWidget(comuna) {
   const response = await fetch(
-    `https://referenciales.cl/api/public/map-data?comuna=${comuna}&limit=5`
+    `https://degux.cl/api/public/map-data?comuna=${comuna}&limit=5`
   );
   const result = await response.json();
   
@@ -337,7 +337,7 @@ async function getPricesByYear(years = [2022, 2023, 2024]) {
   
   for (const year of years) {
     const response = await fetch(
-      `https://referenciales.cl/api/public/map-data?anio=${year}`
+      `https://degux.cl/api/public/map-data?anio=${year}`
     );
     const result = await response.json();
     
@@ -354,10 +354,10 @@ async function getPricesByYear(years = [2022, 2023, 2024]) {
 
 - ✅ **Desarrollo**: Disponible en localhost:3000
 - 🔄 **Producción**: En proceso de despliegue
-- 📍 **URL Final**: `https://referenciales.cl/api/public`
+- 📍 **URL Final**: `https://degux.cl/api/public`
 
 ---
 
 **🎉 ¡Listo para integrar en pantojapropiedades.cl!**
 
-Esta API te permite acceder a todos los datos de referenciales inmobiliarias de Chile de forma gratuita y sin autenticación. Perfect para enriquecer tu plataforma con datos reales del mercado.
+Esta API te permite acceder a todos los datos de degux inmobiliarias de Chile de forma gratuita y sin autenticación. Perfect para enriquecer tu plataforma con datos reales del mercado.

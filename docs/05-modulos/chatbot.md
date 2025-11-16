@@ -1,4 +1,4 @@
-# 💬 GUÍA DEL MÓDULO DE CHAT - referenciales.cl
+# 💬 GUÍA DEL MÓDULO DE CHAT - degux.cl
 
 ## 📋 Estado Actual
 
@@ -99,7 +99,7 @@ but required in type 'ChatMessageUncheckedCreateInput'.
 Para verificar que todo funciona, ejecuta el script de verificación completa:
 
 ```bash
-cd C:\Users\gabri\OneDrive\Proyectos-Programacion\referenciales.cl
+cd C:\Users\gabri\OneDrive\Proyectos-Programacion\degux.cl
 .\verify-chat-fix.bat
 ```
 
@@ -235,7 +235,7 @@ model ChatMessage {
 
 ```bash
 # Ver logs de chat en Vercel
-vercel logs --app=referenciales-cl | grep "Chat API"
+vercel logs --app=degux-cl | grep "Chat API"
 
 # Verificar mensajes en base de datos
 npx prisma studio

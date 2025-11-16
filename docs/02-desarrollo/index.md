@@ -1,6 +1,6 @@
 # 🚀 GUÍA DE DESARROLLO - degux.cl
 
-Esta guía centraliza la información esencial para el desarrollo en el proyecto `referenciales.cl`, cubriendo desde las convenciones de importación hasta comandos rápidos y una referencia a la guía de autenticación.
+Esta guía centraliza la información esencial para el desarrollo en el proyecto `degux.cl`, cubriendo desde las convenciones de importación hasta comandos rápidos y una referencia a la guía de autenticación.
 
 ---
 
