@@ -14,7 +14,7 @@ interface PlantCardProps {
     difficulty?: string | null;
     isFavorite: boolean;
   };
-  username: string;
+  username?: string | null;
 }
 
 export default function PlantCard({ plant, username }: PlantCardProps) {
