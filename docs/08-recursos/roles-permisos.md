@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the role-based access control (RBAC) system implemented for Referenciales.cl. The system allows only admin users to perform CRUD operations and view sensitive buyer/seller data.
+This document describes the role-based access control (RBAC) system implemented for degux.cl. The system allows only admin users to perform CRUD operations and view sensitive buyer/seller data.
 
 ## Admin Role Assignment
 
@@ -58,12 +58,12 @@ Updated `src/middleware.ts` to:
 - Return appropriate error responses for unauthorized access
 
 Protected admin-only paths:
-- `/dashboard/referenciales/create`
-- `/dashboard/referenciales/edit`
-- `/api/referenciales/create`
-- `/api/referenciales/update`
-- `/api/referenciales/delete`
-- `/api/referenciales/upload-csv`
+- `/dashboard/degux/create`
+- `/dashboard/degux/edit`
+- `/api/degux/create`
+- `/api/degux/update`
+- `/api/degux/delete`
+- `/api/degux/upload-csv`
 
 ### 4. Custom Auth Hook (✅ Implemented)
 
@@ -74,11 +74,11 @@ const { isAdmin, canCreateReferenciales, canViewSensitiveData } = useAuth();
 
 ### 5. Component-Level Protection (✅ Implemented)
 
-#### Table Component (`src/components/ui/referenciales/table.tsx`)
+#### Table Component (`src/components/ui/degux/table.tsx`)
 - Conditionally shows/hides sensitive buyer/seller data
 - Redacts data for non-admin users with "• • • • •"
 
-#### Dashboard Page (`src/app/dashboard/referenciales/page.tsx`)
+#### Dashboard Page (`src/app/dashboard/degux/page.tsx`)
 - Shows "Create" button only for admin users
 - Displays admin role indicator
 
@@ -170,9 +170,9 @@ Use `sql/verify_roles.sql` to check current role assignments and verify system s
 - ✅ `src/middleware.ts` - Route protection
 - ✅ `src/hooks/useAuth.ts` - Custom auth utilities
 - ✅ `src/types/next-auth.d.ts` - TypeScript definitions
-- ✅ `src/components/ui/referenciales/table.tsx` - Conditional data display
-- ✅ `src/app/dashboard/referenciales/page.tsx` - Admin UI elements
-- ✅ `src/app/api/referenciales/upload-csv/route.ts` - API protection
+- ✅ `src/components/ui/degux/table.tsx` - Conditional data display
+- ✅ `src/app/dashboard/degux/page.tsx` - Admin UI elements
+- ✅ `src/app/api/degux/upload-csv/route.ts` - API protection
 
 ## SQL Scripts
 

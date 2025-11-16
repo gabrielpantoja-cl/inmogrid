@@ -30,7 +30,7 @@ ssh gabriel@VPS_IP_REDACTED "curl -s http://localhost:3000/ | grep 'degux\.cl' |
 # Resultado: 26 referencias a degux.cl ✅
 
 # Producción (Cloudflare) sirviendo antiguo
-curl -s https://degux.cl/ | grep 'referenciales\.cl' | wc -l
+curl -s https://degux.cl/ | grep 'degux\.cl' | wc -l
 # Resultado: múltiples referencias a referenciales.cl ❌
 ```
 
@@ -150,7 +150,7 @@ server {
 **Evidencia fuerte**:
 - Headers HTTP de producción muestran `cache-control: s-maxage=31536000` (1 año)
 - BUILD_ID antiguo embebido en HTML: `<!--BsnOPbYfj2db_ogPfTqXF-->`
-- Content-Security-Policy headers ANTIGUOS con referencias a Vercel y referenciales.cl
+- Content-Security-Policy headers ANTIGUOS con referencias a Vercel y degux.cl
 
 **Posibles ubicaciones de cache**:
 ```
