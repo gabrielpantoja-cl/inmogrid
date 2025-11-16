@@ -119,10 +119,10 @@ export default function Page() {
           
           <div className="space-y-4">
             <h1 className={`${lusitana.className} text-2xl text-gray-800 md:text-4xl md:leading-normal font-bold`}>
-              Bienvenido a <span className="text-primary">degux.cl</span>
+              Crea y comparte en tu propio <span className="text-primary">espacio digital</span>
             </h1>
             <p className="text-lg text-gray-600 md:text-xl">
-              Una base de datos colaborativa para la tasación inmobiliaria en Chile.
+              Tu lienzo para construir una marca personal auténtica. Publica, conecta y descubre en un ecosistema libre y colaborativo.
             </p>
           </div>
           
