@@ -1,13 +1,14 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(ssh gabriel@VPS_IP_REDACTED \"curl -s -o /dev/null -w ''HTTP Status: %{http_code}\\n'' https://degux.cl/\")",
+      "Bash(npx prisma:*)"
+    ]
+  },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "Neon",
     "context7",
     "github"
-  ],
-  "permissions": {
-    "allow": [
-      "Bash(ssh gabriel@VPS_IP_REDACTED \"curl -s -o /dev/null -w ''HTTP Status: %{http_code}\\n'' https://degux.cl/\")"
-    ]
-  }
+  ]
 }
