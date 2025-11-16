@@ -232,7 +232,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
 // Generar metadata dinámica para SEO
 export async function generateMetadata({ params }: ProfilePageProps) {
-  const { username } = params;
+  const { username } = await params;
 
   const user = await prisma.user.findUnique({
     where: { username },
