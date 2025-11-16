@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 interface ProfileHeroProps {
   name: string;
-  username: string;
+  username?: string | null;
   tagline?: string | null;
   image?: string | null;
   coverImageUrl?: string | null;
