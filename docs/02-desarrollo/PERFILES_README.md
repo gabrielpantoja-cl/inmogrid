@@ -134,11 +134,12 @@ degux.cl/
 │               ├── SocialLinks.tsx          # ✅ Nuevo
 │               └── PlantCard.tsx            # ✅ Nuevo
 ├── docs/
-│   ├── PERFILERIA_HUMANA_VISION.md         # Documentación de visión
-│   ├── PERFILERIA_PROTOTIPO_MONA.html      # Prototipo visual HTML
-│   ├── PERFILERIA_PITCH_MONA.md            # Pitch para Mona
-│   └── PERFILERIA_PLAN_IMPLEMENTACION.md   # Plan completo
-└── PERFILES_README.md                       # ✅ Este archivo
+│   ├── 01-introduccion/
+│   │   ├── PERFILERIA_HUMANA_VISION.md      # Documentación de visión
+│   │   └── PERFILERIA_PITCH_MONA.md         # Pitch para Mona
+│   └── 02-desarrollo/
+│       ├── PERFILERIA_PLAN_IMPLEMENTACION.md# Plan completo
+│       └── PERFILES_README.md               # ✅ Este archivo
 ```
 
 ---
@@ -275,9 +276,9 @@ npx prisma studio
 ## 📞 Contacto
 
 Si tienes dudas o encuentras errores, revisa:
-- **Documentación técnica**: `docs/PERFILERIA_HUMANA_VISION.md`
-- **Plan de implementación**: `docs/PERFILERIA_PLAN_IMPLEMENTACION.md`
-- **Pitch para Mona**: `docs/PERFILERIA_PITCH_MONA.md`
+- **Documentación técnica**: `docs/01-introduccion/PERFILERIA_HUMANA_VISION.md`
+- **Plan de implementación**: `docs/02-desarrollo/PERFILERIA_PLAN_IMPLEMENTACION.md`
+- **Pitch para Mona**: `docs/01-introduccion/PERFILERIA_PITCH_MONA.md`
 
 ---
 
