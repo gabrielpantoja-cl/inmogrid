@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import LatestReferenciales from '@/components/ui/dashboard/latest-referenciales';
 import { lusitana } from '@/lib/styles/fonts';
 import { Suspense } from 'react';
@@ -54,9 +55,9 @@ export default function DashboardContent({
             </div>
             <div className="text-sm text-blue-600">
               Estás explorando el dashboard sin autenticación.
-              <a href="/auth/signin" className="ml-1 underline hover:text-blue-700">
+              <Link href="/auth/signin" className="ml-1 underline hover:text-blue-700">
                 Inicia sesión
-              </a> para acceder a todas las funciones.
+              </Link> para acceder a todas las funciones.
             </div>
           </div>
         )}
