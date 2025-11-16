@@ -16,6 +16,9 @@ RUN npx prisma generate
 # Copy application code
 COPY . .
 
+# Explicitly copy directories with brackets (Docker bug workaround)
+COPY src/app/\[username\] ./src/app/\[username\]
+
 # Build Next.js application
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
