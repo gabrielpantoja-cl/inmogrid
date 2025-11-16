@@ -87,6 +87,15 @@ model User {
   linkedin         String?
   isPublicProfile  Boolean        @default(false)
 
+  // 🌱 CAMPOS DE PERFILERÍA HUMANA (Fase 2)
+  username         String?  @unique     // URL amigable: degux.cl/username
+  tagline          String?              // Frase corta (ej: "Amante de las plantas")
+  coverImageUrl    String?              // Portada del perfil
+  location         String?              // Ubicación libre (ej: "Sur de Chile")
+  identityTags     String[] @default([])// Tags de identidad ["vegano", "ecologista"]
+  externalLinks    Json?                // Links externos { instagram: "...", whatsapp: "..." }
+  customCss        String?              // CSS personalizado (premium feature)
+
   // ✅ ACTUALIZADAS: Todas las referencias a minúsculas
   accounts      Account[]
   auditLogs     AuditLog[]
@@ -98,6 +107,11 @@ model User {
   properties           Property[]
   connectionsInitiated Connection[] @relation("ConnectionRequester")
   connectionsReceived  Connection[] @relation("ConnectionReceiver")
+
+  // 🌱 NUEVAS RELACIONES (Perfilería Humana)
+  posts                Post[]
+  plants               Plant[]
+  collections          Collection[]
 }
 
 model VerificationToken {
@@ -322,4 +336,88 @@ enum ListingSource {
   MERCADO_LIBRE
   YAPO
   OTRO
+}
+
+// 🌱 PERFILERÍA HUMANA - MODELO POST (Blog/Artículos)
+model Post {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title           String
+  slug            String   @unique  // URL: /username/posts/slug
+  content         String   @db.Text // Markdown o rich text
+  excerpt         String?  @db.Text // Resumen corto
+  coverImageUrl   String?
+
+  published       Boolean  @default(false)
+  publishedAt     DateTime?
+
+  tags            String[] @default([]) // ["plantas", "ecología"]
+  readTime        Int?     // Minutos de lectura estimado
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, published])
+  @@index([slug])
+}
+
+// 🌱 PERFILERÍA HUMANA - MODELO PLANT (Colección Personal de Plantas)
+// Enfoque: Compartir conocimiento y pasión, NO venta directa
+model Plant {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name            String
+  slug            String   @unique  // URL: /username/plantas/slug
+  scientificName  String?
+  description     String?  @db.Text // Historia personal, por qué la ama
+  careInstructions String? @db.Text // Cuidados y consejos
+
+  imageUrls       String[] @default([])
+  mainImageUrl    String?
+
+  // Metadata educativa
+  category        String?  // "Suculenta", "Cactus", "Ornamental", "Nativa"
+  difficulty      String?  // "Fácil", "Media", "Difícil"
+  sunlight        String?  // "Sol directo", "Semi-sombra", "Sombra"
+  watering        String?  // "Poco", "Moderado", "Frecuente"
+  origin          String?  // Origen geográfico de la planta
+
+  // Organización
+  isFavorite      Boolean  @default(false) // Destacar como planta favorita
+  featured        Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, isFavorite])
+  @@index([slug])
+  @@index([category])
+}
+
+// 🌱 PERFILERÍA HUMANA - MODELO COLLECTION (Colecciones Temáticas)
+model Collection {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name            String
+  slug            String   @unique  // URL: /username/collections/slug
+  description     String?  @db.Text
+  coverImageUrl   String?
+
+  // Elementos de la colección (flexible JSON)
+  items           Json     @default("[]") // Array de { type, id, title, imageUrl, description }
+
+  isPublic        Boolean  @default(true)
+  featured        Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, isPublic])
+  @@index([slug])
 }
