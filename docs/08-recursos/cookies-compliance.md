@@ -1,8 +1,8 @@
-# Guía de Implementación de Cookies - Referenciales.cl
+# Guía de Implementación de Cookies - degux.cl
 
 ## Resumen Ejecutivo
 
-Esta guía documenta la implementación completa de la política de cookies para referenciales.cl, cumpliendo con la **Ley 21.719 de Protección de Datos Personales de Chile** (vigente diciembre 2026) y las mejores prácticas internacionales.
+Esta guía documenta la implementación completa de la política de cookies para degux.cl, cumpliendo con la **Ley 21.719 de Protección de Datos Personales de Chile** (vigente diciembre 2026) y las mejores prácticas internacionales.
 
 ## 📋 Índice
 
@@ -284,7 +284,7 @@ describe('Cookie Consent Banner', () => {
 
 #### Transparencia (Art. 12-14)
 - [ ] **Información previa**: Antes de instalar cookies
-- [ ] **Identidad del responsable**: Referenciales.cl claramente identificado
+- [ ] **Identidad del responsable**: degux.cl claramente identificado
 - [ ] **Finalidad específica**: Propósito de cada cookie explicado
 - [ ] **Base legal**: Justificación legal para cada tipo
 - [ ] **Transferencias internacionales**: Google, Vercel declarados
@@ -502,12 +502,12 @@ describe('Cookie Consent Banner', () => {
 
 ### Desarrollo
 - **Responsable**: Equipo Frontend
-- **Email**: desarrollo@referenciales.cl
+- **Email**: desarrollo@degux.cl
 - **Escalation**: CTO
 
 ### Legal/Compliance
 - **Responsable**: Asesor Legal
-- **Contacto**: legal@referenciales.cl
+- **Contacto**: legal@degux.cl
 - **WhatsApp**: +56 9 3176 9472
 
 ### Usuarios

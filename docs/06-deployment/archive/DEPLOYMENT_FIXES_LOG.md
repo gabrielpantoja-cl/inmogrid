@@ -9,7 +9,7 @@
 
 ### Síntomas
 1. ❌ Producción (https://degux.cl) mostraba contenido antiguo
-2. ❌ Referencias a dominio antiguo "referenciales.cl"
+2. ❌ Referencias a dominio antiguo "degux.cl"
 3. ❌ Errores de GitHub API: `https://api.github.com/repos/TheCuriousSloth/degux 404`
 4. ❌ Errores CSP: Cloudflare Insights bloqueado
 5. ❌ Errores 404: `/_vercel/speed-insights/script.js`

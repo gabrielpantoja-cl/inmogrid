@@ -2,7 +2,7 @@
 
 ## 🎯 Resumen
 
-La nueva implementación de la API de GitHub Stars para **referenciales.cl** incluye todas las mejores prácticas recomendadas por GitHub, manejo completo de rate limiting, caching inteligente con ETags, y una arquitectura robusta para uso en producción.
+La nueva implementación de la API de GitHub Stars para **degux.cl** incluye todas las mejores prácticas recomendadas por GitHub, manejo completo de rate limiting, caching inteligente con ETags, y una arquitectura robusta para uso en producción.
 
 ## 🆕 Mejoras Implementadas
 
@@ -277,7 +277,7 @@ export function Footer() {
   return (
     <footer className="border-t p-4">
       <div className="flex justify-between items-center">
-        <span>© 2025 referenciales.cl</span>
+        <span>© 2025 degux.cl</span>
         <div className="flex items-center gap-2">
           <span>Star us on GitHub:</span>
           <GitHubStarsSimple 
