@@ -60,3 +60,6 @@ backup_produccion.sql
 # MCP configuration
 .mcp.json
 .env.backup.*
+
+# Claude local configuration
+.claude/settings.local.json
