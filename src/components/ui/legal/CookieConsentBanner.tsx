@@ -101,9 +101,9 @@ export default function CookieConsentBanner() {
 
               <p className="text-xs text-gray-500 mt-3">
                 Al usar este sitio, acepta nuestras{' '}
-                <a href="/privacy" className="text-blue-600 hover:underline">
+                <Link href="/privacy" className="text-blue-600 hover:underline">
                   Políticas de Privacidad
-                </a>{' '}
+                </Link>{' '}
                 conforme a la Ley 21.719 de Chile.
               </p>
             </div>
