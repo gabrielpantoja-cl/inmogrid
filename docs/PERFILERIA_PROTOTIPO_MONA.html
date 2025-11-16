@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mona - Vivero Mapu | degux.cl</title>
+    <style>
+        /* Reset y variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #2d5016;        /* Verde bosque profundo */
+            --color-secondary: #c17a5b;      /* Terracota suave */
+            --color-accent: #7ab56f;         /* Verde claro plantas */
+            --color-bg: #fafaf9;             /* Blanco cálido */
+            --color-card: #ffffff;
+            --color-text: #1f2937;
+            --color-text-light: #6b7280;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Header con portada */
+        .hero-section {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%);
+            background-image: url('https://images.unsplash.com/photo-1466781783364-36c955e42a7f?w=1600&h=400&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 2rem 2rem;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(45,80,22,0.3), rgba(45,80,22,0.7));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: flex-end;
+            gap: 2rem;
+        }
+
+        .profile-picture {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 6px solid white;
+            box-shadow: var(--shadow-lg);
+            object-fit: cover;
+            background: white;
+        }
+
+        .hero-info {
+            flex: 1;
+            color: white;
+            padding-bottom: 1rem;
+        }
+
+        .hero-info h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-info .tagline {
+            font-size: 1.25rem;
+            font-weight: 300;
+            opacity: 0.95;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        /* Navegación de perfil */
+        .profile-nav {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .profile-nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            padding: 1.25rem 0;
+            color: var(--color-text-light);
+            text-decoration: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Bio section */
+        .bio-section {
+            background: var(--color-card);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 3rem;
+        }
+
+        .bio-section h2 {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bio-section p {
+            color: var(--color-text);
+            font-size: 1.125rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Secciones de contenido */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            color: var(--color-text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Grid de cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--color-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            font-style: italic;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-description {
+            color: var(--color-text);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .card-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .card-stock {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+
+        .stock-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #234012;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--color-secondary);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        /* Enlaces sociales */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .social-link:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-primary);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 300px;
+                padding: 0 1rem 1rem;
+            }
+
+            .hero-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .profile-picture {
+                width: 120px;
+                height: 120px;
+            }
+
+            .hero-info h1 {
+                font-size: 2rem;
+            }
+
+            .profile-nav-inner {
+                padding: 0 1rem;
+                gap: 1rem;
+                overflow-x: auto;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section con Portada -->
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <img src="https://ui-avatars.com/api/?name=Mona&size=160&background=7ab56f&color=fff&bold=true"
+                 alt="Mona"
+                 class="profile-picture">
+            <div class="hero-info">
+                <h1>Mona</h1>
+                <p class="tagline">Amante de las plantas, la ecología y la vida simple.<br>Emprendo con cariño desde el sur de Chile.</p>
+                <div class="hero-badges">
+                    <span class="badge">🌱 Plantas</span>
+                    <span class="badge">♻️ Ecología</span>
+                    <span class="badge">🌿 Vida Simple</span>
+                    <span class="badge">🇨🇱 Sur de Chile</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navegación de Perfil -->
+    <nav class="profile-nav">
+        <div class="profile-nav-inner">
+            <a href="#bio" class="nav-link active">Inicio</a>
+            <a href="#vivero" class="nav-link">Vivero Mapu</a>
+            <a href="#plantas-favoritas" class="nav-link">Plantas Favoritas</a>
+            <a href="#notas" class="nav-link">Notas</a>
+            <a href="#contacto" class="nav-link">Contacto</a>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container">
+        <!-- Bio Section -->
+        <section class="bio-section" id="bio">
+            <h2>✨ Sobre Mí</h2>
+            <p>
+                Soy Mona, y mi vida gira en torno a las plantas y la conexión con la naturaleza.
+                Desde pequeña sentí fascinación por el mundo verde, y esa pasión se transformó en
+                <strong>Vivero Mapu</strong>, mi emprendimiento personal donde cultivo y comparto
+                plantas con cariño y dedicación.
+            </p>
+            <p>
+                Creo en la vida simple, en el consumo consciente y en el respeto por la tierra.
+                Cada planta que cultivo lleva una historia, y me encanta compartir esas historias
+                contigo. Aquí encontrarás mi catálogo, mis favoritas, y algunas notas sobre el
+                camino de emprender con propósito.
+            </p>
+
+            <!-- Enlaces Sociales -->
+            <div class="social-links">
+                <a href="https://wa.me/56944362760" class="social-link" target="_blank">
+                    📱 WhatsApp
+                </a>
+                <a href="https://pantojapropiedades.cl" class="social-link" target="_blank">
+                    🏡 PantojaPropiedades
+                </a>
+                <a href="mailto:mona@degux.cl" class="social-link">
+                    ✉️ Email
+                </a>
+            </div>
+        </section>
+
+        <!-- Vivero Mapu Section -->
+        <section class="section" id="vivero">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">🌼 Vivero Mapu</h2>
+                    <p class="section-subtitle">Catálogo de plantas disponibles para venta</p>
+                </div>
+                <a href="#contacto" class="btn btn-primary">Consultar por WhatsApp</a>
+            </div>
+
+            <div class="grid">
+                <!-- Card Planta 1 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1509423350716-97f9360b4e09?w=400&h=300&fit=crop"
+                         alt="Suculenta Echeveria"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Echeveria Elegans</h3>
+                        <p class="card-subtitle">Suculenta roseta plateada</p>
+                        <p class="card-description">
+                            Hermosa suculenta de fácil cuidado, ideal para principiantes.
+                            Requiere sol directo y riego moderado.
+                        </p>
+                        <div class="card-meta">
+                            <span class="card-price">$3.500</span>
+                            <span class="card-stock">
+                                <span class="stock-dot"></span>
+                                En stock (12 unidades)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Planta 2 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1459156212016-c812468e2115?w=400&h=300&fit=crop"
+                         alt="Cactus San Pedro"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Cactus San Pedro</h3>
+                        <p class="card-subtitle">Echinopsis pachanoi</p>
+                        <p class="card-description">
+                            Cactus columnar de crecimiento rápido. Perfecto para jardines
+                            o macetas grandes. Muy resistente.
+                        </p>
+                        <div class="card-meta">
+                            <span class="card-price">$8.000</span>
+                            <span class="card-stock">
+                                <span class="stock-dot"></span>
+                                En stock (5 unidades)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Planta 3 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=400&h=300&fit=crop"
+                         alt="Monstera Deliciosa"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Monstera Deliciosa</h3>
+                        <p class="card-subtitle">Costilla de Adán</p>
+                        <p class="card-description">
+                            Planta de interior muy popular por sus hojas perforadas.
+                            Crece rápido en semi-sombra.
+                        </p>
+                        <div class="card-meta">
+                            <span class="card-price">$12.000</span>
+                            <span class="card-stock">
+                                <span class="stock-dot"></span>
+                                En stock (3 unidades)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Planta 4 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=300&fit=crop"
+                         alt="Pothos Dorado"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Pothos Dorado</h3>
+                        <p class="card-subtitle">Epipremnum aureum</p>
+                        <p class="card-description">
+                            Planta trepadora de hojas verdes con manchas doradas.
+                            Ideal para purificar el aire.
+                        </p>
+                        <div class="card-meta">
+                            <span class="card-price">$5.500</span>
+                            <span class="card-stock">
+                                <span class="stock-dot"></span>
+                                En stock (8 unidades)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Planta 5 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1463320726281-696a485928c7?w=400&h=300&fit=crop"
+                         alt="Lavanda"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Lavanda</h3>
+                        <p class="card-subtitle">Lavandula angustifolia</p>
+                        <p class="card-description">
+                            Aromática y hermosa, perfecta para jardines. Atrae polinizadores
+                            y tiene propiedades relajantes.
+                        </p>
+                        <div class="card-meta">
+                            <span class="card-price">$4.500</span>
+                            <span class="card-stock">
+                                <span class="stock-dot"></span>
+                                En stock (15 unidades)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Planta 6 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1565011523534-747a8601f10a?w=400&h=300&fit=crop"
+                         alt="Aloe Vera"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Aloe Vera</h3>
+                        <p class="card-subtitle">Sábila medicinal</p>
+                        <p class="card-description">
+                            Planta medicinal de múltiples usos. Gel cicatrizante y regenerador.
+                            Muy fácil de cuidar.
+                        </p>
+                        <div class="card-meta">
+                            <span class="card-price">$6.000</span>
+                            <span class="card-stock">
+                                <span class="stock-dot"></span>
+                                En stock (10 unidades)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Plantas Favoritas Section -->
+        <section class="section" id="plantas-favoritas">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">💚 Mis Plantas Favoritas</h2>
+                    <p class="section-subtitle">Colección personal de las que más amo</p>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=400&h=300&fit=crop"
+                         alt="Helecho Culantrillo"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Helecho Culantrillo</h3>
+                        <p class="card-description">
+                            Este helecho nativo del sur de Chile me conecta con mis raíces.
+                            Crece en ambientes húmedos y sombríos, recordándome los bosques
+                            donde crecí. No está a la venta, pero puedo enseñarte a cuidar el tuyo.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1508558936510-0af1e3cccbab?w=400&h=300&fit=crop"
+                         alt="Orquídea chilena"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Orquídea Chilena</h3>
+                        <p class="card-description">
+                            Una joya nativa que tardó años en florecer por primera vez.
+                            Simboliza paciencia y dedicación. Cada flor es un pequeño milagro.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=400&h=300&fit=crop"
+                         alt="Copihue"
+                         class="card-image">
+                    <div class="card-content">
+                        <h3 class="card-title">Copihue Rojo</h3>
+                        <p class="card-description">
+                            La flor nacional de Chile. Tenerla en mi jardín es un orgullo.
+                            Requiere mucho cuidado, pero su belleza lo vale.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Contacto -->
+        <section class="section" id="contacto">
+            <div class="bio-section">
+                <h2>📬 Contacto</h2>
+                <p>
+                    ¿Te interesa alguna planta del catálogo? ¿Quieres consultar por cuidados específicos?
+                    ¡Escríbeme! Me encanta compartir mi pasión por las plantas.
+                </p>
+                <div class="social-links">
+                    <a href="https://wa.me/56944362760?text=Hola%20Mona,%20vi%20tu%20perfil%20en%20degux.cl"
+                       class="btn btn-primary"
+                       target="_blank">
+                        📱 WhatsApp: +56 9 4436 2760
+                    </a>
+                    <a href="mailto:mona@degux.cl" class="btn btn-outline">
+                        ✉️ Email: mona@degux.cl
+                    </a>
+                </div>
+                <p style="margin-top: 2rem; color: var(--color-text-light); font-size: 0.95rem;">
+                    <strong>Horario de atención:</strong> Lunes a Sábado, 10:00 - 18:00 hrs<br>
+                    <strong>Ubicación:</strong> Sur de Chile (envíos a todo el país)
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">degux.cl</div>
+            <p class="footer-text">Ecosistema digital colaborativo</p>
+            <p class="footer-text">Perfiles humanos auténticos, sin ruido tóxico</p>
+            <p style="margin-top: 1rem; opacity: 0.7; font-size: 0.875rem;">
+                © 2025 degux.cl - Todos los derechos reservados
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
