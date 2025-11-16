@@ -2,6 +2,7 @@
 // Ruta: /{username} (sin autenticación requerida)
 
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import ProfileHero from '@/components/ui/profile/ProfileHero';
 import ProfileBio from '@/components/ui/profile/ProfileBio';
