@@ -183,7 +183,7 @@ pm2 restart degux-app
 GET https://api.github.com/repos/TheCuriousSloth/degux 404
 Refused to load script 'https://static.cloudflareinsights.com/beacon.min.js'
 GET https://degux.cl/_vercel/speed-insights/script.js 404
-Banner: "Referenciales.cl usa cookies"
+Banner: "degux.cl usa cookies"
 ```
 
 ### Después de las correcciones:

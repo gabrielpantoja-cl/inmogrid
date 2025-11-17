@@ -30,8 +30,8 @@ ssh gabriel@167.172.251.27 "curl -s http://localhost:3000/ | grep 'degux\.cl' | 
 # Resultado: 26 referencias a degux.cl ✅
 
 # Producción (Cloudflare) sirviendo antiguo
-curl -s https://degux.cl/ | grep 'degux\.cl' | wc -l
-# Resultado: múltiples referencias a referenciales.cl ❌
+curl -s https://degux.cl/ | grep 'referenciales\.cl' | wc -l
+# Resultado: múltiples referencias a referenciales.cl (contenido antiguo) ❌
 ```
 
 ### 2. Descubrimiento de Nginx
@@ -55,7 +55,7 @@ tcp   LISTEN 0  511   *:3000        *:*         # ← PM2 (Next.js)
 curl -k -H "Host: degux.cl" https://167.172.251.27/ | grep 'application-name'
 
 # Resultado:
-<meta name="application-name" content="referenciales.cl"/>  # ❌ ANTIGUO
+<meta name="application-name" content="degux.cl"/>  # ❌ ANTIGUO
 <!--BsnOPbYfj2db_ogPfTqXF-->  # BUILD_ID antiguo
 ```
 
