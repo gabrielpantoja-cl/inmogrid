@@ -175,7 +175,7 @@ document.querySelector('title').textContent
 // Debería mostrar: "degux.cl"
 
 // Buscar referencias antiguas
-document.body.innerHTML.includes('degux.cl')
+document.body.innerHTML.includes('referenciales.cl')
 // Debería mostrar: false
 
 document.body.innerHTML.includes('degux.cl')
