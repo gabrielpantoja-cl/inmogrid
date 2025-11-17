@@ -18,7 +18,8 @@
       "Bash(xargs git status:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(bash scripts/deploy-to-vps.sh:*)"
+      "Bash(bash scripts/deploy-to-vps.sh:*)",
+      "Bash(psql:*)"
     ],
     "deny": [],
     "ask": []
