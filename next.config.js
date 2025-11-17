@@ -37,6 +37,18 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ui-avatars.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Formatos soportados para optimización
     formats: ['image/webp', 'image/avif'],
@@ -54,7 +66,7 @@ const nextConfig = {
       default-src 'self';
       script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com;
       style-src 'self' 'unsafe-inline';
-      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://degux.cl https://www.degux.cl;
+      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://degux.cl https://www.degux.cl https://images.unsplash.com https://ui-avatars.com;
       font-src 'self' data:;
       object-src 'none';
       base-uri 'self';
