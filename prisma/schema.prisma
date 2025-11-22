@@ -85,7 +85,7 @@ model User {
   commune          String?
   website          String?
   linkedin         String?
-  isPublicProfile  Boolean        @default(false)
+  isPublicProfile  Boolean        @default(true)  // Perfiles públicos por defecto para red social
 
   // 🌱 CAMPOS DE PERFILERÍA HUMANA (Fase 2)
   username         String?  @unique     // URL amigable: degux.cl/username

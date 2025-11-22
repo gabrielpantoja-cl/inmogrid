@@ -25,13 +25,12 @@ import { robustSignOut } from '@/lib/auth-utils';
 import { useSession } from 'next-auth/react';
 
 const navigationLinks = [
-  { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
-  { name: 'Referenciales', href: '/dashboard/referenciales', icon: DocumentDuplicateIcon },
-  { name: 'Mapa', href: '/dashboard/mapa', icon: MapPinIcon },
-  { name: 'Estadísticas', href: '/dashboard/estadisticas', icon: ChartBarIcon, badge: 'BETA' },
-  { name: 'Subir Datos', href: '/dashboard/referenciales/create', icon: ArrowUpTrayIcon },
-  { name: 'Conservadores', href: '/dashboard/conservadores', icon: BuildingOfficeIcon },
-  { name: 'Documentación', href: '/dashboard/documentacion', icon: BookOpenIcon },
+  { name: 'Feed', href: '/dashboard', icon: HomeIcon },
+  { name: 'Mi Perfil', href: '/dashboard/perfil', icon: UserIcon },
+  { name: 'Mis Notas', href: '/dashboard/notas', icon: DocumentDuplicateIcon },
+  { name: 'Mis Plantas', href: '/dashboard/plantas', icon: MapPinIcon },
+  { name: 'Explorar', href: '/dashboard/explorar', icon: ChartBarIcon },
+  { name: 'Comunidad', href: '/dashboard/comunidad', icon: BuildingOfficeIcon },
 ];
 
 export default function Navbar() {
