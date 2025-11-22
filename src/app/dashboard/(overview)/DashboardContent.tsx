@@ -129,7 +129,7 @@ export default function DashboardContent({
         </h2>
 
         <div className="space-y-4">
-          {latestPosts.length > 0 ? (
+          {latestPosts?.length > 0 ? (
             latestPosts.map((post) => (
               <div key={post.id} className="border-b border-gray-100 pb-4 last:border-b-0">
                 <Link href={`/${post.user.username}/posts/${post.slug}`} className="block group">
