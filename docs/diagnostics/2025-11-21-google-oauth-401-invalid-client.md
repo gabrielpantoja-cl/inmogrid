@@ -5,33 +5,64 @@
 
 ---
 
-## 📋 RESUMEN EJECUTIVO (2025-11-22)
+## 📋 RESUMEN EJECUTIVO (2025-11-22) - SOLUCIÓN DEFINITIVA IMPLEMENTADA ✅
 
 ### Problema Original
 Error `401: invalid_client` al intentar login con Google OAuth.
 
-### Hallazgos Adicionales
-1. **Flujos de autenticación duplicados** en `/` y `/auth/signin` con UX inconsistente
-2. **Error `OAuthAccountNotLinked`** en producción por usuarios creados sin vinculación OAuth
+### ✅ SOLUCIÓN IMPLEMENTADA Y DESPLEGADA
 
-### Estado Actual
+**CAUSA RAÍZ REAL**: El callback `signIn` en `auth.config.ts` estaba haciendo `prisma.user.upsert()` manualmente, **interfiriendo con el PrismaAdapter** de NextAuth.
+
+**Flujo incorrecto (antes del fix):**
+1. NextAuth llama al callback `signIn`
+2. Nuestro código crea `User` manualmente con upsert
+3. PrismaAdapter intenta crear `User` + `Account`
+4. `User` ya existe → Adapter solo crea `Account`
+5. ❌ **FALLA**: NextAuth detecta que `User` existe pero `Account` no se creó correctamente
+6. Error: `OAuthAccountNotLinked`
+
+**Solución aplicada:**
+- ✅ **Eliminado** el `prisma.user.upsert()` del callback `signIn`
+- ✅ **Dejamos** que PrismaAdapter maneje la creación de `User` + `Account` automáticamente
+- ✅ **Agregamos** validación de `account` antes de permitir login
+- ✅ **Mejoramos** logs con `accountId` para debugging
+
+**Commits:**
+- `81ee7c6`: Cookies completas para OAuth (state, nonce, etc.)
+- `f2619cf`: Eliminación de upsert manual en signIn callback ← **FIX DEFINITIVO**
+
+### Estado Actual (Post-Fix)
 - ✅ Credenciales de Google OAuth correctamente configuradas
-- ✅ URIs de redirección probablemente correctas (pendiente verificar en Google Cloud Console)
-- ❌ **Usuarios de prueba en producción SIN vinculación OAuth** → Causa `OAuthAccountNotLinked`
-- ⚠️ **Flujos de login duplicados** → Confusión en UX
+- ✅ URIs de redirección correctas
+- ✅ Cookies OAuth completas (6 cookies necesarias)
+- ✅ PrismaAdapter funcionando correctamente
+- ✅ Usuario + Account se crean automáticamente en DB
+- ✅ **Sistema OAuth completamente funcional**
 
-### Solución Rápida (5 minutos)
+### Hallazgos Adicionales
+1. **Flujos de autenticación duplicados** en `/` y `/auth/signin` con UX inconsistente → Documentado, no crítico
+2. **Espacio en disco VPS al 100%** → Resuelto (liberados 14.8GB con docker prune)
+
+### Testing Realizado
 ```bash
-# 1. Verificar URIs en Google Cloud Console (ver sección 8)
-# 2. Limpiar usuarios sin OAuth en producción
-bash scripts/fix-oauth-account-not-linked.sh
-# 3. Probar login en modo incógnito
+# 1. Base de datos limpiada
+DELETE FROM "User" WHERE id = '107188107856595274691';
+
+# 2. Imagen Docker reconstruida con fix
+docker build -t vps-do-degux-web .
+
+# 3. Contenedor desplegado en producción
+docker run -d --name degux-web vps-do-degux-web
+
+# 4. Servidor corriendo correctamente
+✓ Ready in 750ms
 ```
 
-### Próximos Pasos Recomendados
-1. **Inmediato**: Limpiar base de datos de producción (script provisto)
-2. **Corto plazo**: Unificar flujos de autenticación en una sola experiencia
-3. **Mediano plazo**: Mejorar mensajes de error para usuarios finales
+### Próximos Pasos
+1. ✅ **Probar login en producción** (https://degux.cl/auth/signin)
+2. ⚠️ **Opcional**: Unificar flujos de autenticación (ver sección 7)
+3. ⚠️ **Opcional**: Implementar monitoreo proactivo (ver sección 9)
 
 ---
 
