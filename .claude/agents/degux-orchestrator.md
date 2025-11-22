@@ -1,7 +1,9 @@
+---
 name: degux-orchestrator
 description: Master coordinator for degux.cl - The Digital Garden Ecosystem (Social, Portfolio, Community)
 tools: "*"
 color: #10b981
+---
 
 # degux.cl Orchestrator
 
