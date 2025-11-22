@@ -2,49 +2,53 @@
 
 **Proyecto:** degux.cl - Ecosistema Digital Colaborativo
 **Inicio diagnóstico:** 2025-11-21
-**Última actualización:** 2025-11-22 20:15 CLT
-**Estado:** 🔄 En resolución - Error `invalid_grant` detectado
+**Resolución final:** 2025-11-22 22:30 CLT
+**Estado:** ✅ RESUELTO - Google OAuth funcionando correctamente
 
 ---
 
 ## 📊 Resumen Ejecutivo
 
-### Estado Actual del Sistema
+### Estado Final del Sistema
 
 | Componente | Estado | Notas |
 |------------|--------|-------|
 | **Infraestructura** | ✅ Operacional | VPS Digital Ocean, Docker Compose |
-| **Base de Datos** | ✅ Conectada | PostgreSQL 15 + PostGIS (puerto 5433) |
-| **Contenedor Web** | ✅ Healthy | degux-web corriendo 26+ minutos |
+| **Base de Datos** | ✅ Limpia | PostgreSQL 15 + PostGIS (puerto 5433) |
+| **Contenedor Web** | ✅ Healthy | degux-web funcionando correctamente |
 | **Variables de Entorno** | ✅ Configuradas | Credenciales Google OAuth presentes |
-| **OAuth Local** | ⚠️ No probado | Requiere verificación |
-| **OAuth Producción** | ❌ Fallando | Error: `invalid_grant` |
+| **OAuth Producción** | ✅ Funcionando | 2 usuarios autenticados correctamente |
+| **Tabla User** | ✅ Poblada | 2 registros con OAuth vinculado |
+| **Tabla Account** | ✅ Vinculada | 2 cuentas Google OAuth activas |
 
 ### Historial de Problemas Resueltos
 
 1. ✅ **`401 invalid_client`** - Resuelto (2025-11-21)
 2. ✅ **Dependencias legacy** (Neon/Vercel) - Eliminadas (2025-11-22)
 3. ✅ **Tests al 100%** - 42/42 pasando (2025-11-22)
-4. ❌ **`invalid_grant`** - En diagnóstico (2025-11-22)
+4. ✅ **`OAuthAccountNotLinked`** - Resuelto (2025-11-22 22:30 CLT) ← **SOLUCIÓN FINAL**
 
 ---
 
-## 🔴 Problema Actual: Error `invalid_grant` (2025-11-22)
+## ✅ Problema #4: `OAuthAccountNotLinked` (2025-11-22) - RESUELTO
 
-### Error Detectado en Producción
+### Síntoma
+
+Usuarios no podían autenticarse con Google OAuth. El error inicial reportado era `invalid_grant`, pero la causa raíz real era **`OAuthAccountNotLinked`**.
+
+### Error Real Identificado
 
 ```log
-[next-auth][error][OAUTH_CALLBACK_ERROR]
-invalid_grant (Bad Request) {
-  error: Error [OAuthCallbackError]: invalid_grant (Bad Request)
-  providerId: 'google',
-  message: 'invalid_grant (Bad Request)'
-}
+Error: OAuthAccountNotLinked
+- Usuario existe en tabla "User"
+- NO existe registro correspondiente en tabla "Account"
+- NextAuth rechaza la autenticación OAuth por seguridad
 ```
 
 **Ubicación:** VPS (https://degux.cl)
-**Timestamp:** 2025-11-22 20:15 UTC
-**Impacto:** Usuarios no pueden autenticarse con Google
+**Timestamp Inicial:** 2025-11-22 20:15 UTC
+**Resolución Final:** 2025-11-22 22:30 CLT
+**Impacto:** Login bloqueado para usuarios existentes sin vinculación OAuth
 
 ### Diagnóstico Realizado
 
@@ -85,11 +89,110 @@ System clock synchronized: yes ✅
 
 - ✅ Handler exportado como GET y POST
 
+### Causa Raíz Real
+
+El problema **NO era `invalid_grant`** como se pensó inicialmente. La verdadera causa fue:
+
+**Usuarios Huérfanos en Base de Datos:**
+
+```sql
+-- Usuarios existentes SIN cuentas OAuth vinculadas
+SELECT u.id, u.email, COUNT(a."userId") as oauth_accounts
+FROM "User" u
+LEFT JOIN "Account" a ON u.id = a."userId"
+GROUP BY u.id, u.email;
+
+-- Resultado encontrado:
+-- peritajes@gabrielpantoja.cl         | 0 cuentas OAuth
+-- gabrielpantojarivera@gmail.com      | 0 cuentas OAuth
+-- user-gabriel-001                    | 0 cuentas OAuth
+```
+
+**¿Por qué existían estos usuarios?**
+- Creados manualmente via seed scripts
+- Pruebas anteriores de desarrollo
+- Migraciones incompletas
+
+**¿Por qué NextAuth los rechazaba?**
+
+Cuando un usuario intenta hacer login con Google OAuth:
+
+1. NextAuth recibe el email de Google → ✅ `peritajes@gabrielpantoja.cl`
+2. Busca si el email ya existe en tabla `User` → ✅ **SÍ existe**
+3. Busca si tiene una cuenta OAuth vinculada → ❌ **NO existe en tabla `Account`**
+4. NextAuth rechaza el login con `OAuthAccountNotLinked` por seguridad (prevenir secuestro de cuentas)
+
+### Solución Aplicada
+
+**Paso 1: Backup de Seguridad**
+
+```bash
+ssh gabriel@VPS_IP_REDACTED \
+  "docker exec degux-db pg_dump -U degux_user -d degux_core \
+   -t '\"User\"' -t '\"Account\"' -t '\"Session\"' -t '\"VerificationToken\"' \
+   > ~/backup-auth-tables-$(date +%Y%m%d-%H%M%S).sql"
+
+# Resultado: ~/backup-auth-tables-20251122-191841.sql (9.5KB)
+```
+
+**Paso 2: Limpieza Completa de Tablas de Autenticación**
+
+```sql
+-- Orden correcto (respetando foreign keys)
+DELETE FROM "Session";           -- 0 registros eliminados
+DELETE FROM "VerificationToken"; -- 0 registros eliminados
+DELETE FROM "Account";           -- 0 registros eliminados
+DELETE FROM "User";              -- 4 registros eliminados ✅
+```
+
+**Paso 3: Login Limpio con Google OAuth**
+
+```bash
+# Monitoreo en tiempo real
+docker logs degux-web -f --since 30s | grep AUTH
+
+# Logs observados:
+✅ [AUTH-SIGNIN] { email: 'peritajes@gabrielpantoja.cl', provider: 'google' }
+✅ [AUTH-SIGNIN] Allowing sign in for: peritajes@gabrielpantoja.cl
+📥 [AUTH-SIGNIN-EVENT] { provider: 'google' }
+🔄 [AUTH-REDIRECT] Same origin allowed: https://degux.cl/dashboard
+
+✅ [AUTH-SIGNIN] { email: 'gabrielpantojarivera@gmail.com', provider: 'google' }
+✅ [AUTH-SIGNIN] Allowing sign in for: gabrielpantojarivera@gmail.com
+📥 [AUTH-SIGNIN-EVENT] { provider: 'google' }
+🔄 [AUTH-REDIRECT] Same origin allowed: https://degux.cl/dashboard
+```
+
+**Paso 4: Verificación de Registros Creados**
+
+```sql
+-- Usuarios creados correctamente
+SELECT id, email, name, role FROM "User";
+
+-- Resultado:
+-- cmiauszy80000rm0ijizvq5n4 | peritajes@gabrielpantoja.cl    | Gabriel Pantoja | user
+-- cmiauu0180003rm0ig2jot4d6 | gabrielpantojarivera@gmail.com | Gabriel Pantoja | user
+
+-- Cuentas OAuth vinculadas correctamente
+SELECT "userId", provider, "providerAccountId", type FROM "Account";
+
+-- Resultado:
+-- cmiauszy80000rm0ijizvq5n4 | google | 115440023452874243558 | oauth ✅
+-- cmiauu0180003rm0ig2jot4d6 | google | 107188107856595274691 | oauth ✅
+```
+
+### Resultado Final
+
+✅ **Google OAuth funcionando al 100%**
+✅ **PrismaAdapter creando User + Account automáticamente**
+✅ **Ambos usuarios autenticados correctamente**
+✅ **Redirección a /dashboard exitosa**
+
 ---
 
-## 🎯 Causa Raíz del Error `invalid_grant`
+## 🎯 Información de Contexto: Error `invalid_grant`
 
-El error `invalid_grant` de Google OAuth ocurre cuando:
+El error `invalid_grant` de Google OAuth **NO fue la causa** en este caso, pero puede ocurrir cuando:
 
 ### A. Redirect URI No Coincide (MÁS COMÚN) ⚠️
 
@@ -357,36 +460,58 @@ Redirect → https://degux.cl/dashboard
 
 ## 🚨 Errores Conocidos y Soluciones
 
-### Error: `OAuthAccountNotLinked`
+### Error: `OAuthAccountNotLinked` ✅ RESUELTO
 
 **Causa:** Usuario existe en tabla `User` pero no tiene registro en tabla `Account`
+
+**Síntomas:**
+- Login con Google falla silenciosamente
+- Usuario es redirigido a página de signin nuevamente
+- No aparece mensaje de error visible
+
+**Diagnóstico:**
+
+```sql
+-- Verificar usuarios sin cuentas OAuth vinculadas
+SELECT u.id, u.email, COUNT(a."userId") as oauth_accounts
+FROM "User" u
+LEFT JOIN "Account" a ON u.id = a."userId"
+GROUP BY u.id, u.email
+HAVING COUNT(a."userId") = 0;
+```
 
 **Solución:**
 
 ```sql
--- Eliminar usuario problemático
+-- Opción 1: Eliminar usuario específico
 DELETE FROM "User" WHERE email = 'usuario@example.com';
 
--- Intentar login nuevamente (PrismaAdapter creará User + Account)
+-- Opción 2: Limpieza completa (recomendado en desarrollo)
+DELETE FROM "Session";
+DELETE FROM "VerificationToken";
+DELETE FROM "Account";
+DELETE FROM "User";
+
+-- Intentar login nuevamente (PrismaAdapter creará User + Account correctamente)
 ```
 
-### Error: `401 invalid_client`
+### Error: `401 invalid_client` ✅ RESUELTO
 
 **Causa:** Credenciales incorrectas (Client ID/Secret)
 
 **Solución:** Verificar variables de entorno coinciden con Google Cloud Console
 
-### Error: `invalid_grant` (ACTUAL)
+### Error: `invalid_grant`
 
-**Causa:** Redirect URI no coincide
+**Causa:** Redirect URI no coincide exactamente
 
-**Solución:** Verificar Google Cloud Console (ver PASO 1)
+**Solución:** Verificar Google Cloud Console (ver sección "Información de Contexto")
 
-### Error: `State cookie was missing`
+### Error: `State cookie was missing` ✅ RESUELTO
 
 **Causa:** Cookies OAuth incompletas
 
-**Solución:** ✅ Ya resuelto - Cookies completas configuradas
+**Solución:** ✅ Ya resuelto - Cookies completas configuradas en `auth.config.ts`
 
 ---
 
@@ -438,29 +563,74 @@ Una barra extra = Error `invalid_grant`
 ❌ No probar implementación de librerías (PrismaAdapter)
 ✅ Probar lógica de negocio y validaciones
 
+### 5. Usuarios Huérfanos Deben Eliminarse ⭐ NUEVA
+
+**Problema:** Usuarios en tabla `User` sin vinculación en tabla `Account`
+
+**¿Cómo ocurre?**
+- Seed scripts que crean usuarios manualmente
+- Pruebas de desarrollo que insertan directamente en `User`
+- Migraciones incompletas de sistemas anteriores
+
+**Prevención:**
+
+```typescript
+// ❌ NUNCA crear usuarios manualmente si usas OAuth
+await prisma.user.create({
+  data: { email: 'usuario@example.com', name: 'Usuario' }
+});
+
+// ✅ SIEMPRE dejar que PrismaAdapter maneje la creación
+// El usuario se creará automáticamente en el primer login OAuth
+```
+
+**Diagnóstico rápido:**
+
+```sql
+-- Verificar integridad de datos OAuth
+SELECT
+  u.email,
+  COUNT(a."userId") as oauth_accounts,
+  CASE
+    WHEN COUNT(a."userId") = 0 THEN '❌ HUÉRFANO'
+    ELSE '✅ OK'
+  END as estado
+FROM "User" u
+LEFT JOIN "Account" a ON u.id = a."userId"
+GROUP BY u.id, u.email;
+```
+
 ---
 
-## 📞 Próximos Pasos
+## 📞 Acciones Completadas
 
-### Inmediatos (HOY)
+### ✅ Resolución Final (2025-11-22)
 
-1. ⏳ Verificar URIs en Google Cloud Console
-2. ⏳ Guardar cambios y esperar 5 minutos
-3. ⏳ Probar en modo incógnito
-4. ⏳ Revisar logs en tiempo real
+1. ✅ Backup de tablas de autenticación creado
+2. ✅ Limpieza completa de usuarios huérfanos
+3. ✅ Login exitoso con Google OAuth (2 cuentas probadas)
+4. ✅ Verificación de User + Account correctamente vinculados
+5. ✅ Documentación actualizada con solución definitiva
 
-### Corto Plazo (Esta Semana)
+### Próximos Pasos Recomendados
 
-- [ ] Unificar flujos de autenticación (`/` vs `/auth/signin`)
-- [ ] Crear E2E tests con Playwright
-- [ ] Documentar proceso de troubleshooting
+**Corto Plazo (Esta Semana):**
 
-### Largo Plazo (Siguiente Sprint)
+- [ ] Agregar validación de integridad User/Account en health checks
+- [ ] Crear script de diagnóstico OAuth para troubleshooting futuro
+- [ ] Documentar procedimiento de limpieza de usuarios huérfanos
 
-- [ ] Implementar monitoreo proactivo (UptimeRobot)
-- [ ] Agregar página 502 personalizada
-- [ ] Health checks mejorados en Nginx
-- [ ] Coverage reporting con Jest
+**Mediano Plazo (Próximo Sprint):**
+
+- [ ] Implementar E2E tests con Playwright para flujo OAuth completo
+- [ ] Agregar monitoreo proactivo de autenticación (logs, alertas)
+- [ ] Crear página de error personalizada para OAuth failures
+
+**Largo Plazo:**
+
+- [ ] Considerar implementar cuenta linking (permitir vincular emails existentes)
+- [ ] Evaluar soporte multi-provider (GitHub, Microsoft) además de Google
+- [ ] Implementar sistema de recuperación de cuentas huérfanas
 
 ---
 
@@ -473,6 +643,7 @@ Una barra extra = Error `invalid_grant`
 
 ---
 
-**Última modificación:** 2025-11-22 20:15 CLT
-**Próxima revisión:** Después de resolver `invalid_grant`
+**Fecha creación:** 2025-11-21
+**Última modificación:** 2025-11-22 22:30 CLT
+**Estado:** ✅ RESUELTO - Autenticación OAuth funcionando
 **Mantenido por:** Gabriel Pantoja (con Claude Code)
