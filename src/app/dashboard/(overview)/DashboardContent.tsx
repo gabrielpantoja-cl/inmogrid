@@ -6,17 +6,51 @@ import { Session } from 'next-auth';
 import {
   UserGroupIcon,
   DocumentTextIcon,
-  SparklesIcon
+  SparklesIcon,
+  NewspaperIcon
 } from '@heroicons/react/24/outline';
+import { formatDistanceToNowStrict, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale';
+
+interface LatestReferencial {
+  id: string;
+  fechaescritura: Date;
+  createdAt: Date;
+  fojas: string;
+  numero: number;
+  anio: number;
+  cbr: string;
+  user: {
+    name: string | null;
+  };
+}
+
+interface LatestPost {
+  id: string;
+  title: string;
+  excerpt: string | null;
+  slug: string;
+  createdAt: Date;
+  user: {
+    name: string | null;
+    username: string | null;
+  };
+}
 
 interface DashboardContentProps {
   session: Session | null; // ✅ Permitir sesión nula para modo anónimo
-  latestReferenciales: any[];
+  latestReferenciales: LatestReferencial[];
   totalReferenciales: number;
+  latestPosts: LatestPost[];
+  totalPosts: number;
 }
 
 export default function DashboardContent({
   session,
+  latestReferenciales,
+  totalReferenciales,
+  latestPosts,
+  totalPosts,
 }: DashboardContentProps) {
   return (
     <main className="flex flex-col space-y-6">
@@ -108,21 +142,49 @@ export default function DashboardContent({
       {/* Feed de Actividad Reciente */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h2 className={`${lusitana.className} text-xl md:text-2xl mb-6 text-gray-800`}>
-          📰 Feed de la Comunidad
+          📰 Feed de la Comunidad ({totalPosts} publicaciones)
         </h2>
 
         <div className="space-y-4">
-          {/* Mensaje temporal mientras implementamos el feed real */}
-          <div className="text-center py-12 text-gray-500">
-            <SparklesIcon className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-            <p className="text-lg font-medium text-gray-600 mb-2">
-              ¡Próximamente!
-            </p>
-            <p className="text-sm max-w-md mx-auto">
-              Aquí verás las últimas publicaciones, plantas y actividades de la comunidad.
-              Mientras tanto, explora los perfiles públicos en <Link href="/dashboard/comunidad" className="text-green-700 underline">Comunidad</Link>.
-            </p>
-          </div>
+          {latestPosts.length > 0 ? (
+            latestPosts.map((post) => (
+              <div key={post.id} className="border-b border-gray-100 pb-4 last:border-b-0">
+                <Link href={`/${post.user.username}/posts/${post.slug}`} className="block group">
+                  <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                    {post.title}
+                  </h3>
+                  {post.excerpt && (
+                    <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+                      {post.excerpt}
+                    </p>
+                  )}
+                  <div className="flex items-center text-xs text-gray-500 mt-2">
+                    <NewspaperIcon className="w-4 h-4 mr-1" />
+                    <span>
+                      {post.user.name} &bull;{' '}
+                      {formatDistanceToNowStrict(parseISO(post.createdAt.toISOString()), {
+                        addSuffix: true,
+                        locale: es,
+                      })}
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-12 text-gray-500">
+              <NewspaperIcon className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+              <p className="text-lg font-medium text-gray-600 mb-2">
+                ¡Sé el primero en publicar!
+              </p>
+              <p className="text-sm max-w-md mx-auto">
+                No hay publicaciones recientes en la comunidad.
+                <Link href="/dashboard/notas" className="text-green-700 underline ml-1">
+                  Crea tu primera publicación aquí.
+                </Link>
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </main>

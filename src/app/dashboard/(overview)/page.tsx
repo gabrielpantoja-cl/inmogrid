@@ -3,12 +3,16 @@ import { authOptions } from '@/lib/auth.config';
 import DashboardContent from './DashboardContent';
 import DisclaimerPopup from '@/components/ui/dashboard/DisclaimerPopup';
 import { prisma } from '@/lib/prisma';
-import type { referenciales, User } from '@prisma/client';
+import type { referenciales, User, Post } from '@prisma/client';
 import { Suspense } from 'react';
 
 // Tipos mejorados
 interface LatestReferencial extends Pick<referenciales, 'id' | 'fechaescritura' | 'createdAt' | 'fojas' | 'numero' | 'anio' | 'cbr'> {
   user: Pick<User, 'name'>;
+}
+
+interface LatestPost extends Pick<Post, 'id' | 'title' | 'excerpt' | 'slug' | 'createdAt'> {
+  user: Pick<User, 'name' | 'username'>;
 }
 
 interface DashboardError extends Error {
@@ -38,7 +42,7 @@ export default async function DashboardPage() {
   // }
 
   try {
-    const [latestReferenciales, totalReferenciales] = await Promise.all([
+    const [latestReferenciales, totalReferenciales, latestPosts, totalPosts] = await Promise.all([
       prisma.referenciales.findMany({
         take: 5,
         orderBy: { 
@@ -60,7 +64,28 @@ export default async function DashboardPage() {
           }
         }
       }),
-      prisma.referenciales.count()
+      prisma.referenciales.count(),
+      prisma.post.findMany({
+        take: 5,
+        where: { published: true },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        select: {
+          id: true,
+          title: true,
+          excerpt: true,
+          slug: true,
+          createdAt: true,
+          user: {
+            select: {
+              name: true,
+              username: true,
+            },
+          },
+        },
+      }),
+      prisma.post.count({ where: { published: true } }),
     ]);
 
     return (
@@ -71,6 +96,8 @@ export default async function DashboardPage() {
             session={session}
             latestReferenciales={latestReferenciales}
             totalReferenciales={totalReferenciales}
+            latestPosts={latestPosts as LatestPost[]}
+            totalPosts={totalPosts}
           />
         </Suspense>
       </>
