@@ -1,8 +1,41 @@
 # Diagnóstico de Error de Autenticación de Google: `401 invalid_client`
 
-**Fecha:** 2025-11-21
+**Fecha inicial:** 2025-11-21
+**Última actualización:** 2025-11-22
 
-## 1. Problema
+---
+
+## 📋 RESUMEN EJECUTIVO (2025-11-22)
+
+### Problema Original
+Error `401: invalid_client` al intentar login con Google OAuth.
+
+### Hallazgos Adicionales
+1. **Flujos de autenticación duplicados** en `/` y `/auth/signin` con UX inconsistente
+2. **Error `OAuthAccountNotLinked`** en producción por usuarios creados sin vinculación OAuth
+
+### Estado Actual
+- ✅ Credenciales de Google OAuth correctamente configuradas
+- ✅ URIs de redirección probablemente correctas (pendiente verificar en Google Cloud Console)
+- ❌ **Usuarios de prueba en producción SIN vinculación OAuth** → Causa `OAuthAccountNotLinked`
+- ⚠️ **Flujos de login duplicados** → Confusión en UX
+
+### Solución Rápida (5 minutos)
+```bash
+# 1. Verificar URIs en Google Cloud Console (ver sección 8)
+# 2. Limpiar usuarios sin OAuth en producción
+bash scripts/fix-oauth-account-not-linked.sh
+# 3. Probar login en modo incógnito
+```
+
+### Próximos Pasos Recomendados
+1. **Inmediato**: Limpiar base de datos de producción (script provisto)
+2. **Corto plazo**: Unificar flujos de autenticación en una sola experiencia
+3. **Mediano plazo**: Mejorar mensajes de error para usuarios finales
+
+---
+
+## 1. Problema Original
 
 Al intentar iniciar sesión con Google en la aplicación `degux.cl`, se produce el siguiente error de autorización:
 
@@ -254,7 +287,277 @@ client_secret_*.json
 
 ---
 
-## 7. DIAGNÓSTICO DEFINITIVO - Error 401: invalid_client (2025-11-22)
+## 7. NUEVOS HALLAZGOS - Problemas Adicionales Detectados (2025-11-22)
+
+### 🔍 Problema 1: Flujos de Autenticación Duplicados
+
+**Síntoma:** La experiencia de usuario es inconsistente entre la landing page y la página de signin.
+
+**Ubicaciones:**
+- **Landing Page (`/`)**: `src/app/page.tsx` - Botón "Iniciar sesión con Google"
+- **Signin Page (`/auth/signin`)**: `src/app/auth/signin/page.tsx` - Página dedicada con UI diferente
+
+**Inconsistencias:**
+1. **UI diferente**: Landing usa diseño del hero, signin usa página centrada
+2. **Flujo confuso**: Los usuarios no saben si usar `/` o `/auth/signin`
+3. **Callbacks duplicados**: Ambos redirigen a `/dashboard` pero con lógica distinta
+
+**Impacto:**
+- Confusión en usuarios nuevos
+- Duplicación de lógica de autenticación
+- Dificulta el debugging (¿cuál flujo falló?)
+
+### 🔍 Problema 2: Error `OAuthAccountNotLinked` en Producción
+
+**Síntoma:** Al intentar login con Google en producción aparece:
+```
+🔴 [SIGNIN] URL Error detected: OAuthAccountNotLinked
+```
+
+**Causa Raíz Identificada:**
+
+Verificación en base de datos de producción:
+
+```sql
+-- ✅ Tabla User tiene 4 usuarios
+SELECT id, email, name FROM "User";
+-- Resultado:
+-- user-gabriel-001     | gabriel@degux.cl
+-- user-mona-001        | mona@degux.cl
+-- cm99ydecv...         | monacaniqueo@gmail.com
+-- cm7q0t1yi...         | gabrielpantojarivera@gmail.com
+
+-- ❌ Tabla Account está VACÍA
+SELECT * FROM "Account";
+-- Resultado: 0 rows
+```
+
+**Explicación del Error:**
+
+NextAuth usa el patrón **User + Account**:
+- `User`: Datos del usuario (email, nombre, etc.)
+- `Account`: Vinculación con proveedores OAuth (Google, GitHub, etc.)
+
+**Lo que está pasando:**
+1. Usuario intenta login con `gabrielpantojarivera@gmail.com`
+2. NextAuth consulta Google OAuth → ✅ Usuario válido en Google
+3. NextAuth busca email en tabla `User` → ✅ **YA EXISTE** (creado manualmente)
+4. NextAuth busca registro en `Account` → ❌ **NO EXISTE**
+5. NextAuth arroja error `OAuthAccountNotLinked` porque el email existe pero no está vinculado a Google
+
+**Cómo se crearon estos usuarios:**
+- Probablemente mediante **seeds** (`npm run seed`)
+- O creados manualmente en la base de datos
+- **Sin pasar por el flujo OAuth**, por eso no tienen registro en `Account`
+
+### ✅ SOLUCIÓN PARA OAuthAccountNotLinked
+
+#### Opción A: Limpiar Usuarios de Prueba (Recomendado para desarrollo)
+
+```bash
+# Conectar a base de datos de producción
+ssh gabriel@167.172.251.27
+
+# Eliminar usuarios sin Account
+docker exec -it n8n-db psql -U degux_user -d degux
+
+-- Verificar usuarios
+SELECT id, email, name FROM "User";
+
+-- BACKUP: Exportar usuarios antes de eliminar
+\copy "User" TO '/tmp/users_backup.csv' CSV HEADER;
+
+-- Eliminar usuarios sin vinculación OAuth (CUIDADO: solo en desarrollo)
+DELETE FROM "User" WHERE id NOT IN (SELECT "userId" FROM "Account");
+
+-- Verificar que se eliminaron
+SELECT id, email, name FROM "User";
+-- Debería mostrar 0 rows
+
+-- Salir
+\q
+```
+
+**Después de limpiar:**
+1. Intenta login con Google desde https://degux.cl/auth/signin
+2. NextAuth creará el usuario correctamente con su vinculación en `Account`
+3. El error `OAuthAccountNotLinked` desaparecerá
+
+#### Opción B: Vincular Usuarios Existentes (Para producción con datos reales)
+
+Si necesitas **mantener** los usuarios existentes y solo vincularlos:
+
+```bash
+# ADVERTENCIA: Este proceso es delicado, requiere conocer el providerAccountId de Google
+
+# 1. Hacer login REAL con Google en ambiente de prueba local
+# 2. Copiar el providerAccountId que Google asigna
+# 3. Crear manualmente el registro en Account:
+
+docker exec -it n8n-db psql -U degux_user -d degux
+
+-- Insertar vinculación OAuth manual (EJEMPLO)
+INSERT INTO "Account" (
+  "userId",
+  type,
+  provider,
+  "providerAccountId",
+  "access_token",
+  "token_type",
+  scope,
+  "id_token"
+) VALUES (
+  'cm7q0t1yi0000jw039rkrmhty', -- userId de gabrielpantojarivera@gmail.com
+  'oauth',
+  'google',
+  'GOOGLE_ACCOUNT_ID_AQUÍ', -- ID de cuenta de Google (obtener de login real)
+  NULL, -- Se actualizará en próximo login
+  'Bearer',
+  'openid email profile',
+  NULL
+);
+```
+
+**⚠️ IMPORTANTE:** La Opción B es **compleja y propensa a errores**. Solo úsala si tienes datos de producción que **no puedes perder**.
+
+#### Opción C: Permitir Email/Password + OAuth (Cambio de Arquitectura)
+
+Si quieres permitir **múltiples métodos de autenticación**:
+
+1. Modificar `src/lib/auth.config.ts`:
+```typescript
+callbacks: {
+  async signIn({ user, account, profile }) {
+    // Permitir que un email tenga múltiples providers
+    return true; // Más permisivo
+  }
+}
+```
+
+2. Modificar schema de Prisma para soportar `allowDangerousEmailAccountLinking`:
+```typescript
+// En auth.config.ts
+adapter: PrismaAdapter(prisma),
+allowDangerousEmailAccountLinking: true, // ⚠️ SOLO si entiendes los riesgos
+```
+
+**⚠️ ADVERTENCIA:** `allowDangerousEmailAccountLinking` tiene **riesgos de seguridad** si un atacante conoce el email de un usuario.
+
+### 🎨 SOLUCIÓN PARA Flujos de Autenticación Duplicados
+
+**Problema identificado:**
+- Landing page (`/`) tiene botón "Iniciar sesión con Google"
+- Página dedicada (`/auth/signin`) tiene UI completamente diferente
+- Ambos redirigen a `/dashboard` con lógica duplicada
+- Confusión para usuarios: ¿cuál usar?
+
+**Recomendación: Unificar en un solo flujo**
+
+#### Opción A: Redirigir Landing a Signin Page (Más simple)
+
+Modificar `src/app/page.tsx`:
+
+```typescript
+// En el botón de "Iniciar sesión con Google"
+const handleAuth = async () => {
+  if (!acceptedTerms) return;
+
+  // En lugar de signIn directamente, redirigir a /auth/signin
+  router.push('/auth/signin');
+};
+```
+
+**Ventajas:**
+- ✅ Un solo lugar para debuggear
+- ✅ Experiencia consistente
+- ✅ Menos código duplicado
+
+**Desventajas:**
+- ❌ Un clic extra para el usuario
+- ❌ Landing page menos "atractiva" sin CTA directo
+
+#### Opción B: Modal de Login en Landing (Más elegante)
+
+Crear un modal que se abre desde landing:
+
+```typescript
+// Nuevo componente: src/components/auth/GoogleSignInModal.tsx
+'use client';
+
+export function GoogleSignInModal({ isOpen, onClose }) {
+  // Mismo contenido de /auth/signin pero en modal
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      {/* UI de signin aquí */}
+    </Modal>
+  );
+}
+```
+
+Usar en `src/app/page.tsx`:
+
+```typescript
+const [showLoginModal, setShowLoginModal] = useState(false);
+
+// En el botón
+<button onClick={() => setShowLoginModal(true)}>
+  Iniciar sesión con Google
+</button>
+
+<GoogleSignInModal
+  isOpen={showLoginModal}
+  onClose={() => setShowLoginModal(false)}
+/>
+```
+
+**Ventajas:**
+- ✅ Experiencia fluida sin salir de landing
+- ✅ Código centralizado en componente reutilizable
+- ✅ Moderna y elegante
+
+**Desventajas:**
+- ❌ Más complejo de implementar
+- ❌ Requiere manejo de estado del modal
+
+#### Opción C: Mantener Ambos Flujos pero Unificar Componente (Compromiso)
+
+Crear componente compartido:
+
+```typescript
+// src/components/auth/GoogleSignInButton.tsx
+'use client';
+
+export function GoogleSignInButton({
+  callbackUrl = '/dashboard',
+  showTerms = true
+}) {
+  // Lógica centralizada de signIn
+}
+```
+
+Usar en ambos lugares:
+
+```typescript
+// En src/app/page.tsx
+<GoogleSignInButton callbackUrl="/dashboard" showTerms={true} />
+
+// En src/app/auth/signin/page.tsx
+<GoogleSignInButton callbackUrl={callbackUrl} showTerms={false} />
+```
+
+**Ventajas:**
+- ✅ Lógica centralizada
+- ✅ Mantiene flexibilidad de dos flujos
+- ✅ Fácil de mantener
+
+**Desventajas:**
+- ⚠️ Sigue habiendo dos puntos de entrada
+
+**Recomendación:** Implementar **Opción A** (redirigir a signin) en el corto plazo para resolver la confusión, y luego evaluar **Opción B** (modal) si la UX lo requiere.
+
+---
+
+## 8. DIAGNÓSTICO DEFINITIVO - Error 401: invalid_client (2025-11-22)
 
 ### 🔍 Investigación Realizada
 
