@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "seed": "node prisma/seed.mjs",
+    "seed:profiles": "npx tsx prisma/seed-profiles.ts",
     "build": "npx prisma generate && next build",
     "dev": "next dev --turbo",
     "dev:tunnel": "ssh -N -L 5432:localhost:5432 gabriel@VPS_IP_REDACTED",
