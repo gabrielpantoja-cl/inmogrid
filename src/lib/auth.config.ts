@@ -158,45 +158,32 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     
-    // ✅ SIGNIN CALLBACK - LOGGING Y VALIDACIÓN
-    async signIn({ user, account }) {
+    // ✅ SIGNIN CALLBACK - SOLO VALIDACIÓN (PrismaAdapter maneja User + Account)
+    async signIn({ user, account, profile }) {
       console.log('✅ [AUTH-SIGNIN]', {
         userId: user.id,
         email: user.email,
         provider: account?.provider,
+        accountId: account?.providerAccountId,
         timestamp: new Date().toISOString()
       });
-      
+
       // Validar que tenemos los datos mínimos necesarios
       if (!user.email) {
         console.error('❌ [AUTH-SIGNIN] No email provided');
         return false;
       }
 
-      try {
-        // Crear usuario con rol por defecto (los roles admin se asignan manualmente en la DB)
-        await prisma.user.upsert({
-          where: { email: user.email },
-          update: {
-            name: user.name,
-            image: user.image,
-            // Mantener el rol existente, no sobrescribir
-          },
-          create: {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            image: user.image,
-            role: 'user', // Rol por defecto, se cambia manualmente en DB si es admin
-          },
-        });
-
-        console.log(`✅ [AUTH-SIGNIN] User processed: ${user.email}`);
-      } catch (error) {
-        console.error('❌ [AUTH-SIGNIN] Error processing user:', error);
-        // Continuar con el login aunque falle la actualización
+      if (!account) {
+        console.error('❌ [AUTH-SIGNIN] No account information provided');
+        return false;
       }
-      
+
+      // ✅ IMPORTANTE: NO hacer upsert manual aquí
+      // PrismaAdapter se encarga de crear User + Account automáticamente
+      // Si hacemos upsert manual, interferimos con el adapter y Account no se crea
+
+      console.log(`✅ [AUTH-SIGNIN] Allowing sign in for: ${user.email}`);
       return true;
     }
   },
