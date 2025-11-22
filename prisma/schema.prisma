@@ -7,10 +7,9 @@ generator client {
 datasource db {
   provider   = "postgresql"
   url        = env("POSTGRES_PRISMA_URL")
-  extensions = [postgis]
+  extensions = [postgis, uuid_ossp(map: "uuid-ossp", schema: "public")]
 }
 
-// ✅ MODELO ACCOUNT CORREGIDO - Compatible con NextAuth.js
 model Account {
   userId            String
   type              String
@@ -24,10 +23,9 @@ model Account {
   id_token          String?
   session_state     String?
   createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  id                String   @id @default(cuid())
-  // ✅ CAMBIADO: User -> user (minúscula) para compatibilidad con NextAuth
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt         DateTime
+  id                String   @id
+  User              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -38,8 +36,7 @@ model AuditLog {
   action    String
   metadata  Json?
   createdAt DateTime @default(now())
-  // ✅ CAMBIADO: User -> user (minúscula)
-  user      User     @relation(fields: [userId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
 }
 
 model ChatMessage {
@@ -48,70 +45,201 @@ model ChatMessage {
   role      MessageRole
   content   String
   createdAt DateTime    @default(now())
-  // ✅ CAMBIADO: User -> user (minúscula)
-  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
 }
 
-// ✅ MODELO SESSION CORREGIDO - Compatible con NextAuth.js
+model Collection {
+  id            String   @id
+  userId        String
+  name          String
+  slug          String   @unique
+  description   String?
+  coverImageUrl String?
+  items         Json     @default("[]")
+  isPublic      Boolean  @default(true)
+  featured      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
+  User          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([slug])
+  @@index([userId, isPublic])
+}
+
+model Connection {
+  id                                String           @id
+  requesterId                       String
+  receiverId                        String
+  status                            ConnectionStatus @default(pending)
+  message                           String?
+  createdAt                         DateTime         @default(now())
+  updatedAt                         DateTime
+  User_Connection_receiverIdToUser  User             @relation("Connection_receiverIdToUser", fields: [receiverId], references: [id], onDelete: Cascade)
+  User_Connection_requesterIdToUser User             @relation("Connection_requesterIdToUser", fields: [requesterId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, receiverId])
+  @@index([receiverId, status])
+  @@index([requesterId, status])
+}
+
+model Plant {
+  id               String   @id
+  userId           String
+  name             String
+  slug             String   @unique
+  scientificName   String?
+  description      String?
+  careInstructions String?
+  imageUrls        String[] @default([])
+  mainImageUrl     String?
+  category         String?
+  difficulty       String?
+  sunlight         String?
+  watering         String?
+  origin           String?
+  isFavorite       Boolean  @default(false)
+  featured         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime
+  User             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([category])
+  @@index([slug])
+  @@index([userId, isFavorite])
+}
+
+model Post {
+  id            String    @id
+  userId        String
+  title         String
+  slug          String    @unique
+  content       String
+  excerpt       String?
+  coverImageUrl String?
+  published     Boolean   @default(false)
+  publishedAt   DateTime?
+  tags          String[]  @default([])
+  readTime      Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+  User          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([slug])
+  @@index([userId, published])
+}
+
+model Property {
+  id           String         @id
+  userId       String
+  title        String
+  description  String?
+  propertyType PropertyType
+  status       PropertyStatus @default(available)
+  address      String
+  commune      String
+  region       String
+  lat          Float?
+  lng          Float?
+  bedrooms     Int?
+  bathrooms    Int?
+  parkingSpots Int?
+  totalSurface Float?
+  builtSurface Float?
+  price        BigInt
+  currency     String         @default("CLP")
+  images       String[]       @default([])
+  mainImage    String?
+  featured     Boolean        @default(false)
+  views        Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime
+  User         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([commune, status])
+  @@index([propertyType, status])
+  @@index([userId])
+}
+
+model PropertyListing {
+  id           String        @id
+  title        String
+  description  String?
+  price        BigInt?
+  currency     String        @default("CLP")
+  address      String?
+  commune      String
+  region       String
+  lat          Float?
+  lng          Float?
+  totalSurface Float?
+  builtSurface Float?
+  bedrooms     Int?
+  bathrooms    Int?
+  parkingSpots Int?
+  propertyType String?
+  source       ListingSource
+  sourceUrl    String?
+  externalId   String?
+  images       String[]      @default([])
+  mainImage    String?
+  scrapedAt    DateTime      @default(now())
+  publishedAt  DateTime?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime
+
+  @@unique([source, externalId])
+  @@index([commune, isActive])
+  @@index([source, isActive])
+}
+
 model Session {
   id           String   @id
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  // ✅ CAMBIADO: User -> user (minúscula) para compatibilidad con NextAuth
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// ✅ MODELO USER ACTUALIZADO - Referencias corregidas + Perfil Profesional
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  role          Role            @default(user)
-
-  // 🆕 CAMPOS DE PERFIL PROFESIONAL (Fase 1)
-  bio              String?
-  profession       ProfessionType?
-  company          String?
-  phone            String?
-  region           String?
-  commune          String?
-  website          String?
-  linkedin         String?
-  isPublicProfile  Boolean        @default(true)  // Perfiles públicos por defecto para red social
-
-  // 🌱 CAMPOS DE PERFILERÍA HUMANA (Fase 2)
-  username         String?  @unique     // URL amigable: degux.cl/username
-  tagline          String?              // Frase corta (ej: "Amante de las plantas")
-  coverImageUrl    String?              // Portada del perfil
-  location         String?              // Ubicación libre (ej: "Sur de Chile")
-  identityTags     String[] @default([])// Tags de identidad ["vegano", "ecologista"]
-  externalLinks    Json?                // Links externos { instagram: "...", whatsapp: "..." }
-  customCss        String?              // CSS personalizado (premium feature)
-
-  // ✅ ACTUALIZADAS: Todas las referencias a minúsculas
-  accounts      Account[]
-  auditLogs     AuditLog[]
-  chatMessages  ChatMessage[]
-  sessions      Session[]
-  referenciales referenciales[]
-
-  // 🆕 NUEVAS RELACIONES (Fase 1)
-  properties           Property[]
-  connectionsInitiated Connection[] @relation("ConnectionRequester")
-  connectionsReceived  Connection[] @relation("ConnectionReceiver")
-
-  // 🌱 NUEVAS RELACIONES (Perfilería Humana)
-  posts                Post[]
-  plants               Plant[]
-  collections          Collection[]
+  id                                      String          @id
+  name                                    String?
+  email                                   String          @unique
+  password                                String?
+  emailVerified                           DateTime?
+  image                                   String?
+  createdAt                               DateTime        @default(now())
+  updatedAt                               DateTime
+  role                                    Role            @default(user)
+  bio                                     String?
+  profession                              ProfessionType?
+  company                                 String?
+  phone                                   String?
+  region                                  String?
+  commune                                 String?
+  website                                 String?
+  linkedin                                String?
+  isPublicProfile                         Boolean         @default(true)
+  username                                String?         @unique
+  tagline                                 String?
+  coverImageUrl                           String?
+  location                                String?
+  identityTags                            String[]        @default([])
+  externalLinks                           Json?
+  customCss                               String?
+  Account                                 Account[]
+  AuditLog                                AuditLog[]
+  ChatMessage                             ChatMessage[]
+  Collection                              Collection[]
+  Connection_Connection_receiverIdToUser  Connection[]    @relation("Connection_receiverIdToUser")
+  Connection_Connection_requesterIdToUser Connection[]    @relation("Connection_requesterIdToUser")
+  Plant                                   Plant[]
+  Post                                    Post[]
+  Property                                Property[]
+  Session                                 Session[]
+  referenciales                           referenciales[]
 }
 
 model VerificationToken {
@@ -132,7 +260,7 @@ model conservadores {
   email         String?
   sitioWeb      String?
   createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  updatedAt     DateTime
   referenciales referenciales[]
 }
 
@@ -157,10 +285,9 @@ model referenciales {
   conservadorId  String
   geom           Unsupported("geometry")?
   createdAt      DateTime                 @default(now())
-  updatedAt      DateTime                 @updatedAt
+  updatedAt      DateTime
   conservadores  conservadores            @relation(fields: [conservadorId], references: [id])
-  // ✅ CAMBIADO: User -> user (minúscula) + OPCIONAL para datos de N8N
-  user           User?                    @relation(fields: [userId], references: [id])
+  User           User?                    @relation(fields: [userId], references: [id])
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -172,66 +299,19 @@ model spatial_ref_sys {
   proj4text String? @db.VarChar(2048)
 }
 
-// 🆕 FASE 1: Modelo Property (Propiedades listadas por usuarios)
-model Property {
-  id          String         @id
-  userId      String
-  title       String
-  description String?
-  propertyType PropertyType
-  status      PropertyStatus @default(available)
-
-  // Ubicación
-  address     String
-  commune     String
-  region      String
-  lat         Float?
-  lng         Float?
-
-  // Características
-  bedrooms    Int?
-  bathrooms   Int?
-  parkingSpots Int?
-  totalSurface Float?
-  builtSurface Float?
-
-  // Precio
-  price       BigInt
-  currency    String         @default("CLP")
-
-  // Imágenes
-  images      String[]       @default([])
-  mainImage   String?
-
-  // Metadata
-  featured    Boolean        @default(false)
-  views       Int            @default(0)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-
-  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([commune, status])
-  @@index([propertyType, status])
+enum ConnectionStatus {
+  pending
+  accepted
+  rejected
+  blocked
 }
 
-// 🆕 FASE 1: Modelo Connection (Red de networking)
-model Connection {
-  id          String           @id
-  requesterId String
-  receiverId  String
-  status      ConnectionStatus @default(pending)
-  message     String?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-
-  requester   User             @relation("ConnectionRequester", fields: [requesterId], references: [id], onDelete: Cascade)
-  receiver    User             @relation("ConnectionReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
-
-  @@unique([requesterId, receiverId])
-  @@index([requesterId, status])
-  @@index([receiverId, status])
+enum ListingSource {
+  PORTAL_INMOBILIARIO
+  TOCTOC
+  MERCADO_LIBRE
+  YAPO
+  OTRO
 }
 
 enum MessageRole {
@@ -239,13 +319,6 @@ enum MessageRole {
   bot
 }
 
-enum Role {
-  user
-  admin
-  superadmin
-}
-
-// 🆕 FASE 1: Enums para Perfiles y Propiedades
 enum ProfessionType {
   CORREDOR
   TASADOR
@@ -255,6 +328,13 @@ enum ProfessionType {
   INVERSIONISTA
   ABOGADO
   OTRO
+}
+
+enum PropertyStatus {
+  available
+  reserved
+  sold
+  inactive
 }
 
 enum PropertyType {
@@ -268,156 +348,8 @@ enum PropertyType {
   OTRO
 }
 
-enum PropertyStatus {
-  available
-  reserved
-  sold
-  inactive
-}
-
-enum ConnectionStatus {
-  pending
-  accepted
-  rejected
-  blocked
-}
-
-// 🆕 MODELO PropertyListing (Ofertas scrapeadas de portales externos)
-model PropertyListing {
-  id              String   @id
-
-  // Información básica
-  title           String
-  description     String?
-  price           BigInt?
-  currency        String   @default("CLP")
-
-  // Ubicación
-  address         String?
-  commune         String
-  region          String
-  lat             Float?
-  lng             Float?
-
-  // Superficies
-  totalSurface    Float?   // Superficie de terreno
-  builtSurface    Float?   // Superficie edificada
-
-  // Características
-  bedrooms        Int?
-  bathrooms       Int?
-  parkingSpots    Int?
-  propertyType    String?
-
-  // Fuente
-  source          ListingSource  // Portal origen
-  sourceUrl       String?        // URL original
-  externalId      String?        // ID en portal origen
-
-  // Imágenes
-  images          String[]  @default([])
-  mainImage       String?
-
-  // Metadata
-  scrapedAt       DateTime  @default(now())
-  publishedAt     DateTime?
-  isActive        Boolean   @default(true)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  @@index([commune, isActive])
-  @@index([source, isActive])
-  @@unique([source, externalId])
-}
-
-enum ListingSource {
-  PORTAL_INMOBILIARIO
-  TOCTOC
-  MERCADO_LIBRE
-  YAPO
-  OTRO
-}
-
-// 🌱 PERFILERÍA HUMANA - MODELO POST (Blog/Artículos)
-model Post {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  title           String
-  slug            String   @unique  // URL: /username/posts/slug
-  content         String   @db.Text // Markdown o rich text
-  excerpt         String?  @db.Text // Resumen corto
-  coverImageUrl   String?
-
-  published       Boolean  @default(false)
-  publishedAt     DateTime?
-
-  tags            String[] @default([]) // ["plantas", "ecología"]
-  readTime        Int?     // Minutos de lectura estimado
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  @@index([userId, published])
-  @@index([slug])
-}
-
-// 🌱 PERFILERÍA HUMANA - MODELO PLANT (Colección Personal de Plantas)
-// Enfoque: Compartir conocimiento y pasión, NO venta directa
-model Plant {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  name            String
-  slug            String   @unique  // URL: /username/plantas/slug
-  scientificName  String?
-  description     String?  @db.Text // Historia personal, por qué la ama
-  careInstructions String? @db.Text // Cuidados y consejos
-
-  imageUrls       String[] @default([])
-  mainImageUrl    String?
-
-  // Metadata educativa
-  category        String?  // "Suculenta", "Cactus", "Ornamental", "Nativa"
-  difficulty      String?  // "Fácil", "Media", "Difícil"
-  sunlight        String?  // "Sol directo", "Semi-sombra", "Sombra"
-  watering        String?  // "Poco", "Moderado", "Frecuente"
-  origin          String?  // Origen geográfico de la planta
-
-  // Organización
-  isFavorite      Boolean  @default(false) // Destacar como planta favorita
-  featured        Boolean  @default(false)
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  @@index([userId, isFavorite])
-  @@index([slug])
-  @@index([category])
-}
-
-// 🌱 PERFILERÍA HUMANA - MODELO COLLECTION (Colecciones Temáticas)
-model Collection {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  name            String
-  slug            String   @unique  // URL: /username/collections/slug
-  description     String?  @db.Text
-  coverImageUrl   String?
-
-  // Elementos de la colección (flexible JSON)
-  items           Json     @default("[]") // Array de { type, id, title, imageUrl, description }
-
-  isPublic        Boolean  @default(true)
-  featured        Boolean  @default(false)
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  @@index([userId, isPublic])
-  @@index([slug])
+enum Role {
+  user
+  admin
+  superadmin
 }
