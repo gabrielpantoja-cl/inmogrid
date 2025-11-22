@@ -1,4 +1,7 @@
 // jest.setup.js
+const dotenv = require('dotenv');
+dotenv.config({ path: '.env.test.local', override: true });
+
 require('@testing-library/jest-dom');
 require('whatwg-fetch');
 const { TextEncoder, TextDecoder } = require('util');
