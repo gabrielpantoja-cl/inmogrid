@@ -11,24 +11,31 @@ import {
   Bars3Icon,
   XMarkIcon,
   HomeIcon,
-  DocumentDuplicateIcon, // For "Mis Publicaciones"
-  LeafIcon,             // For "Mis Plantas"
-  UserGroupIcon,        // For "Comunidad"
-  MagnifyingGlassIcon,  // For "Explorar"
-  UserIcon              // For "Mi Perfil"
+  DocumentDuplicateIcon,
+  GlobeAltIcon,           // Used as a fallback for "Mis Plantas"
+  UserGroupIcon,        
+  MagnifyingGlassIcon,  
+  UserIcon              
 } from '@heroicons/react/24/outline';
 import { useDeleteAccount } from '@/lib/hooks/useDeleteAccount';
 import { Dialog } from '@/components/ui/dialog';
 import { robustSignOut } from '@/lib/auth-utils';
 import { useSession } from 'next-auth/react';
 
-const navigationLinks = [
+interface NavLink {
+  name: string;
+  href: string;
+  icon: React.ElementType; // Use React.ElementType for icon components
+  badge?: string; // Optional badge property
+}
+
+const navigationLinks: NavLink[] = [
   { name: 'Feed', href: '/dashboard', icon: HomeIcon },
   { name: 'Mi Perfil', href: '/dashboard/perfil', icon: UserIcon },
-  { name: 'Mis Publicaciones', href: '/dashboard/notas', icon: DocumentDuplicateIcon }, // Renamed from Mis Notas
-  { name: 'Mis Plantas', href: '/dashboard/plantas', icon: LeafIcon }, // Changed icon to LeafIcon
-  { name: 'Explorar', href: '/dashboard/explorar', icon: MagnifyingGlassIcon }, // Changed icon to MagnifyingGlassIcon
-  { name: 'Comunidad', href: '/dashboard/comunidad', icon: UserGroupIcon }, // Changed icon to UserGroupIcon
+  { name: 'Mis Publicaciones', href: '/dashboard/notas', icon: DocumentDuplicateIcon },
+  { name: 'Mis Plantas', href: '/dashboard/plantas', icon: GlobeAltIcon }, // Changed icon to GlobeAltIcon
+  { name: 'Explorar', href: '/dashboard/explorar', icon: MagnifyingGlassIcon },
+  { name: 'Comunidad', href: '/dashboard/comunidad', icon: UserGroupIcon },
 ];
 
 export default function Navbar() {
