@@ -98,10 +98,9 @@ function SignInContent() {
         timestamp: new Date().toISOString()
       });
       
-      // ✅ CONFIGURACIÓN OPTIMIZADA PARA VPS
       const result = await signIn('google', {
         callbackUrl,
-        redirect: true // Permitir redirección automática en producción
+        redirect: true
       });
 
       // Este código solo se ejecutará si redirect: false
@@ -191,13 +190,6 @@ function SignInContent() {
               </div>
             )}
           </button>
-
-          {/* ✅ INFORMACIÓN SOBRE LA CORRECCIÓN */}
-          <div className="text-center">
-            <div className="text-xs text-blue-600 bg-blue-50 p-3 rounded-md border border-blue-200">
-              ✅ Sistema de autenticación optimizado para VPS
-            </div>
-          </div>
 
           {/* Información adicional */}
           <div className="text-center">
