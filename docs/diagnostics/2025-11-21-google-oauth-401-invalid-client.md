@@ -254,7 +254,154 @@ client_secret_*.json
 
 ---
 
-## 7. Solución de Problemas Comunes
+## 7. DIAGNÓSTICO DEFINITIVO - Error 401: invalid_client (2025-11-22)
+
+### 🔍 Investigación Realizada
+
+**Credenciales verificadas:**
+- ✅ Local (.env.local): Credenciales correctas
+- ✅ VPS (.env.production): Credenciales correctas
+- ✅ Google Cloud Console: Cliente OAuth existe y está activo
+- ✅ Código de aplicación: Configuración de NextAuth correcta
+
+**Tests exitosos:**
+- ✅ Todos los tests en `__tests__/auth/` pasan
+- ✅ Variables de entorno están correctamente cargadas
+- ✅ NextAuth está correctamente configurado
+
+### 🎯 CAUSA RAÍZ IDENTIFICADA
+
+El error `401: invalid_client` ocurre cuando las **URIs de redirección autorizadas en Google Cloud Console NO coinciden EXACTAMENTE** con las URIs que NextAuth está intentando usar.
+
+**Problema común:**
+NextAuth v4 utiliza la ruta `/api/auth/callback/google`, pero si en Google Cloud Console tienes configuradas rutas diferentes (por ejemplo, `/auth/callback/google` sin `/api`), Google rechazará la autenticación con error `401: invalid_client`.
+
+### ✅ SOLUCIÓN DEFINITIVA
+
+#### Paso 1: Verificar URIs en Google Cloud Console
+
+1. Ve a [Google Cloud Console](https://console.cloud.google.com/)
+2. Selecciona el proyecto `degux-cl`
+3. Ve a **APIs y servicios > Credenciales**
+4. Encuentra el cliente OAuth: `GCP_PROJECT_NUMBER_REDACTED-b3utu9es3bfpoovilhqdhdtr0hm3378s.apps.googleusercontent.com`
+5. Haz clic para editar
+
+#### Paso 2: Configurar URIs de Redirección EXACTAS
+
+**IMPORTANTE:** Copia y pega estas URIs EXACTAMENTE como se muestran (sin espacios extra):
+
+**URIs de redirección autorizados:**
+```
+https://degux.cl/api/auth/callback/google
+http://localhost:3000/api/auth/callback/google
+```
+
+**Orígenes JavaScript autorizados:**
+```
+https://degux.cl
+http://localhost:3000
+```
+
+#### Paso 3: Guardar y Esperar Propagación
+
+1. Haz clic en **"Guardar"** en Google Cloud Console
+2. **IMPORTANTE:** Google puede tardar hasta 5 minutos en propagar los cambios
+3. Espera 5 minutos antes de volver a intentar el login
+
+#### Paso 4: Verificar en Desarrollo Local
+
+```bash
+# Terminal 1: Levantar base de datos
+docker compose -f docker-compose.local.yml up -d
+
+# Terminal 2: Iniciar aplicación
+npm run dev
+
+# Terminal 3: Verificar que las variables estén cargadas
+grep GOOGLE_CLIENT_ID .env.local
+grep NEXTAUTH_URL .env.local
+```
+
+Luego abre el navegador en **modo incógnito** (para evitar cookies viejas):
+1. Ve a http://localhost:3000/auth/signin
+2. Haz clic en "Continuar con Google"
+3. Selecciona tu cuenta
+4. **Deberías** ser redirigido a `/dashboard` sin errores
+
+#### Paso 5: Verificar en Producción VPS
+
+Si funciona en local, verifica en producción:
+
+```bash
+# SSH al VPS
+ssh gabriel@VPS_IP_REDACTED
+
+# Verificar que el contenedor esté corriendo
+docker ps | grep degux-web
+
+# Ver logs del contenedor
+docker logs degux-web --tail 50 -f
+
+# Verificar variables de entorno del contenedor
+docker exec degux-web env | grep GOOGLE_CLIENT_ID
+docker exec degux-web env | grep NEXTAUTH_URL
+```
+
+Luego abre el navegador en **modo incógnito**:
+1. Ve a https://degux.cl/auth/signin
+2. Haz clic en "Continuar con Google"
+3. Selecciona tu cuenta
+4. **Deberías** ser redirigido a `/dashboard` sin errores
+
+### 🔧 Troubleshooting Adicional
+
+#### Error persiste después de 5 minutos
+
+**Opción A: Crear nuevo Cliente OAuth**
+
+Si los cambios no se propagan, crea un nuevo cliente OAuth:
+
+1. En Google Cloud Console, ve a **Credenciales**
+2. Haz clic en **"+ CREAR CREDENCIALES" > "ID de cliente de OAuth 2.0"**
+3. Tipo: **Aplicación web**
+4. Nombre: `degux-cl-oauth-client-v2`
+5. Agrega las URIs exactas mencionadas arriba
+6. Copia el nuevo `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET`
+7. Actualiza `.env.local` y `.env.production` con las nuevas credenciales
+8. Reinicia los servicios
+
+**Opción B: Verificar que NextAuth esté usando las URIs correctas**
+
+Agrega logs temporales en `src/lib/auth.config.ts`:
+
+```typescript
+GoogleProvider({
+  clientId: process.env.GOOGLE_CLIENT_ID!,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+  authorization: {
+    params: {
+      prompt: "select_account",
+      scope: "openid email profile",
+      redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/google` // ← AGREGAR ESTE LOG
+    }
+  }
+}),
+```
+
+Luego verifica en la consola del navegador qué URI está enviando NextAuth.
+
+### 📋 Checklist Final
+
+- [ ] URIs en Google Cloud Console están configuradas EXACTAMENTE como se indica
+- [ ] Se esperó al menos 5 minutos después de guardar cambios en Google Cloud
+- [ ] Variables de entorno están correctamente configuradas en `.env.local` y `.env.production`
+- [ ] Prueba realizada en **modo incógnito** para evitar cookies antiguas
+- [ ] Servidor Next.js reiniciado después de cambios en variables de entorno
+- [ ] Contenedor Docker reiniciado en VPS si aplica
+
+---
+
+## 8. Solución de Problemas Comunes
 
 ### Error: "Configuration mismatch"
 **Causa:** `NEXTAUTH_URL` no coincide con el dominio real.
@@ -264,14 +411,22 @@ client_secret_*.json
 
 ### Error: "Redirect URI mismatch"
 **Causa:** La URL de callback no está autorizada en Google Cloud Console.
-**Solución:** Verificar que las URIs de redirección incluyan `/api/auth/callback/google`.
+**Solución:** Verificar que las URIs de redirección incluyan `/api/auth/callback/google` (NO `/auth/callback/google`).
 
 ### Error: "Database connection failed"
 **Causa:** `POSTGRES_PRISMA_URL` incorrecta o base de datos no disponible.
 **Solución:**
 - Local: Verificar que Docker container esté corriendo: `docker ps | grep degux-postgres-local`
-- VPS: Verificar que container `degux-db` esté corriendo: `docker ps | grep degux-db`
+- VPS: Verificar que container `n8n-db` esté corriendo: `docker ps | grep n8n-db` (degux usa n8n-db en producción)
 
 ### Error: "Invalid session"
 **Causa:** `NEXTAUTH_SECRET` diferente entre ejecuciones.
 **Solución:** Usar siempre el mismo valor de `NEXTAUTH_SECRET` en cada entorno.
+
+### Error: "401: invalid_client" (persistente)
+**Causa:** URIs de redirección no coinciden EXACTAMENTE.
+**Solución:**
+1. Verificar que Google Cloud Console tenga `/api/auth/callback/google` (con `/api`)
+2. Esperar 5 minutos para propagación de cambios
+3. Probar en modo incógnito
+4. Si persiste, crear nuevo cliente OAuth
