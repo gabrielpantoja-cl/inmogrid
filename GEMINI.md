@@ -115,7 +115,9 @@ npm run api:validate     # Validate public API
 
 ### Infrastructure Architecture
 
-**IMPORTANT**: All services run in Docker Compose. NO native systemd services (no PM2, no native Nginx).
+**IMPORTANT**: All services run in Docker Compose. NO native systemd services are used (e.g., no PM2, no native Nginx). The architecture differs between production (VPS) and local development.
+
+#### Production Architecture (VPS)
 
 **VPS Services (Docker Compose):**
 ```
@@ -125,21 +127,28 @@ VPS Digital Ocean (167.172.251.27)
     ↓
 nginx-proxy (Docker) :80, :443 ← Reverse proxy + SSL
     ↓
-┌────────────────────────────────────────┐
-│  Docker Containers (vps_network)      │
-├────────────────────────────────────────┤
-│  degux-web (Port 3000) ← degux.cl     │
-│  n8n (Port 5678)       ← N8N UI       │
-│  n8n-db (Port 5432)    ← N8N DB       │
-│  n8n-redis (Port 6379) ← N8N Cache    │
-│  portainer (9443)      ← Docker UI    │
-└────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│      Docker Containers (vps_network)        │
+├─────────────────────────────────────────────┤
+│  degux-web (Port 3000)   ← degux.cl App     │
+│  degux-db (Port 5433)    ← degux.cl DB      │
+│  n8n (Port 5678)         ← N8N UI           │
+│  n8n-db (Port 5432)      ← N8N DB           │
+│  n8n-redis (Port 6379)   ← N8N Cache        │
+│  portainer (Port 9443)   ← Docker UI        │
+└─────────────────────────────────────────────┘
 ```
 
-**Database Architecture:**
-- **Port 5432**: N8N PostgreSQL (workflows data) - N8N exclusive
-- **Port 5433**: degux PostgreSQL (app data) - degux exclusive
-- Databases are isolated for security and failure containment
+**Database Architecture (Production):**
+- **degux-db (Port 5433)**: PostgreSQL database for the main `degux.cl` application.
+- **n8n-db (Port 5432)**: Separate PostgreSQL database exclusively for `n8n` workflow data.
+- Databases are isolated in separate containers for security and failure containment.
+
+#### Local Development Architecture
+
+For local development, a simplified setup is defined in `docker-compose.local.yml`:
+- **degux-postgres-local**: A self-contained PostgreSQL container for the application database. It maps port `5432` on the host to the container's port `5432`.
+- **degux-adminer-local**: An optional Adminer container for database management, accessible on host port `8080`.
 
 **Deployment Method:**
 - Use `scripts/deploy-to-vps.sh` (automated Docker deployment)
@@ -232,10 +241,11 @@ import { authOptions } from '../../../lib/auth.config'
 - **Phase 4**: ChatConversation, VectorEmbedding (pgvector)
 - **Phase 5**: CRMClient, CRMDeal
 
-**Database Connection:**
+**Database Connection Examples:**
 ```env
-# Local development (if using local PostgreSQL)
-POSTGRES_PRISMA_URL="postgresql://user:pass@localhost:5432/degux_dev?schema=public"
+# Local Development (connects to 'degux-postgres-local' container)
+# Credentials from docker-compose.local.yml
+POSTGRES_PRISMA_URL="postgresql://degux_user:degux_local_password@localhost:5432/degux_dev?schema=public"
 
 # VPS PostgreSQL dedicated (production/staging)
 POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@167.172.251.27:5433/degux_core?schema=public&sslmode=require"
@@ -385,15 +395,20 @@ N8N_WEBHOOK_SECRET=your_webhook_secret
 
 ### Database Connection Issues
 ```bash
-# Verify database connection
+# Verify database connection with Prisma
 npx prisma studio
 
-# Reset database schema (development only)
-npm run prisma:reset
+# Check Local Docker DB Status (if running from docker-compose.local.yml)
+docker ps | grep degux-postgres-local
 
-# Check VPS PostgreSQL dedicated (port 5433)
-# SSH to VPS and run:
-docker exec degux-db psql -U degux_user -d degux_core -c "\dt"
+# Connect to Local Docker DB
+docker exec -it degux-postgres-local psql -U degux_user -d degux_dev
+
+# Check VPS Production DB Status (via SSH)
+ssh gabriel@167.172.251.27 "docker ps | grep degux-db"
+
+# Connect to VPS Production DB (via SSH)
+ssh gabriel@167.172.251.27 "docker exec -it degux-db psql -U degux_user -d degux_core"
 ```
 
 ### Build/Type Errors
@@ -437,19 +452,42 @@ npm run dev
 
 ### Service Health Checks
 ```bash
-# Check all Docker containers
-docker ps
+# Check all Docker containers on VPS
+ssh gabriel@167.172.251.27 "docker ps"
 
-# Check degux database
-docker exec degux-db psql -U degux_user -d degux_core -c "SELECT version();"
+# Check degux database container on VPS
+ssh gabriel@167.172.251.27 "docker logs degux-db"
 
-# Check N8N
-docker logs n8n
+# Check N8N container on VPS
+ssh gabriel@167.172.251.27 "docker logs n8n"
 
-# Check Nginx
-sudo nginx -t
-sudo systemctl status nginx
+# Check Nginx proxy container on VPS
+ssh gabriel@167.172.251.27 "docker ps | grep nginx-proxy"
 ```
+
+### Backup Strategy
+- **PostgreSQL degux**: Automated daily backups at 3 AM
+- **Retention**: 7 daily, 4 weekly, 6 monthly
+- **Location**: `/home/gabriel/vps-do/degux/backups/`
+- **Restore**: See `InfrastructureAgent.md` for procedures
+
+## Chilean Real Estate Domain
+
+### Data Standards
+- **ROL**: Municipal property identifier (format: `XXXXX-XXXX`)
+- **Fojas**: Page number in property registry
+- **Número**: Entry number in registry
+- **Año**: Registry year (1900-present)
+- **CBR**: Conservador de Bienes Raíces office code
+- **Commune**: 346 Chilean communes
+- **Region**: 16 Chilean regions
+
+### Validation Rules
+- ROL format: `/^\d{5}-\d{4}$/`
+- Geographic bounds: lat -56.0 to -17.5, lng -76.0 to -66.0
+- Price ranges by commune and property type
+- Surface area reasonableness checks
+
 
 ### Backup Strategy
 - **PostgreSQL degux**: Automated daily backups at 3 AM
