@@ -46,22 +46,22 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    // ✅ REDIRECT CALLBACK CORREGIDO - ELIMINA BUCLES INFINITOS
+    // ✅ REDIRECT CALLBACK CORREGIDO - ELIMINA BUCLES INFINITOS Y PREVIENE REDIRECCIONES EXTERNAS
     async redirect({ url, baseUrl }) {
       console.log('🔄 [AUTH-REDIRECT]', { url, baseUrl, NODE_ENV: process.env.NODE_ENV });
-      
+
       // Si la URL es relativa, construir URL completa
       if (url.startsWith("/")) {
         const fullUrl = `${baseUrl}${url}`;
         console.log('🔄 [AUTH-REDIRECT] Relative URL converted:', fullUrl);
         return fullUrl;
       }
-      
+
       // Si es del mismo origen, permitir
       try {
         const urlObj = new URL(url);
         const baseUrlObj = new URL(baseUrl);
-        
+
         if (urlObj.origin === baseUrlObj.origin) {
           console.log('🔄 [AUTH-REDIRECT] Same origin allowed:', url);
           return url;
@@ -69,15 +69,10 @@ export const authOptions: NextAuthOptions = {
       } catch (error) {
         console.error('🔄 [AUTH-REDIRECT] URL parsing error:', error);
       }
-      
-      // ✅ REDIRECCIÓN POR DEFECTO - Permitir la URL original si no es una página de inicio de sesión
-      // Esto permite el acceso anónimo a rutas como /dashboard si el middleware lo permite.
-      if (url.startsWith(`${baseUrl}/auth/signin`)) {
-        console.log('🔄 [AUTH-REDIRECT] Redirecting to signin page:', url);
-        return url;
-      }
-      console.log('🔄 [AUTH-REDIRECT] Allowing original URL:', url);
-      return url;
+
+      // 🔒 SEGURIDAD: Redirigir a /dashboard para URLs externas o inválidas
+      console.log('🔄 [AUTH-REDIRECT] External URL detected, redirecting to dashboard:', url);
+      return `${baseUrl}/dashboard`;
     },
     
     // ✅ SESSION CALLBACK - INCLUYE ROLE
@@ -154,27 +149,27 @@ export const authOptions: NextAuthOptions = {
   // ✅ CONFIGURACIÓN DE PÁGINAS CORREGIDA
   pages: {
     signIn: "/auth/signin",
-    signOut: "/", 
+    signOut: "/",
     error: "/auth/error",
   },
-  
+
   // ✅ EVENTOS SIMPLIFICADOS
   events: {
     async signOut({ token }) {
-      console.log('📤 [AUTH-SIGNOUT]', { 
+      console.log('📤 [AUTH-SIGNOUT]', {
         tokenId: token?.sub,
-        timestamp: new Date().toISOString() 
+        timestamp: new Date().toISOString()
       });
     },
     async signIn({ user, account }) {
-      console.log('📥 [AUTH-SIGNIN-EVENT]', { 
-        userId: user.id, 
+      console.log('📥 [AUTH-SIGNIN-EVENT]', {
+        userId: user.id,
         provider: account?.provider,
         timestamp: new Date().toISOString()
       });
     }
   },
-  
-  // ✅ DEBUG SOLO EN DESARROLLO
-  debug: process.env.NODE_ENV === 'development'
+
+  // ✅ DEBUG MODE - Habilitado cuando NEXTAUTH_DEBUG=true
+  debug: process.env.NEXTAUTH_DEBUG === 'true'
 }
