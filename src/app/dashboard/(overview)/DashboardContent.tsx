@@ -1,18 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import LatestReferenciales from '@/components/ui/dashboard/latest-referenciales';
 import { lusitana } from '@/lib/styles/fonts';
-import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
-import { CardsSkeleton, LatestReferencialesSkeleton } from '@/components/ui/primitives/skeletons';
 import { Session } from 'next-auth';
-import UfDisplay from '@/components/ui/dashboard/UfDisplay';
-
-const TopCommunesChart = dynamic(
-  () => import('@/components/ui/dashboard/TopComunasChart'),
-  { ssr: false }
-);
+import {
+  UserGroupIcon,
+  DocumentTextIcon,
+  SparklesIcon
+} from '@heroicons/react/24/outline';
 
 interface DashboardContentProps {
   session: Session | null; // ✅ Permitir sesión nula para modo anónimo
@@ -22,61 +17,112 @@ interface DashboardContentProps {
 
 export default function DashboardContent({
   session,
-  latestReferenciales,
 }: DashboardContentProps) {
   return (
     <main className="flex flex-col space-y-6">
-      {/* Breadcrumb */}
-      <div className="border-b pb-2">
-        <h1 className={`${lusitana.className} text-xl md:text-2xl`}>
-          Inicio
-        </h1>
-      </div>
-
-      {/* Contenedor principal */}
-      <div className="flex flex-col space-y-6">
-        {/* Bienvenida */}
+      {/* Bienvenida */}
+      <div className="rounded-xl bg-gradient-to-r from-green-50 to-blue-50 p-6 shadow-sm border border-green-200">
         {session?.user ? (
           <div className="space-y-2">
-            <div className="text-lg text-primary">
-              👋 ¡Hola! <span className="font-bold">{session.user.name}</span>
-            </div>
-            <div className="text-sm text-gray-600">
-              Cuenta: <span className="font-medium">{session.user.email}</span>
-            </div>
-            <div className="text-base text-primary">
-              Bienvenid@ a referenciales.cl
-            </div>
+            <h1 className={`${lusitana.className} text-2xl md:text-3xl text-gray-800`}>
+              👋 ¡Hola, <span className="font-bold text-green-700">{session.user.name}</span>!
+            </h1>
+            <p className="text-gray-600">
+              Bienvenid@ a <span className="font-semibold text-green-700">degux.cl</span> 🌱 - Tu ecosistema digital colaborativo
+            </p>
           </div>
         ) : (
-          <div className="space-y-2 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <div className="text-lg text-blue-800">
-              👤 Navegando como <span className="font-bold">Incógnito</span>
-            </div>
-            <div className="text-sm text-blue-600">
-              Estás explorando el dashboard sin autenticación.
-              <Link href="/auth/signin" className="ml-1 underline hover:text-blue-700">
+          <div className="space-y-2">
+            <h1 className={`${lusitana.className} text-2xl md:text-3xl text-gray-800`}>
+              👋 Bienvenid@ a degux.cl
+            </h1>
+            <p className="text-gray-600">
+              <Link href="/auth/signin" className="font-semibold text-green-700 underline hover:text-green-600">
                 Inicia sesión
-              </Link> para acceder a todas las funciones.
-            </div>
+              </Link> para crear tu perfil y conectar con la comunidad.
+            </p>
           </div>
         )}
+      </div>
 
-        {/* Valor UF */}
-        <div className="w-full">
-          <Suspense fallback={<CardsSkeleton />}>
-            <UfDisplay />
-          </Suspense>
-        </div>
+      {/* Acciones Rápidas */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Link
+          href="/dashboard/perfil"
+          className="group p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-green-300 transition-all"
+        >
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors">
+              <UserGroupIcon className="w-6 h-6 text-green-700" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-800 group-hover:text-green-700 transition-colors">
+                Mi Perfil
+              </h3>
+              <p className="text-sm text-gray-500">
+                Edita tu información y personaliza tu espacio
+              </p>
+            </div>
+          </div>
+        </Link>
 
-        {/* Gráficos y referencias */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-          <Suspense fallback={<LatestReferencialesSkeleton />}>
-            <LatestReferenciales data={latestReferenciales} />
-          </Suspense>
-          <Suspense fallback={<LatestReferencialesSkeleton />}>
-            <TopCommunesChart />
-          </Suspense>
+        <Link
+          href="/dashboard/notas"
+          className="group p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all"
+        >
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
+              <DocumentTextIcon className="w-6 h-6 text-blue-700" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+                Mis Notas
+              </h3>
+              <p className="text-sm text-gray-500">
+                Crea y gestiona tus publicaciones
+              </p>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          href="/dashboard/plantas"
+          className="group p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-purple-300 transition-all"
+        >
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-purple-100 rounded-lg group-hover:bg-purple-200 transition-colors">
+              <SparklesIcon className="w-6 h-6 text-purple-700" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-800 group-hover:text-purple-700 transition-colors">
+                Mis Plantas
+              </h3>
+              <p className="text-sm text-gray-500">
+                Comparte tu colección y conocimientos
+              </p>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Feed de Actividad Reciente */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 className={`${lusitana.className} text-xl md:text-2xl mb-6 text-gray-800`}>
+          📰 Feed de la Comunidad
+        </h2>
+
+        <div className="space-y-4">
+          {/* Mensaje temporal mientras implementamos el feed real */}
+          <div className="text-center py-12 text-gray-500">
+            <SparklesIcon className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+            <p className="text-lg font-medium text-gray-600 mb-2">
+              ¡Próximamente!
+            </p>
+            <p className="text-sm max-w-md mx-auto">
+              Aquí verás las últimas publicaciones, plantas y actividades de la comunidad.
+              Mientras tanto, explora los perfiles públicos en <Link href="/dashboard/comunidad" className="text-green-700 underline">Comunidad</Link>.
+            </p>
+          </div>
         </div>
       </div>
     </main>
