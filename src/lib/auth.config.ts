@@ -28,19 +28,74 @@ export const authOptions: NextAuthOptions = {
     maxAge: 24 * 60 * 60, // 24 horas
   },
 
-  // ✅ COOKIES SIMPLIFICADAS - CORRIGE PROBLEMAS DE DOMINIO
+  // ✅ COOKIES COMPLETAS - INCLUYE STATE Y PKCE PARA OAUTH
   cookies: {
     sessionToken: {
-      name: process.env.NODE_ENV === "production" 
-        ? "__Secure-next-auth.session-token" 
+      name: process.env.NODE_ENV === "production"
+        ? "__Secure-next-auth.session-token"
         : "next-auth.session-token",
       options: {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
         secure: process.env.NODE_ENV === "production",
-        // ✅ REMOVIDO DOMINIO ESPECÍFICO - Causa problemas en producción
-        // domain: process.env.NODE_ENV === "production" ? ".referenciales.cl" : undefined
+      }
+    },
+    callbackUrl: {
+      name: process.env.NODE_ENV === "production"
+        ? "__Secure-next-auth.callback-url"
+        : "next-auth.callback-url",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      }
+    },
+    csrfToken: {
+      name: process.env.NODE_ENV === "production"
+        ? "__Host-next-auth.csrf-token"
+        : "next-auth.csrf-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      }
+    },
+    pkceCodeVerifier: {
+      name: process.env.NODE_ENV === "production"
+        ? "__Secure-next-auth.pkce.code_verifier"
+        : "next-auth.pkce.code_verifier",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 900, // 15 minutos
+      }
+    },
+    state: {
+      name: process.env.NODE_ENV === "production"
+        ? "__Secure-next-auth.state"
+        : "next-auth.state",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 900, // 15 minutos
+      }
+    },
+    nonce: {
+      name: process.env.NODE_ENV === "production"
+        ? "__Secure-next-auth.nonce"
+        : "next-auth.nonce",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
       }
     }
   },

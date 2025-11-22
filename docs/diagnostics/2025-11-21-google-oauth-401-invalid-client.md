@@ -557,6 +557,328 @@ Usar en ambos lugares:
 
 ---
 
+## 9. ERRORES TEMPORALES Y ESTRATEGIAS DE PREVENCIÓN (2025-11-22)
+
+### 🔍 Errores Detectados Durante Diagnóstico
+
+#### Error 1: `502 Bad Gateway` (Temporal)
+**Síntoma:** Al intentar OAuth callback, aparece error 502.
+
+**Causa:** Contenedor `degux-web` reiniciándose o temporalmente no disponible.
+
+**Evidencia:**
+```bash
+# Contenedor estaba UP hace 1 minuto (recién reiniciado)
+degux-web   Up About a minute (healthy)   0.0.0.0:3000->3000/tcp
+```
+
+**Por qué confunde:**
+- ❌ Parece un error de configuración grave
+- ❌ Usuario no sabe si es temporal o permanente
+- ❌ Dificulta debugging (¿fue el código o fue el servidor?)
+
+#### Error 2: `State cookie was missing` (Real y Recurrente)
+**Síntoma:** NextAuth no puede guardar/leer cookies de OAuth state.
+
+**Causa:** Configuración incompleta de cookies en `auth.config.ts`.
+
+**Evidencia de logs:**
+```
+[next-auth][error][OAUTH_CALLBACK_ERROR]
+State cookie was missing.
+```
+
+**Problema:**
+Solo teníamos configurada `sessionToken`, pero NextAuth necesita **6 cookies diferentes**:
+1. `sessionToken` - Sesión del usuario
+2. `callbackUrl` - URL de redirección después de login
+3. `csrfToken` - Protección CSRF
+4. `pkceCodeVerifier` - Verificador PKCE para OAuth
+5. `state` - Estado OAuth (el que faltaba) ← **CRÍTICO**
+6. `nonce` - Número único para prevenir replay attacks
+
+**Solución aplicada:**
+Configuración completa de todas las cookies necesarias en `src/lib/auth.config.ts`.
+
+---
+
+### ✅ ESTRATEGIAS DE PREVENCIÓN DE ERRORES TEMPORALES
+
+#### 1. Health Checks Mejorados
+
+**Problema actual:**
+Nginx no verifica si el contenedor está listo antes de enviar tráfico.
+
+**Solución:**
+Agregar health checks activos en Nginx:
+
+```nginx
+# En /etc/nginx/sites-available/degux.cl
+
+upstream degux_backend {
+    server 127.0.0.1:3000 max_fails=3 fail_timeout=30s;
+
+    # Health check (requiere nginx plus o módulo adicional)
+    # Alternativa: usar keepalive
+    keepalive 32;
+}
+
+server {
+    # ... configuración SSL ...
+
+    location / {
+        # Usar upstream con health check
+        proxy_pass http://degux_backend;
+
+        # Reintentos automáticos
+        proxy_next_upstream error timeout http_502 http_503;
+        proxy_next_upstream_tries 2;
+        proxy_next_upstream_timeout 5s;
+
+        # Headers y timeouts...
+    }
+
+    # Health check endpoint
+    location /api/health {
+        proxy_pass http://degux_backend/api/health;
+        access_log off;
+    }
+}
+```
+
+#### 2. Página de Error 502 Personalizada
+
+**Problema actual:**
+Usuario ve error técnico "502 Bad Gateway" sin contexto.
+
+**Solución:**
+Crear página de error amigable:
+
+```nginx
+# En /etc/nginx/sites-available/degux.cl
+
+server {
+    # ... configuración ...
+
+    # Página de error personalizada
+    error_page 502 503 504 /502.html;
+
+    location = /502.html {
+        root /var/www/degux.cl/error_pages;
+        internal;
+    }
+}
+```
+
+Crear `/var/www/degux.cl/error_pages/502.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Servicio Temporalmente No Disponible</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 { color: #e74c3c; }
+        .retry-btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .retry-btn:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⏳ Servicio Temporalmente No Disponible</h1>
+        <p>Estamos actualizando nuestros sistemas. Por favor, intenta de nuevo en unos segundos.</p>
+        <button class="retry-btn" onclick="location.reload()">🔄 Reintentar</button>
+        <p style="font-size: 0.9rem; color: #666; margin-top: 1.5rem;">
+            Si el problema persiste, contacta a soporte.
+        </p>
+    </div>
+</body>
+</html>
+```
+
+#### 3. Logging Mejorado para Debugging
+
+**Problema actual:**
+Difícil saber si error fue temporal o permanente.
+
+**Solución:**
+Agregar timestamps y contexto en logs:
+
+```typescript
+// En src/lib/auth.config.ts
+
+callbacks: {
+  async signIn({ user, account }) {
+    const timestamp = new Date().toISOString();
+    const logPrefix = `[${timestamp}] [AUTH-SIGNIN]`;
+
+    console.log(`${logPrefix} Attempt:`, {
+      userId: user.id,
+      email: user.email,
+      provider: account?.provider,
+    });
+
+    try {
+      // ... lógica de signIn ...
+      console.log(`${logPrefix} SUCCESS:`, user.email);
+      return true;
+    } catch (error) {
+      console.error(`${logPrefix} ERROR:`, error);
+      return false;
+    }
+  }
+}
+```
+
+#### 4. Retry Logic en Frontend
+
+**Problema actual:**
+Si el servidor está reiniciando, el usuario ve error inmediatamente.
+
+**Solución:**
+Implementar reintentos automáticos:
+
+```typescript
+// En src/app/auth/signin/page.tsx
+
+const handleGoogleSignIn = async () => {
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 2000; // 2 segundos
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      console.log(`🔐 [SIGNIN] Attempt ${attempt}/${MAX_RETRIES}`);
+
+      const result = await signIn('google', {
+        callbackUrl,
+        redirect: true
+      });
+
+      // Si llega aquí, fue exitoso
+      return;
+
+    } catch (error: any) {
+      console.error(`❌ [SIGNIN] Attempt ${attempt} failed:`, error);
+
+      // Si no es el último intento, esperar antes de reintentar
+      if (attempt < MAX_RETRIES) {
+        console.log(`⏳ [SIGNIN] Retrying in ${RETRY_DELAY}ms...`);
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+      } else {
+        // Último intento falló, mostrar error al usuario
+        setError('El servicio está temporalmente no disponible. Por favor, intenta nuevamente en unos momentos.');
+      }
+    }
+  }
+};
+```
+
+#### 5. Monitoreo Proactivo con Uptime Checks
+
+**Problema actual:**
+No sabemos cuándo el servicio está caído hasta que un usuario reporta.
+
+**Solución:**
+Configurar monitoreo externo:
+
+**Opción A: UptimeRobot (Gratis)**
+- URL: https://uptimerobot.com
+- Monitorea https://degux.cl cada 5 minutos
+- Envía email/Telegram si está caído
+
+**Opción B: Healthchecks.io (Gratis)**
+- URL: https://healthchecks.io
+- Cron job en VPS cada minuto:
+```bash
+# En VPS, agregar a crontab
+*/1 * * * * curl -fsS -m 10 --retry 3 https://hc-ping.com/TU_PING_KEY > /dev/null || echo "Degux health check failed"
+```
+
+**Opción C: Script de Monitoreo Local**
+```bash
+# scripts/monitor-degux.sh
+#!/bin/bash
+
+HEALTHCHECK_URL="https://degux.cl/api/health"
+WEBHOOK_URL="https://discord.com/api/webhooks/TU_WEBHOOK" # O Telegram
+
+while true; do
+  HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' "$HEALTHCHECK_URL")
+
+  if [ "$HTTP_CODE" != "200" ]; then
+    # Enviar alerta
+    curl -X POST "$WEBHOOK_URL" \
+      -H "Content-Type: application/json" \
+      -d "{\"content\": \"⚠️ Degux.cl is down! HTTP $HTTP_CODE\"}"
+  fi
+
+  sleep 60 # Verificar cada minuto
+done
+```
+
+#### 6. Docker Compose con Auto-Restart
+
+**Problema actual:**
+Si el contenedor muere, queda caído hasta reinicio manual.
+
+**Solución:**
+Asegurar restart policy en `docker-compose.yml`:
+
+```yaml
+services:
+  degux-web:
+    image: degux-web:latest
+    container_name: degux-web
+    restart: unless-stopped  # ← CRÍTICO
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+```
+
+---
+
+### 📋 Checklist de Prevención de Errores Temporales
+
+- [ ] Health checks configurados en Nginx
+- [ ] Página de error 502 personalizada creada
+- [ ] Logging mejorado con timestamps
+- [ ] Retry logic implementado en frontend
+- [ ] Monitoreo externo configurado (UptimeRobot/Healthchecks)
+- [ ] Docker restart policy configurado
+- [ ] Alertas automáticas configuradas (Discord/Telegram)
+
+---
+
 ## 8. DIAGNÓSTICO DEFINITIVO - Error 401: invalid_client (2025-11-22)
 
 ### 🔍 Investigación Realizada
