@@ -5,13 +5,13 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 
 interface NotesPageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 export default async function NotesPage({ params }: NotesPageProps) {
-  const { username } = params;
+  const { username } = await params;
 
   // 1. Get user
   const user = await prisma.user.findUnique({
