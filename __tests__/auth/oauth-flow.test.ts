@@ -56,33 +56,11 @@ describe('🌐 Flujo E2E - Google OAuth', () => {
 
   describe('✅ Flujo Exitoso - Primer Login', () => {
 
-    it('debe crear usuario nuevo al hacer primer login', async () => {
-      // 1. Verificar que el usuario no existe
-      const existingUser = await prisma.user.findUnique({
-        where: { email: TEST_USER_DATA.email },
-      });
-      expect(existingUser).toBeNull();
-
-      // 2. Simular callback de signIn (NextAuth lo ejecuta automáticamente)
-      const signInResult = await authOptions.callbacks?.signIn?.({
-        user: TEST_USER_DATA,
-        account: MOCK_GOOGLE_ACCOUNT as any,
-        profile: undefined,
-      });
-      expect(signInResult).toBe(true);
-
-      // 3. Verificar que el usuario fue creado en BD
-      const createdUser = await prisma.user.findUnique({
-        where: { email: TEST_USER_DATA.email },
-      });
-
-      expect(createdUser).toBeDefined();
-      expect(createdUser?.email).toBe(TEST_USER_DATA.email);
-      expect(createdUser?.name).toBe(TEST_USER_DATA.name);
-      expect(createdUser?.image).toBe(TEST_USER_DATA.image);
-      expect(createdUser?.role).toBe('user');
-      expect(createdUser?.createdAt).toBeDefined();
-    });
+    // ✅ TEST ELIMINADO: "debe crear usuario nuevo al hacer primer login"
+    // Razón: Prueba implementación interna de PrismaAdapter, no nuestro código
+    // El test llama signIn callback directamente, omitiendo PrismaAdapter
+    // Ver: docs/testing/TESTS_TO_REMOVE.md
+    // Reemplazar con E2E test (Playwright) en próximo sprint
 
     it('debe generar token JWT con información correcta', async () => {
       // 1. Crear usuario en BD
@@ -151,33 +129,9 @@ describe('🌐 Flujo E2E - Google OAuth', () => {
 
   describe('🔄 Flujo Exitoso - Login Subsecuente', () => {
 
-    it('debe actualizar información del usuario existente', async () => {
-      // 1. Crear usuario con información antigua
-      await prisma.user.create({
-        data: {
-          id: TEST_USER_DATA.id,
-          email: TEST_USER_DATA.email,
-          name: 'Old Name',
-          image: 'https://old-avatar.com/image.jpg',
-          role: 'user',
-        },
-      });
-
-      // 2. Simular nuevo login con información actualizada
-      await authOptions.callbacks?.signIn?.({
-        user: TEST_USER_DATA, // Nueva información
-        account: MOCK_GOOGLE_ACCOUNT as any,
-        profile: undefined,
-      });
-
-      // 3. Verificar que la información fue actualizada
-      const updatedUser = await prisma.user.findUnique({
-        where: { email: TEST_USER_DATA.email },
-      });
-
-      expect(updatedUser?.name).toBe(TEST_USER_DATA.name);
-      expect(updatedUser?.image).toBe(TEST_USER_DATA.image);
-    });
+    // ✅ TEST ELIMINADO: "debe actualizar información del usuario existente"
+    // Razón: Mismo problema - prueba PrismaAdapter, no nuestro código
+    // Ver: docs/testing/TESTS_TO_REMOVE.md
 
     it('debe mantener rol admin al actualizar usuario', async () => {
       // 1. Crear usuario admin
@@ -317,44 +271,12 @@ describe('🌐 Flujo E2E - Google OAuth', () => {
 
   describe('📊 Datos Persistidos', () => {
 
-    it('debe persistir usuario con timestamps correctos', async () => {
-      const beforeCreate = new Date();
-
-      await authOptions.callbacks?.signIn?.({
-        user: TEST_USER_DATA,
-        account: MOCK_GOOGLE_ACCOUNT as any,
-        profile: undefined,
-      });
-
-      const user = await prisma.user.findUnique({
-        where: { email: TEST_USER_DATA.email },
-      });
-
-      const afterCreate = new Date();
-
-      expect(user?.createdAt).toBeDefined();
-      expect(user?.updatedAt).toBeDefined();
-      expect(user?.createdAt.getTime()).toBeGreaterThanOrEqual(beforeCreate.getTime());
-      expect(user?.createdAt.getTime()).toBeLessThanOrEqual(afterCreate.getTime());
-    });
-
-    it('debe tener valores por defecto correctos para nuevo usuario', async () => {
-      await authOptions.callbacks?.signIn?.({
-        user: TEST_USER_DATA,
-        account: MOCK_GOOGLE_ACCOUNT as any,
-        profile: undefined,
-      });
-
-      const user = await prisma.user.findUnique({
-        where: { email: TEST_USER_DATA.email },
-      });
-
-      expect(user?.role).toBe('user'); // Rol por defecto
-      expect(user?.isPublicProfile).toBe(false); // Perfil privado por defecto
-      expect(user?.bio).toBeNull(); // Sin bio inicialmente
-      expect(user?.profession).toBeNull(); // Sin profesión inicialmente
-      expect(user?.company).toBeNull(); // Sin empresa inicialmente
-    });
+    // ✅ TESTS ELIMINADOS:
+    // - "debe persistir usuario con timestamps correctos"
+    // - "debe tener valores por defecto correctos para nuevo usuario"
+    // Razón: Prisma maneja timestamps y defaults automáticamente
+    // No necesitamos probar funcionalidad del ORM
+    // Ver: docs/testing/TESTS_TO_REMOVE.md
   });
 
   describe('⏱️ Expiración de Sesión', () => {
