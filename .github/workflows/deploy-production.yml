@@ -59,21 +59,26 @@ jobs:
             # Navigate to Docker compose directory
             cd /home/gabriel/vps-do
 
-            # Rebuild Docker image (incluye TODOS los compose files)
-            echo "🏗️  Building Docker image..."
-            docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml build degux-web
+            # Stop and remove old container
+            echo "🛑 Stopping and removing old container..."
+            docker stop degux-web 2>/dev/null || true
+            docker rm degux-web 2>/dev/null || true
 
-            # Stop old container
-            echo "⏸️  Stopping old container..."
-            docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml stop degux-web
+            # Rebuild Docker image WITHOUT cache (ensures latest code)
+            echo "🏗️  Building Docker image (no cache)..."
+            docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml build --no-cache degux-web
 
             # Start new container
             echo "▶️  Starting new container..."
             docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
 
+            # Clean up old images
+            echo "🧹 Cleaning up old images..."
+            docker image prune -f
+
             # Wait for container to be ready
             echo "⏳ Waiting for container to be ready..."
-            sleep 10
+            sleep 15
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.0.3
