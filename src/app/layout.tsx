@@ -26,11 +26,11 @@ export const viewport: Viewport = {
 // Configuración de Metadatos (SEO, Social Sharing, etc.)
 export const metadata: Metadata = {
   title: {
-    template: '%s | Dashboard | @degux.cl',
-    default: 'degux.cl',
+    template: '%s | degux.cl',
+    default: 'degux.cl - Tu lienzo digital para crear y conectar',
   },
-  description: 'Base de datos colaborativa.',
-  metadataBase: new URL('https://degux.cl/'),
+  description: 'Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir ideas y conectar con una comunidad de creadores y profesionales.',
+  metadataBase: new URL('https://degux.cl'),
   applicationName: 'degux.cl',
   appleWebApp: {
     capable: true,
@@ -42,54 +42,50 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  authors: [{ name: 'degux.cl', url: 'https://www.degux.cl/' }], 
+  authors: [{ name: 'degux.cl', url: 'https://degux.cl' }], 
   creator: 'degux.cl',
   publisher: 'degux.cl',
-  keywords: ['Next.js 15', 'degux.cl', 'Dashboard', 'nextjs.org/learn', 'Server Actions', 'tasaciones', 'inmobiliarias', 'Chile'],
+  keywords: ['marca personal', 'portafolio digital', 'creadores de contenido', 'networking', 'comunidad profesional', 'blog personal', 'Substack', 'Behance', 'Linktree'],
   icons: {
     icon: [
       { url: '/images/android/android-launchericon-512-512.png', sizes: '512x512', type: 'image/png' },
       { url: '/images/android/android-launchericon-192-192.png', sizes: '192x192', type: 'image/png' },
-      // ... otros tamaños si los tienes ...
-      { url: '/favicon.ico', sizes: 'any', type: 'image/x-icon' } // Fallback favicon.ico
+      { url: '/favicon.ico', sizes: 'any', type: 'image/x-icon' }
     ],
     apple: [
       { url: '/images/ios/180.png', sizes: '180x180', type: 'image/png' },
-      // ... otros tamaños si los tienes ...
     ],
     shortcut: '/favicon.ico',
     other: [
       {
         rel: 'mask-icon',
-        url: '/images/safari-pinned-tab.svg', // Asegúrate de que exista
+        url: '/images/safari-pinned-tab.svg',
         color: '#000000',
       },
     ],
   },
-  manifest: '/manifest.json', // Asegúrate de que exista y esté configurado
+  manifest: '/manifest.json',
   openGraph: {
-    title: 'degux.cl Dashboard',
-    description: 'Base de datos colaborativa.',
-    url: 'https://next14-postgres.vercel.app/', // Reemplaza con tu URL de producción
+    title: 'degux.cl - Tu lienzo digital para crear y conectar',
+    description: 'Construye tu perfil, publica tu trabajo y conecta con una comunidad de creadores y profesionales.',
+    url: 'https://degux.cl',
     siteName: 'degux.cl',
     locale: 'es_CL',
     type: 'website',
     images: [
       {
-        url: '/images/og-image.png', // Asegúrate de que exista
+        url: '/images/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'degux.cl Dashboard',
+        alt: 'degux.cl - Tu lienzo digital para crear y conectar',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@tu_twitter', // Reemplaza con tu handle de Twitter si tienes
-    description: 'Base de datos colaborativa.',
-    title: 'degux.cl Dashboard',
-    creator: '@tu_twitter', // Reemplaza con tu handle de Twitter si tienes
-    images: ['/images/twitter-image.png'], // Asegúrate de que exista
+    title: 'degux.cl - Tu lienzo digital para crear y conectar',
+    description: 'Construye tu perfil, publica tu trabajo y conecta con una comunidad de creadores y profesionales.',
+    images: ['/images/twitter-image.png'],
   },
   robots: {
     index: true,
@@ -102,11 +98,8 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'your-google-site-verification', // Reemplaza con tu código de verificación de Google Search Console
-  },
   alternates: {
-    canonical: 'https://next14-postgres.vercel.app/', // Reemplaza con tu URL de producción
+    canonical: 'https://degux.cl',
   },
 };
 
