@@ -83,9 +83,6 @@ export default function AcmeLogo() {
         <h1 className="text-base font-bold tracking-tight text-white whitespace-nowrap">
           degux<span className="text-white/90">.cl</span>
         </h1>
-        <p className="text-xs text-white/80 font-normal hidden sm:block">
-          Base de datos colaborativa
-        </p>
       </div>
     </div>
   );
