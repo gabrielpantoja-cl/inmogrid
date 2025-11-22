@@ -127,11 +127,12 @@ describe('🔐 Sistema de Autenticación - Integración Completa', () => {
     });
 
     it('debe mantener rol admin existente al actualizar usuario', async () => {
+      // Limpiar usuario existente primero
+      await prisma.user.deleteMany({ where: { email: TEST_USER.email } });
+
       // Crear usuario admin
-      await prisma.user.upsert({
-        where: { email: TEST_USER.email },
-        update: {},
-        create: {
+      await prisma.user.create({
+        data: {
           id: TEST_USER.id,
           email: TEST_USER.email,
           name: TEST_USER.name,
