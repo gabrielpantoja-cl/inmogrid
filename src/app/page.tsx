@@ -10,7 +10,8 @@ import AcmeLogo from '../components/ui/common/AcmeLogo';
 import OptimizedHeroImage from '../components/ui/common/OptimizedHeroImage';
 import { lusitana } from '../lib/styles/fonts';
 import Link from 'next/link';
-import { fetchGithubStars } from '../lib/githubStars';
+// TEMPORAL: Comentado hasta que el repositorio sea público
+// import { fetchGithubStars } from '../lib/githubStars';
 
 // Agregar icono de GitHub y contador de estrellas
 const GITHUB_REPO_URL = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/degux.cl';
@@ -28,13 +29,14 @@ export default function Page() {
 
   console.log('🏠 [HomePage] Auth status:', { authLoading, isAuthenticated, user });
 
-  useEffect(() => {
-    console.log('🏠 [HomePage] useEffect - Fetching GitHub stars...');
-    fetchGithubStars(GITHUB_REPO_FULL).then((stars) => {
-      console.log('🏠 [HomePage] GitHub stars fetched:', stars);
-      setGithubStars(stars);
-    });
-  }, []);
+  // TEMPORAL: Comentado hasta que el repositorio sea público
+  // useEffect(() => {
+  //   console.log('🏠 [HomePage] useEffect - Fetching GitHub stars...');
+  //   fetchGithubStars(GITHUB_REPO_FULL).then((stars) => {
+  //     console.log('🏠 [HomePage] GitHub stars fetched:', stars);
+  //     setGithubStars(stars);
+  //   });
+  // }, []);
 
   // ✅ ELIMINADO: useEffect que causaba redirects automáticos
   // Ya no redirigimos automáticamente al dashboard, el usuario debe hacer clic
