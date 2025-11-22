@@ -37,6 +37,7 @@
     "prisma:push": "npx prisma db push",
     "prisma:reset": "npx prisma generate && npx prisma db push",
     "prisma:studio": "npx prisma studio",
+    "prisma:studio:prod": "bash prisma-studio-production.sh",
     "optimize:images": "node scripts/optimize-images.js",
     "check:images": "node scripts/check-images.js",
     "deploy:check": "npm run test:public-api && npm run api:health && echo '✅ API pública lista para deploy'",
