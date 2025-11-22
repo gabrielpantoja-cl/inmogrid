@@ -87,3 +87,191 @@ Después de guardar los cambios en `.env.local`, detén tu servidor de desarroll
 ## 5. Verificación
 
 Una vez completados los pasos anteriores, intenta iniciar sesión con Google de nuevo. El error `401 invalid_client` debería estar resuelto.
+
+---
+
+## 6. Estado Actual (Actualizado: 2025-11-22)
+
+### ✅ Configuración en Google Cloud Console
+
+**Proyecto:** `degux-cl` (ID: `degux-cl`)
+**Cliente OAuth 2.0:** `GCP_PROJECT_NUMBER_REDACTED-b3utu9es3bfpoovilhqdhdtr0hm3378s.apps.googleusercontent.com`
+
+**Credenciales confirmadas:**
+```json
+{
+  "client_id": "GCP_PROJECT_NUMBER_REDACTED-b3utu9es3bfpoovilhqdhdtr0hm3378s.apps.googleusercontent.com",
+  "client_secret": "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",
+  "project_id": "degux-cl"
+}
+```
+
+**URIs de redirección autorizados:**
+- ✅ `https://degux.cl/api/auth/callback/google` (Producción)
+- ✅ `http://localhost:3000/api/auth/callback/google` (Desarrollo local)
+
+**Orígenes JavaScript autorizados:**
+- ✅ `https://degux.cl` (Producción)
+- ✅ `http://localhost:3000` (Desarrollo local)
+
+### ✅ Configuración Local (.env.local)
+
+El archivo `.env.local` ha sido configurado correctamente con las credenciales del cliente OAuth:
+
+```env
+# Google OAuth 2.0
+GOOGLE_CLIENT_ID="GCP_PROJECT_NUMBER_REDACTED-b3utu9es3bfpoovilhqdhdtr0hm3378s.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="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"
+
+# NextAuth.js Local
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="IfBvEpoXetsQVqiCAwOTxkdJNSlzYcgm"
+NEXTAUTH_DEBUG="true"
+```
+
+### 🔄 Próximos Pasos
+
+#### 1. **Testeo en Desarrollo Local**
+```bash
+# 1. Levantar base de datos local
+docker compose -f docker-compose.local.yml up -d
+
+# 2. Aplicar migraciones de Prisma
+npm run prisma:push
+
+# 3. Generar cliente de Prisma
+npm run prisma:generate
+
+# 4. Iniciar servidor de desarrollo
+npm run dev
+
+# 5. Navegar a http://localhost:3000/api/auth/signin
+# 6. Probar inicio de sesión con Google
+```
+
+**Verificaciones esperadas:**
+- ✅ Redirección correcta a Google OAuth
+- ✅ No aparece error `401 invalid_client`
+- ✅ Callback exitoso a `/api/auth/callback/google`
+- ✅ Creación de sesión y usuario en base de datos
+- ✅ Redirección final a página de inicio o dashboard
+
+#### 2. **Configuración en VPS Producción**
+
+Una vez confirmado que funciona en local, se debe replicar la configuración en el VPS:
+
+```bash
+# 1. Conectar al VPS vía SSH
+ssh root@VPS_IP_REDACTED
+
+# 2. Navegar al directorio del proyecto
+cd /root/degux.cl
+
+# 3. Crear/editar archivo .env en producción
+nano .env
+
+# 4. Configurar variables de entorno (ver sección siguiente)
+```
+
+**Variables de entorno para VPS (.env en producción):**
+
+```env
+# =========================================
+# 🗄️ BASE DE DATOS VPS (Container degux-db)
+# =========================================
+POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD_PRODUCCION@degux-db:5432/degux_core?schema=public"
+
+# =========================================
+# 🔐 NEXTAUTH.JS - PRODUCCIÓN
+# =========================================
+NEXTAUTH_SECRET="GENERAR_SECRETO_ALEATORIO_32_CHARS_MINIMO"
+NEXTAUTH_URL="https://degux.cl"
+
+# =========================================
+# 🔑 GOOGLE OAUTH 2.0 (MISMAS CREDENCIALES)
+# =========================================
+GOOGLE_CLIENT_ID="GCP_PROJECT_NUMBER_REDACTED-b3utu9es3bfpoovilhqdhdtr0hm3378s.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="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"
+
+# =========================================
+# 🗺️ GOOGLE MAPS API
+# =========================================
+GOOGLE_MAPS_API_KEY="your_google_maps_api_key"
+```
+
+**Comandos post-configuración en VPS:**
+
+```bash
+# 5. Reconstruir y reiniciar contenedor Next.js
+docker compose down degux-web
+docker compose up -d --build degux-web
+
+# 6. Verificar logs
+docker compose logs -f degux-web
+
+# 7. Probar autenticación en https://degux.cl/api/auth/signin
+```
+
+### 🔒 Seguridad
+
+**Archivos que NUNCA deben subirse a Git:**
+- ❌ `.env.local` (desarrollo local)
+- ❌ `.env` (producción VPS)
+- ❌ `client_secret_*.json` (credenciales de Google Cloud)
+
+**Verificar .gitignore:**
+```gitignore
+# Environment variables
+.env
+.env.local
+.env*.local
+.env.production
+.env.development
+
+# Google Cloud credentials
+client_secret_*.json
+```
+
+### 📋 Checklist de Validación
+
+#### Desarrollo Local
+- [ ] Base de datos PostgreSQL local corriendo (Docker)
+- [ ] Variables de entorno configuradas en `.env.local`
+- [ ] Servidor Next.js en `http://localhost:3000`
+- [ ] Login con Google exitoso
+- [ ] Usuario creado en base de datos local
+- [ ] Sesión activa y persistente
+
+#### Producción VPS
+- [ ] Contenedor `degux-db` corriendo
+- [ ] Contenedor `degux-web` corriendo
+- [ ] Variables de entorno configuradas en `.env` (VPS)
+- [ ] Nginx proxy redirigiendo correctamente
+- [ ] SSL/TLS activo (Let's Encrypt)
+- [ ] Login con Google exitoso en `https://degux.cl`
+- [ ] Usuario creado en base de datos de producción
+- [ ] Sesión activa y persistente
+
+---
+
+## 7. Solución de Problemas Comunes
+
+### Error: "Configuration mismatch"
+**Causa:** `NEXTAUTH_URL` no coincide con el dominio real.
+**Solución:**
+- Local: `NEXTAUTH_URL="http://localhost:3000"`
+- Producción: `NEXTAUTH_URL="https://degux.cl"`
+
+### Error: "Redirect URI mismatch"
+**Causa:** La URL de callback no está autorizada en Google Cloud Console.
+**Solución:** Verificar que las URIs de redirección incluyan `/api/auth/callback/google`.
+
+### Error: "Database connection failed"
+**Causa:** `POSTGRES_PRISMA_URL` incorrecta o base de datos no disponible.
+**Solución:**
+- Local: Verificar que Docker container esté corriendo: `docker ps | grep degux-postgres-local`
+- VPS: Verificar que container `degux-db` esté corriendo: `docker ps | grep degux-db`
+
+### Error: "Invalid session"
+**Causa:** `NEXTAUTH_SECRET` diferente entre ejecuciones.
+**Solución:** Usar siempre el mismo valor de `NEXTAUTH_SECRET` en cada entorno.
