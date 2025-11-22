@@ -3,14 +3,10 @@ import { authOptions } from '@/lib/auth.config';
 import DashboardContent from './DashboardContent';
 import DisclaimerPopup from '@/components/ui/dashboard/DisclaimerPopup';
 import { prisma } from '@/lib/prisma';
-import type { referenciales, User, Post } from '@prisma/client';
+import type { User, Post } from '@prisma/client';
 import { Suspense } from 'react';
 
 // Tipos mejorados
-interface LatestReferencial extends Pick<referenciales, 'id' | 'fechaescritura' | 'createdAt' | 'fojas' | 'numero' | 'anio' | 'cbr'> {
-  user: Pick<User, 'name'>;
-}
-
 interface LatestPost extends Pick<Post, 'id' | 'title' | 'excerpt' | 'slug' | 'createdAt'> {
   user: Pick<User, 'name' | 'username'>;
 }
@@ -22,7 +18,7 @@ interface DashboardError extends Error {
 
 export const metadata = {
   title: 'Panel de Control',
-  description: 'Panel de control de Referenciales'
+  description: 'Panel de control'
 };
 
 function ErrorMessage({ message }: { message: string }) {
@@ -42,29 +38,7 @@ export default async function DashboardPage() {
   // }
 
   try {
-    const [latestReferenciales, totalReferenciales, latestPosts, totalPosts] = await Promise.all([
-      prisma.referenciales.findMany({
-        take: 5,
-        orderBy: { 
-          // Ordenamos por fecha de creación, no por fecha de escritura
-          createdAt: 'desc' 
-        },
-        select: {
-          id: true,
-          fechaescritura: true,
-          fojas: true,
-          numero: true,
-          anio: true,
-          cbr: true,
-          createdAt: true, // Añadimos createdAt para usar en la UI
-          user: {
-            select: { 
-              name: true 
-            }
-          }
-        }
-      }),
-      prisma.referenciales.count(),
+    const [latestPosts, totalPosts] = await Promise.all([
       prisma.post.findMany({
         take: 5,
         where: { published: true },
@@ -94,8 +68,6 @@ export default async function DashboardPage() {
         <Suspense fallback={<div>Cargando panel de control...</div>}>
           <DashboardContent 
             session={session}
-            latestReferenciales={latestReferenciales}
-            totalReferenciales={totalReferenciales}
             latestPosts={latestPosts as LatestPost[]}
             totalPosts={totalPosts}
           />
@@ -119,3 +91,4 @@ export default async function DashboardPage() {
     return <ErrorMessage message="Error al cargar el dashboard. Por favor, intente nuevamente." />;
   }
 }
+
