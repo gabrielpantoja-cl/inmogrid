@@ -18,7 +18,7 @@ services:
       POSTGRES_DB: degux_dev
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=es_CL.UTF-8"
     ports:
-      - "5432:5432"  # Puerto local estándar
+      - "15432:5432" # Puerto local para tests, evita conflictos con el 5432 estándar
     volumes:
       - degux_postgres_data:/var/lib/postgresql/data
       - ./docker/init-scripts:/docker-entrypoint-initdb.d  # Scripts de inicialización

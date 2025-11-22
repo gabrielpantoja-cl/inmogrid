@@ -1,3 +1,4 @@
+/** @jest-environment node */
 /**
  * 🧪 Test de Integración - Sistema de Autenticación degux.cl
  *

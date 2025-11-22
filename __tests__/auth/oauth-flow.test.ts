@@ -1,3 +1,4 @@
+/** @jest-environment node */
 /**
  * 🧪 Test E2E - Flujo Completo de Google OAuth
  *
