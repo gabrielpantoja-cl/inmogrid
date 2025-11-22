@@ -7,15 +7,15 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 interface NotePageProps {
-  params: {
+  params: Promise<{
     username: string;
     slug: string;
-  };
+  }>;
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: NotePageProps) {
-  const { username, slug } = params;
+  const { username, slug } = await params;
 
   const user = await prisma.user.findUnique({
     where: { username },
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: NotePageProps) {
 }
 
 export default async function NotePage({ params }: NotePageProps) {
-  const { username, slug } = params;
+  const { username, slug } = await params;
 
   const user = await prisma.user.findUnique({
     where: { username },
