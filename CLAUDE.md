@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**IMPORTANT**: degux is an open data initiative that democratizes access to real estate information in Chile. We believe that property transaction data, being of public origin (Conservador de Bienes Raíces), should remain accessible to the entire community. Our platform uses modern technology and free software principles to ensure that this vital information is not concentrated in the hands of a few, but serves the informed development of the Chilean real estate market and the exercise of citizen rights.
+**degux.cl** ha evolucionado. Ya no somos una plataforma inmobiliaria; somos un lienzo digital para tu marca personal. Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir tus ideas y conectar con una comunidad de creadadores y profesionales.
+
+Imagina una mezcla entre **Substack**, **Behance** y **Linktree**, con un fuerte sentido de comunidad local.
 
 **degux - Ecosistema Digital Colaborativo** is a comprehensive Next.js 15 platform for the Chilean real estate ecosystem. It features:
 

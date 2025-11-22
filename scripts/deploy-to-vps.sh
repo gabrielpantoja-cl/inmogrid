@@ -78,17 +78,17 @@ echo -e "${YELLOW}[3/5]${NC} Rebuilding contenedor degux-web..."
 ssh ${VPS_USER}@${VPS_HOST} << 'EOF'
   cd /home/gabriel/vps-do
 
-  # Build nueva imagen (incluye TODOS los compose files)
+  # Build nueva imagen
   echo "  → Building imagen Docker..."
-  docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml build degux-web
+  docker compose -f docker-compose.yml -f docker-compose.degux.yml build degux-web
 
   # Detener contenedor antiguo
   echo "  → Deteniendo contenedor antiguo..."
-  docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml stop degux-web
+  docker compose -f docker-compose.yml -f docker-compose.degux.yml stop degux-web
 
   # Iniciar contenedor nuevo
   echo "  → Iniciando contenedor nuevo..."
-  docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
+  docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 
   echo "  ✅ Contenedor rebuildeado"
 EOF
@@ -162,5 +162,5 @@ echo ""
 echo "📊 Comandos útiles:"
 echo "   - Ver logs: ssh ${VPS_USER}@${VPS_HOST} 'docker logs degux-web -f'"
 echo "   - Ver status: ssh ${VPS_USER}@${VPS_HOST} 'docker ps'"
-echo "   - Restart: ssh ${VPS_USER}@${VPS_HOST} 'cd ~/vps-do && docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml restart degux-web'"
+echo "   - Restart: ssh ${VPS_USER}@${VPS_HOST} 'cd ~/vps-do && docker compose -f docker-compose.yml -f docker-compose.degux.yml restart degux-web'"
 echo ""
