@@ -12,19 +12,6 @@ import {
 import { formatDistanceToNowStrict, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-interface LatestReferencial {
-  id: string;
-  fechaescritura: Date;
-  createdAt: Date;
-  fojas: string;
-  numero: number;
-  anio: number;
-  cbr: string;
-  user: {
-    name: string | null;
-  };
-}
-
 interface LatestPost {
   id: string;
   title: string;
@@ -39,16 +26,12 @@ interface LatestPost {
 
 interface DashboardContentProps {
   session: Session | null; // ✅ Permitir sesión nula para modo anónimo
-  latestReferenciales: LatestReferencial[];
-  totalReferenciales: number;
   latestPosts: LatestPost[];
   totalPosts: number;
 }
 
 export default function DashboardContent({
   session,
-  latestReferenciales,
-  totalReferenciales,
   latestPosts,
   totalPosts,
 }: DashboardContentProps) {
