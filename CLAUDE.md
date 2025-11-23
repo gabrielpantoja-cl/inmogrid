@@ -256,7 +256,13 @@ POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@167.172.251.27:5433/degux_
 **Migration Guidelines:**
 - Use `npx prisma db push` for development
 - Use `npx prisma migrate dev` for production migrations
-- **CRITICAL**: Maintain lowercase relation names (`user`, not `User`) for NextAuth compatibility
+- **🚨 CRITICAL - NextAuth Prisma Adapter**: Maintain lowercase relation names (`user`, not `User`) for NextAuth compatibility
+  - ❌ WRONG: `model Account { User User @relation(...) }`
+  - ✅ CORRECT: `model Account { user User @relation(...) }`
+  - Affected models: `Account.user`, `Session.user`
+  - Breaking this causes: `PrismaClientValidationError: Unknown field 'User'`
+  - Reference: `docs/03-arquitectura/GOOGLE_OAUTH_DIAGNOSTICS_RESOLVED.md` (Problema #5)
+- **ALWAYS**: Add `@updatedAt` decorator to all `updatedAt` fields for auto-update
 - **YOU MUST**: Always validate Chilean property data consistency (ROL, fojas, CBR numbers)
 - **IMPORTANT**: Implement Row Level Security (RLS) for multi-tenant data isolation
 
@@ -321,9 +327,11 @@ POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@167.172.251.27:5433/degux_
 
 ### Database Schema Changes
 1. Modify `prisma/schema.prisma`
-2. Run `npm run prisma:push` (development) or create migration (production)
-3. **CRITICAL**: Maintain lowercase relation names (`user`, not `User`) for NextAuth compatibility
-4. Run `npm run prisma:generate` to update client
+2. **🚨 CRITICAL**: Verify lowercase relation names for NextAuth models (`Account.user`, `Session.user`)
+3. Add `@updatedAt` to any new `updatedAt` fields
+4. Run `npm run prisma:push` (development) or create migration (production)
+5. Run `npm run prisma:generate` to update client
+6. Verify tests still pass: `npm run test`
 
 ### Testing APIs
 ```bash

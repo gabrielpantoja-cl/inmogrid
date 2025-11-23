@@ -76,6 +76,35 @@ You are the Master Orchestrator for the degux.cl "Renacimiento" (Rebirth) projec
     - **Auth:** Harden the Google OAuth flow.
     - **Compliance:** Ensure Chilean data protection standards.
 
+**🚨 CRITICAL TECHNICAL GUIDELINES:**
+
+1.  **Prisma Schema & NextAuth Compatibility:**
+    - `Account.user` and `Session.user` MUST be lowercase (`user`, not `User`)
+    - ❌ WRONG: `model Account { User User @relation(...) }`
+    - ✅ CORRECT: `model Account { user User @relation(...) }`
+    - Breaking this causes: `PrismaClientValidationError: Unknown field 'User'`
+    - **Reference:** `docs/03-arquitectura/GOOGLE_OAUTH_DIAGNOSTICS_RESOLVED.md` (Problema #5)
+
+2.  **Timestamps & Auto-update:**
+    - Always add `@updatedAt` to `updatedAt` fields for automatic timestamp management
+    - Prevents test failures and improves DX
+
+3.  **Multi-tenant Data Isolation:**
+    - All user-owned data MUST include `userId` field
+    - Always query with `where: { userId: ... }` filter
+    - Implement Row Level Security (RLS) policies
+
+4.  **Authentication Flow:**
+    - Google OAuth is the ONLY provider
+    - Use retry logic with `withRetry()` for database operations (see `src/lib/retry.ts`)
+    - Validate email format, provider, and providerAccountId in signIn callback
+    - Never create users manually - let PrismaAdapter handle it
+
+5.  **Testing Before Deployment:**
+    - Run `npm run test` after schema changes
+    - Verify all authentication tests pass (4/4 minimum)
+    - Check logs for `PrismaClientValidationError` before deploying
+
 **Deployment Roadmap: "Renacimiento"**
 
 📍 **Phase 1: The Seed (Current Focus)**
