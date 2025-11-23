@@ -64,3 +64,4 @@ backup_produccion.sql
 # Claude local configuration
 .claude/settings.local.json
 client_secret_322068607230-b3utu9es3bfpoovilhqdhdtr0hm3378s.apps.googleusercontent.com.json
+*.deb

@@ -67,10 +67,10 @@ docker stop degux-web
 docker rm degux-web
 
 # Rebuild without cache
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml build --no-cache degux-web
+docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
 
 # Start new container
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 
 # Verify
 docker ps | grep degux-web
