@@ -26,7 +26,8 @@
 1. ✅ **`401 invalid_client`** - Resuelto (2025-11-21)
 2. ✅ **Dependencias legacy** (Neon/Vercel) - Eliminadas (2025-11-22)
 3. ✅ **Tests al 100%** - 42/42 pasando (2025-11-22)
-4. ✅ **`OAuthAccountNotLinked`** - Resuelto (2025-11-22 22:30 CLT) ← **SOLUCIÓN FINAL**
+4. ✅ **`OAuthAccountNotLinked`** - Resuelto (2025-11-22 22:30 CLT)
+5. ✅ **`PrismaClientValidationError` (Relaciones en mayúscula)** - Resuelto (2025-11-23) ← **SOLUCIÓN CRÍTICA FINAL**
 
 ---
 
@@ -187,6 +188,174 @@ SELECT "userId", provider, "providerAccountId", type FROM "Account";
 ✅ **PrismaAdapter creando User + Account automáticamente**
 ✅ **Ambos usuarios autenticados correctamente**
 ✅ **Redirección a /dashboard exitosa**
+
+---
+
+## ✅ Problema #5: `PrismaClientValidationError` - Relaciones en Mayúscula (2025-11-23) - RESUELTO
+
+### Síntoma
+
+Google OAuth volvía a fallar en producción después de haber resuelto el problema de usuarios huérfanos. La autenticación funcionaba intermitentemente y luego se caía completamente.
+
+### Error Identificado
+
+```log
+[next-auth][error][OAUTH_CALLBACK_HANDLER_ERROR]
+PrismaClientValidationError: Unknown field `User` for select statement on model `Account`.
+Available options are marked with ?.
+Error [GetUserByAccountError]
+```
+
+**Ubicación:** VPS (https://degux.cl)
+**Timestamp:** 2025-11-23 02:00 CLT
+**Impacto:** Login bloqueado para TODOS los usuarios (crítico)
+
+### Causa Raíz
+
+El schema de Prisma tenía relaciones definidas con nombres en **MAYÚSCULA** (`User`, `Session`), pero NextAuth PrismaAdapter requiere nombres en **minúscula** (`user`, `session`).
+
+**Schema incorrecto:**
+```prisma
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  // ... otros campos
+  User              User     @relation(fields: [userId], references: [id])  // ❌ INCORRECTO
+}
+
+model Session {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  User         User     @relation(fields: [userId], references: [id])  // ❌ INCORRECTO
+}
+```
+
+**¿Por qué fallaba?**
+
+NextAuth PrismaAdapter intenta hacer queries como:
+```typescript
+await prisma.account.findUnique({
+  where: { provider_providerAccountId },
+  include: { user: true }  // ← Busca 'user' en minúscula
+})
+```
+
+Pero el schema tenía `User` (mayúscula), causando el error de validación.
+
+### Solución Aplicada
+
+**Paso 1: Corrección del Schema Prisma**
+
+```prisma
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  // ... otros campos
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt  // ← MEJORA ADICIONAL
+  id                String   @id
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)  // ✅ CORRECTO (lowercase)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)  // ✅ CORRECTO (lowercase)
+}
+```
+
+**Mejoras adicionales aplicadas a TODOS los modelos:**
+- Agregado `@updatedAt` para auto-actualización de timestamps
+- Modelos corregidos: Account, Session, User, Connection, Collection, Plant, Post, Property, PropertyListing, conservadores, referenciales
+
+**Paso 2: Regeneración de Prisma Client**
+
+```bash
+# Local
+npm run prisma:generate
+npm run prisma:push
+
+# VPS
+ssh gabriel@VPS_IP_REDACTED "cd degux.cl && npm run prisma:generate"
+```
+
+**Paso 3: Mejoras de Robustez**
+
+Creado módulo `src/lib/retry.ts` con utilidades:
+- `withRetry()`: Retry automático con backoff exponencial
+- `withTimeout()`: Timeout para operaciones
+- `withRetryAndTimeout()`: Combinación de ambos
+
+**Paso 4: Mejoras en `auth.config.ts`**
+
+```typescript
+// JWT callback con retry logic
+async jwt({ token, user }) {
+  if (user) {
+    token.sub = user.id;
+    try {
+      const dbUser = await withRetry(
+        async () => prisma.user.findUnique({
+          where: { id: user.id },
+          select: { role: true }
+        }),
+        {
+          maxAttempts: 3,
+          delayMs: 500,
+          shouldRetry: (error: unknown) => {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            return errorMessage.includes('connection') ||
+                   errorMessage.includes('timeout') ||
+                   errorMessage.includes('ECONNREFUSED');
+          }
+        }
+      );
+      token.role = dbUser?.role || 'user';
+    } catch (error) {
+      console.error('[AUTH-JWT] Error fetching user role (all retries failed):', error);
+      token.role = 'user';  // Fallback seguro
+    }
+  }
+  return token;
+}
+```
+
+**Validaciones robustas en signIn callback:**
+- ✅ Formato de email válido (regex)
+- ✅ Solo provider 'google' permitido
+- ✅ providerAccountId requerido
+- ✅ Logging estructurado con contexto completo
+
+**Eventos extendidos:**
+- `📥 [AUTH-SIGNIN-EVENT]`: Login con flag `isNewUser`
+- `🆕 [AUTH-NEW-USER]`: Registro de nuevos usuarios
+- `👤 [AUTH-CREATE-USER]`: Creación por PrismaAdapter
+- `🔗 [AUTH-LINK-ACCOUNT]`: Vinculación OAuth
+- `🔑 [AUTH-SESSION]`: Sesiones recuperadas
+- `📤 [AUTH-SIGNOUT]`: Logout de usuarios
+
+### Resultado Final
+
+✅ **Google OAuth funcionando perfectamente en producción**
+✅ **PrismaAdapter resolviendo relaciones correctamente**
+✅ **Sistema más robusto con retry logic y validaciones**
+✅ **Logging detallado para debugging futuro**
+✅ **Tests de autenticación pasando (4/4 PASS)**
+
+### Commits
+
+1. **`71f7160`**: 🔧 Fix: Corregir nombres de relaciones Prisma para NextAuth compatibility
+2. **`314584a`**: ✨ Feat: Mejorar robustez de autenticación Google OAuth
 
 ---
 
@@ -563,7 +732,7 @@ Una barra extra = Error `invalid_grant`
 ❌ No probar implementación de librerías (PrismaAdapter)
 ✅ Probar lógica de negocio y validaciones
 
-### 5. Usuarios Huérfanos Deben Eliminarse ⭐ NUEVA
+### 5. Usuarios Huérfanos Deben Eliminarse
 
 **Problema:** Usuarios en tabla `User` sin vinculación en tabla `Account`
 
@@ -600,17 +769,85 @@ LEFT JOIN "Account" a ON u.id = a."userId"
 GROUP BY u.id, u.email;
 ```
 
+### 6. Relaciones Prisma en Minúscula para NextAuth ⭐ CRÍTICO
+
+**Problema:** NextAuth PrismaAdapter REQUIERE nombres de relaciones en minúscula
+
+**¿Por qué?**
+
+NextAuth hace queries internas como:
+```typescript
+prisma.account.findUnique({
+  where: { ... },
+  include: { user: true }  // ← Busca 'user' (lowercase)
+})
+```
+
+Si el schema tiene `User` (uppercase), Prisma lanza error de validación.
+
+**Solución:**
+
+```prisma
+// ❌ INCORRECTO
+model Account {
+  User User @relation(fields: [userId], references: [id])
+}
+
+// ✅ CORRECTO
+model Account {
+  user User @relation(fields: [userId], references: [id])
+}
+```
+
+**Modelos afectados:**
+- `Account.user` (no `User`)
+- `Session.user` (no `User`)
+
+**Referencia oficial:**
+- [NextAuth Prisma Adapter](https://next-auth.js.org/adapters/prisma)
+- Ver schema ejemplo en docs oficiales
+
+### 7. @updatedAt Mejora Developer Experience
+
+**Problema:** Tests fallando por "Argument `updatedAt` is missing"
+
+**Solución:**
+
+```prisma
+model User {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt  // ← Auto-actualización
+}
+```
+
+**Beneficios:**
+- ✅ Prisma actualiza automáticamente el timestamp
+- ✅ No se require pasar `updatedAt` manualmente
+- ✅ Tests más limpios y mantenibles
+
 ---
 
 ## 📞 Acciones Completadas
 
-### ✅ Resolución Final (2025-11-22)
+### ✅ Resolución Inicial (2025-11-22)
 
 1. ✅ Backup de tablas de autenticación creado
 2. ✅ Limpieza completa de usuarios huérfanos
 3. ✅ Login exitoso con Google OAuth (2 cuentas probadas)
 4. ✅ Verificación de User + Account correctamente vinculados
 5. ✅ Documentación actualizada con solución definitiva
+
+### ✅ Resolución Final - Schema Prisma (2025-11-23)
+
+1. ✅ Corrección de relaciones Prisma (User → user, Session → user)
+2. ✅ Agregado @updatedAt a todos los modelos
+3. ✅ Implementación de retry logic (src/lib/retry.ts)
+4. ✅ Mejoras de robustez en auth.config.ts
+5. ✅ Validaciones extendidas en signIn callback
+6. ✅ Eventos de logging detallado
+7. ✅ Tests de autenticación pasando (4/4 PASS)
+8. ✅ Deployment exitoso al VPS
+9. ✅ **Google OAuth funcionando perfectamente en producción**
 
 ### Próximos Pasos Recomendados
 

@@ -84,7 +84,14 @@ We are currently pivoting. The priority is **User Experience & Profile Customiza
 ### Database & Prisma
 * **Multi-tenancy:** Data is owned by the `User`. Always query with `where: { userId: ... }`.
 * **Naming:** Use camelCase for fields, PascalCase for Models.
-* **Relations:** Keep `user` lowercase in relations for NextAuth compatibility.
+* **🚨 CRITICAL - NextAuth Relations:**
+  - `Account.user` and `Session.user` MUST be lowercase (`user`, not `User`)
+  - ❌ WRONG: `model Account { User User @relation(...) }`
+  - ✅ CORRECT: `model Account { user User @relation(...) }`
+  - Breaking this causes auth to fail with `PrismaClientValidationError`
+  - See: `docs/03-arquitectura/GOOGLE_OAUTH_DIAGNOSTICS_RESOLVED.md` (Problema #5)
+* **Timestamps:** Always add `@updatedAt` to `updatedAt` fields for auto-update
+* **Before pushing schema:** Run `npm run test` to verify no regressions
 
 ### The "Setup" Component Standard
 When building UI for the "Gamer/Dev Setup" section:
