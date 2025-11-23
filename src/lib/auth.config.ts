@@ -293,6 +293,50 @@ export const authOptions: NextAuthOptions = {
         providerAccountId: account.providerAccountId,
         timestamp: new Date().toISOString()
       });
+
+      // Asignar username automáticamente si no tiene uno
+      try {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { username: true, email: true, name: true }
+        });
+
+        if (dbUser && !dbUser.username) {
+          // Generar username desde el email o nombre
+          const baseUsername = dbUser.name
+            ? dbUser.name.toLowerCase().replace(/[^a-z0-9]/g, '')
+            : dbUser.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+
+          // Verificar si el username ya existe y agregar sufijo si es necesario
+          let username = baseUsername;
+          let suffix = 1;
+
+          while (true) {
+            const existing = await prisma.user.findUnique({
+              where: { username },
+              select: { id: true }
+            });
+
+            if (!existing) break;
+            username = `${baseUsername}${suffix}`;
+            suffix++;
+          }
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { username }
+          });
+
+          console.log('🆔 [AUTH-AUTO-USERNAME] Username assigned', {
+            userId: user.id,
+            username,
+            timestamp: new Date().toISOString()
+          });
+        }
+      } catch (error) {
+        console.error('❌ [AUTH-AUTO-USERNAME] Failed to assign username', error);
+        // No bloquear el login si falla la asignación de username
+      }
     },
     async session({ session, token }) {
       console.log('🔑 [AUTH-SESSION] Session retrieved', {
