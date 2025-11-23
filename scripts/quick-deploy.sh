@@ -53,10 +53,10 @@ docker stop degux-web 2>/dev/null || true
 docker rm degux-web 2>/dev/null || true
 
 echo "🏗️  Building Docker image (no cache)..."
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml build --no-cache degux-web
+docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
 
 echo "▶️  Starting new container..."
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 
 echo "🧹 Cleaning up old images..."
 docker image prune -f
