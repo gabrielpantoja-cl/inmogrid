@@ -2,8 +2,27 @@ import { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
+import { withRetry } from "@/lib/retry"
 
-// ✅ CONFIGURACIÓN CORREGIDA PARA NEXTAUTH V4 - RESUELVE BUCLE INFINITO OAUTH
+/**
+ * ✅ CONFIGURACIÓN ROBUSTA PARA NEXTAUTH V4 + GOOGLE OAUTH
+ *
+ * PROBLEMAS RESUELTOS:
+ * - ❌ Bucle infinito OAuth (redirect callback)
+ * - ❌ PrismaClientValidationError (relaciones User/Account en mayúscula)
+ * - ❌ OAuthAccountNotLinked (usuarios huérfanos sin Account)
+ *
+ * MEJORAS IMPLEMENTADAS:
+ * - ✅ Retry logic para operaciones de BD (withRetry)
+ * - ✅ Validaciones robustas en signIn callback
+ * - ✅ Logging detallado para debugging en producción
+ * - ✅ Eventos extendidos (createUser, linkAccount, session)
+ * - ✅ Manejo de errores con fallbacks seguros
+ *
+ * REFERENCIAS:
+ * - docs/03-arquitectura/GOOGLE_OAUTH_DIAGNOSTICS_RESOLVED.md
+ * - CLAUDE.md: "CRITICAL: Maintain lowercase relation names"
+ */
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -139,43 +158,78 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     
-    // ✅ JWT CALLBACK - INCLUYE ROLE DEL USUARIO
+    // ✅ JWT CALLBACK - INCLUYE ROLE DEL USUARIO CON RETRY
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
-        // Obtener el role del usuario desde la base de datos
+        // Obtener el role del usuario desde la base de datos con retry
         try {
-          const dbUser = await prisma.user.findUnique({
-            where: { id: user.id },
-            select: { role: true }
-          });
+          const dbUser = await withRetry(
+            async () => prisma.user.findUnique({
+              where: { id: user.id },
+              select: { role: true }
+            }),
+            {
+              maxAttempts: 3,
+              delayMs: 500,
+              shouldRetry: (error: unknown) => {
+                // Retry solo en errores de conexión, no en errores de datos
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                return errorMessage.includes('connection') ||
+                       errorMessage.includes('timeout') ||
+                       errorMessage.includes('ECONNREFUSED');
+              }
+            }
+          );
           token.role = dbUser?.role || 'user';
         } catch (error) {
-          console.error('Error fetching user role:', error);
+          console.error('[AUTH-JWT] Error fetching user role (all retries failed):', error);
+          // Fallback seguro: asignar role por defecto
           token.role = 'user';
         }
       }
       return token;
     },
     
-    // ✅ SIGNIN CALLBACK - SOLO VALIDACIÓN (PrismaAdapter maneja User + Account)
+    // ✅ SIGNIN CALLBACK - VALIDACIÓN ROBUSTA (PrismaAdapter maneja User + Account)
     async signIn({ user, account, profile }) {
-      console.log('✅ [AUTH-SIGNIN]', {
-        userId: user.id,
-        email: user.email,
+      const logContext = {
+        userId: user?.id,
+        email: user?.email,
         provider: account?.provider,
         accountId: account?.providerAccountId,
         timestamp: new Date().toISOString()
-      });
+      };
+
+      console.log('✅ [AUTH-SIGNIN] Inicio de validación', logContext);
 
       // Validar que tenemos los datos mínimos necesarios
-      if (!user.email) {
-        console.error('❌ [AUTH-SIGNIN] No email provided');
+      if (!user?.email) {
+        console.error('❌ [AUTH-SIGNIN] BLOCKED: No email provided', logContext);
         return false;
       }
 
       if (!account) {
-        console.error('❌ [AUTH-SIGNIN] No account information provided');
+        console.error('❌ [AUTH-SIGNIN] BLOCKED: No account information provided', logContext);
+        return false;
+      }
+
+      // Validar formato de email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(user.email)) {
+        console.error('❌ [AUTH-SIGNIN] BLOCKED: Invalid email format', { ...logContext, email: user.email });
+        return false;
+      }
+
+      // Validar provider
+      if (account.provider !== 'google') {
+        console.error('❌ [AUTH-SIGNIN] BLOCKED: Unsupported provider', { ...logContext, provider: account.provider });
+        return false;
+      }
+
+      // Validar providerAccountId
+      if (!account.providerAccountId) {
+        console.error('❌ [AUTH-SIGNIN] BLOCKED: No providerAccountId', logContext);
         return false;
       }
 
@@ -183,7 +237,7 @@ export const authOptions: NextAuthOptions = {
       // PrismaAdapter se encarga de crear User + Account automáticamente
       // Si hacemos upsert manual, interferimos con el adapter y Account no se crea
 
-      console.log(`✅ [AUTH-SIGNIN] Allowing sign in for: ${user.email}`);
+      console.log(`✅ [AUTH-SIGNIN] ALLOWED: Sign in authorized for ${user.email}`, logContext);
       return true;
     }
   },
@@ -195,18 +249,55 @@ export const authOptions: NextAuthOptions = {
     error: "/auth/error",
   },
 
-  // ✅ EVENTOS SIMPLIFICADOS
+  // ✅ EVENTOS CON LOGGING DETALLADO
   events: {
-    async signOut({ token }) {
-      console.log('📤 [AUTH-SIGNOUT]', {
+    async signOut({ token, session }) {
+      console.log('📤 [AUTH-SIGNOUT] User signed out', {
         tokenId: token?.sub,
+        email: token?.email,
         timestamp: new Date().toISOString()
       });
     },
-    async signIn({ user, account }) {
-      console.log('📥 [AUTH-SIGNIN-EVENT]', {
+    async signIn({ user, account, profile, isNewUser }) {
+      console.log('📥 [AUTH-SIGNIN-EVENT] User signed in', {
         userId: user.id,
+        email: user.email,
         provider: account?.provider,
+        providerAccountId: account?.providerAccountId,
+        isNewUser: isNewUser,
+        timestamp: new Date().toISOString()
+      });
+
+      // Log adicional para nuevos usuarios
+      if (isNewUser) {
+        console.log('🆕 [AUTH-NEW-USER] New user registered via OAuth', {
+          userId: user.id,
+          email: user.email,
+          provider: account?.provider,
+          timestamp: new Date().toISOString()
+        });
+      }
+    },
+    async createUser({ user }) {
+      console.log('👤 [AUTH-CREATE-USER] New user created by PrismaAdapter', {
+        userId: user.id,
+        email: user.email,
+        timestamp: new Date().toISOString()
+      });
+    },
+    async linkAccount({ user, account, profile }) {
+      console.log('🔗 [AUTH-LINK-ACCOUNT] Account linked to user', {
+        userId: user.id,
+        email: user.email,
+        provider: account.provider,
+        providerAccountId: account.providerAccountId,
+        timestamp: new Date().toISOString()
+      });
+    },
+    async session({ session, token }) {
+      console.log('🔑 [AUTH-SESSION] Session retrieved', {
+        userId: session.user?.id || token?.sub,
+        email: session.user?.email || token?.email,
         timestamp: new Date().toISOString()
       });
     }
