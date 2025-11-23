@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 
 // Tipos mejorados
 interface LatestPost extends Pick<Post, 'id' | 'title' | 'excerpt' | 'slug' | 'createdAt'> {
-  user: Pick<User, 'name' | 'username'>;
+  User: Pick<User, 'name' | 'username'>;
 }
 
 interface DashboardError extends Error {
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
           excerpt: true,
           slug: true,
           createdAt: true,
-          user: {
+          User: {
             select: {
               name: true,
               username: true,

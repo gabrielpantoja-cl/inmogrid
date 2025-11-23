@@ -129,6 +129,7 @@ export async function sendConnectionRequest(
         receiverId: validatedData.receiverId,
         message: validatedData.message,
         status: 'pending',
+        updatedAt: new Date(),
       },
     })
 
@@ -183,8 +184,8 @@ export async function handleConnectionAction(
     const connection = await prisma.connection.findUnique({
       where: { id: validatedData.connectionId },
       include: {
-        requester: { select: { name: true, email: true } },
-        receiver: { select: { id: true } },
+        User_Connection_requesterIdToUser: { select: { name: true, email: true } },
+        User_Connection_receiverIdToUser: { select: { id: true } },
       },
     })
 
@@ -192,7 +193,7 @@ export async function handleConnectionAction(
       return { success: false, error: 'Conexión no encontrada' }
     }
 
-    if (connection.receiver.id !== currentUser.id) {
+    if (connection.User_Connection_receiverIdToUser.id !== currentUser.id) {
       return { success: false, error: 'No autorizado' }
     }
 
@@ -205,7 +206,10 @@ export async function handleConnectionAction(
 
     await prisma.connection.update({
       where: { id: validatedData.connectionId },
-      data: { status: newStatus },
+      data: {
+        status: newStatus,
+        updatedAt: new Date(),
+      },
     })
 
     // 5. Revalidar
@@ -301,7 +305,7 @@ export async function getUserConnections() {
         status: 'accepted',
       },
       include: {
-        requester: {
+        User_Connection_requesterIdToUser: {
           select: {
             id: true,
             name: true,
@@ -312,7 +316,7 @@ export async function getUserConnections() {
             commune: true,
           },
         },
-        receiver: {
+        User_Connection_receiverIdToUser: {
           select: {
             id: true,
             name: true,
@@ -332,7 +336,7 @@ export async function getUserConnections() {
       const isRequester = conn.requesterId === currentUser.id
       return {
         id: conn.id,
-        connection: isRequester ? conn.receiver : conn.requester,
+        connection: isRequester ? conn.User_Connection_receiverIdToUser : conn.User_Connection_requesterIdToUser,
         createdAt: conn.createdAt,
       }
     })
@@ -366,7 +370,7 @@ export async function getPendingRequests() {
         status: 'pending',
       },
       include: {
-        requester: {
+        User_Connection_requesterIdToUser: {
           select: {
             id: true,
             name: true,

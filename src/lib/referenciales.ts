@@ -16,7 +16,7 @@ export async function fetchLatestReferenciales() {
         fechaescritura: 'desc',
       },
       include: {
-        user: true, // ✅ CORREGIDO: User -> user (minúscula)
+        User: true, // Relación con User (mayúscula según schema de Prisma)
         conservadores: true,
       },
     });
@@ -113,7 +113,7 @@ export async function fetchFilteredReferenciales(query: string | null | undefine
         conservadorId: true,
         createdAt: true,
         updatedAt: true,
-        user: { // ✅ CORREGIDO: User -> user (minúscula)
+        User: { // Relación con User (mayúscula según schema de Prisma)
           select: {
             name: true,
             email: true,
@@ -220,7 +220,7 @@ export async function fetchReferencialById(id: string | null | undefined) {
       },
       include: {
         conservadores: true,
-        user: true // ✅ CORREGIDO: User -> user (minúscula)
+        User: true // Relación con User (mayúscula según schema de Prisma)
       }
     });
 
@@ -321,7 +321,7 @@ export async function fetchAllFilteredReferenciales(query: string | null | undef
         conservadorId: true,
         createdAt: true,
         updatedAt: true,
-        user: {
+        User: {
           select: {
             name: true,
             email: true,

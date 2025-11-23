@@ -19,10 +19,10 @@ export interface Referencial {
   conservadorId: string; // Campo nuevo
   createdAt: Date;    // Añadido
   updatedAt: Date;    // Añadido
-  user: {
+  User: {
     name: string | null;
     email: string;
-  };
+  } | null; // Puede ser null si no hay usuario
   conservadores?: { // Relación opcional con conservadores
     id: string;
     nombre: string;
