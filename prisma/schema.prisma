@@ -130,70 +130,7 @@ model Post {
   @@index([userId, published])
 }
 
-model Property {
-  id           String         @id
-  userId       String
-  title        String
-  description  String?
-  propertyType PropertyType
-  status       PropertyStatus @default(available)
-  address      String
-  commune      String
-  region       String
-  lat          Float?
-  lng          Float?
-  bedrooms     Int?
-  bathrooms    Int?
-  parkingSpots Int?
-  totalSurface Float?
-  builtSurface Float?
-  price        BigInt
-  currency     String         @default("CLP")
-  images       String[]       @default([])
-  mainImage    String?
-  featured     Boolean        @default(false)
-  views        Int            @default(0)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  User         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([commune, status])
-  @@index([propertyType, status])
-  @@index([userId])
-}
-
-model PropertyListing {
-  id           String        @id
-  title        String
-  description  String?
-  price        BigInt?
-  currency     String        @default("CLP")
-  address      String?
-  commune      String
-  region       String
-  lat          Float?
-  lng          Float?
-  totalSurface Float?
-  builtSurface Float?
-  bedrooms     Int?
-  bathrooms    Int?
-  parkingSpots Int?
-  propertyType String?
-  source       ListingSource
-  sourceUrl    String?
-  externalId   String?
-  images       String[]      @default([])
-  mainImage    String?
-  scrapedAt    DateTime      @default(now())
-  publishedAt  DateTime?
-  isActive     Boolean       @default(true)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-
-  @@unique([source, externalId])
-  @@index([commune, isActive])
-  @@index([source, isActive])
-}
 
 model Session {
   id           String   @id
@@ -237,9 +174,7 @@ model User {
   Connection_Connection_requesterIdToUser Connection[]    @relation("Connection_requesterIdToUser")
   Plant                                   Plant[]
   Post                                    Post[]
-  Property                                Property[]
   Session                                 Session[]
-  referenciales                           referenciales[]
 }
 
 model VerificationToken {
@@ -250,54 +185,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-model conservadores {
-  id            String          @id
-  nombre        String
-  direccion     String
-  comuna        String
-  region        String
-  telefono      String?
-  email         String?
-  sitioWeb      String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  referenciales referenciales[]
-}
-
-model referenciales {
-  id             String                   @id
-  lat            Float
-  lng            Float
-  fojas          String
-  numero         Int
-  anio           Int
-  cbr            String
-  comprador      String
-  vendedor       String
-  predio         String
-  comuna         String
-  rol            String
-  fechaescritura DateTime
-  superficie     Float
-  monto          BigInt?
-  observaciones  String?
-  userId         String?
-  conservadorId  String
-  geom           Unsupported("geometry")?
-  createdAt      DateTime                 @default(now())
-  updatedAt      DateTime                 @updatedAt
-  conservadores  conservadores            @relation(fields: [conservadorId], references: [id])
-  User           User?                    @relation(fields: [userId], references: [id])
-}
-
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model spatial_ref_sys {
-  srid      Int     @id
-  auth_name String? @db.VarChar(256)
-  auth_srid Int?
-  srtext    String? @db.VarChar(2048)
-  proj4text String? @db.VarChar(2048)
-}
 
 enum ConnectionStatus {
   pending
@@ -306,45 +193,23 @@ enum ConnectionStatus {
   blocked
 }
 
-enum ListingSource {
-  PORTAL_INMOBILIARIO
-  TOCTOC
-  MERCADO_LIBRE
-  YAPO
-  OTRO
-}
-
 enum MessageRole {
   user
   bot
 }
 
 enum ProfessionType {
-  CORREDOR
-  TASADOR
-  ARQUITECTO
-  CONSTRUCTOR
-  INGENIERO
-  INVERSIONISTA
-  ABOGADO
-  OTRO
-}
-
-enum PropertyStatus {
-  available
-  reserved
-  sold
-  inactive
-}
-
-enum PropertyType {
-  CASA
-  DEPARTAMENTO
-  TERRENO
-  LOCAL_COMERCIAL
-  OFICINA
-  BODEGA
-  PARCELA
+  CREADOR_CONTENIDO
+  DISENADOR
+  DESARROLLADOR
+  FOTOGRAFO
+  ESCRITOR
+  ARTISTA
+  EMPRENDEDOR
+  EDUCADOR
+  VIVERISTA
+  JARDINERO
+  BOTANICO
   OTRO
 }
 

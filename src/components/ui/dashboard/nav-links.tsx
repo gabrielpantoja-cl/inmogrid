@@ -2,10 +2,10 @@
 
 import {
   HomeIcon,
-  DocumentDuplicateIcon,
-  MapPinIcon,
-  BuildingOfficeIcon,
-  ArrowUpTrayIcon,
+  UserCircleIcon,
+  DocumentTextIcon,
+  SparklesIcon,
+  UsersIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,20 +13,24 @@ import { usePathname } from 'next/navigation';
 const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
   {
-    name: 'Referenciales',
-    href: '/dashboard/referenciales',
-    icon: DocumentDuplicateIcon,
-  },
-  { name: 'Mapa', href: '/dashboard/mapa', icon: MapPinIcon },
-  {
-    name: 'Subir Referenciales',
-    href: '/dashboard/referenciales/create',
-    icon: ArrowUpTrayIcon,
+    name: 'Mi Perfil',
+    href: '/dashboard/perfil',
+    icon: UserCircleIcon,
   },
   {
-    name: 'Conservadores',
-    href: '/dashboard/conservadores',
-    icon: BuildingOfficeIcon,
+    name: 'Mis Notas',
+    href: '/dashboard/notas',
+    icon: DocumentTextIcon,
+  },
+  {
+    name: 'Mis Plantas',
+    href: '/dashboard/plantas',
+    icon: SparklesIcon,
+  },
+  {
+    name: 'Conexiones',
+    href: '/dashboard/networking',
+    icon: UsersIcon,
   },
 ];
 
