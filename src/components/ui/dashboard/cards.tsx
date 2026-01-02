@@ -10,7 +10,7 @@ const iconMap = {
   collected: BanknotesIcon,
   colaborador: UserGroupIcon,
   pending: ClockIcon,
-  referenciales: InboxIcon,
+  content: InboxIcon,
 };
 
 export function Card({
@@ -20,7 +20,7 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'referenciales' | 'colaboradores' | 'pending' | 'collected';
+  type: 'content' | 'colaboradores' | 'pending' | 'collected';
 }) {
   const Icon = iconMap[type === 'colaboradores' ? 'colaborador' : type];
   return (

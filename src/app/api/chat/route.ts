@@ -14,15 +14,15 @@ interface FAQs {
 
 // Preguntas frecuentes (FAQs) y sus respuestas
 const faqs: FAQs = {
-  "¿De qué se trata degux.cl?": "degux.cl es una base de datos colaborativa para peritos tasadores.",
-  "¿Cómo puedo registrarme?": "Al iniciar sesión con Google te registras automáticamente en nuestra aplicación.",
-  "¿Cuáles son los servicios que ofrecen?": "Ofrecemos acceso a una base de datos colaborativa, incluyendo consultas personalizadas, vista por mapa y más.",
-  "¿Cuál es el correo o teléfono de contacto?": "El canal oficial de comunicación es el WhatsApp: +56 9 3176 9472."
+  "¿De qué se trata degux.cl?": "degux.cl es una plataforma colaborativa para crear tu marca personal. Publica contenido, comparte tus plantas favoritas, construye colecciones y conecta con una comunidad de creadores y profesionales.",
+  "¿Cómo puedo registrarme?": "Al iniciar sesión con Google te registras automáticamente en degux.cl y puedes comenzar a crear tu perfil profesional.",
+  "¿Cuáles son los servicios que ofrecen?": "Ofrecemos perfiles públicos personalizables, publicación de notas/blog, catálogo de plantas, colecciones de contenido y networking profesional.",
+  "¿Cuál es el correo o teléfono de contacto?": "Puedes contactarnos vía WhatsApp: +56 9 3176 9472 o a través de GitHub Discussions."
 };
 
 // Prompt inicial para orientar al asistente
 const promptInitial = `
-Eres un asistente virtual para referenciales.cl. Responde a las preguntas de los usuarios de manera clara y concisa, y limita tus respuestas a temas relacionados con las tasaciones inmobiliarias. Aquí hay algunas preguntas frecuentes y sus respuestas:
+Eres un asistente virtual para degux.cl, una plataforma colaborativa enfocada en marca personal y contenido creativo. Ayudas a los usuarios con preguntas sobre cómo usar la plataforma, publicar contenido (notas, plantas, colecciones), configurar su perfil profesional y conectar con otros creadores. Responde de manera clara, amigable y enfocada en empoderar a los creadores de contenido. Aquí hay algunas preguntas frecuentes y sus respuestas:
 ${Object.entries(faqs).map(([question, answer]) => `- "${question}": "${answer}"`).join('\n')}
 `;
 
