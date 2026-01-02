@@ -1,5 +1,5 @@
 // __tests__/__mocks__/providers/google-provider.ts
-import { Provider } from 'next-auth/providers';
+import GoogleProvider from 'next-auth/providers/google';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import React, { ReactNode, FC } from 'react';
@@ -52,7 +52,7 @@ export const mockGoogleResponse: GoogleResponse = {
 };
 
 // Provider de Google
-export const mockGoogleProvider: Provider = {
+export const mockGoogleProvider: any = {
   id: 'google',
   name: 'Google',
   type: 'oauth',
@@ -99,18 +99,12 @@ export const mockSession: Session = {
     name: mockGoogleProfile.name,
     email: mockGoogleProfile.email,
     image: mockGoogleProfile.picture,
+    role: 'user',
   },
   expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
 };
 
-// Wrapper de providers
-export const AllTheProviders: FC<ProvidersWrapperProps> = ({ children }) => {
-  return (
-    <SessionProvider session={mockSession}>
-      {children}
-    </SessionProvider>
-  );
-};
+
 
 export type { ProvidersWrapperProps };
 export default googleProviderMock;
