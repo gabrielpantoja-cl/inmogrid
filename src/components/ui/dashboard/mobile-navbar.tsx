@@ -6,9 +6,10 @@ import { usePathname } from 'next/navigation';
 import {
   HomeIcon,
   DocumentDuplicateIcon,
-  MapPinIcon,
-  BuildingOfficeIcon,
-  ArrowUpTrayIcon,
+  UserIcon,
+  PencilSquareIcon,
+  SparklesIcon,
+  UserGroupIcon,
   PowerIcon,
   ExclamationTriangleIcon,
   QuestionMarkCircleIcon,
@@ -22,10 +23,11 @@ import { robustSignOut } from '@/lib/auth-utils';
 
 const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
-  { name: 'Referenciales', href: '/dashboard/referenciales', icon: DocumentDuplicateIcon },
-  { name: 'Mapa', href: '/dashboard/mapa', icon: MapPinIcon },
-  { name: 'Subir Referenciales', href: '/dashboard/referenciales/create', icon: ArrowUpTrayIcon },
-  { name: 'Conservadores', href: '/dashboard/conservadores', icon: BuildingOfficeIcon },
+  { name: 'Mi Perfil', href: '/dashboard/perfil', icon: UserIcon },
+  { name: 'Mis Notas', href: '/dashboard/notas', icon: DocumentDuplicateIcon },
+  { name: 'Crear Nota', href: '/dashboard/notas/crear', icon: PencilSquareIcon },
+  { name: 'Mis Plantas', href: '/dashboard/plantas', icon: SparklesIcon },
+  { name: 'Networking', href: '/dashboard/networking', icon: UserGroupIcon },
 ];
 
 export default function MobileNavbar() {
