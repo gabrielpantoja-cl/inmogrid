@@ -30,9 +30,9 @@ export function useAuth() {
   const isUser = userRole === 'user';
 
   // Función para verificar si el usuario puede realizar operaciones CRUD
-  const canCreateReferenciales = isAuthenticated; // Todos los usuarios autenticados pueden crear
-  const canEditReferenciales = isAdmin;
-  const canDeleteReferenciales = isAdmin;
+  const canCreateContent = isAuthenticated; // Todos los usuarios autenticados pueden crear contenido
+  const canEditContent = isAdmin; // Solo admins pueden editar contenido de otros
+  const canDeleteContent = isAdmin; // Solo admins pueden eliminar contenido de otros
   const canViewSensitiveData = isAdmin;
 
   return {
@@ -47,10 +47,10 @@ export function useAuth() {
     isSuperAdmin,
     isUser,
 
-    // Permisos específicos
-    canCreateReferenciales,
-    canEditReferenciales,
-    canDeleteReferenciales,
+    // Permisos específicos (generic permissions for content management)
+    canCreateContent,
+    canEditContent,
+    canDeleteContent,
     canViewSensitiveData,
   };
 }

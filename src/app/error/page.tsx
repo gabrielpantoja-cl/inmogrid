@@ -98,8 +98,8 @@ function ErrorContent() {
         <div className="text-center border-t border-gray-200 pt-6">
           <p className="text-xs text-gray-500">
             ¿Necesitas ayuda?{' '}
-            <a href="https://github.com/TheCuriou/referenciales.cl/discussions" 
-               target="_blank" 
+            <a href="https://github.com/gabrielpantoja-cl/degux.cl/discussions"
+               target="_blank"
                rel="noopener noreferrer"
                className="text-blue-600 hover:text-blue-500 underline">
               Contacta al soporte

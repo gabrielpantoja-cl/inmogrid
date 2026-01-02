@@ -13,7 +13,7 @@ interface EmailTemplates {
 
 export const emailTemplates: EmailTemplates = {
   welcome: (userName: string) => ({
-    subject: 'Bienvenido a Referenciales',
+    subject: 'Bienvenido a degux.cl',
     html: `
       <div style="
         font-family: Arial, sans-serif;
@@ -27,23 +27,23 @@ export const emailTemplates: EmailTemplates = {
         <div style="text-align: center; margin-bottom: 20px;">
           <h2 style="color: #2563eb;">¡Bienvenido ${userName}!</h2>
         </div>
-        
+
         <div style="color: #4b5563; line-height: 1.6;">
-          <p>Gracias por registrarte en Referenciales.</p>
-          <p>Tu cuenta ha sido creada exitosamente y ya puedes comenzar a usar nuestros servicios.</p>
+          <p>Gracias por unirte a degux.cl.</p>
+          <p>Tu cuenta ha sido creada exitosamente y ya puedes comenzar a construir tu marca personal, publicar contenido y conectar con nuestra comunidad.</p>
         </div>
-        
+
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
-        
+
         <div style="color: #6b7280; font-size: 14px;">
-          <p>Saludos,<br>El equipo de Referenciales</p>
+          <p>Saludos,<br>El equipo de degux.cl</p>
         </div>
       </div>
     `
   }),
-  
+
   deleteAccount: (userName: string) => ({
-    subject: 'Cuenta Eliminada - Referenciales',
+    subject: 'Cuenta Eliminada - degux.cl',
     html: `
       <div style="
         font-family: Arial, sans-serif;
@@ -57,17 +57,17 @@ export const emailTemplates: EmailTemplates = {
         <div style="text-align: center; margin-bottom: 20px;">
           <h2 style="color: #2563eb;">Cuenta Eliminada</h2>
         </div>
-        
+
         <div style="color: #4b5563; line-height: 1.6;">
           <p>Hola ${userName},</p>
-          <p>Tu cuenta en Referenciales ha sido eliminada exitosamente.</p>
+          <p>Tu cuenta en degux.cl ha sido eliminada exitosamente.</p>
           <p>Esperamos volver a verte pronto.</p>
         </div>
-        
+
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
-        
+
         <div style="color: #6b7280; font-size: 14px;">
-          <p>Saludos,<br>El equipo de Referenciales</p>
+          <p>Saludos,<br>El equipo de degux.cl</p>
         </div>
       </div>
     `
