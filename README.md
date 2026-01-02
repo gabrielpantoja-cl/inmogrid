@@ -1,6 +1,6 @@
 # degux.cl - Tu Ecosistema Digital para Crear y Conectar
 
-**degux.cl** ha evolucionado. Ya no somos una plataforma inmobiliaria; somos un lienzo digital para tu marca personal. Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir tus ideas y conectar con una comunidad de creadores y profesionales.
+**degux.cl** lienzo digital para tu marca personal. Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir tus ideas y conectar con una comunidad de creadores y profesionales.
 
 Imagina una mezcla entre **Substack**, **Behance** y **Linktree**, con un fuerte sentido de comunidad local.
 

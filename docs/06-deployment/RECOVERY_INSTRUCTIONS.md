@@ -1,9 +1,23 @@
 # 🚨 Instrucciones de Recuperación de degux.cl
 
-## 📊 Estado Actual
-- **Sitio**: degux.cl
-- **Estado**: ❌ NO ACCESIBLE (timeout)
-- **Diagnóstico**: El contenedor Docker probablemente está caído o no responde
+**Guía rápida de diagnóstico y recuperación para incidentes de disponibilidad del sitio web.**
+
+## 📖 Índice
+- [Solución Rápida](#-solución-rápida-opción-1---recomendada)
+- [Diagnóstico Manual](#-diagnóstico-manual)
+- [Problemas Comunes](#-problemas-comunes-y-soluciones)
+- [Verificación Post-Recuperación](#-verificación-post-recuperación)
+- [Escalación](#-escalación)
+- [Incidentes Anteriores](#-incidentes-anteriores)
+
+## 📊 Síntomas Comunes de Incidentes
+
+| Síntoma | Causa Probable | Solución Rápida |
+|---------|----------------|-----------------|
+| `ERR_NETWORK_CHANGED` en navegador | Contenedor unhealthy o caído | [Reinicio simple](#método-b-conectándote-directamente-al-vps) |
+| Sitio muy lento o timeout | Contenedor sin recursos | [Verificar recursos](#verificar-recursos-del-sistema) |
+| Error 502 Bad Gateway | nginx-proxy no puede contactar app | [Reiniciar contenedor](#1-contenedor-caído-exited) |
+| Error 500 Internal Server Error | Error de aplicación | [Revisar logs](#ver-logs-de-degux-web) |
 
 ---
 
@@ -176,6 +190,31 @@ docker volume prune -f
 docker builder prune -f
 ```
 
+### 7. Contenedor "Unhealthy" (pero corriendo) ⚠️ NUEVO
+**Síntoma**: `docker ps` muestra degux-web como "Up X hours (unhealthy)"
+**Causa**: Error de aplicación no capturado que falla los health checks
+**Solución**:
+```bash
+cd /home/gabriel/vps-do
+
+# 1. Revisar logs para identificar el error
+docker logs degux-web --tail 50
+
+# 2. Reiniciar contenedor (solución más rápida)
+docker compose -f docker-compose.yml -f docker-compose.degux.yml restart degux-web
+
+# 3. Verificar que vuelva a "healthy"
+sleep 15
+docker ps | grep degux-web
+# Debe mostrar: Up X seconds (healthy)
+
+# 4. Verificar health check
+curl https://degux.cl/api/health
+# Debe responder: {"status":"ok","database":"connected"}
+```
+
+**Nota**: Este fue el problema del incidente del 01-01-2026. Ver [Postmortem](#-incidentes-anteriores) para más detalles.
+
 ---
 
 ## 🎯 Verificación Post-Recuperación
@@ -245,7 +284,26 @@ Si ninguna de las soluciones anteriores funciona:
 
 - **Portainer (Dashboard Docker)**: https://VPS_IP_REDACTED:9443
 - **Logs de N8N**: `docker logs n8n`
-- **Documentación completa**: `/home/user/degux.cl/docs/06-deployment/`
+- **Documentación de deployment**: `docs/06-deployment/`
+- **Documentación de arquitectura**: `docs/03-arquitectura/`
+
+---
+
+## 📁 Incidentes Anteriores
+
+### 🔥 Incidente 01-01-2026: Contenedor Unhealthy
+- **Fecha**: 2026-01-01
+- **Duración**: ~5 horas unhealthy, 5 minutos de recuperación
+- **Síntoma**: Sitio completamente inaccesible, error `ERR_NETWORK_CHANGED`
+- **Causa raíz**: Error de JavaScript no capturado (`TypeError: reading 'aa'`) + ausencia de error boundaries globales
+- **Solución**: Reinicio simple del contenedor
+- **Mejoras implementadas**:
+  - ✅ Creados `src/app/error.tsx` y `src/app/global-error.tsx` (error boundaries globales)
+  - ✅ Documentación mejorada de recuperación
+  - 🔄 Pendiente: Integración con servicio de error reporting (Sentry)
+  - 🔄 Pendiente: Alertas automáticas cuando contenedor pasa a unhealthy
+
+**Postmortem completo**: `docs/06-deployment/POSTMORTEM_2026-01-01_UNHEALTHY_CONTAINER.md`
 
 ---
 
@@ -262,6 +320,17 @@ Si ninguna de las soluciones anteriores funciona:
 
 ---
 
-**Última actualización**: 2025-12-29
+---
+
+## 🔗 Documentos Relacionados
+
+- [POSTMORTEM_2026-01-01_UNHEALTHY_CONTAINER.md](./POSTMORTEM_2026-01-01_UNHEALTHY_CONTAINER.md) - Incidente contenedor unhealthy
+- [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Guía de deployment completa
+- [PUERTOS_VPS.md](./PUERTOS_VPS.md) - Arquitectura de puertos y contenedores
+
+---
+
+**Última actualización**: 2026-01-01
 **Mantenedor**: Gabriel Pantoja
 **VPS**: VPS_IP_REDACTED (Digital Ocean)
+**Contributors**: Claude Code (AI Assistant)
