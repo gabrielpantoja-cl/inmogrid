@@ -25,7 +25,10 @@ interface HealthCheck {
     };
   };
   stats?: {
-    totalReferenciales: number;
+    totalUsers: number;
+    totalPosts: number;
+    totalCollections: number;
+    totalPlants: number;
     lastUpdate: string;
   };
 }
@@ -57,19 +60,30 @@ async function testDatabaseConnection(): Promise<{
 
 // Función para obtener estadísticas básicas
 async function getBasicStats(): Promise<{
-  totalReferenciales: number;
+  totalUsers: number;
+  totalPosts: number;
+  totalCollections: number;
+  totalPlants: number;
   lastUpdate: string;
 } | null> {
   try {
-    const count = await prisma.referenciales.count();
-    const lastRecord = await prisma.referenciales.findFirst({
-      orderBy: { updatedAt: 'desc' },
-      select: { updatedAt: true },
-    });
+    const [usersCount, postsCount, collectionsCount, plantsCount, lastPost] = await Promise.all([
+      prisma.user.count(),
+      prisma.post.count(),
+      prisma.collection.count(),
+      prisma.plant.count(),
+      prisma.post.findFirst({
+        orderBy: { updatedAt: 'desc' },
+        select: { updatedAt: true },
+      }),
+    ]);
 
     return {
-      totalReferenciales: count,
-      lastUpdate: lastRecord?.updatedAt.toISOString() || 'No data',
+      totalUsers: usersCount,
+      totalPosts: postsCount,
+      totalCollections: collectionsCount,
+      totalPlants: plantsCount,
+      lastUpdate: lastPost?.updatedAt.toISOString() || 'No data',
     };
   } catch (error) {
     console.error('Error getting stats:', error);

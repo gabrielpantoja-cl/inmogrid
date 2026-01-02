@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 /**
  * Global Error Boundary
@@ -205,9 +206,9 @@ export default function GlobalError({
               Intentar de nuevo
             </button>
 
-            <a href="/" className="btn-secondary">
+            <Link href="/" className="btn-secondary">
               Volver al inicio
-            </a>
+            </Link>
           </div>
 
           <div className="footer">

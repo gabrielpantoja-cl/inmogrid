@@ -32,7 +32,6 @@ export async function middleware(req: NextRequest) {
 
   // ✅ PASO 2: APIS QUE PUEDEN REQUERIR AUTENTICACIÓN
   const protectedApiPaths = [
-    '/api/referenciales/',
     '/api/users/',
     '/api/auth-logs/',
     '/api/chat/',
@@ -63,14 +62,11 @@ export async function middleware(req: NextRequest) {
   const isChatbotPage = pathname.startsWith('/chatbot');
 
   // ✅ IDENTIFICAR RUTAS ADMIN-ONLY
-  const adminOnlyPaths = [
-    '/dashboard/referenciales/edit',
-    '/api/referenciales/update',
-    '/api/referenciales/delete',
+  const adminOnlyPaths: string[] = [
+    // Añadir rutas admin aquí según sea necesario
   ];
 
-  const isAdminOnlyPath = adminOnlyPaths.some(path => pathname.startsWith(path)) || 
-                         pathname.match(/\/dashboard\/referenciales\/[^\/]+\/edit$/);
+  const isAdminOnlyPath = adminOnlyPaths.some(path => pathname.startsWith(path));
 
   // ✅ REGLA 1: APIs protegidas requieren autenticación
   if (!token && isProtectedApi) {

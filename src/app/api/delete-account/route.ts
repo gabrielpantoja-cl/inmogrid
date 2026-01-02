@@ -21,43 +21,47 @@ export async function DELETE() {
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      include: { referenciales: true }
-    });
+    // Verificar si el usuario tiene contenido asociado
+    const [postsCount, collectionsCount, plantsCount] = await Promise.all([
+      prisma.post.count({ where: { userId: session.user.id } }),
+      prisma.collection.count({ where: { userId: session.user.id } }),
+      prisma.plant.count({ where: { userId: session.user.id } })
+    ]);
 
-    if (!user) {
-      return new NextResponse(
-        JSON.stringify({ 
-          success: false, 
-          message: 'No se encontró la cuenta de usuario. Por favor, contacta con soporte.',
-          error: 'USER_NOT_FOUND'
-        }), 
-        { 
-          status: 404,
-          headers: { 'Content-Type': 'application/json' }
-        }
-      );
-    }
+    const totalContent = postsCount + collectionsCount + plantsCount;
 
-    if (user.referenciales.length > 0) {
+    if (totalContent > 0) {
       return new NextResponse(
-        JSON.stringify({ 
-          success: false, 
-          message: 'No es posible eliminar tu cuenta debido a que tienes registros asociados. Por favor, elimina primero todos tus registros e inténtalo de nuevo.',
-          error: 'HAS_ASSOCIATED_RECORDS',
-          recordCount: user.referenciales.length
-        }), 
-        { 
+        JSON.stringify({
+          success: false,
+          message: 'No es posible eliminar tu cuenta debido a que tienes contenido publicado. Por favor, elimina primero tus posts, colecciones y plantas antes de continuar.',
+          error: 'HAS_ASSOCIATED_CONTENT',
+          content: {
+            posts: postsCount,
+            collections: collectionsCount,
+            plants: plantsCount
+          }
+        }),
+        {
           status: 400,
           headers: { 'Content-Type': 'application/json' }
         }
       );
     }
 
+    // Eliminar cuenta y todos los datos asociados en transacción
     await prisma.$transaction([
+      // Eliminar conexiones (como requester y receiver)
+      prisma.connection.deleteMany({ where: { requesterId: session.user.id } }),
+      prisma.connection.deleteMany({ where: { receiverId: session.user.id } }),
+      // Eliminar mensajes del chat
+      prisma.chatMessage.deleteMany({ where: { userId: session.user.id } }),
+      // Eliminar logs de auditoría
+      prisma.auditLog.deleteMany({ where: { userId: session.user.id } }),
+      // Eliminar sesiones y cuentas OAuth
       prisma.account.deleteMany({ where: { userId: session.user.id } }),
       prisma.session.deleteMany({ where: { userId: session.user.id } }),
+      // Finalmente eliminar el usuario
       prisma.user.delete({ where: { id: session.user.id } })
     ]);
 
