@@ -234,16 +234,15 @@ export default function NotasContent({
 
                   {/* Acciones */}
                   <div className="flex items-center gap-2">
-                    {/* TODO: Implementar vista pública de posts */}
-                    {/* {post.published && session.user?.username && (
+                    {post.published && session.user?.username && (
                       <Link
-                        href={`/${session.user.username}/posts/${post.slug}`}
+                        href={`/${session.user.username}/notas/${post.slug}`}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Ver publicación"
                       >
                         <EyeIcon className="w-5 h-5" />
                       </Link>
-                    )} */}
+                    )}
 
                     <Link
                       href={`/dashboard/notas/${post.id}/editar`}

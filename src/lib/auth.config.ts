@@ -149,11 +149,12 @@ export const authOptions: NextAuthOptions = {
       return `${baseUrl}/dashboard`;
     },
     
-    // ✅ SESSION CALLBACK - INCLUYE ROLE
+    // ✅ SESSION CALLBACK - INCLUYE ROLE Y USERNAME
     async session({ session, token }) {
       if (session?.user && token?.sub) {
         session.user.id = token.sub;
         session.user.role = token.role as 'user' | 'admin' | 'superadmin';
+        session.user.username = token.username as string | null;
       }
       return session;
     },
@@ -167,7 +168,7 @@ export const authOptions: NextAuthOptions = {
           const dbUser = await withRetry(
             async () => prisma.user.findUnique({
               where: { id: user.id },
-              select: { role: true }
+              select: { role: true, username: true }
             }),
             {
               maxAttempts: 3,
@@ -182,6 +183,7 @@ export const authOptions: NextAuthOptions = {
             }
           );
           token.role = dbUser?.role || 'user';
+          token.username = dbUser?.username || null;
         } catch (error) {
           console.error('[AUTH-JWT] Error fetching user role (all retries failed):', error);
           // Fallback seguro: asignar role por defecto

@@ -132,7 +132,7 @@ export default function DashboardContent({
           {latestPosts?.length > 0 ? (
             latestPosts.map((post) => (
               <div key={post.id} className="border-b border-gray-100 pb-4 last:border-b-0">
-                <Link href={`/${post.User.username}/posts/${post.slug}`} className="block group">
+                <Link href={`/${post.User.username}/notas/${post.slug}`} className="block group">
                   <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
                     {post.title}
                   </h3>
