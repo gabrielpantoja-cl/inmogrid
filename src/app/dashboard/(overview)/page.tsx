@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth.config';
 import DashboardContent from './DashboardContent';
-import DisclaimerPopup from '@/components/ui/dashboard/DisclaimerPopup';
 import { prisma } from '@/lib/prisma';
 import type { User, Post } from '@prisma/client';
 import { Suspense } from 'react';
@@ -63,16 +62,13 @@ export default async function DashboardPage() {
     ]);
 
     return (
-      <>
-        <DisclaimerPopup />
-        <Suspense fallback={<div>Cargando panel de control...</div>}>
-          <DashboardContent 
-            session={session}
-            latestPosts={latestPosts as LatestPost[]}
-            totalPosts={totalPosts}
-          />
-        </Suspense>
-      </>
+      <Suspense fallback={<div>Cargando panel de control...</div>}>
+        <DashboardContent
+          session={session}
+          latestPosts={latestPosts as LatestPost[]}
+          totalPosts={totalPosts}
+        />
+      </Suspense>
     );
 
   } catch (error) {
