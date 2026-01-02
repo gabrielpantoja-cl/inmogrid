@@ -18,9 +18,7 @@ const DOC_PATH_MAP: Record<string, string> = {
   'autenticacion': '03-arquitectura/autenticacion',
   'base-datos': '03-arquitectura/base-datos',
   'estructura-proyecto': '03-arquitectura/estructura-proyecto',
-  'api-publica': '04-api/api-publica',
-  'integraciones': '04-api/integraciones',
-  'referenciales': '05-modulos/referenciales',
+  // Removed legacy docs: 'api-publica', 'integraciones', 'referenciales'
   'estadisticas-avanzadas': '05-modulos/estadisticas-avanzadas',
   'mapa-interactivo': '05-modulos/mapa-interactivo',
   'chatbot': '05-modulos/chatbot',

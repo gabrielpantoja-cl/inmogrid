@@ -34,21 +34,13 @@ const DOCS_STRUCTURE: DocItem[] = [
       { id: 'estructura-proyecto', title: 'Estructura del Proyecto', path: '03-arquitectura/estructura-proyecto' }
     ]
   },
-  {
-    id: 'api',
-    title: '🔌 API',
-    path: '04-api',
-    children: [
-      { id: 'api-publica', title: 'API Pública', path: '04-api/api-publica' },
-      { id: 'integraciones', title: 'Integraciones', path: '04-api/integraciones' }
-    ]
-  },
+  // Removed: API section (legacy docs api-publica, integraciones archived)
   {
     id: 'modulos',
     title: '📊 Módulos',
     path: '05-modulos',
     children: [
-      { id: 'referenciales', title: 'Referenciales', path: '05-modulos/referenciales' },
+      // Removed: 'referenciales' (archived to legacy-docs)
       { id: 'estadisticas-avanzadas', title: 'Estadísticas Avanzadas', path: '05-modulos/estadisticas-avanzadas' },
       { id: 'mapa-interactivo', title: 'Mapa Interactivo', path: '05-modulos/mapa-interactivo' },
       { id: 'chatbot', title: 'Chatbot', path: '05-modulos/chatbot' }
