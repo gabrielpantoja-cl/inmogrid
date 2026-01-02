@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
         {/* Columna 1: Botón/Enlace a inicio */}
         <div className="flex justify-center md:justify-start">
           <Link href="/" className="text-lg font-semibold text-blue-700 hover:text-blue-900 transition-colors">
-            referenciales.cl
+            degux.cl
           </Link>
         </div>
 
