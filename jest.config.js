@@ -15,7 +15,7 @@ const customJestConfig = {
     '^next/image$': '<rootDir>/__mocks__/next/image.tsx',
   },
   testMatch: [
-    "**/__tests__/**/*.[jt]s?(x)",
+    "**/__tests__/**/*.(spec|test).[jt]s?(x)",
     "**/?(*.)+(spec|test).[jt]s?(x)"
   ],
   testPathIgnorePatterns: [
@@ -23,6 +23,9 @@ const customJestConfig = {
     '<rootDir>/node_modules/',
     '<rootDir>/coverage/',
     '<rootDir>/dist/',
+    '<rootDir>/__tests__/__helpers__/',
+    '<rootDir>/__tests__/__mocks__/',
+    '<rootDir>/__tests__/config/',
   ],
   coverageDirectory: '<rootDir>/coverage/',
   collectCoverage: false, // Cambiar a true cuando los tests funcionen
