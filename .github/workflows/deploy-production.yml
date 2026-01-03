@@ -15,23 +15,32 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      # ============================================
+      # OPTIMIZACIÓN: Setup Node.js 22 con cache
+      # ============================================
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
           cache: 'npm'
 
+      # ============================================
+      # OPTIMIZACIÓN: Solo instalar deps para tests
+      # (build se hace en Docker, no aquí)
+      # ============================================
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline
 
+      # ============================================
+      # Tests (si fallan, no deployar)
+      # ============================================
       - name: Run tests
-        run: npm run test || echo "Tests not configured yet"
+        run: npm run test
+        continue-on-error: false
 
-      - name: Build application (verify build works)
-        run: npm run build
-        env:
-          SKIP_ENV_VALIDATION: true
-
+      # ============================================
+      # DEPLOY: Build y deploy en VPS con Docker
+      # ============================================
       - name: Deploy to VPS via Docker
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -40,7 +49,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            echo "🚀 Starting Docker deployment for degux.cl"
+            echo "🚀 Starting optimized Docker deployment for degux.cl"
 
             # Navigate to app directory
             cd /home/gabriel/degux.cl
@@ -49,7 +58,7 @@ jobs:
             echo "📥 Pulling latest code..."
             git pull origin main
 
-            # Clean PM2 if it exists (installed by error)
+            # Clean PM2 if it exists (should not exist)
             if command -v pm2 &> /dev/null; then
               echo "🧹 Cleaning up PM2 (not needed with Docker)..."
               pm2 delete degux-app 2>/dev/null || true
@@ -64,21 +73,23 @@ jobs:
             docker stop degux-web 2>/dev/null || true
             docker rm degux-web 2>/dev/null || true
 
-            # Rebuild Docker image WITHOUT cache (ensures latest code)
-            echo "🏗️  Building Docker image (no cache)..."
-            docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml build --no-cache degux-web
+            # ============================================
+            # OPTIMIZACIÓN: Build CON cache (mucho más rápido)
+            # ============================================
+            echo "🏗️  Building Docker image (with cache optimization)..."
+            docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml build degux-web
 
             # Start new container
             echo "▶️  Starting new container..."
             docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
 
-            # Clean up old images
-            echo "🧹 Cleaning up old images..."
+            # Clean up old/dangling images only (keep cached layers)
+            echo "🧹 Cleaning up dangling images..."
             docker image prune -f
 
             # Wait for container to be ready
             echo "⏳ Waiting for container to be ready..."
-            sleep 15
+            sleep 20
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.0.3

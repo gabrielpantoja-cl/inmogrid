@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // ============================================
+  // PRODUCTION CONFIGURATION
+  // ============================================
+
+  // Output standalone mode for optimized Docker builds
+  // Reduces image size by ~80% (only includes necessary dependencies)
+  output: 'standalone',
+
   // Configuración de imágenes para optimización
   images: {
     // Permitir optimización de imágenes locales y externas
