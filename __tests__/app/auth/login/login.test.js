@@ -1,9 +1,9 @@
 import { screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import HomePage from '../../../../app/page';
-import { TEST_IDS, ROUTES } from '../../__helpers__/constants';
-import { renderWithRouter } from '../../__helpers__/test-utils';
+import HomePage from '@/app/page';
+import { TEST_IDS, ROUTES } from '../../../__helpers__/constants';
+import { renderWithRouter } from '../../../__helpers__/test-utils';
 
 // Constantes para tests
 const TEST_VALUES = {
