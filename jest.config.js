@@ -26,6 +26,7 @@ const customJestConfig = {
     '<rootDir>/__tests__/__helpers__/',
     '<rootDir>/__tests__/__mocks__/',
     '<rootDir>/__tests__/config/',
+    '<rootDir>/__tests__/e2e/',  // Playwright tests (run with 'npm run test:e2e')
   ],
   coverageDirectory: '<rootDir>/coverage/',
   collectCoverage: false, // Cambiar a true cuando los tests funcionen
