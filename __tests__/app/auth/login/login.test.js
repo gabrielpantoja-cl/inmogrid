@@ -1,9 +1,8 @@
-import { screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import HomePage from '@/app/page';
 import { TEST_IDS, ROUTES } from '../../../__helpers__/constants';
-import { renderWithRouter } from '../../../__helpers__/test-utils';
 
 // Constantes para tests
 const TEST_VALUES = {
@@ -48,7 +47,7 @@ describe('Página de Login', () => {
 
   describe('Renderizado inicial', () => {
     it('debe mostrar elementos principales correctamente', () => {
-      renderWithRouter(<HomePage />);
+      render(<HomePage />);
       
       expect(screen.getByRole('heading', { name: /bienvenido/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: TEST_VALUES.BUTTON_TEXT })).toBeInTheDocument();
@@ -56,7 +55,7 @@ describe('Página de Login', () => {
     });
 
     it('debe tener el botón deshabilitado inicialmente', () => {
-      renderWithRouter(<HomePage />);
+      render(<HomePage />);
       
       const loginButton = screen.getByRole('button', { name: TEST_VALUES.BUTTON_TEXT });
       expect(loginButton).toBeDisabled();
@@ -65,7 +64,7 @@ describe('Página de Login', () => {
 
   describe('Interacciones del usuario', () => {
     it('debe habilitar el botón cuando se aceptan los términos', () => {
-      renderWithRouter(<HomePage />);
+      render(<HomePage />);
       
       const termsCheckbox = screen.getByRole('checkbox', { name: TEST_VALUES.TERMS_TEXT });
       const loginButton = screen.getByRole('button', { name: TEST_VALUES.BUTTON_TEXT });
@@ -76,7 +75,7 @@ describe('Página de Login', () => {
 
     it('debe mostrar spinner durante la autenticación', async () => {
       signIn.mockImplementationOnce(() => new Promise(resolve => setTimeout(resolve, 100)));
-      renderWithRouter(<HomePage />);
+      render(<HomePage />);
       
       const termsCheckbox = screen.getByRole('checkbox', { name: TEST_VALUES.TERMS_TEXT });
       const loginButton = screen.getByRole('button', { name: TEST_VALUES.BUTTON_TEXT });
@@ -91,7 +90,7 @@ describe('Página de Login', () => {
   describe('Flujos de autenticación', () => {
     it('debe manejar autenticación exitosa', async () => {
       signIn.mockResolvedValueOnce({ ok: true, error: null });
-      renderWithRouter(<HomePage />);
+      render(<HomePage />);
       
       const termsCheckbox = screen.getByRole('checkbox', { name: TEST_VALUES.TERMS_TEXT });
       const loginButton = screen.getByRole('button', { name: TEST_VALUES.BUTTON_TEXT });
@@ -112,7 +111,7 @@ describe('Página de Login', () => {
       const errorMessage = 'Error de autenticación';
       signIn.mockRejectedValueOnce(new Error(errorMessage));
       
-      renderWithRouter(<HomePage />);
+      render(<HomePage />);
       
       const termsCheckbox = screen.getByRole('checkbox', { name: TEST_VALUES.TERMS_TEXT });
       const loginButton = screen.getByRole('button', { name: TEST_VALUES.BUTTON_TEXT });
@@ -129,7 +128,7 @@ describe('Página de Login', () => {
     it('debe manejar errores de red', async () => {
       signIn.mockRejectedValueOnce(new Error(TEST_VALUES.NETWORK_ERROR));
       
-      renderWithRouter(<HomePage />);
+      render(<HomePage />);
       
       const termsCheckbox = screen.getByRole('checkbox', { name: TEST_VALUES.TERMS_TEXT });
       const loginButton = screen.getByRole('button', { name: TEST_VALUES.BUTTON_TEXT });
@@ -148,7 +147,7 @@ describe('Página de Login', () => {
     it('debe limpiar errores al reintentar login', async () => {
       signIn.mockRejectedValueOnce(new Error(TEST_VALUES.AUTH_ERROR));
       
-      renderWithRouter(<HomePage />);
+      render(<HomePage />);
       
       const termsCheckbox = screen.getByRole('checkbox', { name: TEST_VALUES.TERMS_TEXT });
       const loginButton = screen.getByRole('button', { name: TEST_VALUES.BUTTON_TEXT });
