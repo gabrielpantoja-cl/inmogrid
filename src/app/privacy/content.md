@@ -51,7 +51,7 @@ Conforme a la Ley 19.628 y la Ley 21.719 de Proteccion de Datos Personales, tien
 - **Cancelacion**: solicitar la eliminacion de tus datos.
 - **Oposicion**: oponerte al tratamiento de tus datos en casos especificos.
 
-Para ejercer estos derechos, contactanos por WhatsApp: [+56 9 3176 9472](https://wa.me/56931769472). Plazo de respuesta: 30 dias habiles.
+Para ejercer estos derechos, contactanos a traves de nuestras [Discusiones en GitHub](https://github.com/gabrielpantoja-cl/degux.cl/discussions). Plazo de respuesta: 30 dias habiles.
 
 ## 6. Seguridad
 
@@ -77,4 +77,4 @@ Esta politica puede actualizarse para reflejar cambios en la legislacion o en nu
 
 ---
 
-Contacto: [+56 9 3176 9472](https://wa.me/56931769472) (WhatsApp)
+Contacto: [Discusiones en GitHub](https://github.com/gabrielpantoja-cl/degux.cl/discussions)

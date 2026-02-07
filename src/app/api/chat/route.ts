@@ -17,7 +17,7 @@ const faqs: FAQs = {
   "¿De qué se trata degux.cl?": "degux.cl es una plataforma colaborativa para crear tu marca personal. Publica contenido, comparte tus plantas favoritas, construye colecciones y conecta con una comunidad de creadores y profesionales.",
   "¿Cómo puedo registrarme?": "Al iniciar sesión con Google te registras automáticamente en degux.cl y puedes comenzar a crear tu perfil profesional.",
   "¿Cuáles son los servicios que ofrecen?": "Ofrecemos perfiles públicos personalizables, publicación de notas/blog, catálogo de plantas, colecciones de contenido y networking profesional.",
-  "¿Cuál es el correo o teléfono de contacto?": "Puedes contactarnos vía WhatsApp: +56 9 3176 9472 o a través de GitHub Discussions."
+  "¿Cuál es el canal de contacto?": "Puedes contactarnos a traves de nuestras Discusiones en GitHub: https://github.com/gabrielpantoja-cl/degux.cl/discussions"
 };
 
 // Prompt inicial para orientar al asistente
