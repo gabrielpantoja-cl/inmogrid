@@ -2,8 +2,8 @@
 import React from 'react';
 import Link from 'next/link'; // Para enlaces internos (Términos, Privacidad)
 import WhatsAppIcon from '@/components/ui/common/WhatsAppIcon'; // Usa alias de ruta si está configurado
-// Opcional: Importa un icono de GitHub si tienes uno disponible y quieres usarlo
-// import { FaGithub } from 'react-icons/fa';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const nextVersion = require('next/package.json').version;
 
 const Footer: React.FC = () => {
   // --- URLs (Asegúrate que sean correctas) ---
@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
             Privacidad
           </Link>
           <span className="text-xs text-gray-400 mt-1">
-            Next.js {process.env.NEXT_PUBLIC_NEXTJS_VERSION || '15.5.10'}
+            Next.js {nextVersion}
           </span>
         </div>
       </div>
