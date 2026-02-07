@@ -148,7 +148,7 @@ nginx-proxy (Docker) :80, :443 ← Reverse proxy + SSL
 
 #### Local Development Architecture
 
-For local development, a simplified setup is defined in `docker-compose.local.yml`:
+For local development, a simplified setup is defined in `docker/docker-compose.local.yml`:
 - **degux-postgres-local**: A self-contained PostgreSQL container for the application database. It maps port `5432` on the host to the container's port `5432`.
 - **degux-adminer-local**: An optional Adminer container for database management, accessible on host port `8080`.
 
@@ -246,7 +246,7 @@ import { authOptions } from '../../../lib/auth.config'
 **Database Connection Examples:**
 ```env
 # Local Development (connects to 'degux-postgres-local' container)
-# Credentials from docker-compose.local.yml
+# Credentials from docker/docker-compose.local.yml
 POSTGRES_PRISMA_URL="postgresql://degux_user:degux_local_password@localhost:5432/degux_dev?schema=public"
 
 # VPS PostgreSQL dedicated (production/staging)
@@ -422,7 +422,7 @@ This project uses 7 specialized Claude Code agents for development:
 # Verify database connection with Prisma
 npx prisma studio
 
-# Check Local Docker DB Status (if running from docker-compose.local.yml)
+# Check Local Docker DB Status (if running from docker/docker-compose.local.yml)
 docker ps | grep degux-postgres-local
 
 # Connect to Local Docker DB
