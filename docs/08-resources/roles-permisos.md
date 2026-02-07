@@ -22,7 +22,7 @@ WHERE email IN ('admin-email-1@domain.com', 'admin-email-2@domain.com');
 SELECT id, email, role FROM "User" WHERE role = 'admin';
 ```
 
-See `sql/assign_admin_roles.sql` for the complete script.
+See `scripts/sql/assign_admin_roles.sql` for the complete script.
 
 ## Implementation Details
 
@@ -154,7 +154,7 @@ UPDATE "User" SET role = 'user' WHERE email = 'former-admin@domain.com';
 ```
 
 ### Verification Scripts
-Use `sql/verify_roles.sql` to check current role assignments and verify system state.
+Use `scripts/sql/verify_roles.sql` to check current role assignments and verify system state.
 
 ## Technical Notes
 
@@ -176,5 +176,5 @@ Use `sql/verify_roles.sql` to check current role assignments and verify system s
 
 ## SQL Scripts
 
-- ✅ `sql/assign_admin_roles.sql` - Set admin roles
-- ✅ `sql/verify_roles.sql` - Verify role assignments
+- ✅ `scripts/sql/assign_admin_roles.sql` - Set admin roles
+- ✅ `scripts/sql/verify_roles.sql` - Verify role assignments
