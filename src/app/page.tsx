@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { signIn, signOut } from 'next-auth/react';
 import { useAuth } from '@/hooks/useAuth';
 import AcmeLogo from '../components/ui/common/AcmeLogo';
-import OptimizedHeroImage from '../components/ui/common/OptimizedHeroImage';
+import Image from 'next/image';
 import { lusitana } from '../lib/styles/fonts';
 import Link from 'next/link';
 
@@ -194,43 +194,21 @@ export default function Page() {
           </div>
         </div>
         
-        {/* Panel de Imagen Optimizado */}
+        {/* Panel de Imagen */}
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          <div className="relative w-full max-w-4xl">
-            {/* Versión Desktop */}
-            <div className="hidden md:block">
-              <OptimizedHeroImage 
-                isMobile={false}
-                priority={true}
-                className=""
-              />
-            </div>
-            
-            {/* Versión Mobile */}
-            <div className="block md:hidden">
-              <OptimizedHeroImage 
-                isMobile={true}
-                priority={true}
-                className=""
-              />
-            </div>
+          <div className="relative w-full max-w-4xl aspect-[16/10] rounded-lg overflow-hidden shadow-2xl border border-gray-200">
+            <Image
+              src="/images/hero-alternatives/cat-plants-02.jpg"
+              alt="degux.cl - ecosistema digital colaborativo"
+              fill
+              priority
+              quality={80}
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, 60vw"
+            />
           </div>
         </div>
       </div>
-      
-      
-
-      {/* CSS adicional para el shimmer effect */}
-      <style jsx>{`
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      `}</style>
     </main>
   );
 }
