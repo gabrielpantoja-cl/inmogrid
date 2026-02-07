@@ -51,7 +51,7 @@ Conforme a la Ley 19.628 y la Ley 21.719 de Proteccion de Datos Personales, tien
 - **Cancelacion**: solicitar la eliminacion de tus datos.
 - **Oposicion**: oponerte al tratamiento de tus datos en casos especificos.
 
-Para ejercer estos derechos, contactanos a traves de nuestras [Discusiones en GitHub](https://github.com/gabrielpantoja-cl/degux.cl/discussions). Plazo de respuesta: 30 dias habiles.
+Para ejercer estos derechos, contactanos a traves de [degux.cl/networking](https://degux.cl/networking). Plazo de respuesta: 30 dias habiles.
 
 ## 6. Seguridad
 
@@ -77,4 +77,4 @@ Esta politica puede actualizarse para reflejar cambios en la legislacion o en nu
 
 ---
 
-Contacto: [Discusiones en GitHub](https://github.com/gabrielpantoja-cl/degux.cl/discussions)
+Contacto: [degux.cl/networking](https://degux.cl/networking)

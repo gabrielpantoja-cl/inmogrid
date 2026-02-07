@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
 
         {/* Columna 2: Enlaces de Contacto/Comunidad */}
         <div className="flex flex-col items-center gap-y-5 md:flex-row md:items-start md:justify-center md:gap-x-10">
-          {/* Bloque GitHub Discussions */}
+          {/* TODO: GitHub Discussions - habilitar cuando esté listo
           <div className="text-center md:text-left">
             <a
               href={githubDiscussionsUrl}
@@ -34,13 +34,11 @@ const Footer: React.FC = () => {
               title="GitHub Discussions (Consultas públicas/técnicas)"
               className="text-sm font-medium text-gray-700 hover:text-black underline inline-flex items-center"
             >
-              {/* <FaGithub className="h-4 w-4 mr-1" /> Opcional Icono */}
                <span>Discusiones GitHub</span>
             </a>
-            {/* Descripción corta */}
             <p className="text-xs text-gray-500 mt-1">Preguntas técnicas y comunidad</p>
           </div>
-
+          */}
         </div>
 
         {/* Columna 3: Enlaces Legales + version */}
