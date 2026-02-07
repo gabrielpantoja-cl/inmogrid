@@ -26,10 +26,12 @@ test-results/
 .DS_Store
 *.pem
 
-# Screenshots (capturas sueltas en raiz del proyecto)
-/degux-*.png
-/degux-*.jpeg
-/Captura de pantalla*
+# Screenshots
+*.png
+*.jpeg
+!public/**/*.png
+!public/**/*.jpeg
+!docs/**/*.png
 
 # debug
 npm-debug.log*
@@ -52,9 +54,8 @@ yarn.lock
 next-env.d.ts     
 
 
-# Ignore scripts folder
-# /scripts/         <-- Ojo: Esto ignora TODA la carpeta scripts. Si quieres rastrear scripts específicos dentro, esta línea es demasiado general.
-.codegpt          
+# IDE/tools
+.codegpt
 
 # draw.io files
 *.drawio          
