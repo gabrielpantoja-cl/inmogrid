@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Columna 3: Enlaces Legales agrupados en columna */}
+        {/* Columna 3: Enlaces Legales + version */}
         <div className="flex flex-col items-center md:items-end justify-center gap-y-1 text-center md:text-right">
           <Link href="/terms" className="text-sm text-gray-600 hover:text-gray-900">
             Términos
@@ -72,6 +72,9 @@ const Footer: React.FC = () => {
           <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900">
             Privacidad
           </Link>
+          <span className="text-xs text-gray-400 mt-1">
+            Next.js {process.env.NEXT_PUBLIC_NEXTJS_VERSION || '15.5.10'}
+          </span>
         </div>
       </div>
     </footer>
