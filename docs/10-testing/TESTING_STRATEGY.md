@@ -215,7 +215,7 @@ git commit -m "test: remove low-value tests that probe third-party internals
 - Remove 2 outdated dashboard rendering tests
 - Remove 5 OAuth flow tests that test PrismaAdapter behavior
 - Keep 42 high-value tests (100% passing)
-- See docs/testing/TEST_FAILURE_ANALYSIS.md for rationale"
+- See docs/10-testing/TEST_FAILURE_ANALYSIS.md for rationale"
 ```
 
 ---
