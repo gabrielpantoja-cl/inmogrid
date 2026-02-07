@@ -17,7 +17,7 @@ fi
 
 # Levantar contenedores
 echo "📦 Levantando contenedores..."
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Esperar a que PostgreSQL esté listo
 echo "⏳ Esperando a que PostgreSQL esté listo..."
@@ -28,7 +28,7 @@ if docker ps | grep -q "degux-postgres-local"; then
     echo "✅ PostgreSQL local está corriendo"
 else
     echo "❌ Error: PostgreSQL no se inició correctamente"
-    docker compose -f docker-compose.local.yml logs postgres-local
+    docker compose -f docker/docker-compose.local.yml logs postgres-local
     exit 1
 fi
 
@@ -53,8 +53,8 @@ echo ""
 echo "🌐 Adminer (GUI): http://localhost:8080"
 echo ""
 echo "🔧 Comandos útiles:"
-echo "   - Ver estado: docker compose -f docker-compose.local.yml ps"
-echo "   - Ver logs: docker compose -f docker-compose.local.yml logs -f"
-echo "   - Detener: docker compose -f docker-compose.local.yml down"
+echo "   - Ver estado: docker compose -f docker/docker-compose.local.yml ps"
+echo "   - Ver logs: docker compose -f docker/docker-compose.local.yml logs -f"
+echo "   - Detener: docker compose -f docker/docker-compose.local.yml down"
 echo "   - Prisma Studio: npx prisma studio"
 echo ""
