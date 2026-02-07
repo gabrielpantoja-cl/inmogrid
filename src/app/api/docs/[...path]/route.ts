@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { resolve } from 'path';
 
 export async function GET(
   request: NextRequest,
@@ -8,11 +8,22 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await params;
-    const docPath = resolvedParams.path.join('/');
-    const filePath = join(process.cwd(), 'docs', `${docPath}.md`);
-    
+
+    // Reject path segments that attempt directory traversal
+    if (resolvedParams.path.some(segment => segment === '..' || segment === '.' || segment.includes('\0'))) {
+      return new NextResponse('Ruta no permitida', { status: 400 });
+    }
+
+    const docsDir = resolve(process.cwd(), 'docs');
+    const filePath = resolve(docsDir, `${resolvedParams.path.join('/')}.md`);
+
+    // Ensure resolved path stays within docs directory
+    if (!filePath.startsWith(docsDir + '/')) {
+      return new NextResponse('Ruta no permitida', { status: 400 });
+    }
+
     const content = await readFile(filePath, 'utf-8');
-    
+
     return new NextResponse(content, {
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
