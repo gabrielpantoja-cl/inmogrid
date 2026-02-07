@@ -44,5 +44,3 @@ Estos terminos pueden actualizarse. El uso continuado de la plataforma tras una 
 Estos terminos se rigen por las leyes de la Republica de Chile. Cualquier controversia sera sometida a los tribunales competentes de Chile.
 
 ---
-
-Contacto: [degux.cl/networking](https://degux.cl/networking)
