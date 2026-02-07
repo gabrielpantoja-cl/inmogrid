@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/og-image.png',
+        url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'degux.cl - Tu lienzo digital para crear y conectar',
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'degux.cl - Tu lienzo digital para crear y conectar',
     description: 'Construye tu perfil, publica tu trabajo y conecta con una comunidad de creadores y profesionales.',
-    images: ['/images/twitter-image.png'],
+    images: ['/images/og-image.jpg'],
   },
   robots: {
     index: true,
