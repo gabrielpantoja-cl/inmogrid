@@ -160,7 +160,7 @@ Las siguientes referencias a "referenciales" permanecen **solo con propósito hi
 - `SCRIPTS_CLEANUP_ANALYSIS.md` - Análisis de scripts eliminados
 - `archive/legacy-docs/` - Documentación archivada del proyecto anterior
 - `docs/03-arquitectura/GOOGLE_OAUTH_DIAGNOSTICS_RESOLVED.md` - Referencias históricas en logs
-- `docs/testing/` - Referencias en reportes de tests antiguos
+- `docs/10-testing/` - Referencias en reportes de tests antiguos
 
 **Ninguna de estas referencias afecta el código en producción.**
 
