@@ -5,11 +5,12 @@ import { Toaster } from 'react-hot-toast';
 import SessionProviderClient from '@/app/dashboard/SessionProviderClient';
 import { CookieConsentProvider } from '@/components/ui/legal/CookieConsentProvider';
 import CookieConsentBanner from '@/components/ui/legal/CookieConsentBanner';
-import { 
-  ConditionalGoogleAnalytics, 
-  ConditionalVercelAnalytics, 
-  ConditionalSpeedInsights 
+import {
+  ConditionalGoogleAnalytics,
+  ConditionalVercelAnalytics,
+  ConditionalSpeedInsights
 } from '@/components/ui/legal/ConditionalAnalytics';
+import Footer from '@/components/ui/common/Footer';
 
 // Configuración del Viewport
 export const viewport: Viewport = {
@@ -135,6 +136,7 @@ export default function RootLayout({
         <CookieConsentProvider>
           <SessionProviderClient>
             {children}
+            <Footer />
           </SessionProviderClient>
 
           {/* Componente para mostrar notificaciones (react-hot-toast) */}

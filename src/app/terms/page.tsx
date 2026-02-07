@@ -1,5 +1,4 @@
 /* app/terms/page.tsx */
-import Footer from '@/components/ui/common/Footer';
 import TimeStamp from '@/components/ui/common/TimeStamp';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -31,7 +30,6 @@ export default async function TermsPage() {
   dangerouslySetInnerHTML={{ __html: processedContent.toString() }}
         />
 
-        <Footer />
       </div>
     </main>
   );

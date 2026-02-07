@@ -1,9 +1,8 @@
 // Ubicación: components/ui/common/Footer.tsx
 import React from 'react';
-import Link from 'next/link'; // Para enlaces internos (Términos, Privacidad)
-import WhatsAppIcon from '@/components/ui/common/WhatsAppIcon'; // Usa alias de ruta si está configurado
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const nextVersion = require('next/package.json').version;
+import Link from 'next/link';
+import WhatsAppIcon from '@/components/ui/common/WhatsAppIcon';
+import { version as nextVersion } from 'next/package.json';
 
 const Footer: React.FC = () => {
   // --- URLs (Asegúrate que sean correctas) ---
