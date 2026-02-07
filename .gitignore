@@ -12,6 +12,9 @@ playwright/.auth/
 test-results/
 .env.test.local
 
+# Playwright MCP (screenshots, console logs)
+.playwright-mcp/
+
 # next.js
 /.next/
 /out/
@@ -22,6 +25,11 @@ test-results/
 # misc
 .DS_Store
 *.pem
+
+# Screenshots (capturas sueltas en raiz del proyecto)
+/degux-*.png
+/degux-*.jpeg
+/Captura de pantalla*
 
 # debug
 npm-debug.log*
