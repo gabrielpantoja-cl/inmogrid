@@ -1,7 +1,6 @@
 // Ubicación: components/ui/common/Footer.tsx
 import React from 'react';
 import Link from 'next/link';
-import WhatsAppIcon from '@/components/ui/common/WhatsAppIcon';
 import { version as nextVersion } from 'next/package.json';
 import { version as reactVersion } from 'react/package.json';
 
@@ -9,7 +8,6 @@ const Footer: React.FC = () => {
   // --- URLs (Asegúrate que sean correctas) ---
   const githubRepoUrl = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/degux.cl';
   const githubDiscussionsUrl = `${githubRepoUrl}/discussions`;
-  const whatsappUrl = 'https://wa.me/56931769472'; // Tu número dedicado
   // --- Fin URLs ---
 
   return (
@@ -43,25 +41,6 @@ const Footer: React.FC = () => {
             <p className="text-xs text-gray-500 mt-1">Preguntas técnicas y comunidad</p>
           </div>
 
-          {/* Bloque WhatsApp Link */}
-          <div className="text-center md:text-left">
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="WhatsApp (Consultas rápidas/directas)" // Tooltip útil
-              // Estilos mantenidos: green color/hover
-              className="text-sm font-medium text-green-600 hover:text-green-800 inline-flex items-center"
-            >
-              {/* Span para tamaño del icono */}
-              <span className="inline-block h-4 w-4">
-                <WhatsAppIcon />
-              </span>
-              <span className="ml-1">WhatsApp</span>
-            </a>
-             {/* Descripción corta */}
-            <p className="text-xs text-gray-500 mt-1">Consultas rápidas y directas</p>
-          </div>
         </div>
 
         {/* Columna 3: Enlaces Legales + version */}
