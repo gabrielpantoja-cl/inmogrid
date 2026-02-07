@@ -1,7 +1,7 @@
 ---
 name: database-manager-agent
 description: Specialized Database Administrator for degux.cl PostgreSQL + PostGIS
-tools: "*"
+tools: Read, Write, Edit, Glob, Grep, Bash
 color: purple
 ---
 

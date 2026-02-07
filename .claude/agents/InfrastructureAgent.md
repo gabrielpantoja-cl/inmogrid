@@ -1,7 +1,7 @@
 ---
 name: infrastructure-agent
 description: VPS Infrastructure Management and Production Deployment for degux.cl
-tools: "*"
+tools: Read, Write, Edit, Glob, Grep, Bash
 color: cyan
 ---
 

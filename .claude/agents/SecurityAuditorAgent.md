@@ -1,7 +1,8 @@
 ---
 name: security-auditor-agent
 description: Specialized Security Auditor for degux.cl
-tools: "*"
+tools: Read, Glob, Grep, Bash, Write, WebSearch, WebFetch
+disallowedTools: Edit, NotebookEdit
 color: red
 ---
 
