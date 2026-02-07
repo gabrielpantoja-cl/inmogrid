@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import WhatsAppIcon from '@/components/ui/common/WhatsAppIcon';
 import { version as nextVersion } from 'next/package.json';
+import { version as reactVersion } from 'react/package.json';
 
 const Footer: React.FC = () => {
   // --- URLs (Asegúrate que sean correctas) ---
@@ -71,8 +72,8 @@ const Footer: React.FC = () => {
           <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900">
             Privacidad
           </Link>
-          <span className="text-xs text-gray-400 mt-1">
-            Next.js {nextVersion}
+          <span className="text-xs text-gray-400 mt-1 font-mono tracking-tight">
+            Next.js {nextVersion} &middot; React {reactVersion}
           </span>
         </div>
       </div>
