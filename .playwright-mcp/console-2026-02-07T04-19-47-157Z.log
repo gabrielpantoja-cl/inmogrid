@@ -1,4 +1,0 @@
-[    1356ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ https://degux.cl/api/auth/session:0
-[    1359ms] [ERROR] [next-auth][error][CLIENT_FETCH_ERROR] 
-https://next-auth.js.org/errors#client_fetch_error There is a problem with the server configuration. Check the server logs for more information. {error: Object, url: /api/auth/session, message: There is a problem with the server configuration. Check the server logs for more information.} @ https://degux.cl/_next/static/chunks/6489-d9b8155f09111a57.js:0
-[    1664ms] [ERROR] Failed to load resource: the server responded with a status of 500 () @ https://degux.cl/api/auth/_log:0
