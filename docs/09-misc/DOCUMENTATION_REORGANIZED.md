@@ -44,7 +44,7 @@
 
 ---
 
-### 3. docs/08-ai-prompts/ ⭐ NUEVA CARPETA (2 archivos copiados)
+### 3. docs/08-resources/ ⭐ NUEVA CARPETA (2 archivos copiados)
 
 **Archivos de configuración AI**:
 - ✅ `CLAUDE.md` (copia de referencia)
@@ -57,7 +57,7 @@
 
 **Nota**: Los archivos originales permanecen en raíz (usados por las AIs)
 
-**README**: `docs/08-ai-prompts/README.md`
+**README**: `docs/08-resources/README.md`
 
 ---
 
@@ -97,7 +97,7 @@ docs/
 │   ├── LEGACY_CLEANUP_2026-01-02.md         ← MOVIDO
 │   ├── SCRIPTS_CLEANUP_ANALYSIS.md          ← MOVIDO
 │   └── INCIDENT_SUMMARY_2026-01-01.md       ← MOVIDO
-├── 08-ai-prompts/ ⭐ NUEVO
+├── 08-resources/ ⭐ NUEVO
 │   ├── README.md
 │   ├── CLAUDE.md                            ← COPIADO
 │   └── GEMINI.md                            ← COPIADO
@@ -171,7 +171,7 @@ Solo archivos esenciales permanecen en raíz:
 
 **AI Configuration**:
 - `CLAUDE.md` (raíz) - Config principal
-- `docs/08-ai-prompts/README.md` - Guía de uso
+- `docs/08-resources/README.md` - Guía de uso
 
 ---
 
@@ -199,7 +199,7 @@ ls docs/
 # Ir a categoría específica
 cd docs/06-deployment/
 cd docs/07-maintenance/
-cd docs/08-ai-prompts/
+cd docs/08-resources/
 
 # Leer índice de categoría
 cat docs/06-deployment/README.md

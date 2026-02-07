@@ -323,9 +323,9 @@ EXPOSE 3000                # ✅ Puerto
 CMD ["npm", "start"]       # ✅ Comando
 ```
 
-### ✅ docker-compose.local.yml
+### ✅ docker/docker-compose.local.yml
 
-**Archivo: `docker-compose.local.yml`**
+**Archivo: `docker/docker-compose.local.yml`**
 ```yaml
 version: '3.8'
 
@@ -349,16 +349,16 @@ services:
 ### ✅ Comandos Docker
 ```bash
 # Iniciar servicios
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Detener servicios
-docker compose -f docker-compose.local.yml down
+docker compose -f docker/docker-compose.local.yml down
 
 # Ver logs
-docker compose -f docker-compose.local.yml logs -f postgres-local
+docker compose -f docker/docker-compose.local.yml logs -f postgres-local
 
 # Ejecutar comandos en contenedor
-docker compose -f docker-compose.local.yml exec postgres-local psql -U degux_user -d degux_dev
+docker compose -f docker/docker-compose.local.yml exec postgres-local psql -U degux_user -d degux_dev
 ```
 
 ### ✅ Volúmenes

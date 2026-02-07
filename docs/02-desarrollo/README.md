@@ -94,7 +94,7 @@ npm run test:e2e         # Playwright E2E
 
 # Database
 npm run prisma:studio    # Gestor visual
-docker compose -f docker-compose.local.yml up -d  # Iniciar BD
+docker compose -f docker/docker-compose.local.yml up -d  # Iniciar BD
 ```
 
 ---

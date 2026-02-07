@@ -11,7 +11,7 @@ Archivos de configuración para asistentes de IA (Claude, Gemini, etc.).
 
 **Ubicaciones**:
 - `CLAUDE.md` (raíz) - Archivo principal usado por Claude Code CLI
-- `docs/08-ai-prompts/CLAUDE.md` - Copia de referencia
+- `docs/08-resources/CLAUDE.md` - Copia de referencia
 
 **Contenido**:
 - Descripción del proyecto
@@ -34,7 +34,7 @@ Archivos de configuración para asistentes de IA (Claude, Gemini, etc.).
 
 **Ubicaciones**:
 - `GEMINI.md` (raíz) - Archivo principal
-- `docs/08-ai-prompts/GEMINI.md` - Copia de referencia
+- `docs/08-resources/GEMINI.md` - Copia de referencia
 
 **Contenido**:
 - Configuración específica de Gemini
@@ -93,8 +93,8 @@ Archivos de configuración para asistentes de IA (Claude, Gemini, etc.).
 - `GEMINI.md` - Usado por Gemini
 
 **Copias de referencia** (este folder):
-- `docs/08-ai-prompts/CLAUDE.md` - Referencia/backup
-- `docs/08-ai-prompts/GEMINI.md` - Referencia/backup
+- `docs/08-resources/CLAUDE.md` - Referencia/backup
+- `docs/08-resources/GEMINI.md` - Referencia/backup
 
 **Recomendación**: Mantener archivos en raíz como fuente de verdad. Copias aquí son solo referencia.
 
@@ -120,7 +120,7 @@ Archivos de configuración para asistentes de IA (Claude, Gemini, etc.).
 - [ ] Actualizar comandos si hubo cambios
 - [ ] Actualizar arquitectura si cambió stack
 - [ ] Actualizar referencias a docs
-- [ ] Copiar a docs/08-ai-prompts/ (backup)
+- [ ] Copiar a docs/08-resources/ (backup)
 
 ### Cada Milestone:
 - [ ] Revisar que info esté actualizada

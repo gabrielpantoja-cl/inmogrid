@@ -267,7 +267,7 @@ docs/
 | Archivo | Propósito | Estado |
 |---------|----------|--------|
 | `Dockerfile` | Producción | ✅ Listo |
-| `docker-compose.local.yml` | Desarrollo local | ✅ Listo |
+| `docker/docker-compose.local.yml` | Desarrollo local | ✅ Listo |
 
 ### Base de Datos
 
@@ -384,7 +384,7 @@ degux.cl/
 - ✅ playwright.config.ts
 - ✅ prisma/schema.prisma (221 líneas)
 - ✅ Dockerfile
-- ✅ docker-compose.local.yml
+- ✅ docker/docker-compose.local.yml
 - ✅ .env.example (101 líneas)
 - ✅ .env.local.example (53 líneas)
 - ✅ .gitignore (68 líneas)

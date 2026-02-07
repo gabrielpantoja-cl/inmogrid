@@ -131,7 +131,7 @@ npm run test
 Production Env: Docker Compose on Digital Ocean.
 
 **DB Access:**
-*   **Local:** `localhost:5432` (via `docker-compose.local.yml`)
+*   **Local:** `localhost:5432` (via `docker/docker-compose.local.yml`)
 *   **Prod:** `VPS_IP_REDACTED:5433` (via SSH Tunnel strongly recommended).
 
 **Deployment:** Manual via `scripts/deploy-to-vps.sh` (currently).

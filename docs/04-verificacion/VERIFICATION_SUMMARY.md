@@ -136,7 +136,7 @@ degux-cl
 ✅ playwright.config.ts         - E2E
 ✅ prisma/schema.prisma         - Prisma (221 líneas)
 ✅ Dockerfile                   - Producción
-✅ docker-compose.local.yml     - Desarrollo
+✅ docker/docker-compose.local.yml     - Desarrollo
 ✅ .npmrc                        - npm config
 ✅ .nvmrc                        - Node version
 ✅ .gitignore                    - Git ignore
@@ -350,7 +350,7 @@ npm run test
 
 ### Paso 3: Base de Datos (2 min)
 ```powershell
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 ```
 
 ### Paso 4: Iniciar Desarrollo (1 min)
