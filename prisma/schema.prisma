@@ -8,7 +8,12 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// ============================================================
+// NEXTAUTH MODELS
+// ============================================================
+
 model Account {
+  id                String   @id
   userId            String
   type              String
   provider          String
@@ -22,49 +27,71 @@ model Account {
   session_state     String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  id                String   @id
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
-model AuditLog {
-  id        String   @id
-  userId    String
-  action    String
-  metadata  Json?
-  createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id])
+model Session {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model ChatMessage {
-  id        String      @id
-  userId    String
-  role      MessageRole
-  content   String
-  createdAt DateTime    @default(now())
-  User      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
 
-  @@index([userId, createdAt])
+  @@id([identifier, token])
 }
 
-model Collection {
-  id            String   @id
-  userId        String
-  name          String
-  slug          String   @unique
-  description   String?
-  coverImageUrl String?
-  items         Json     @default("[]")
-  isPublic      Boolean  @default(true)
-  featured      Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  User          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// ============================================================
+// USER
+// ============================================================
 
-  @@index([slug])
-  @@index([userId, isPublic])
+model User {
+  id                                      String               @id
+  name                                    String?
+  email                                   String               @unique
+  password                                String?
+  emailVerified                           DateTime?
+  image                                   String?
+  createdAt                               DateTime             @default(now())
+  updatedAt                               DateTime             @updatedAt
+  role                                    Role                 @default(user)
+  bio                                     String?
+  profession                              ProfessionType?
+  company                                 String?
+  phone                                   String?
+  region                                  String?
+  commune                                 String?
+  website                                 String?
+  linkedin                                String?
+  isPublicProfile                         Boolean              @default(true)
+  username                                String?              @unique
+  tagline                                 String?
+  coverImageUrl                           String?
+  location                                String?
+  identityTags                            String[]             @default([])
+  externalLinks                           Json?
+  customCss                               String?
+  Account                                 Account[]
+  AuditLog                                AuditLog[]
+  ChatMessage                             ChatMessage[]
+  Connection_Connection_receiverIdToUser  Connection[]         @relation("Connection_receiverIdToUser")
+  Connection_Connection_requesterIdToUser Connection[]         @relation("Connection_requesterIdToUser")
+  Post                                    Post[]
+  Session                                 Session[]
+  Event                                   Event[]
+  ProfessionalProfile                     ProfessionalProfile?
 }
+
+// ============================================================
+// COMMUNITY & NETWORKING
+// ============================================================
 
 model Connection {
   id                                String           @id
@@ -82,31 +109,9 @@ model Connection {
   @@index([requesterId, status])
 }
 
-model Plant {
-  id               String   @id
-  userId           String
-  name             String
-  slug             String   @unique
-  scientificName   String?
-  description      String?
-  careInstructions String?
-  imageUrls        String[] @default([])
-  mainImageUrl     String?
-  category         String?
-  difficulty       String?
-  sunlight         String?
-  watering         String?
-  origin           String?
-  isFavorite       Boolean  @default(false)
-  featured         Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  User             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([category])
-  @@index([slug])
-  @@index([userId, isFavorite])
-}
+// ============================================================
+// CONTENT
+// ============================================================
 
 model Post {
   id            String    @id
@@ -128,61 +133,108 @@ model Post {
   @@index([userId, published])
 }
 
+// ============================================================
+// EVENTS (Fase 0 MVP)
+// ============================================================
 
+model Event {
+  id              String        @id @default(cuid())
+  title           String
+  description     String
+  organizerName   String
+  organizerType   OrganizerType
+  eventType       EventType
+  startDate       DateTime
+  endDate         DateTime?
+  location        String?
+  isOnline        Boolean       @default(false)
+  onlineUrl       String?
+  coverImageUrl   String?
+  registrationUrl String?
+  isFree          Boolean       @default(true)
+  isCommercial    Boolean       @default(false)
+  isPaid          Boolean       @default(false)
+  price           Float?
+  status          EventStatus   @default(PENDING)
+  publishedAt     DateTime?
+  region          String?
+  commune         String?
+  userId          String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  User            User?         @relation(fields: [userId], references: [id])
 
-model Session {
-  id           String   @id
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([status, startDate])
+  @@index([region, status])
+  @@index([isCommercial, status])
 }
 
-model User {
-  id                                      String          @id
-  name                                    String?
-  email                                   String          @unique
-  password                                String?
-  emailVerified                           DateTime?
-  image                                   String?
-  createdAt                               DateTime        @default(now())
-  updatedAt                               DateTime        @updatedAt
-  role                                    Role            @default(user)
-  bio                                     String?
-  profession                              ProfessionType?
-  company                                 String?
-  phone                                   String?
-  region                                  String?
-  commune                                 String?
-  website                                 String?
-  linkedin                                String?
-  isPublicProfile                         Boolean         @default(true)
-  username                                String?         @unique
-  tagline                                 String?
-  coverImageUrl                           String?
-  location                                String?
-  identityTags                            String[]        @default([])
-  externalLinks                           Json?
-  customCss                               String?
-  Account                                 Account[]
-  AuditLog                                AuditLog[]
-  ChatMessage                             ChatMessage[]
-  Collection                              Collection[]
-  Connection_Connection_receiverIdToUser  Connection[]    @relation("Connection_receiverIdToUser")
-  Connection_Connection_requesterIdToUser Connection[]    @relation("Connection_requesterIdToUser")
-  Plant                                   Plant[]
-  Post                                    Post[]
-  Session                                 Session[]
+// ============================================================
+// PROFESSIONAL DIRECTORY (Fase 1)
+// ============================================================
+
+model ProfessionalProfile {
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  specialty       String[]  @default([])
+  certifications  String[]  @default([])
+  regions         String[]  @default([])
+  yearsExperience Int?
+  isVerified      Boolean   @default(false)
+  verifiedAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  User            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model VerificationToken {
-  identifier String   @unique
-  token      String
-  expires    DateTime
+// ============================================================
+// SYSTEM
+// ============================================================
 
-  @@id([identifier, token])
+model AuditLog {
+  id        String   @id
+  userId    String
+  action    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
 }
 
+model ChatMessage {
+  id        String      @id
+  userId    String
+  role      MessageRole
+  content   String
+  createdAt DateTime    @default(now())
+  User      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum Role {
+  user
+  admin
+  superadmin
+}
+
+enum ProfessionType {
+  TASADOR_PERITO
+  PERITO_JUDICIAL
+  CORREDOR_PROPIEDADES
+  ADMINISTRADOR_PROP
+  ABOGADO_INMOBILIARIO
+  ARQUITECTO
+  INGENIERO_CIVIL
+  ACADEMICO
+  FUNCIONARIO_PUBLICO
+  INVERSIONISTA
+  PROPIETARIO
+  OTRO
+}
 
 enum ConnectionStatus {
   pending
@@ -196,23 +248,25 @@ enum MessageRole {
   bot
 }
 
-enum ProfessionType {
-  CREADOR_CONTENIDO
-  DISENADOR
-  DESARROLLADOR
-  FOTOGRAFO
-  ESCRITOR
-  ARTISTA
-  EMPRENDEDOR
-  EDUCADOR
-  VIVERISTA
-  JARDINERO
-  BOTANICO
-  OTRO
+enum EventStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+  EXPIRED
 }
 
-enum Role {
-  user
-  admin
-  superadmin
+enum EventType {
+  TALLER
+  SEMINARIO
+  CHARLA
+  CURSO
+  OPEN_HOUSE
+  LANZAMIENTO
+}
+
+enum OrganizerType {
+  MUNICIPAL
+  UNIVERSITARIO
+  GREMIAL
+  COMERCIAL
 }
