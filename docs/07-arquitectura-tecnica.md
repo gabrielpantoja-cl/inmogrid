@@ -505,6 +505,7 @@ NEXT_PUBLIC_REFERENCIALES_API="https://referenciales.cl/api/public"
 |----------|---------------|
 | **Mantener NextAuth** (no migrar a Supabase Auth) | Migración toma 2+ semanas — no hay tiempo antes del 16/abril |
 | **Mantener Prisma** (no migrar a Supabase client) | Prisma+Supabase PostgreSQL = compatible 100%, zero riesgo |
+| **No migrar a Drizzle ORM (por ahora)** | Drizzle tiene ventajas reales (bundle ~3KB vs ~20MB, edge-compatible, type safety inferida del schema), pero no hay ganancia inmediata: sin edge functions críticas, sin PostGIS en este proyecto (las queries espaciales viven en referenciales.cl). Evaluar en Fase 2 (mayo-junio 2026) si aparecen problemas de performance o se necesita edge runtime real. |
 | **No fusionar referenciales.cl** | El scraper escribe directo a Neon — mover rompería la pipeline operativa |
 | **No migrar pantojapropiedades.cl** | Reescritura en Next.js desde cero = meses. Migrar features selectivamente = días |
 | **Eliminar MUI (@mui/material)** | Agrega 300kb al bundle sin valor incremental sobre shadcn/ui + Tailwind |
