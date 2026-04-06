@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { lusitana } from '@/lib/styles/fonts';
-import { Session } from 'next-auth';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 import {
   UserGroupIcon,
   DocumentTextIcon,
@@ -25,36 +25,38 @@ interface LatestPost {
 }
 
 interface DashboardContentProps {
-  session: Session | null; // ✅ Permitir sesión nula para modo anónimo
+  user: SupabaseUser | null;
   latestPosts: LatestPost[];
   totalPosts: number;
 }
 
 export default function DashboardContent({
-  session,
+  user,
   latestPosts,
   totalPosts,
 }: DashboardContentProps) {
+  const displayName = user?.user_metadata?.full_name ?? user?.email;
+
   return (
     <main className="flex flex-col space-y-6">
       {/* Bienvenida */}
       <div className="rounded-xl bg-gradient-to-r from-green-50 to-blue-50 p-6 shadow-sm border border-green-200">
-        {session?.user ? (
+        {user ? (
           <div className="space-y-2">
             <h1 className={`${lusitana.className} text-2xl md:text-3xl text-gray-800`}>
-              👋 ¡Hola, <span className="font-bold text-green-700">{session.user.name}</span>!
+              ¡Hola, <span className="font-bold text-green-700">{displayName}</span>!
             </h1>
             <p className="text-gray-600">
-              Bienvenid@ a <span className="font-semibold text-green-700">degux.cl</span> 🌱 - Tu ecosistema digital colaborativo
+              Bienvenid@ a <span className="font-semibold text-green-700">degux.cl</span> - Tu ecosistema digital colaborativo
             </p>
           </div>
         ) : (
           <div className="space-y-2">
             <h1 className={`${lusitana.className} text-2xl md:text-3xl text-gray-800`}>
-              👋 Bienvenid@ a degux.cl
+              Bienvenid@ a degux.cl
             </h1>
             <p className="text-gray-600">
-              <Link href="/auth/signin" className="font-semibold text-green-700 underline hover:text-green-600">
+              <Link href="/auth/login" className="font-semibold text-green-700 underline hover:text-green-600">
                 Inicia sesión
               </Link> para crear tu perfil y conectar con la comunidad.
             </p>
@@ -125,7 +127,7 @@ export default function DashboardContent({
       {/* Feed de Actividad Reciente */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h2 className={`${lusitana.className} text-xl md:text-2xl mb-6 text-gray-800`}>
-          📰 Feed de la Comunidad ({totalPosts} publicaciones)
+          Feed de la Comunidad ({totalPosts} publicaciones)
         </h2>
 
         <div className="space-y-4">

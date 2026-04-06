@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/primitives/button";
-import { signIn } from "next-auth/react";
+import { createClient } from "@/lib/supabase/client";
 
 interface ButtonSocialProps {
   children: React.ReactNode;
@@ -21,7 +21,16 @@ const ButtonSocial = ({ children, provider, className, onClick, disabled }: Butt
       if (onClick) {
         onClick();
       } else {
-        await signIn(provider);
+        const supabase = createClient();
+        const { error: oauthError } = await supabase.auth.signInWithOAuth({
+          provider: provider as Parameters<typeof supabase.auth.signInWithOAuth>[0]['provider'],
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+          },
+        });
+        if (oauthError) {
+          setError("Error al iniciar sesión. Por favor, inténtalo de nuevo.");
+        }
       }
     } catch (err) {
       setError("Error al iniciar sesión. Por favor, inténtalo de nuevo.");

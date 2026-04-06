@@ -16,11 +16,9 @@
  */
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth.config'
+import { getUser } from '@/lib/supabase/auth'
 
 // ========================================
 // TIPOS Y VALIDACIONES
@@ -48,14 +46,14 @@ type ActionResponse<T = void> = {
 // ========================================
 
 async function getAuthenticatedUser() {
-  const session = await getServerSession(authOptions)
+  const supabaseUser = await getUser()
 
-  if (!session?.user?.email) {
+  if (!supabaseUser?.email) {
     throw new Error('No autenticado')
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+    where: { email: supabaseUser.email },
     select: { id: true, email: true, name: true }
   })
 

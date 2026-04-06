@@ -1,8 +1,7 @@
 // Página de edición de perfil del usuario
 // Ruta: /dashboard/perfil (autenticado)
 
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth.config';
+import { requireAuth } from '@/lib/supabase/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import ProfileEditForm from '@/components/forms/ProfileEditForm';
@@ -13,16 +12,11 @@ export const metadata = {
 };
 
 export default async function ProfileEditPage() {
-  const session = await getServerSession(authOptions);
+  const authUser = await requireAuth();
 
-  // Redirigir si no está autenticado
-  if (!session?.user?.id) {
-    redirect('/auth/signin');
-  }
-
-  // Obtener datos completos del usuario
+  // Obtener datos completos del usuario desde Prisma
   const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
+    where: { id: authUser.id },
     select: {
       id: true,
       name: true,
@@ -48,7 +42,7 @@ export default async function ProfileEditPage() {
   });
 
   if (!user) {
-    redirect('/auth/signin');
+    redirect('/auth/login');
   }
 
   return (
@@ -56,7 +50,7 @@ export default async function ProfileEditPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">
-          ✏️ Editar Mi Perfil
+          Editar Mi Perfil
         </h1>
         <p className="mt-2 text-gray-600">
           Personaliza tu perfil y define cómo te ven los demás en degux.cl

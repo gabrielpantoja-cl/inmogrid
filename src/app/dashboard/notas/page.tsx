@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth.config';
+import { requireAuth, getProfile } from '@/lib/supabase/auth';
 import { redirect } from 'next/navigation';
 import NotasContent from './NotasContent';
 import { prisma } from '@/lib/prisma';
@@ -10,16 +9,19 @@ export const metadata = {
 };
 
 export default async function NotasPage() {
-  const session = await getServerSession(authOptions);
+  const user = await requireAuth();
 
-  if (!session?.user?.id) {
-    redirect('/auth/signin');
+  // Obtener el perfil del usuario para el username
+  const profile = await getProfile(user.id);
+
+  if (!profile) {
+    redirect('/auth/login');
   }
 
   // Obtener posts del usuario
   const posts = await prisma.post.findMany({
     where: {
-      userId: session.user.id,
+      userId: user.id,
     },
     select: {
       id: true,
@@ -41,7 +43,7 @@ export default async function NotasPage() {
 
   return (
     <NotasContent
-      session={session}
+      username={profile.username}
       initialPosts={posts}
     />
   );

@@ -1,6 +1,8 @@
-import { redirect } from 'next/navigation';
+import { redirect } from 'next/navigation'
 
+/**
+ * Canonical redirect: /login → /auth/login
+ */
 export default function LoginPage() {
-  // Redirigir automáticamente a la página de signin estándar
-  redirect('/auth/signin');
+  redirect('/auth/login')
 }

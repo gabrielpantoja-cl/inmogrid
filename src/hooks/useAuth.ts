@@ -1,56 +1,81 @@
-import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+'use client'
+
+import { createClient } from '@/lib/supabase/client'
+import { type User } from '@supabase/supabase-js'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+interface Profile {
+  id: string
+  username: string | null
+  full_name: string | null
+  avatar_url: string | null
+  role: string
+  bio: string | null
+  website: string | null
+  linkedin: string | null
+  profession: string | null
+  company: string | null
+  phone: string | null
+  region: string | null
+  commune: string | null
+  is_public_profile: boolean
+}
 
 export function useAuth() {
-  // ✅ SIEMPRE llamar useSession (cumple con reglas de hooks)
-  const { data: session, status } = useSession();
+  const [user, setUser] = useState<User | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
+  const supabase = createClient()
 
-  // ✅ CORREGIDO: Usar NextAuth en desarrollo también
-  const isLoading = status === 'loading';
-  const isAuthenticated = !!session?.user;
-  const user = session?.user;
-  const userRole = session?.user?.role || 'user';
-
-  // Log para debugging en consola
   useEffect(() => {
-    if (status !== 'loading') {
-      console.log('🔐 [USEAUTH-HOOK]', {
-        status,
-        isAuthenticated,
-        userRole,
-        userId: user?.id,
-        userEmail: user?.email,
-        timestamp: new Date().toISOString()
-      });
+    // Subscribe to auth state changes (covers initial load + login/logout events)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const currentUser = session?.user ?? null
+      setUser(currentUser)
+
+      if (currentUser) {
+        const { data } = await supabase
+          .from('degux_profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single()
+        setProfile(data ?? null)
+      } else {
+        setProfile(null)
+      }
+
+      setIsLoading(false)
+    })
+
+    return () => {
+      subscription.unsubscribe()
     }
-  }, [status, isAuthenticated, userRole, user?.id, user?.email]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const isAdmin = userRole === 'admin' || userRole === 'superadmin';
-  const isSuperAdmin = userRole === 'superadmin';
-  const isUser = userRole === 'user';
+  const signOut = async () => {
+    await supabase.auth.signOut()
+    router.push('/auth/login')
+  }
 
-  // Función para verificar si el usuario puede realizar operaciones CRUD
-  const canCreateContent = isAuthenticated; // Todos los usuarios autenticados pueden crear contenido
-  const canEditContent = isAdmin; // Solo admins pueden editar contenido de otros
-  const canDeleteContent = isAdmin; // Solo admins pueden eliminar contenido de otros
-  const canViewSensitiveData = isAdmin;
+  // Derived permission helpers based on the profile role
+  const role = profile?.role ?? 'user'
+  const isAdmin = role === 'admin' || role === 'superadmin'
+  const isSuperAdmin = role === 'superadmin'
+  const isAuthenticated = user !== null
 
   return {
-    // Estado de autenticación
+    user,
+    profile,
     isLoading,
     isAuthenticated,
-    user,
-    userRole,
-
-    // Verificaciones de rol
+    role,
     isAdmin,
     isSuperAdmin,
-    isUser,
-
-    // Permisos específicos (generic permissions for content management)
-    canCreateContent,
-    canEditContent,
-    canDeleteContent,
-    canViewSensitiveData,
-  };
+    signOut,
+  }
 }

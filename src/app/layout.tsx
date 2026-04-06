@@ -2,7 +2,6 @@ import React from 'react';
 import './globals.css';
 import { Metadata, Viewport } from 'next';
 import { Toaster } from 'react-hot-toast';
-import SessionProviderClient from '@/app/dashboard/SessionProviderClient';
 import { CookieConsentProvider } from '@/components/ui/legal/CookieConsentProvider';
 import CookieConsentBanner from '@/components/ui/legal/CookieConsentBanner';
 import {
@@ -134,10 +133,10 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <CookieConsentProvider>
-          <SessionProviderClient>
+          <>
             {children}
             <Footer />
-          </SessionProviderClient>
+          </>
 
           {/* Componente para mostrar notificaciones (react-hot-toast) */}
           <Toaster

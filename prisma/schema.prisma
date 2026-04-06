@@ -9,84 +9,43 @@ datasource db {
 }
 
 // ============================================================
-// NEXTAUTH MODELS
+// SUPABASE AUTH PATTERN
+// id references auth.users.id (UUID managed by Supabase Auth)
+// No NextAuth models (Account, Session, VerificationToken, User)
 // ============================================================
 
-model Account {
-  id                String   @id
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Profile {
+  id              String          @id @db.Uuid
+  username        String?         @unique
+  fullName        String?         @map("full_name")
+  avatarUrl       String?         @map("avatar_url")
+  bio             String?
+  profession      ProfessionType?
+  company         String?
+  phone           String?
+  region          String?
+  commune         String?
+  website         String?
+  linkedin        String?
+  tagline         String?
+  coverImageUrl   String?         @map("cover_image_url")
+  location        String?
+  identityTags    String[]        @default([]) @map("identity_tags")
+  externalLinks   Json?           @map("external_links")
+  isPublicProfile Boolean         @default(true) @map("is_public_profile")
+  role            Role            @default(user)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
 
-  @@unique([provider, providerAccountId])
-}
+  Post                            Post[]
+  AuditLog                        AuditLog[]
+  ChatMessage                     ChatMessage[]
+  Event                           Event[]
+  ProfessionalProfile             ProfessionalProfile?
+  Connection_receiverIdToProfile  Connection[] @relation("Connection_receiverIdToProfile")
+  Connection_requesterIdToProfile Connection[] @relation("Connection_requesterIdToProfile")
 
-model Session {
-  id           String   @id
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@id([identifier, token])
-}
-
-// ============================================================
-// USER
-// ============================================================
-
-model User {
-  id                                      String               @id
-  name                                    String?
-  email                                   String               @unique
-  password                                String?
-  emailVerified                           DateTime?
-  image                                   String?
-  createdAt                               DateTime             @default(now())
-  updatedAt                               DateTime             @updatedAt
-  role                                    Role                 @default(user)
-  bio                                     String?
-  profession                              ProfessionType?
-  company                                 String?
-  phone                                   String?
-  region                                  String?
-  commune                                 String?
-  website                                 String?
-  linkedin                                String?
-  isPublicProfile                         Boolean              @default(true)
-  username                                String?              @unique
-  tagline                                 String?
-  coverImageUrl                           String?
-  location                                String?
-  identityTags                            String[]             @default([])
-  externalLinks                           Json?
-  customCss                               String?
-  Account                                 Account[]
-  AuditLog                                AuditLog[]
-  ChatMessage                             ChatMessage[]
-  Connection_Connection_receiverIdToUser  Connection[]         @relation("Connection_receiverIdToUser")
-  Connection_Connection_requesterIdToUser Connection[]         @relation("Connection_requesterIdToUser")
-  Post                                    Post[]
-  Session                                 Session[]
-  Event                                   Event[]
-  ProfessionalProfile                     ProfessionalProfile?
+  @@map("degux_profiles")
 }
 
 // ============================================================
@@ -94,19 +53,20 @@ model User {
 // ============================================================
 
 model Connection {
-  id                                String           @id
-  requesterId                       String
-  receiverId                        String
-  status                            ConnectionStatus @default(pending)
-  message                           String?
-  createdAt                         DateTime         @default(now())
-  updatedAt                         DateTime         @updatedAt
-  User_Connection_receiverIdToUser  User             @relation("Connection_receiverIdToUser", fields: [receiverId], references: [id], onDelete: Cascade)
-  User_Connection_requesterIdToUser User             @relation("Connection_requesterIdToUser", fields: [requesterId], references: [id], onDelete: Cascade)
+  id          String           @id @default(cuid())
+  requesterId String           @db.Uuid @map("requester_id")
+  receiverId  String           @db.Uuid @map("receiver_id")
+  status      ConnectionStatus @default(pending)
+  message     String?
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  requester   Profile          @relation("Connection_requesterIdToProfile", fields: [requesterId], references: [id], onDelete: Cascade)
+  receiver    Profile          @relation("Connection_receiverIdToProfile", fields: [receiverId], references: [id], onDelete: Cascade)
 
   @@unique([requesterId, receiverId])
   @@index([receiverId, status])
   @@index([requesterId, status])
+  @@map("degux_connections")
 }
 
 // ============================================================
@@ -114,77 +74,81 @@ model Connection {
 // ============================================================
 
 model Post {
-  id            String    @id
-  userId        String
+  id            String    @id @default(cuid())
+  userId        String    @db.Uuid @map("user_id")
   title         String
   slug          String    @unique
   content       String
   excerpt       String?
-  coverImageUrl String?
+  coverImageUrl String?   @map("cover_image_url")
   published     Boolean   @default(false)
-  publishedAt   DateTime?
+  publishedAt   DateTime? @map("published_at")
   tags          String[]  @default([])
-  readTime      Int?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  User          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  readTime      Int?      @map("read_time")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  author        Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([slug])
   @@index([userId, published])
+  @@map("degux_posts")
 }
 
 // ============================================================
-// EVENTS (Fase 0 MVP)
+// EVENTS
 // ============================================================
 
 model Event {
   id              String        @id @default(cuid())
   title           String
   description     String
-  organizerName   String
-  organizerType   OrganizerType
-  eventType       EventType
-  startDate       DateTime
-  endDate         DateTime?
+  organizerName   String        @map("organizer_name")
+  organizerType   OrganizerType @map("organizer_type")
+  eventType       EventType     @map("event_type")
+  startDate       DateTime      @map("start_date")
+  endDate         DateTime?     @map("end_date")
   location        String?
-  isOnline        Boolean       @default(false)
-  onlineUrl       String?
-  coverImageUrl   String?
-  registrationUrl String?
-  isFree          Boolean       @default(true)
-  isCommercial    Boolean       @default(false)
-  isPaid          Boolean       @default(false)
+  isOnline        Boolean       @default(false) @map("is_online")
+  onlineUrl       String?       @map("online_url")
+  coverImageUrl   String?       @map("cover_image_url")
+  registrationUrl String?       @map("registration_url")
+  isFree          Boolean       @default(true) @map("is_free")
+  isCommercial    Boolean       @default(false) @map("is_commercial")
+  isPaid          Boolean       @default(false) @map("is_paid")
   price           Float?
   status          EventStatus   @default(PENDING)
-  publishedAt     DateTime?
+  publishedAt     DateTime?     @map("published_at")
   region          String?
   commune         String?
-  userId          String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  User            User?         @relation(fields: [userId], references: [id])
+  userId          String?       @db.Uuid @map("user_id")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  author          Profile?      @relation(fields: [userId], references: [id])
 
   @@index([status, startDate])
   @@index([region, status])
   @@index([isCommercial, status])
+  @@map("degux_events")
 }
 
 // ============================================================
-// PROFESSIONAL DIRECTORY (Fase 1)
+// PROFESSIONAL DIRECTORY
 // ============================================================
 
 model ProfessionalProfile {
   id              String    @id @default(cuid())
-  userId          String    @unique
+  userId          String    @unique @db.Uuid @map("user_id")
   specialty       String[]  @default([])
   certifications  String[]  @default([])
   regions         String[]  @default([])
-  yearsExperience Int?
-  isVerified      Boolean   @default(false)
-  verifiedAt      DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  User            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  yearsExperience Int?      @map("years_experience")
+  isVerified      Boolean   @default(false) @map("is_verified")
+  verifiedAt      DateTime? @map("verified_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  profile         Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("degux_professional_profiles")
 }
 
 // ============================================================
@@ -192,23 +156,26 @@ model ProfessionalProfile {
 // ============================================================
 
 model AuditLog {
-  id        String   @id
-  userId    String
+  id        String   @id @default(cuid())
+  userId    String   @db.Uuid @map("user_id")
   action    String
   metadata  Json?
-  createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  profile   Profile  @relation(fields: [userId], references: [id])
+
+  @@map("degux_audit_logs")
 }
 
 model ChatMessage {
-  id        String      @id
-  userId    String
+  id        String      @id @default(cuid())
+  userId    String      @db.Uuid @map("user_id")
   role      MessageRole
   content   String
-  createdAt DateTime    @default(now())
-  User      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now()) @map("created_at")
+  profile   Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
+  @@map("degux_chat_messages")
 }
 
 // ============================================================

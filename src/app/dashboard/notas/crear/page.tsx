@@ -1,6 +1,4 @@
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth.config';
-import { redirect } from 'next/navigation';
+import { requireAuth } from '@/lib/supabase/auth';
 import CrearNotaForm from './CrearNotaForm';
 
 export const metadata = {
@@ -9,15 +7,12 @@ export const metadata = {
 };
 
 export default async function CrearNotaPage() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    redirect('/auth/signin');
-  }
+  // Ensures the user is authenticated; redirects to /auth/login otherwise
+  await requireAuth();
 
   return (
     <div className="max-w-4xl mx-auto">
-      <CrearNotaForm session={session} />
+      <CrearNotaForm />
     </div>
   );
 }

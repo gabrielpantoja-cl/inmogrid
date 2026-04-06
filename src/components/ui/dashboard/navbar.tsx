@@ -5,66 +5,61 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import AcmeLogo from '@/components/ui/common/AcmeLogo';
-import { 
-  PowerIcon, 
+import {
+  PowerIcon,
   ExclamationTriangleIcon,
   Bars3Icon,
   XMarkIcon,
   HomeIcon,
   DocumentDuplicateIcon,
-  GlobeAltIcon,           // Used as a fallback for "Mis Plantas"
-  UserGroupIcon,        
-  MagnifyingGlassIcon,  
-  UserIcon              
+  GlobeAltIcon,
+  UserGroupIcon,
+  MagnifyingGlassIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import { useDeleteAccount } from '@/lib/hooks/useDeleteAccount';
 import { Dialog } from '@/components/ui/dialog';
-import { robustSignOut } from '@/lib/auth-utils';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface NavLink {
   name: string;
   href: string;
-  icon: React.ElementType; // Use React.ElementType for icon components
-  badge?: string; // Optional badge property
+  icon: React.ElementType;
+  badge?: string;
 }
 
 const navigationLinks: NavLink[] = [
   { name: 'Feed', href: '/dashboard', icon: HomeIcon },
   { name: 'Mi Perfil', href: '/dashboard/perfil', icon: UserIcon },
   { name: 'Mis Publicaciones', href: '/dashboard/notas', icon: DocumentDuplicateIcon },
-  { name: 'Mis Plantas', href: '/dashboard/plantas', icon: GlobeAltIcon }, // Changed icon to GlobeAltIcon
+  { name: 'Mis Plantas', href: '/dashboard/plantas', icon: GlobeAltIcon },
   { name: 'Explorar', href: '/dashboard/explorar', icon: MagnifyingGlassIcon },
   { name: 'Comunidad', href: '/dashboard/comunidad', icon: UserGroupIcon },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { user, profile, signOut } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  const { 
-    deleteAccount, 
-    isDeleting, 
-    showModal, 
-    setShowModal, 
-    handleConfirmDelete 
+  const {
+    deleteAccount,
+    isDeleting,
+    showModal,
+    setShowModal,
+    handleConfirmDelete
   } = useDeleteAccount();
 
   const handleSignOut = async () => {
     if (isSigningOut) return;
-    
+
     setIsSigningOut(true);
     setIsUserMenuOpen(false);
     try {
-      await robustSignOut({
-        callbackUrl: '/',
-        redirect: true,
-        source: 'navbar'
-      });
-    } catch (error: any) {
+      await signOut();
+    } catch (error) {
       console.error('SignOut failed in navbar:', error);
     } finally {
       setIsSigningOut(false);
@@ -76,6 +71,9 @@ export default function Navbar() {
     deleteAccount();
   };
 
+  const displayName = profile?.full_name ?? user?.email;
+  const avatarUrl = profile?.avatar_url ?? user?.user_metadata?.avatar_url;
+
   return (
     <>
       <nav className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-[60]">
@@ -83,7 +81,6 @@ export default function Navbar() {
           <div className="flex justify-between h-16">
             {/* Logo y navegación principal */}
             <div className="flex items-center">
-              {/* Logo */}
               <div className="flex-shrink-0 flex items-center">
                 <Link href="/dashboard" className="flex items-center">
                   <div className="w-8 h-8 text-blue-600">
@@ -125,12 +122,12 @@ export default function Navbar() {
 
             {/* Menú de usuario - Desktop */}
             <div className="hidden md:flex md:items-center md:space-x-4">
-              {session?.user && (
+              {user && (
                 <div className="text-sm text-gray-600">
-                  Hola, <span className="font-medium">{session.user.name}</span>
+                  Hola, <span className="font-medium">{displayName}</span>
                 </div>
               )}
-              
+
               {/* Dropdown de usuario */}
               <div className="relative">
                 <button
@@ -138,10 +135,10 @@ export default function Navbar() {
                   className="flex items-center p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
                   aria-label="Menú de usuario"
                 >
-                  {session?.user?.image ? (
-                    <Image 
-                      src={session.user.image} 
-                      alt="Avatar" 
+                  {avatarUrl ? (
+                    <Image
+                      src={avatarUrl}
+                      alt="Avatar"
                       width={32}
                       height={32}
                       className="w-8 h-8 rounded-full"
@@ -164,9 +161,9 @@ export default function Navbar() {
                       <PowerIcon className={`w-4 h-4 mr-3 ${isSigningOut ? 'animate-spin' : ''}`} />
                       {isSigningOut ? 'Cerrando...' : 'Cerrar Sesión'}
                     </button>
-                    
+
                     <div className="border-t border-gray-100"></div>
-                    
+
                     <button
                       onClick={handleDeleteAccount}
                       disabled={isDeleting}
@@ -179,15 +176,15 @@ export default function Navbar() {
                     </button>
 
                     <div className="border-t border-gray-100 mt-1 pt-1">
-                      <Link 
-                        href="/terms" 
+                      <Link
+                        href="/terms"
                         className="block px-4 py-1 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
                         Términos de Servicio
                       </Link>
-                      <Link 
-                        href="/privacy" 
+                      <Link
+                        href="/privacy"
                         className="block px-4 py-1 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
@@ -246,15 +243,15 @@ export default function Navbar() {
                   </Link>
                 );
               })}
-              
+
               {/* Acciones de usuario en móvil */}
               <div className="border-t border-gray-200 pt-3 mt-3">
-                {session?.user && (
+                {user && (
                   <div className="px-3 py-2 text-sm text-gray-600">
-                    Conectado como <span className="font-medium">{session.user.name}</span>
+                    Conectado como <span className="font-medium">{displayName}</span>
                   </div>
                 )}
-                
+
                 <button
                   onClick={handleSignOut}
                   disabled={isSigningOut}
@@ -265,7 +262,7 @@ export default function Navbar() {
                   <PowerIcon className={`w-5 h-5 mr-3 ${isSigningOut ? 'animate-spin' : ''}`} />
                   {isSigningOut ? 'Cerrando...' : 'Cerrar Sesión'}
                 </button>
-                
+
                 <button
                   onClick={handleDeleteAccount}
                   disabled={isDeleting}
@@ -306,7 +303,7 @@ export default function Navbar() {
         open={showModal}
         onClose={() => setShowModal(false)}
         title="¿Estás seguro?"
-        description='Esta acción eliminará permanentemente tu cuenta y todos tus datos. Esta acción no se puede deshacer.'
+        description="Esta acción eliminará permanentemente tu cuenta y todos tus datos. Esta acción no se puede deshacer."
         buttons={[
           {
             label: "Cancelar",

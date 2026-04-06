@@ -1,9 +1,9 @@
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth.config';
+import { getUser } from '@/lib/supabase/auth';
 import DashboardContent from './DashboardContent';
 import { prisma } from '@/lib/prisma';
 import type { User, Post } from '@prisma/client';
 import { Suspense } from 'react';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 // Tipos mejorados
 interface LatestPost extends Pick<Post, 'id' | 'title' | 'excerpt' | 'slug' | 'createdAt'> {
@@ -29,12 +29,9 @@ function ErrorMessage({ message }: { message: string }) {
 }
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions);
+  const user: SupabaseUser | null = await getUser();
 
-  // ✅ PERMITIR ACCESO ANÓNIMO - Mostrar contenido limitado si no hay sesión
-  // if (!session) {
-  //   redirect('/auth/signin');
-  // }
+  // Permitir acceso anónimo — mostrar contenido limitado si no hay sesión
 
   try {
     const [latestPosts, totalPosts] = await Promise.all([
@@ -64,7 +61,7 @@ export default async function DashboardPage() {
     return (
       <Suspense fallback={<div>Cargando panel de control...</div>}>
         <DashboardContent
-          session={session}
+          user={user}
           latestPosts={latestPosts as LatestPost[]}
           totalPosts={totalPosts}
         />
@@ -73,13 +70,13 @@ export default async function DashboardPage() {
 
   } catch (error) {
     console.error('[Dashboard Error]:', error);
-    
+
     const dashboardError = error as DashboardError;
 
     if (dashboardError.code === 'P2002') {
       return <ErrorMessage message="Error de restricción única en la base de datos." />;
     }
-    
+
     if (dashboardError.code === 'P2025') {
       return <ErrorMessage message="No se encontró el registro solicitado." />;
     }
@@ -87,4 +84,3 @@ export default async function DashboardPage() {
     return <ErrorMessage message="Error al cargar el dashboard. Por favor, intente nuevamente." />;
   }
 }
-

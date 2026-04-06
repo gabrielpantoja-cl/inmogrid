@@ -1,20 +1,19 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { getUser } from '@/lib/supabase/auth';
 import { prisma } from '@/lib/prisma';
-import { authOptions } from '@/lib/auth.config';
 
 export async function DELETE() {
   try {
-    const session = await getServerSession(authOptions);
+    const authUser = await getUser();
 
-    if (!session?.user?.id) {
+    if (!authUser?.id) {
       return new NextResponse(
-        JSON.stringify({ 
-          success: false, 
+        JSON.stringify({
+          success: false,
           message: 'No tienes autorización para realizar esta acción. Por favor, inicia sesión.',
           error: 'UNAUTHORIZED'
-        }), 
-        { 
+        }),
+        {
           status: 401,
           headers: { 'Content-Type': 'application/json' }
         }
@@ -23,9 +22,9 @@ export async function DELETE() {
 
     // Verificar si el usuario tiene contenido asociado
     const [postsCount, collectionsCount, plantsCount] = await Promise.all([
-      prisma.post.count({ where: { userId: session.user.id } }),
-      prisma.collection.count({ where: { userId: session.user.id } }),
-      prisma.plant.count({ where: { userId: session.user.id } })
+      prisma.post.count({ where: { userId: authUser.id } }),
+      prisma.collection.count({ where: { userId: authUser.id } }),
+      prisma.plant.count({ where: { userId: authUser.id } })
     ]);
 
     const totalContent = postsCount + collectionsCount + plantsCount;
@@ -52,25 +51,25 @@ export async function DELETE() {
     // Eliminar cuenta y todos los datos asociados en transacción
     await prisma.$transaction([
       // Eliminar conexiones (como requester y receiver)
-      prisma.connection.deleteMany({ where: { requesterId: session.user.id } }),
-      prisma.connection.deleteMany({ where: { receiverId: session.user.id } }),
+      prisma.connection.deleteMany({ where: { requesterId: authUser.id } }),
+      prisma.connection.deleteMany({ where: { receiverId: authUser.id } }),
       // Eliminar mensajes del chat
-      prisma.chatMessage.deleteMany({ where: { userId: session.user.id } }),
+      prisma.chatMessage.deleteMany({ where: { userId: authUser.id } }),
       // Eliminar logs de auditoría
-      prisma.auditLog.deleteMany({ where: { userId: session.user.id } }),
-      // Eliminar sesiones y cuentas OAuth
-      prisma.account.deleteMany({ where: { userId: session.user.id } }),
-      prisma.session.deleteMany({ where: { userId: session.user.id } }),
+      prisma.auditLog.deleteMany({ where: { userId: authUser.id } }),
+      // Eliminar sesiones y cuentas OAuth (NextAuth legacy — kept for existing rows)
+      prisma.account.deleteMany({ where: { userId: authUser.id } }),
+      prisma.session.deleteMany({ where: { userId: authUser.id } }),
       // Finalmente eliminar el usuario
-      prisma.user.delete({ where: { id: session.user.id } })
+      prisma.user.delete({ where: { id: authUser.id } })
     ]);
 
     return new NextResponse(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: 'Tu cuenta ha sido eliminada exitosamente. Gracias por usar nuestros servicios.'
-      }), 
-      { 
+      }),
+      {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       }
@@ -79,12 +78,12 @@ export async function DELETE() {
   } catch (error) {
     console.error('Error al eliminar cuenta:', error);
     return new NextResponse(
-      JSON.stringify({ 
-        success: false, 
+      JSON.stringify({
+        success: false,
         message: 'Ocurrió un error al intentar eliminar tu cuenta. Por favor, inténtalo de nuevo más tarde.',
         error: error instanceof Error ? error.message : 'UNKNOWN_ERROR'
-      }), 
-      { 
+      }),
+      {
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       }

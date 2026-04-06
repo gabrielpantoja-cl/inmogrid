@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { signOut, useSession } from 'next-auth/react';
+import { createClient } from '@/lib/supabase/client';
 import { toast } from 'react-hot-toast';
 
 interface DeleteAccountResponse {
@@ -10,21 +10,23 @@ interface DeleteAccountResponse {
 }
 
 export const useDeleteAccount = () => {
-  const { data: session } = useSession();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const handleConfirmDelete = useCallback(async () => {
-    if (!session?.user) {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
       toast.error('Debes iniciar sesión para realizar esta acción');
       return;
     }
 
     const toastId = toast.loading('Procesando eliminación de cuenta...');
-    
+
     try {
       setIsDeleting(true);
-      
+
       const response = await fetch('/api/delete-account', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' }
@@ -35,8 +37,7 @@ export const useDeleteAccount = () => {
       if (!response.ok) {
         if (response.status === 400 && data.error === 'HAS_ASSOCIATED_RECORDS') {
           toast.error(
-            `No se puede eliminar tu cuenta. Tienes ${data.recordCount} registro(s) asociado(s). 
-            Por favor, elimínalos primero.`, 
+            `No se puede eliminar tu cuenta. Tienes ${data.recordCount} registro(s) asociado(s). Por favor, elimínalos primero.`,
             { id: toastId, duration: 5000 }
           );
         } else {
@@ -46,26 +47,32 @@ export const useDeleteAccount = () => {
       }
 
       toast.success(data.message, { id: toastId });
-      await signOut({ callbackUrl: '/' });
+
+      // Sign out from Supabase after account deletion
+      await supabase.auth.signOut();
+      window.location.href = '/';
     } catch (error) {
       console.error('Error:', error);
       toast.error(
-        error instanceof Error ? error.message : 'Error al eliminar la cuenta', 
+        error instanceof Error ? error.message : 'Error al eliminar la cuenta',
         { id: toastId }
       );
     } finally {
       setIsDeleting(false);
       setShowModal(false);
     }
-  }, [session]);
+  }, []);
 
-  const deleteAccount = () => {
-    if (!session?.user) {
-      toast.error('Debes iniciar sesión para realizar esta acción');
-      return;
-    }
-    setShowModal(true);
-  };
+  const deleteAccount = useCallback(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) {
+        toast.error('Debes iniciar sesión para realizar esta acción');
+        return;
+      }
+      setShowModal(true);
+    });
+  }, []);
 
   return {
     deleteAccount,

@@ -3,19 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { lusitana } from '@/lib/styles/fonts';
-import { Session } from 'next-auth';
 import {
   ArrowLeftIcon,
-  DocumentTextIcon,
   EyeIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
-interface CrearNotaFormProps {
-  session: Session;
-}
-
-export default function CrearNotaForm({ session }: CrearNotaFormProps) {
+export default function CrearNotaForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(false);
@@ -56,8 +50,6 @@ export default function CrearNotaForm({ session }: CrearNotaFormProps) {
         throw new Error(error.error || 'Error al crear la publicación');
       }
 
-      const { post } = await response.json();
-
       // Redirigir a la lista de notas
       router.push('/dashboard/notas');
       router.refresh();
@@ -92,7 +84,7 @@ export default function CrearNotaForm({ session }: CrearNotaFormProps) {
           </Link>
           <div>
             <h1 className={`${lusitana.className} text-2xl md:text-3xl text-gray-800`}>
-              ✍️ Nueva Publicación
+              Nueva Publicación
             </h1>
             <p className="text-gray-600 mt-1">
               Comparte tu conocimiento con la comunidad

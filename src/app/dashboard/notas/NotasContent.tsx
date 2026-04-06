@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { lusitana } from '@/lib/styles/fonts';
-import { Session } from 'next-auth';
 import { useState } from 'react';
 import {
   PencilIcon,
@@ -29,12 +28,12 @@ interface Post {
 }
 
 interface NotasContentProps {
-  session: Session;
+  username: string | null;
   initialPosts: Post[];
 }
 
 export default function NotasContent({
-  session,
+  username,
   initialPosts,
 }: NotasContentProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
@@ -108,7 +107,7 @@ export default function NotasContent({
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className={`${lusitana.className} text-2xl md:text-3xl text-gray-800`}>
-            📝 Mis Notas
+            Mis Notas
           </h1>
           <p className="text-gray-600 mt-1">
             Gestiona tus publicaciones y comparte tu conocimiento con la comunidad
@@ -234,9 +233,9 @@ export default function NotasContent({
 
                   {/* Acciones */}
                   <div className="flex items-center gap-2">
-                    {post.published && session.user?.username && (
+                    {post.published && username && (
                       <Link
-                        href={`/${session.user.username}/notas/${post.slug}`}
+                        href={`/${username}/notas/${post.slug}`}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Ver publicación"
                       >
