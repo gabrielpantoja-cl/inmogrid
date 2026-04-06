@@ -48,7 +48,7 @@ Carpeta de trabajo estratégico para el nuevo proyecto que reemplazará a pantoj
 
 ## Base de código y backend
 
-**Repositorio:** `C:\Users\gabri\Developer\personal\degux.cl`
+**Repositorio:** `C:\Users\gabri\Developer\proptech\degux.cl`
 **Backend Supabase:** proyecto `pantojapropiedades.cl` → renombrar a `DEGUX` (mismo ref, mismas keys)
 **Deploy:** Vercel Hobby (4° proyecto, límite es 200)
 

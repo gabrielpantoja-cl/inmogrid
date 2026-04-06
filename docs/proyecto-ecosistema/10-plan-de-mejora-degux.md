@@ -89,7 +89,7 @@ Las tablas de pantojapropiedades no son compatibles con el schema de DEGUX (Pris
 
 **Paso 5 — Aplicar schema DEGUX**
 ```bash
-cd C:/Users/gabri/Developer/personal/degux.cl
+cd C:/Users/gabri/Developer/proptech/degux.cl
 npx prisma db push        # crea todas las tablas del schema DEGUX
 npx prisma generate       # regenera el cliente TypeScript
 ```
@@ -115,7 +115,7 @@ npx prisma studio         # debe abrir con las tablas DEGUX vacías y limpias
 > **Cuándo hacerlo:** justo antes del deploy de DEGUX en Vercel. No antes, para no confundir mientras pantojapropiedades.cl sigue activo.
 
 **Archivos afectados:**
-- `.env.local` del repo `personal/degux.cl` (nunca commitear)
+- `.env.local` del repo `proptech/degux.cl` (nunca commitear)
 - `.env.example` → actualizar comentarios con nombres de keys correctos
 
 ---

@@ -5,18 +5,18 @@
 
 ## Veredicto: Base de código
 
-### `personal/degux.cl` — **ES el proyecto. Usar desde hoy.**
+### `proptech/degux.cl` — **ES el proyecto. Usar desde hoy.**
 
 Después de auditar los 4 repositorios candidatos, la respuesta es inequívoca.
 
 | Repo | Next.js 15 | Comunidad | Perfiles | Networking | Auth | Decisión |
 |------|-----------|-----------|---------|-----------|------|----------|
-| `personal/degux.cl` | ✅ 15.5.10 | ✅ Sí | ✅ [username] routes | ✅ Modelo listo | ✅ Google OAuth | ✅ **USAR** |
+| `proptech/degux.cl` | ✅ 15.5.10 | ✅ Sí | ✅ [username] routes | ✅ Modelo listo | ✅ Google OAuth | ✅ **USAR** |
 | `proptech/referenciales.cl` | ✅ 15.x | ❌ Solo datos | ❌ No | ❌ No | ✅ Google OAuth | Referencia técnica |
 | `proptech/pantojapropiedades.cl` | ❌ Vite+React | ✅ Parcial | ❌ No | ❌ No | ✅ Supabase | Migrar features |
 | `proptech/gabrielpantoja.cl` | ❌ Vite+React | ❌ Blog solo | ❌ No | ❌ No | ✅ Supabase | No relevante |
 
-### Por qué `personal/degux.cl`
+### Por qué `proptech/degux.cl`
 
 1. **Es literalmente el mismo proyecto** — mismo nombre, mismo dominio, misma visión de comunidad. No es coincidencia: fue el intento anterior de construir DEGUX.
 
@@ -285,7 +285,7 @@ scraper-chile-dashboard (Oracle VPS) — ingesta CBR/Descubro
 
 | Proyecto | URL | Stack | Repositorio | Rol en el ecosistema |
 |---------|-----|-------|------------|---------------------|
-| **DEGUX** | degux.cl | **Next.js 15 + Prisma + Supabase** | `personal/degux.cl` | Plataforma de comunidad — **el nuevo proyecto** |
+| **DEGUX** | degux.cl | **Next.js 15 + Prisma + Supabase** | `proptech/degux.cl` | Plataforma de comunidad — **el nuevo proyecto** |
 | **referenciales.cl** | referenciales.cl | Next.js 15 + Prisma + Neon | `proptech/referenciales.cl` | Datos abiertos de transacciones — proyecto hermano autónomo |
 | **gabrielpantoja.cl** | gabrielpantoja.cl | React+Vite + Supabase | `proptech/gabrielpantoja.cl` | Blog/marca personal Gabriel |
 | **scraper** | (VPS interno) | Python + FastAPI + Docker | `proptech/scraper-chile-dashboard` | Pipeline ingesta CBR → Neon |
@@ -375,7 +375,7 @@ Secuencia exacta:
 2. Ejecutar: npx prisma db push (schema DEGUX sobre Supabase PostgreSQL)
 3. Verificar que los datos críticos de pantojapropiedades están migrados o respaldados
 4. Renombrar en Supabase dashboard: "pantojapropiedades.cl" → "DEGUX"
-5. Crear proyecto Vercel apuntando a personal/degux.cl
+5. Crear proyecto Vercel apuntando a proptech/degux.cl
 6. Configurar variables de entorno con las keys del mismo proyecto Supabase
 7. Deploy → degux.cl en línea
 8. Configurar redirect 301 pantojapropiedades.cl → degux.cl en Vercel
@@ -439,7 +439,7 @@ SEMANA 2 (11-16 abril)
 ├── UI de /eventos/nuevo — formulario publicar evento
 ├── Integrar lógica de cobro (evento comercial → pago requerido)
 ├── Redirección 301 pantojapropiedades.cl → degux.cl (configurar en Vercel)
-└── Deploy en Vercel desde repositorio personal/degux.cl
+└── Deploy en Vercel desde repositorio proptech/degux.cl
 ```
 
 ### Fase 1 — Comunidad profesional (post 16 abril)
@@ -516,7 +516,7 @@ NEXT_PUBLIC_REFERENCIALES_API="https://referenciales.cl/api/public"
 ```
 INMEDIATO (esta semana)
 ├── 1. Crear proyecto en Supabase → obtener connection strings
-├── 2. Clonar/abrir personal/degux.cl → cambiar DATABASE_URL
+├── 2. Clonar/abrir proptech/degux.cl → cambiar DATABASE_URL
 ├── 3. Editar schema.prisma → eliminar Plant/Collection, agregar Event
 ├── 4. Actualizar ProfessionType enum
 ├── 5. npx prisma db push
