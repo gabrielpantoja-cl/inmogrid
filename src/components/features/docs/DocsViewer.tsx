@@ -57,19 +57,19 @@ const DOCS_STRUCTURE: DocItem[] = [
   {
     id: 'mantenimiento',
     title: '🔧 Mantenimiento',
-    path: '07-mantenimiento',
+    path: '07-maintenance',
     children: [
-      { id: 'soluciones-comunes', title: 'Soluciones Comunes', path: '07-mantenimiento/soluciones-comunes' }
+      { id: 'soluciones-comunes', title: 'Soluciones Comunes', path: '07-maintenance/soluciones-comunes' }
     ]
   },
   {
     id: 'recursos',
     title: '📚 Recursos',
-    path: '08-recursos',
+    path: '08-resources',
     children: [
-      { id: 'cookies-compliance', title: 'Cookies & Compliance', path: '08-recursos/cookies-compliance' },
-      { id: 'github-automation', title: 'GitHub Automation', path: '08-recursos/github-automation' },
-      { id: 'roles-permisos', title: 'Roles y Permisos', path: '08-recursos/roles-permisos' }
+      { id: 'cookies-compliance', title: 'Cookies & Compliance', path: '08-resources/cookies-compliance' },
+      { id: 'github-automation', title: 'GitHub Automation', path: '08-resources/github-automation' },
+      { id: 'roles-permisos', title: 'Roles y Permisos', path: '08-resources/roles-permisos' }
     ]
   }
 ];

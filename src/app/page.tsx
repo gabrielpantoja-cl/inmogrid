@@ -1,22 +1,15 @@
 // app/page.tsx - VERSIÓN CORREGIDA SIN REDIRECTS AUTOMÁTICOS
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { signIn, signOut } from 'next-auth/react';
 import { useAuth } from '@/hooks/useAuth';
 import AcmeLogo from '../components/ui/common/AcmeLogo';
-import OptimizedHeroImage from '../components/ui/common/OptimizedHeroImage';
+import Image from 'next/image';
 import { lusitana } from '../lib/styles/fonts';
 import Link from 'next/link';
-// TEMPORAL: Comentado hasta que el repositorio sea público
-// import { fetchGithubStars } from '../lib/githubStars';
-
-// Agregar icono de GitHub y contador de estrellas
-const GITHUB_REPO_URL = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/degux.cl';
-const GITHUB_REPO_FULL = `${process.env.NEXT_PUBLIC_GITHUB_REPO_OWNER || 'gabrielpantoja-cl'}/${process.env.NEXT_PUBLIC_GITHUB_REPO_NAME || 'degux.cl'}`;
-const GITHUB_STARS = 1; // Actualizar dinámicamente si se desea
 
 export default function Page() {
   console.log('🏠 [HomePage] Rendering...');
@@ -25,18 +18,8 @@ export default function Page() {
   const { isLoading: authLoading, isAuthenticated, user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [githubStars, setGithubStars] = useState<number | null>(null);
 
   console.log('🏠 [HomePage] Auth status:', { authLoading, isAuthenticated, user });
-
-  // TEMPORAL: Comentado hasta que el repositorio sea público
-  // useEffect(() => {
-  //   console.log('🏠 [HomePage] useEffect - Fetching GitHub stars...');
-  //   fetchGithubStars(GITHUB_REPO_FULL).then((stars) => {
-  //     console.log('🏠 [HomePage] GitHub stars fetched:', stars);
-  //     setGithubStars(stars);
-  //   });
-  // }, []);
 
   // ✅ ELIMINADO: useEffect que causaba redirects automáticos
   // Ya no redirigimos automáticamente al dashboard, el usuario debe hacer clic
@@ -211,66 +194,21 @@ export default function Page() {
           </div>
         </div>
         
-        {/* Panel de Imagen Optimizado */}
+        {/* Panel de Imagen */}
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          <div className="relative w-full max-w-4xl">
-            {/* Versión Desktop */}
-            <div className="hidden md:block">
-              <OptimizedHeroImage 
-                isMobile={false}
-                priority={true}
-                className=""
-              />
-            </div>
-            
-            {/* Versión Mobile */}
-            <div className="block md:hidden">
-              <OptimizedHeroImage 
-                isMobile={true}
-                priority={true}
-                className=""
-              />
-            </div>
+          <div className="relative w-full max-w-4xl aspect-[16/10] rounded-lg overflow-hidden shadow-2xl border border-gray-200">
+            <Image
+              src="/images/hero-alternatives/cat-plants-02.jpg"
+              alt="degux.cl - ecosistema digital colaborativo"
+              fill
+              priority
+              quality={80}
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, 60vw"
+            />
           </div>
         </div>
       </div>
-      
-      
-
-      {/* Footer con información y GitHub */}
-      <div className="mt-12 text-center text-sm text-gray-500">
-        <span>Ecosistema Colaborativo</span>
-        <a
-          href={GITHUB_REPO_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 hover:text-primary transition-colors group ml-3"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="w-5 h-5 text-gray-600 group-hover:text-primary transition-colors"
-            fill="currentColor"
-            aria-label="GitHub"
-          >
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-          </svg>
-          <span className="font-semibold">
-            {githubStars !== null && githubStars >= 0 ? githubStars : ''} <span className="ml-1">⭐</span>
-          </span>
-        </a>
-      </div>
-
-      {/* CSS adicional para el shimmer effect */}
-      <style jsx>{`
-        @keyframes shimmer {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      `}</style>
     </main>
   );
 }

@@ -12,9 +12,9 @@ export default function ChatbotPage() {
       <div className="flex-grow flex items-center justify-center w-full">
         <Chatbot onClose={handleClose} />
       </div>
-      <footer className="w-full p-4 bg-gray-200 text-center text-sm text-gray-600">
+      <div className="w-full p-4 bg-gray-200 text-center text-sm text-gray-600">
         Advertencia: Este chatbot utiliza inteligencia artificial y los mensajes generados pueden contener errores. Siempre verifique la información proporcionada.
-      </footer>
+      </div>
     </div>
   );
 }

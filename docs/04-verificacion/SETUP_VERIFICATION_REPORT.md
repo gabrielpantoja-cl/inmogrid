@@ -75,7 +75,7 @@ NEXTAUTH_SECRET="IfBvEpoXetsQVqiCAwOTxkdJNSlzYcgm"
 NEXTAUTH_URL="http://localhost:3000"
 
 # Base de datos local con Docker
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Desarrollo
 npm run dev                    # Iniciador con Turbo mode
@@ -99,7 +99,7 @@ npm run test:e2e              # E2E tests
 
 3. **Docker en Windows:**
    - Docker Desktop soportado
-   - docker-compose.local.yml compatible
+   - docker/docker-compose.local.yml compatible
    - Volúmenes configurados correctamente
 
 4. **PowerShell scripts disponibles:**
@@ -226,7 +226,7 @@ cp .env.local.example .env.local
 
 **Para usar:**
 ```bash
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 ```
 
 ---
@@ -277,7 +277,7 @@ docker compose -f docker-compose.local.yml up -d
 | `.nvmrc` | ✅ | Node 18.17.0 LTS |
 | `.gitignore` | ✅ | Exclusiones correctas |
 | `Dockerfile` | ✅ | Producción listo |
-| `docker-compose.local.yml` | ✅ | Desarrollo local |
+| `docker/docker-compose.local.yml` | ✅ | Desarrollo local |
 | `.env.example` | ✅ | Plantilla completa |
 | `.env.local.example` | ✅ | Plantilla local |
 
@@ -297,7 +297,7 @@ npm install
 npm run prisma:generate
 
 # 4. (Opcional) Iniciar DB local en Docker
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # 5. Ver que todo funcione
 npm run lint
@@ -316,7 +316,7 @@ cp .env.local.example .env.local
 npm install
 
 # 4. Iniciar DB local
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # 5. Iniciar desarrollo
 npm run dev
@@ -339,8 +339,8 @@ npm test
 **Solución:**
 ```bash
 # El docker-compose usa puerto 15432
-docker compose -f docker-compose.local.yml down
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml down
+docker compose -f docker/docker-compose.local.yml up -d
 ```
 
 ### ❌ Problema: Node version mismatch
@@ -423,7 +423,7 @@ npm run prisma:generate
 
 4. **En Linux, ejecutar DB local:**
    ```bash
-   docker compose -f docker-compose.local.yml up -d
+   docker compose -f docker/docker-compose.local.yml up -d
    ```
 
 5. **Verificar configuración OAuth:**

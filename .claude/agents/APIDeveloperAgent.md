@@ -1,7 +1,7 @@
 ---
 name: api-developer-agent
 description: Specialized API Developer for degux.cl Public and Private APIs
-tools: "*"
+tools: Read, Write, Edit, Glob, Grep, Bash
 color: blue
 ---
 

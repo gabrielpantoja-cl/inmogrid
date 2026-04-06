@@ -48,7 +48,7 @@ npm run prisma:generate
 # Verificar que Docker Desktop está ejecutándose
 
 # Iniciar PostgreSQL local
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Verificar que está corriendo
 docker ps | findstr degux
@@ -166,10 +166,10 @@ docker --version
 # El docker-compose usa puerto 15432, intenta:
 
 # Detener contenedores previos
-docker compose -f docker-compose.local.yml down
+docker compose -f docker/docker-compose.local.yml down
 
 # Reiniciar
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 ```
 
 #### ❌ "Module not found" en tests
@@ -264,7 +264,7 @@ npm run lint --max-warnings 0
 sudo systemctl start docker
 
 # Iniciar servicios de desarrollo
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Verificar que los servicios están corriendo
 docker ps | grep degux
@@ -380,9 +380,9 @@ npm run clean:cache      # Limpiar .next + cache
 npm run clean:full       # Limpiar TODO
 
 # 🐳 Docker
-docker compose -f docker-compose.local.yml up -d    # Iniciar
-docker compose -f docker-compose.local.yml down     # Detener
-docker compose -f docker-compose.local.yml logs -f  # Ver logs
+docker compose -f docker/docker-compose.local.yml up -d    # Iniciar
+docker compose -f docker/docker-compose.local.yml down     # Detener
+docker compose -f docker/docker-compose.local.yml logs -f  # Ver logs
 ```
 
 ### Optimización en Linux
@@ -412,7 +412,7 @@ sudo usermod -aG docker $USER
 newgrp docker
 
 # O ejecutar con sudo
-sudo docker compose -f docker-compose.local.yml up -d
+sudo docker compose -f docker/docker-compose.local.yml up -d
 ```
 
 #### ❌ "Port 3000 is already in use"
@@ -433,7 +433,7 @@ npm run dev -- -p 3001
 docker ps
 
 # Reiniciar contenedor PostgreSQL
-docker compose -f docker-compose.local.yml restart postgres-local
+docker compose -f docker/docker-compose.local.yml restart postgres-local
 
 # Esperar a que esté listo
 sleep 10
@@ -460,14 +460,14 @@ npm run test
 #### ❌ "pg_isready" fails
 ```bash
 # Verificar que PostgreSQL inició
-docker compose -f docker-compose.local.yml logs postgres-local
+docker compose -f docker/docker-compose.local.yml logs postgres-local
 
 # Esperar más tiempo
 sleep 30
 
 # Reiniciar
-docker compose -f docker-compose.local.yml down
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml down
+docker compose -f docker/docker-compose.local.yml up -d
 ```
 
 ### Tips para Desarrollo en Linux
@@ -478,7 +478,7 @@ docker compose -f docker-compose.local.yml up -d
    # File: ~/start-degux.sh
    
    cd ~/Developer/degux.cl
-   docker compose -f docker-compose.local.yml up -d
+   docker compose -f docker/docker-compose.local.yml up -d
    npm run dev
    ```
 
@@ -487,7 +487,7 @@ docker compose -f docker-compose.local.yml up -d
    alias degux="cd ~/Developer/degux.cl"
    alias degux:dev="cd ~/Developer/degux.cl && npm run dev"
    alias degux:test="cd ~/Developer/degux.cl && npm run test:watch"
-   alias degux:db="docker compose -f docker-compose.local.yml up -d"
+   alias degux:db="docker compose -f docker/docker-compose.local.yml up -d"
    ```
 
 3. **Usar tmux para múltiples terminales**
@@ -641,7 +641,7 @@ npm run dev
 ### En Linux adicional:
 
 - [ ] Docker Desktop corriendo
-- [ ] docker-compose.local.yml servicios activos
+- [ ] docker/docker-compose.local.yml servicios activos
 - [ ] PostgreSQL accesible en localhost:5432
 - [ ] Scripts Bash ejecutables
 

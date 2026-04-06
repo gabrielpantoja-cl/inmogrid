@@ -541,8 +541,8 @@ async signIn({ user, account }) {
 
 **Documentación:**
 
-- `docs/testing/TEST_FAILURE_ANALYSIS.md`
-- `docs/testing/TESTING_STRATEGY.md`
+- `docs/10-testing/TEST_FAILURE_ANALYSIS.md`
+- `docs/10-testing/TESTING_STRATEGY.md`
 
 ---
 

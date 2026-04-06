@@ -1,7 +1,7 @@
 ---
 name: frontend-agent
 description: Next.js 15 Frontend Development for degux.cl
-tools: "*"
+tools: Read, Write, Edit, Glob, Grep, Bash
 color: yellow
 ---
 

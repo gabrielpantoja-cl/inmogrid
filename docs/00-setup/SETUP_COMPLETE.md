@@ -57,7 +57,7 @@ cp .env.local.example .env.local
 npm install
 
 # Iniciar DB local
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Iniciar desarrollo
 npm run dev
@@ -121,7 +121,7 @@ npm run api:health
 ### Opción B: Con Base de Datos Local
 ```powershell
 # Iniciar PostgreSQL en Docker
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Esperar 10 segundos
 Start-Sleep -Seconds 10
@@ -218,7 +218,7 @@ GOOGLE_CLIENT_SECRET="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"
 - ✅ `playwright.config.ts` ✅
 - ✅ `prisma/schema.prisma` ✅
 - ✅ `Dockerfile` ✅
-- ✅ `docker-compose.local.yml` ✅
+- ✅ `docker/docker-compose.local.yml` ✅
 - ✅ `.env.example` ✅
 - ✅ `.env.local.example` ✅
 

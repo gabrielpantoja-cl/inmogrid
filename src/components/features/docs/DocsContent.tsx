@@ -23,10 +23,10 @@ const DOC_PATH_MAP: Record<string, string> = {
   'mapa-interactivo': '05-modulos/mapa-interactivo',
   'chatbot': '05-modulos/chatbot',
   'deployment-index': '06-deployment/index',
-  'soluciones-comunes': '07-mantenimiento/soluciones-comunes',
-  'cookies-compliance': '08-recursos/cookies-compliance',
-  'github-automation': '08-recursos/github-automation',
-  'roles-permisos': '08-recursos/roles-permisos'
+  'soluciones-comunes': '07-maintenance/soluciones-comunes',
+  'cookies-compliance': '08-resources/cookies-compliance',
+  'github-automation': '08-resources/github-automation',
+  'roles-permisos': '08-resources/roles-permisos'
 };
 
 export function DocsContent({ selectedDoc }: DocsContentProps) {

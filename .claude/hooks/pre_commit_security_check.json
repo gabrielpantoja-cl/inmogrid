@@ -1,4 +1,0 @@
-{
-  "matcher": "tool.name == \"Bash\" && tool.args.command.startsWith(\"git commit\")",
-  "command": "echo '🔒 Security Check: Ensure no secrets, API keys, or sensitive data are being committed.' && grep -r -n --include='*.ts' --include='*.tsx' --include='*.js' --include='*.jsx' --include='*.json' 'password\\|secret\\|key\\|token' /home/gabriel/Documentos/referenciales-cl/src/ || echo '✅ No obvious secrets found in source code'"
-}

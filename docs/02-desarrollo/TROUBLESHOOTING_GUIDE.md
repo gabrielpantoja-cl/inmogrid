@@ -119,16 +119,16 @@ npm install --verbose
 #### Si usas Docker
 ```bash
 # Linux
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Windows (PowerShell)
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Verificar que esté corriendo
 docker ps | grep degux
 
 # Si no aparece, ver logs
-docker compose -f docker-compose.local.yml logs postgres-local
+docker compose -f docker/docker-compose.local.yml logs postgres-local
 
 # Esperar 10-15 segundos para que inicie PostgreSQL
 sleep 10  # Linux
@@ -169,7 +169,7 @@ cp .env.local.example .env.local
 grep POSTGRES_PRISMA_URL .env.local  # Linux
 findstr POSTGRES_PRISMA_URL .env.local  # Windows
 
-# 5. Si el contenedor no tiene la contraseña correcta, actualizar docker-compose.local.yml
+# 5. Si el contenedor no tiene la contraseña correcta, actualizar docker/docker-compose.local.yml
 ```
 
 ---
@@ -178,7 +178,7 @@ findstr POSTGRES_PRISMA_URL .env.local  # Windows
 
 ```bash
 # 1. Conectar a PostgreSQL
-docker compose -f docker-compose.local.yml exec postgres-local psql -U postgres -d postgres
+docker compose -f docker/docker-compose.local.yml exec postgres-local psql -U postgres -d postgres
 
 # 2. Crear usuario (dentro de psql)
 CREATE USER degux_user WITH PASSWORD 'degux_local_password';
@@ -195,7 +195,7 @@ CREATE EXTENSION \"uuid-ossp\";
 \\q
 
 # 6. Reiniciar contenedor
-docker compose -f docker-compose.local.yml restart postgres-local
+docker compose -f docker/docker-compose.local.yml restart postgres-local
 ```
 
 ---
@@ -497,13 +497,13 @@ kill -9 <PID>
 # Windows
 taskkill /PID <PID> /F
 
-# 3. O cambiar puerto en docker-compose.local.yml
+# 3. O cambiar puerto en docker/docker-compose.local.yml
 # De:  "15432:5432"
 # A:   "25432:5432"
 
 # 4. Reiniciar Docker
-docker compose -f docker-compose.local.yml down
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml down
+docker compose -f docker/docker-compose.local.yml up -d
 ```
 
 ---
@@ -512,17 +512,17 @@ docker compose -f docker-compose.local.yml up -d
 
 ```bash
 # Ver logs del contenedor
-docker compose -f docker-compose.local.yml logs postgres-local
+docker compose -f docker/docker-compose.local.yml logs postgres-local
 
 # Esperar más tiempo (puede tardar)
 sleep 30
 
 # Verificar nuevamente
-docker compose -f docker-compose.local.yml ps
+docker compose -f docker/docker-compose.local.yml ps
 
 # Si sigue fallando, resetear
-docker compose -f docker-compose.local.yml down -v
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml down -v
+docker compose -f docker/docker-compose.local.yml up -d
 ```
 
 ---
@@ -709,8 +709,8 @@ npm install
 npm run prisma:generate
 
 # 4. Resetear BD (CUIDADO: borra datos)
-docker compose -f docker-compose.local.yml down -v
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml down -v
+docker compose -f docker/docker-compose.local.yml up -d
 sleep 20
 
 # 5. Aplicar migraciones
@@ -746,8 +746,8 @@ npm install
 npm run prisma:generate
 
 # 4. Resetear BD (CUIDADO: borra datos)
-docker compose -f docker-compose.local.yml down -v
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml down -v
+docker compose -f docker/docker-compose.local.yml up -d
 Start-Sleep -Seconds 20
 
 # 5. Aplicar migraciones

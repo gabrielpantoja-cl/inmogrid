@@ -22,7 +22,7 @@ npm run prisma:generate
 ### ✅ Paso 2: Base de Datos (2 minutos)
 ```powershell
 # Iniciar PostgreSQL en Docker
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Esperar 10 segundos
 Start-Sleep -Seconds 10
@@ -69,7 +69,7 @@ npm install
 npm run prisma:generate
 
 # Iniciar BD
-docker compose -f docker-compose.local.yml up -d
+docker compose -f docker/docker-compose.local.yml up -d
 
 # Programar
 npm run dev

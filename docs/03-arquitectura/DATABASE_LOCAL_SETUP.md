@@ -50,7 +50,7 @@ Este script:
 
 ```bash
 # Ver contenedores corriendo
-docker compose -f docker-compose.local.yml ps
+docker compose -f docker/docker-compose.local.yml ps
 
 # Abrir Prisma Studio (GUI para ver/editar datos)
 npx prisma studio
@@ -67,16 +67,16 @@ npx prisma studio
 ./scripts/db-local-start.sh
 
 # Ver estado
-docker compose -f docker-compose.local.yml ps
+docker compose -f docker/docker-compose.local.yml ps
 
 # Ver logs en tiempo real
-docker compose -f docker-compose.local.yml logs -f postgres-local
+docker compose -f docker/docker-compose.local.yml logs -f postgres-local
 
 # Detener (mantiene datos)
-docker compose -f docker-compose.local.yml down
+docker compose -f docker/docker-compose.local.yml down
 
 # Detener y borrar datos (⚠️ CUIDADO)
-docker compose -f docker-compose.local.yml down -v
+docker compose -f docker/docker-compose.local.yml down -v
 ```
 
 ### Gestión de Schema con Prisma
@@ -192,13 +192,13 @@ npx prisma db push
 
 ```bash
 # Ver logs
-docker compose -f docker-compose.local.yml logs postgres-local
+docker compose -f docker/docker-compose.local.yml logs postgres-local
 
 # Reiniciar contenedor
-docker compose -f docker-compose.local.yml restart postgres-local
+docker compose -f docker/docker-compose.local.yml restart postgres-local
 
 # Recrear contenedor (⚠️ borra datos)
-docker compose -f docker-compose.local.yml down -v
+docker compose -f docker/docker-compose.local.yml down -v
 ./scripts/db-local-start.sh
 ```
 
@@ -233,7 +233,7 @@ Si tienes otro PostgreSQL corriendo localmente:
 # Opción 1: Detener PostgreSQL nativo
 sudo systemctl stop postgresql
 
-# Opción 2: Cambiar puerto en docker-compose.local.yml
+# Opción 2: Cambiar puerto en docker/docker-compose.local.yml
 # Editar: "5433:5432" en vez de "5432:5432"
 # Y actualizar .env.local con el nuevo puerto
 ```

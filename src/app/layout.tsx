@@ -5,11 +5,12 @@ import { Toaster } from 'react-hot-toast';
 import SessionProviderClient from '@/app/dashboard/SessionProviderClient';
 import { CookieConsentProvider } from '@/components/ui/legal/CookieConsentProvider';
 import CookieConsentBanner from '@/components/ui/legal/CookieConsentBanner';
-import { 
-  ConditionalGoogleAnalytics, 
-  ConditionalVercelAnalytics, 
-  ConditionalSpeedInsights 
+import {
+  ConditionalGoogleAnalytics,
+  ConditionalVercelAnalytics,
+  ConditionalSpeedInsights
 } from '@/components/ui/legal/ConditionalAnalytics';
+import Footer from '@/components/ui/common/Footer';
 
 // Configuración del Viewport
 export const viewport: Viewport = {
@@ -74,7 +75,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/og-image.png',
+        url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'degux.cl - Tu lienzo digital para crear y conectar',
@@ -85,7 +86,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'degux.cl - Tu lienzo digital para crear y conectar',
     description: 'Construye tu perfil, publica tu trabajo y conecta con una comunidad de creadores y profesionales.',
-    images: ['/images/twitter-image.png'],
+    images: ['/images/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -135,6 +136,7 @@ export default function RootLayout({
         <CookieConsentProvider>
           <SessionProviderClient>
             {children}
+            <Footer />
           </SessionProviderClient>
 
           {/* Componente para mostrar notificaciones (react-hot-toast) */}

@@ -1,7 +1,7 @@
 ---
 name: degux-orchestrator
 description: Master coordinator for degux.cl - The Digital Garden Ecosystem (Social, Portfolio, Community)
-tools: "*"
+tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
 color: #10b981
 ---
 

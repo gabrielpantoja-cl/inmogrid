@@ -1,7 +1,7 @@
 ---
 name: data-ingestion-agent
 description: Specialized Data Processing Agent for Chilean Real Estate Data
-tools: "*"
+tools: Read, Write, Edit, Glob, Grep, Bash
 color: green
 ---
 
