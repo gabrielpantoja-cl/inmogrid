@@ -22,7 +22,7 @@ DEGUX es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existen
 |-------|-------|--------|----------------|
 | `site_page_views` | 5.671 | Analytics | Ignorar — no relevante para DEGUX |
 | `site_session_analytics` | 1.447 | Analytics | Ignorar |
-| `documents` | 238 | ❓ Investigar | Pendiente — ver estructura |
+| `documents` | 238 | RAG / pgvector | ✅ **Reutilizar** — base vectorial de Sofia (embeddings de propiedades y PDFs) |
 | `site_daily_stats` | 83 | Analytics | Ignorar |
 | `property_images` | 79 | Propiedades | ✅ Reutilizar en Fase 1 |
 | `site_popular_content` | 76 | Analytics | Ignorar |
@@ -76,15 +76,37 @@ DEGUX es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existen
 
 **Nota:** `author_id` referencia `auth.users` de Supabase (UUID). DEGUX usa NextAuth con IDs tipo `cuid`. Al integrar el blog en DEGUX, los posts existentes se mostrarán correctamente si se mantiene la tabla original y se accede via Supabase client, o se migran los IDs en una segunda etapa.
 
-### `documents` — (238 filas, PENDIENTE)
+### `documents` — RAG / Vector embeddings (238 filas)
 
-> **TODO:** Ejecutar en Supabase Studio y documentar aquí:
-> ```sql
-> SELECT column_name, data_type, is_nullable
-> FROM information_schema.columns
-> WHERE table_schema = 'public' AND table_name = 'documents'
-> ORDER BY ordinal_position;
-> ```
+| Columna | Tipo | Nullable |
+|---------|------|----------|
+| `id` | uuid | NO |
+| `content` | text | NO |
+| `content_hash` | text | NO |
+| `embedding` | USER-DEFINED (vector) | NO |
+| `document_type` | text | YES |
+| `title` | text | YES |
+| `price` | bigint | YES |
+| `price_uf` | numeric | YES |
+| `address` | text | YES |
+| `property_type` | text | YES |
+| `operation_type` | text | YES |
+| `bedrooms` / `bathrooms` | integer | YES |
+| `chunk_index` / `page_number` | integer | YES |
+| `drive_file_id` / `drive_file_name` / `drive_folder_path` | text | YES |
+| `drive_modified_time` | timestamptz | YES |
+| `metadata` | jsonb | YES |
+| `status` / `processing_status` / `sync_status` | text | YES |
+| `needs_embedding` | boolean | YES |
+| `source_type` | text | YES |
+| `content_version` / `file_size_bytes` | int/bigint | YES |
+| `created_at` / `updated_at` / `last_sync_at` | timestamptz | YES |
+
+**Qué es:** La base de datos vectorial del chatbot **Sofia** (RAG). Contiene chunks de documentos inmobiliarios (propiedades, PDFs de Google Drive) con sus embeddings (`pgvector`). Es el corazón del sistema de respuestas contextuales de Sofia.
+
+**Decisión para DEGUX:** ✅ **Reutilizar directamente** — Es exactamente lo que necesita la Fase 4 de DEGUX (Sofia AI Bot RAG). Los 238 documentos ya embebidos son un activo valioso. No tocar.
+
+**Requiere:** Extensión `pgvector` habilitada en Supabase (ya está activa, confirmado por el tipo `USER-DEFINED` en `embedding`).
 
 ---
 
@@ -112,7 +134,7 @@ ALTER TABLE public.blog_guidelines_versions
 DROP CONSTRAINT IF EXISTS blog_guidelines_versions_created_by_fkey;
 ```
 
-**Estado:** ⏳ Pendiente de aplicar
+**Estado:** ✅ Aplicado — 2026-04-06
 
 **Post-aplicación:** Verificar con:
 ```sql
@@ -183,9 +205,9 @@ Prisma schema (fuente de verdad TypeScript)
 
 ## Pendientes
 
-- [ ] Documentar estructura de tabla `documents` (238 filas)
+- [x] Documentar estructura de tabla `documents` (238 filas) — base vectorial Sofia RAG
 - [ ] Investigar tabla `inmobloques_scores` (3 filas, origen desconocido)
-- [ ] Eliminar FK constraint de `blog_guidelines_versions`
+- [x] Eliminar FK constraint de `blog_guidelines_versions`
 - [ ] Verificar si tablas NextAuth (`Account`, `Session`, `User`) ya existen
 - [ ] Escribir Script 001 — nuevas tablas DEGUX
 - [ ] Aplicar Script 001 en Supabase Studio
