@@ -7,23 +7,33 @@ export const metadata: Metadata = {
   description: 'Descubre perfiles y notas de la comunidad degux.cl',
 };
 
+type PostRow = {
+  id: string;
+  title: string;
+  excerpt: string | null;
+  slug: string;
+  createdAt: Date;
+  authorFullName: string | null;
+  authorUsername: string | null;
+};
+
 export default async function ExplorarPage() {
   const [recentPosts, recentProfiles] = await Promise.all([
-    prisma.post.findMany({
-      take: 10,
-      where: { published: true },
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        title: true,
-        excerpt: true,
-        slug: true,
-        createdAt: true,
-        author: {
-          select: { fullName: true, username: true },
-        },
-      },
-    }),
+    prisma.$queryRaw<PostRow[]>`
+      SELECT
+        p.id,
+        p.title,
+        p.excerpt,
+        p.slug,
+        p.created_at AS "createdAt",
+        dp.full_name  AS "authorFullName",
+        dp.username   AS "authorUsername"
+      FROM posts p
+      LEFT JOIN degux_profiles dp ON dp.id = p.author_id
+      WHERE p.status = 'published'
+      ORDER BY p.created_at DESC
+      LIMIT 10
+    `,
     prisma.profile.findMany({
       take: 10,
       where: { isPublicProfile: true },
@@ -52,7 +62,7 @@ export default async function ExplorarPage() {
             {recentPosts.map((post) => (
               <Link
                 key={post.id}
-                href={`/${post.author?.username}/notas/${post.slug}`}
+                href={post.authorUsername ? `/${post.authorUsername}/notas/${post.slug}` : `/notas/${post.slug}`}
                 className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-blue-300 hover:shadow-sm transition-all"
               >
                 <h3 className="font-medium text-gray-900">{post.title}</h3>
@@ -60,7 +70,7 @@ export default async function ExplorarPage() {
                   <p className="mt-1 text-sm text-gray-600 line-clamp-2">{post.excerpt}</p>
                 )}
                 <p className="mt-2 text-xs text-gray-400">
-                  {post.author?.fullName} &middot;{' '}
+                  {post.authorFullName} &middot;{' '}
                   {new Date(post.createdAt).toLocaleDateString('es-CL')}
                 </p>
               </Link>

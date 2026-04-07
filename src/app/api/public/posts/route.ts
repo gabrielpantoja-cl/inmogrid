@@ -37,16 +37,16 @@ export async function GET(request: NextRequest) {
           p.title,
           p.slug,
           p.excerpt,
-          COALESCE(p.cover_image_url, p.image) AS "coverImageUrl",
-          COALESCE(p.published_at, p.created_at) AS "publishedAt",
-          COALESCE(p.tags, '{}')  AS tags,
-          p.read_time         AS "readTime",
+          p.image             AS "coverImageUrl",
+          p.created_at        AS "publishedAt",
+          '{}'::text[]        AS tags,
+          NULL::int           AS "readTime",
           dp.username         AS "authorUsername",
           dp.full_name        AS "authorFullName",
           dp.avatar_url       AS "authorAvatarUrl"
         FROM posts p
-        LEFT JOIN degux_profiles dp ON dp.id = COALESCE(p.user_id, p.author_id)
-        WHERE (p.status = 'published' OR p.published = TRUE)
+        LEFT JOIN degux_profiles dp ON dp.id = p.author_id
+        WHERE p.status = 'published'
         ${tagFilter}
         ORDER BY COALESCE(p.published_at, p.created_at) DESC
         LIMIT ${limit} OFFSET ${offset}
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       prisma.$queryRaw<[{ count: bigint }]>`
         SELECT COUNT(*) AS count
         FROM posts p
-        WHERE (p.status = 'published' OR p.published = TRUE)
+        WHERE p.status = 'published'
         ${tagFilter}
       `,
     ]);
