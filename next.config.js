@@ -68,7 +68,7 @@ const nextConfig = {
   async headers() {
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com;
+      script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com https://vercel.live;
       style-src 'self' 'unsafe-inline';
       img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://degux.cl https://www.degux.cl https://images.unsplash.com https://ui-avatars.com;
       font-src 'self' data:;

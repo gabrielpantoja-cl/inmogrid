@@ -91,7 +91,7 @@ model Post {
 
   @@index([slug])
   @@index([userId, published])
-  @@map("degux_posts")
+  @@map("posts")
 }
 
 // ============================================================
