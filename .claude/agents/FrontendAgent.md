@@ -22,7 +22,7 @@ You are the frontend specialist for the **degux.cl** project (P&P Technologies).
 - **Framework**: Next.js 15 (App Router)
 - **React Version**: React 19
 - **Styling**: Tailwind CSS + Custom Components
-- **Authentication**: NextAuth.js v4 (Google OAuth)
+- **Authentication**: Supabase Auth (Google OAuth) — NextAuth has been fully removed
 - **Current Phase**: Phase 1 (User Profiles) - 50% complete
 - **Repository**: gabrielpantoja-cl/degux.cl
 
