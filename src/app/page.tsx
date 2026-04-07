@@ -127,7 +127,7 @@ export default function Page() {
 function PostCard({ post }: { post: Post }) {
   const authorName = post.author.fullName ?? post.author.username ?? 'Anónimo';
   const authorHref = post.author.username ? `/${post.author.username}` : '#';
-  const postHref = post.author.username ? `/${post.author.username}/notas/${post.slug}` : '#';
+  const postHref = `/notas/${post.slug}`;
   const date = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })
     : null;

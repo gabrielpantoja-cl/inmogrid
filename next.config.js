@@ -53,6 +53,18 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'blog-assets.pantojapropiedades.cl',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Formatos soportados para optimización
     formats: ['image/webp', 'image/avif'],
@@ -70,7 +82,7 @@ const nextConfig = {
       default-src 'self';
       script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com https://vercel.live;
       style-src 'self' 'unsafe-inline';
-      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://degux.cl https://www.degux.cl https://images.unsplash.com https://ui-avatars.com;
+      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://degux.cl https://www.degux.cl https://images.unsplash.com https://ui-avatars.com https://*.supabase.co https://blog-assets.pantojapropiedades.cl;
       font-src 'self' data:;
       object-src 'none';
       base-uri 'self';
