@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
         LEFT JOIN degux_profiles dp ON dp.id = p.author_id
         WHERE p.status = 'published'
         ${tagFilter}
-        ORDER BY COALESCE(p.published_at, p.created_at) DESC
+        ORDER BY p.created_at DESC
         LIMIT ${limit} OFFSET ${offset}
       `,
       prisma.$queryRaw<[{ count: bigint }]>`
