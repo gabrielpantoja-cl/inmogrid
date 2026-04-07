@@ -1,22 +1,54 @@
 {
   "mcpServers": {
     "playwright": {
+      "type": "stdio",
       "command": "cmd",
-      "args": ["/c", "npx", "@playwright/mcp@latest"]
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@playwright/mcp@latest",
+        "--headless"
+      ],
+      "env": {}
     },
     "Neon": {
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.neon.tech/sse"]
     },
     "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
     },
     "github": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github@latest"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "supabase": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "sbp_3ace39965940a160e4de6a0c3da49bf18f114522"
+      ],
+      "env": {}
+    },
+    "ga4": {
+      "type": "stdio",
+      "command": "C:\\Users\\gabri\\AppData\\Local\\Microsoft\\WinGet\\Links\\uvx.exe",
+      "args": [
+        "analytics-mcp"
+      ],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "C:/Users/gabri/.config/gcloud/application_default_credentials.json",
+        "GOOGLE_PROJECT_ID": "web-gabrielpantoja-cl"
       }
     }
   }
