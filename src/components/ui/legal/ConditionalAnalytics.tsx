@@ -7,8 +7,8 @@ export function ConditionalGoogleAnalytics() {
   const { preferences } = useCookieConsent();
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
-  // Solo renderizar GA si se ha dado consentimiento y existe GA_ID
-  if (!preferences?.analytics || !gaId) {
+  // Solo renderizar GA si se ha dado consentimiento, existe GA_ID y es producción
+  if (!preferences?.analytics || !gaId || process.env.NODE_ENV !== 'production') {
     return null;
   }
 
