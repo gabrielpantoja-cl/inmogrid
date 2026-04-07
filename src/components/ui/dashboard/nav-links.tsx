@@ -4,7 +4,6 @@ import {
   HomeIcon,
   UserCircleIcon,
   DocumentTextIcon,
-  SparklesIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -21,11 +20,6 @@ const links = [
     name: 'Mis Notas',
     href: '/dashboard/notas',
     icon: DocumentTextIcon,
-  },
-  {
-    name: 'Mis Plantas',
-    href: '/dashboard/plantas',
-    icon: SparklesIcon,
   },
   {
     name: 'Conexiones',

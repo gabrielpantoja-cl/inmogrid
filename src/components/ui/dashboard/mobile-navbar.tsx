@@ -8,7 +8,6 @@ import {
   DocumentDuplicateIcon,
   UserIcon,
   PencilSquareIcon,
-  SparklesIcon,
   UserGroupIcon,
   PowerIcon,
   ExclamationTriangleIcon,
@@ -26,7 +25,6 @@ const links = [
   { name: 'Mi Perfil', href: '/dashboard/perfil', icon: UserIcon },
   { name: 'Mis Notas', href: '/dashboard/notas', icon: DocumentDuplicateIcon },
   { name: 'Crear Nota', href: '/dashboard/notas/crear', icon: PencilSquareIcon },
-  { name: 'Mis Plantas', href: '/dashboard/plantas', icon: SparklesIcon },
   { name: 'Networking', href: '/dashboard/networking', icon: UserGroupIcon },
 ];
 

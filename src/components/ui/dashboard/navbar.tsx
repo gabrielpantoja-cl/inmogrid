@@ -12,7 +12,6 @@ import {
   XMarkIcon,
   HomeIcon,
   DocumentDuplicateIcon,
-  GlobeAltIcon,
   UserGroupIcon,
   MagnifyingGlassIcon,
   UserIcon
@@ -32,7 +31,6 @@ const navigationLinks: NavLink[] = [
   { name: 'Feed', href: '/dashboard', icon: HomeIcon },
   { name: 'Mi Perfil', href: '/dashboard/perfil', icon: UserIcon },
   { name: 'Mis Publicaciones', href: '/dashboard/notas', icon: DocumentDuplicateIcon },
-  { name: 'Mis Plantas', href: '/dashboard/plantas', icon: GlobeAltIcon },
   { name: 'Explorar', href: '/dashboard/explorar', icon: MagnifyingGlassIcon },
   { name: 'Comunidad', href: '/dashboard/comunidad', icon: UserGroupIcon },
 ];

@@ -105,7 +105,7 @@ export default function DashboardContent({
         </Link>
 
         <Link
-          href="/dashboard/plantas"
+          href="/dashboard/explorar"
           className="group p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-purple-300 transition-all"
         >
           <div className="flex items-center space-x-4">
@@ -114,10 +114,10 @@ export default function DashboardContent({
             </div>
             <div>
               <h3 className="font-semibold text-gray-800 group-hover:text-purple-700 transition-colors">
-                Mis Plantas
+                Explorar
               </h3>
               <p className="text-sm text-gray-500">
-                Comparte tu colección y conocimientos
+                Descubre profesionales y contenido inmobiliario
               </p>
             </div>
           </div>
