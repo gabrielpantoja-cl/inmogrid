@@ -1,0 +1,9 @@
+correo con dominio propio gabrielpantoja.cl
+sirve para:
+- google search console
+- api de google sheets para leer datos
+- api de google provider para iniciar sesion en referenciales.cl console.cloud
+-credenciales de google id y secret tambien para pantojapropiedades.cl
+
+credenciales CRM calendar:
+{"web":{"client_id":"324646027912-b6b8hb549ps2g71liduamm8179fl2t23.apps.googleusercontent.com","project_id":"pantojapropiedades-cl","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"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","redirect_uris":["http://localhost:5173/admin/crm/calendar/callback","https://pantojapropiedades.cl/admin/crm/calendar/callback"],"javascript_origins":["http://localhost:5173","https://www.pantojapropiedades.cl"]}}

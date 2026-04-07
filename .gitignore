@@ -78,3 +78,4 @@ backup_produccion.sql
 
 # Installers and binaries
 *.deb
+.vercel
