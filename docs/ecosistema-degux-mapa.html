@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DEGUX — Mapa Conceptual</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0a0a10;
+      color: #e8e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 60px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      letter-spacing: -.02em;
+    }
+    .subtitle {
+      color: #555;
+      font-size: 0.82rem;
+      margin-bottom: 48px;
+    }
+
+    /* ══ CANVAS SVG ══ */
+    .map-wrap {
+      width: 100%;
+      max-width: 1000px;
+      position: relative;
+    }
+
+    svg.map {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    /* Nodos */
+    .node-box {
+      rx: 14;
+      ry: 14;
+    }
+
+    /* Texto dentro de nodos */
+    text {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      dominant-baseline: middle;
+    }
+
+    /* ══ LEYENDA ══ */
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 32px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.75rem;
+      color: #999;
+    }
+    .legend-dot {
+      width: 12px; height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    /* ══ TOOLTIP ══ */
+    .tooltip {
+      position: fixed;
+      background: #1e1e2e;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 0.78rem;
+      color: #ccc;
+      max-width: 240px;
+      line-height: 1.55;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s;
+      z-index: 100;
+      box-shadow: 0 8px 30px rgba(0,0,0,.6);
+    }
+    .tooltip strong { color: #fff; display: block; margin-bottom: 4px; }
+
+    /* animación suave en paths */
+    .flow-path {
+      stroke-dasharray: 6 4;
+      animation: dash 18s linear infinite;
+    }
+    @keyframes dash {
+      to { stroke-dashoffset: -200; }
+    }
+
+    .pulse {
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .45; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>🗺️ Mapa Conceptual — DEGUX</h1>
+<p class="subtitle">Pasa el cursor sobre cada pieza para saber qué hace</p>
+
+<div class="map-wrap">
+<svg class="map" viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Flechas -->
+    <marker id="arrow-white"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker>
+    <marker id="arrow-green"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3ecf8e"/></marker>
+    <marker id="arrow-violet" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#818cf8"/></marker>
+    <marker id="arrow-amber"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#f59e0b"/></marker>
+    <marker id="arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#a855f7"/></marker>
+
+    <!-- Glow filters -->
+    <filter id="glow-green"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glow-violet"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+
+    <!-- Gradientes -->
+    <linearGradient id="grad-user" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="grad-vercel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#161616"/>
+      <stop offset="100%" stop-color="#222"/>
+    </linearGradient>
+    <linearGradient id="grad-supabase" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#052e16"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <linearGradient id="grad-vps" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1c1003"/>
+      <stop offset="100%" stop-color="#292000"/>
+    </linearGradient>
+    <linearGradient id="grad-google" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e0938"/>
+      <stop offset="100%" stop-color="#2d1065"/>
+    </linearGradient>
+    <linearGradient id="grad-github" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#21262d"/>
+    </linearGradient>
+    <linearGradient id="grad-cf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a0e00"/>
+      <stop offset="100%" stop-color="#271500"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ════════════════════════════════════════
+       CONEXIONES (dibujadas primero, debajo)
+  ═════════════════════════════════════════ -->
+
+  <!-- Usuario → Cloudflare -->
+  <path d="M 200,90 C 250,90 270,130 310,145"
+    stroke="#555" stroke-width="1.8" fill="none" stroke-dasharray="5,4"
+    marker-end="url(#arrow-white)" class="flow-path"/>
+  <text x="222" y="106" fill="#444" font-size="9">visita degux.cl</text>
+
+  <!-- Cloudflare → Vercel -->
+  <path d="M 410,165 L 480,165"
+    stroke="#f97316" stroke-width="1.8" fill="none"
+    marker-end="url(#arrow-white)"/>
+  <text x="420" y="158" fill="#a16207" font-size="9">redirige tráfico</text>
+
+  <!-- Usuario → Google (login) -->
+  <path d="M 170,115 C 160,200 160,350 220,390"
+    stroke="#a855f7" stroke-width="1.8" fill="none" stroke-dasharray="5,4"
+    marker-end="url(#arrow-purple)" class="flow-path"/>
+  <text x="122" y="270" fill="#7e22ce" font-size="9" transform="rotate(-6,122,270)">inicia sesión</text>
+
+  <!-- Google → Supabase (confirma identidad) -->
+  <path d="M 350,400 C 430,400 500,380 530,340"
+    stroke="#a855f7" stroke-width="1.8" fill="none"
+    marker-end="url(#arrow-green)"/>
+  <text x="390" y="388" fill="#7e22ce" font-size="9">confirma identidad</text>
+
+  <!-- Vercel ↔ Supabase (datos) -->
+  <path d="M 700,185 L 760,220"
+    stroke="#3ecf8e" stroke-width="2" fill="none"
+    marker-end="url(#arrow-green)"/>
+  <path d="M 755,240 L 695,210"
+    stroke="#3ecf8e" stroke-width="2" fill="none"
+    marker-end="url(#arrow-violet)"/>
+  <text x="705" y="208" fill="#059669" font-size="9">pide datos</text>
+  <text x="705" y="222" fill="#4f46e5" font-size="9">devuelve datos</text>
+
+  <!-- Supabase → Vercel (sesión) -->
+  <path d="M 770,260 C 720,260 700,240 700,215"
+    stroke="#818cf8" stroke-width="1.5" fill="none" stroke-dasharray="4,4"
+    marker-end="url(#arrow-violet)"/>
+
+  <!-- GitHub → Vercel (auto-deploy) -->
+  <path d="M 570,500 C 570,460 610,250 610,210"
+    stroke="#555" stroke-width="1.8" fill="none" stroke-dasharray="5,4"
+    marker-end="url(#arrow-white)" class="flow-path"/>
+  <text x="620" y="370" fill="#444" font-size="9">push → deploy</text>
+
+  <!-- VPS → Supabase (automatizaciones) -->
+  <path d="M 220,500 C 350,530 600,530 760,450"
+    stroke="#f59e0b" stroke-width="1.8" fill="none" stroke-dasharray="5,4"
+    marker-end="url(#arrow-amber)" class="flow-path"/>
+  <text x="440" y="548" fill="#b45309" font-size="9">lee / escribe datos (workflows)</text>
+
+  <!-- VPS → Vercel (API externa) -->
+  <path d="M 250,480 C 300,440 480,300 530,220"
+    stroke="#f59e0b" stroke-width="1.5" fill="none" stroke-dasharray="4,4"
+    marker-end="url(#arrow-amber)"/>
+  <text x="340" y="355" fill="#92400e" font-size="9" transform="rotate(-45,340,355)">api.degux.cl</text>
+
+
+  <!-- ════════════════════════════════════════
+       NODOS
+  ═════════════════════════════════════════ -->
+
+  <!-- ── USUARIO ── -->
+  <g class="node" data-tip="usuario" style="cursor:pointer">
+    <rect x="80" y="55" width="140" height="72" rx="14" fill="url(#grad-user)" stroke="#6366f1" stroke-width="1.8"/>
+    <text x="150" y="82" text-anchor="middle" fill="#a5b4fc" font-size="9" font-weight="700" letter-spacing="1">PERSONA USUARIA</text>
+    <text x="150" y="97" text-anchor="middle" font-size="18">👤</text>
+    <text x="150" y="115" text-anchor="middle" fill="#818cf8" font-size="9">Navegador / Celular</text>
+  </g>
+
+  <!-- ── CLOUDFLARE ── -->
+  <g class="node" data-tip="cloudflare" style="cursor:pointer">
+    <rect x="270" y="125" width="140" height="72" rx="14" fill="url(#grad-cf)" stroke="#f97316" stroke-width="1.8"/>
+    <text x="340" y="148" text-anchor="middle" fill="#fb923c" font-size="9" font-weight="700" letter-spacing="1">CLOUDFLARE</text>
+    <text x="340" y="163" text-anchor="middle" font-size="18">🛡️</text>
+    <text x="340" y="183" text-anchor="middle" fill="#f97316" font-size="9">DNS + Seguridad</text>
+  </g>
+
+  <!-- ── VERCEL ── -->
+  <g class="node" data-tip="vercel" style="cursor:pointer">
+    <rect x="480" y="125" width="180" height="130" rx="14" fill="url(#grad-vercel)" stroke="#e5e5e5" stroke-width="1.8" filter="url(#glow-violet)"/>
+    <text x="570" y="150" text-anchor="middle" fill="#fff" font-size="9" font-weight="700" letter-spacing="1">VERCEL — FRONTEND</text>
+    <text x="570" y="170" text-anchor="middle" font-size="24">▲</text>
+    <text x="570" y="196" text-anchor="middle" fill="#aaa" font-size="9">Next.js 15 · React 19</text>
+    <text x="570" y="210" text-anchor="middle" fill="#aaa" font-size="9">Páginas · Dashboard · Feed</text>
+    <text x="570" y="226" text-anchor="middle" fill="#666" font-size="8">degux.cl</text>
+    <text x="570" y="242" text-anchor="middle" fill="#666" font-size="8">Auto-deploy desde GitHub</text>
+  </g>
+
+  <!-- ── SUPABASE ── -->
+  <g class="node" data-tip="supabase" style="cursor:pointer">
+    <rect x="730" y="195" width="155" height="165" rx="14" fill="url(#grad-supabase)" stroke="#3ecf8e" stroke-width="1.8" filter="url(#glow-green)"/>
+    <text x="807" y="220" text-anchor="middle" fill="#6ee7b7" font-size="9" font-weight="700" letter-spacing="1">SUPABASE</text>
+    <text x="807" y="242" text-anchor="middle" font-size="22">🗄️</text>
+    <text x="807" y="265" text-anchor="middle" fill="#aaa" font-size="9">Base de datos PostgreSQL</text>
+    <text x="807" y="280" text-anchor="middle" fill="#aaa" font-size="9">Perfiles · Posts · Conexiones</text>
+    <!-- divisor -->
+    <line x1="748" y1="295" x2="876" y2="295" stroke="#1a4a35" stroke-width="1"/>
+    <text x="807" y="310" text-anchor="middle" fill="#6ee7b7" font-size="8.5" font-weight="600">🔐 Autenticación</text>
+    <text x="807" y="326" text-anchor="middle" fill="#888" font-size="8">Google OAuth · Sesiones</text>
+    <text x="807" y="342" text-anchor="middle" fill="#888" font-size="8">Compartida con pantoja.cl</text>
+    <!-- pulso verde -->
+    <circle cx="876" cy="207" r="5" fill="#3ecf8e" class="pulse"/>
+  </g>
+
+  <!-- ── GOOGLE ── -->
+  <g class="node" data-tip="google" style="cursor:pointer">
+    <rect x="215" y="360" width="140" height="72" rx="14" fill="url(#grad-google)" stroke="#a855f7" stroke-width="1.8"/>
+    <text x="285" y="383" text-anchor="middle" fill="#d8b4fe" font-size="9" font-weight="700" letter-spacing="1">GOOGLE OAuth</text>
+    <text x="285" y="399" text-anchor="middle" font-size="18">🔑</text>
+    <text x="285" y="418" text-anchor="middle" fill="#a78bfa" font-size="9">Verifica identidad</text>
+  </g>
+
+  <!-- ── VPS ORACLE ── -->
+  <g class="node" data-tip="vps" style="cursor:pointer">
+    <rect x="70" y="455" width="175" height="95" rx="14" fill="url(#grad-vps)" stroke="#f59e0b" stroke-width="1.8"/>
+    <text x="157" y="477" text-anchor="middle" fill="#fcd34d" font-size="9" font-weight="700" letter-spacing="1">VPS ORACLE</text>
+    <text x="157" y="494" text-anchor="middle" font-size="18">⚙️</text>
+    <text x="157" y="515" text-anchor="middle" fill="#aaa" font-size="9">N8N · Automatizaciones</text>
+    <text x="157" y="530" text-anchor="middle" fill="#666" font-size="8">api.degux.cl</text>
+  </g>
+
+  <!-- ── GITHUB ── -->
+  <g class="node" data-tip="github" style="cursor:pointer">
+    <rect x="500" y="460" width="140" height="72" rx="14" fill="url(#grad-github)" stroke="#58a6ff" stroke-width="1.8"/>
+    <text x="570" y="483" text-anchor="middle" fill="#58a6ff" font-size="9" font-weight="700" letter-spacing="1">GITHUB</text>
+    <text x="570" y="499" text-anchor="middle" font-size="18">🐙</text>
+    <text x="570" y="518" text-anchor="middle" fill="#aaa" font-size="9">Código fuente · Historial</text>
+  </g>
+
+  <!-- ════════════════════════════════════════
+       ETIQUETAS DE ZONA
+  ═════════════════════════════════════════ -->
+
+  <!-- zona internet público -->
+  <rect x="60" y="38" width="380" height="115" rx="8" fill="none" stroke="#222" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="68" y="52" fill="#333" font-size="8" font-weight="600" letter-spacing="1">INTERNET PÚBLICO</text>
+
+  <!-- zona cloud privada -->
+  <rect x="455" y="108" width="455" height="300" rx="8" fill="none" stroke="#1a2a1a" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="463" y="122" fill="#1a3a1a" font-size="8" font-weight="600" letter-spacing="1">CLOUD INFRASTRUCTURE</text>
+
+</svg>
+</div>
+
+<!-- ══ LEYENDA ══ -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#6366f1"></div> Usuario / Entrada</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div> Cloudflare — DNS / Seguridad</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#e5e5e5"></div> Vercel — Frontend visible</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#3ecf8e"></div> Supabase — Datos + Auth</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div> Google — Identidad</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> VPS Oracle — Automatizaciones</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#58a6ff"></div> GitHub — Código fuente</div>
+</div>
+
+<!-- ══ TOOLTIP ══ -->
+<div class="tooltip" id="tip"></div>
+
+<script>
+  const tips = {
+    usuario:    { title: "👤 Persona Usuaria", text: "Abre el navegador y escribe degux.cl. Ve perfiles, lee posts, inicia sesión. Todo arranca desde aquí." },
+    cloudflare: { title: "🛡️ Cloudflare", text: "El primer guardia. Recibe cada visita, bloquea ataques y redirige el tráfico a Vercel (el sitio real). Actúa como intermediario invisible." },
+    vercel:     { title: "▲ Vercel — Frontend", text: "Aquí vive la página web que la gente ve. Cada vez que Gabriel sube código a GitHub, Vercel lo detecta y actualiza el sitio en segundos automáticamente." },
+    supabase:   { title: "🗄️ Supabase", text: "La bodega central. Guarda todos los datos (perfiles, posts, conexiones) y también controla quién puede entrar (autenticación Google). Compartida con pantojapropiedades.cl durante la transición." },
+    google:     { title: "🔑 Google OAuth", text: "Cuando haces clic en 'Iniciar sesión con Google', Supabase le pregunta a Google '¿es realmente esta persona?'. Google confirma y devuelve una llave de acceso. Sin contraseñas propias." },
+    vps:        { title: "⚙️ VPS Oracle", text: "Un servidor propio que nunca se apaga. Corre automatizaciones con N8N (como Zapier pero privado): envía correos, procesa datos, conecta servicios externos en segundo plano." },
+    github:     { title: "🐙 GitHub", text: "El historial completo del código. Cada mejora queda registrada aquí. Cuando Gabriel hace 'push', Vercel lo detecta y publica los cambios automáticamente." },
+  };
+
+  const tipEl = document.getElementById('tip');
+
+  document.querySelectorAll('.node').forEach(node => {
+    const key = node.dataset.tip;
+    node.addEventListener('mouseenter', e => {
+      const t = tips[key];
+      tipEl.innerHTML = `<strong>${t.title}</strong>${t.text}`;
+      tipEl.style.opacity = '1';
+    });
+    node.addEventListener('mousemove', e => {
+      tipEl.style.left = (e.clientX + 16) + 'px';
+      tipEl.style.top  = (e.clientY - 10) + 'px';
+    });
+    node.addEventListener('mouseleave', () => {
+      tipEl.style.opacity = '0';
+    });
+  });
+</script>
+
+</body>
+</html>
