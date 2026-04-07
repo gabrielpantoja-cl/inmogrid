@@ -1,11 +1,11 @@
 // lib/hooks/usePermissions.ts
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/hooks/useAuth'
 
 interface Permissions {
-  canEdit: boolean;
-  canDelete: boolean;
-  canCreate: boolean;
-  canView: boolean;
+  canEdit: boolean
+  canDelete: boolean
+  canCreate: boolean
+  canView: boolean
 }
 
 const DEFAULT_PERMISSIONS: Permissions = {
@@ -13,29 +13,15 @@ const DEFAULT_PERMISSIONS: Permissions = {
   canDelete: false,
   canCreate: false,
   canView: true,
-};
+}
 
 const ROLE_PERMISSIONS: Record<string, Permissions> = {
-  ADMIN: {
-    canEdit: true,
-    canDelete: true,
-    canCreate: true,
-    canView: true,
-  },
-  EDITOR: {
-    canEdit: true,
-    canDelete: false,
-    canCreate: true,
-    canView: true,
-  },
-  USER: {
-    ...DEFAULT_PERMISSIONS,
-  },
-};
+  superadmin: { canEdit: true, canDelete: true, canCreate: true, canView: true },
+  admin:      { canEdit: true, canDelete: true, canCreate: true, canView: true },
+  user:       { ...DEFAULT_PERMISSIONS },
+}
 
 export function usePermissions(): Permissions {
-  const { data: session } = useSession();
-  const userRole = session?.user?.role || 'USER';
-  
-  return ROLE_PERMISSIONS[userRole] || DEFAULT_PERMISSIONS;
+  const { role } = useAuth()
+  return ROLE_PERMISSIONS[role ?? 'user'] ?? DEFAULT_PERMISSIONS
 }

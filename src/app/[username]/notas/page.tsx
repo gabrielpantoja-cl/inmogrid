@@ -13,44 +13,39 @@ interface NotesPageProps {
 export default async function NotesPage({ params }: NotesPageProps) {
   const { username } = await params;
 
-  // 1. Get user
-  const user = await prisma.user.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: { username },
     select: {
       id: true,
-      name: true,
+      fullName: true,
       username: true,
       isPublicProfile: true,
     },
   });
 
-  if (!user || !user.isPublicProfile) {
+  if (!profile || !profile.isPublicProfile) {
     notFound();
   }
 
-  // 2. Get all published posts for this user
   const posts = await prisma.post.findMany({
     where: {
-      userId: user.id,
+      userId: profile.id,
       published: true,
     },
-    orderBy: {
-      publishedAt: 'desc',
-    },
+    orderBy: { publishedAt: 'desc' },
   });
 
   const totalPosts = posts.length;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <div className="bg-gradient-to-r from-blue-700 to-blue-500 py-12 text-white">
         <div className="mx-auto max-w-4xl px-4 md:px-8">
           <Link
             href={`/${username}`}
             className="mb-4 inline-block text-sm opacity-90 hover:opacity-100"
           >
-            ← Volver al perfil de {user.name || username}
+            ← Volver al perfil de {profile.fullName || username}
           </Link>
           <h1 className="mb-2 text-4xl font-bold">📝 Notas Recientes</h1>
           <p className="text-lg opacity-90">
@@ -59,7 +54,6 @@ export default async function NotesPage({ params }: NotesPageProps) {
         </div>
       </div>
 
-      {/* Content */}
       <div className="mx-auto max-w-4xl px-4 py-8 md:px-8">
         {posts.length > 0 ? (
           <div className="space-y-8">

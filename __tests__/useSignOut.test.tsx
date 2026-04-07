@@ -1,11 +1,14 @@
-// __tests__/useSignOutComponent.test.tsx
+// __tests__/useSignOut.test.tsx
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import { signOut } from 'next-auth/react';
 import { toast } from 'react-hot-toast';
 
-jest.mock('next-auth/react', () => ({
-  signOut: jest.fn(),
+// Mock Supabase client
+const mockSignOut = jest.fn();
+jest.mock('@supabase/ssr', () => ({
+  createBrowserClient: () => ({
+    auth: { signOut: mockSignOut },
+  }),
 }));
 
 jest.mock('react-hot-toast', () => ({
@@ -17,18 +20,14 @@ jest.mock('react-hot-toast', () => ({
 const SignOutButton = () => {
   const handleSignOut = async () => {
     try {
-      await signOut({ callbackUrl: '/', redirect: true });
+      await mockSignOut();
+      window.location.href = '/';
     } catch {
       toast.error('No se pudo cerrar la sesión. Por favor, intenta nuevamente.');
     }
   };
 
-
-  return (
-    <button onClick={handleSignOut}>
-      Cerrar Sesión
-    </button>
-  );
+  return <button onClick={handleSignOut}>Cerrar Sesión</button>;
 };
 
 describe('SignOut', () => {
@@ -36,21 +35,19 @@ describe('SignOut', () => {
     jest.clearAllMocks();
   });
 
-  it('debería cerrar sesión y redireccionar correctamente', async () => {
+  it('debería cerrar sesión correctamente', async () => {
+    mockSignOut.mockResolvedValue({ error: null });
     const { getByText } = render(<SignOutButton />);
 
     fireEvent.click(getByText('Cerrar Sesión'));
 
     await waitFor(() => {
-      expect(signOut).toHaveBeenCalledWith({
-        callbackUrl: '/',
-        redirect: true,
-      });
+      expect(mockSignOut).toHaveBeenCalled();
     });
   });
 
   it('debería manejar error al cerrar sesión', async () => {
-    (signOut as jest.Mock).mockImplementationOnce(() => {
+    mockSignOut.mockImplementationOnce(() => {
       throw new Error('Error al cerrar sesión');
     });
 

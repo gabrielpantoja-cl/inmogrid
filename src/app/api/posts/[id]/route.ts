@@ -13,8 +13,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
+    const authUser = await auth();
+    if (!authUser?.id) {
       return NextResponse.json(
         { error: 'No autenticado' },
         { status: 401 }
@@ -26,7 +26,7 @@ export async function GET(
     const post = await prisma.post.findFirst({
       where: {
         id,
-        userId: session.user.id, // Solo posts del usuario
+        userId: authUser!.id, // Solo posts del usuario
       },
       select: {
         id: true,
@@ -70,8 +70,8 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
+    const authUser = await auth();
+    if (!authUser?.id) {
       return NextResponse.json(
         { error: 'No autenticado' },
         { status: 401 }
@@ -93,7 +93,7 @@ export async function PUT(
     const existingPost = await prisma.post.findFirst({
       where: {
         id,
-        userId: session.user.id,
+        userId: authUser!.id,
       },
     });
 
@@ -166,8 +166,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
+    const authUser = await auth();
+    if (!authUser?.id) {
       return NextResponse.json(
         { error: 'No autenticado' },
         { status: 401 }
@@ -180,7 +180,7 @@ export async function DELETE(
     const post = await prisma.post.findFirst({
       where: {
         id,
-        userId: session.user.id,
+        userId: authUser!.id,
       },
     });
 

@@ -320,71 +320,88 @@ ALTER TABLE public.degux_audit_logs          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.degux_chat_messages       ENABLE ROW LEVEL SECURITY;
 
 -- degux_profiles: public profiles are readable by everyone; owner can update
-CREATE POLICY IF NOT EXISTS "degux_profiles_public_read"
+-- Note: PostgreSQL does not support CREATE POLICY IF NOT EXISTS.
+--       Using DROP + CREATE pattern for idempotency.
+
+DROP POLICY IF EXISTS "degux_profiles_public_read" ON public.degux_profiles;
+CREATE POLICY "degux_profiles_public_read"
   ON public.degux_profiles FOR SELECT
   USING (is_public_profile = TRUE OR auth.uid() = id);
 
-CREATE POLICY IF NOT EXISTS "degux_profiles_owner_update"
+DROP POLICY IF EXISTS "degux_profiles_owner_update" ON public.degux_profiles;
+CREATE POLICY "degux_profiles_owner_update"
   ON public.degux_profiles FOR UPDATE
   USING (auth.uid() = id)
   WITH CHECK (auth.uid() = id);
 
 -- degux_profiles: auto-insert on signup is handled by SECURITY DEFINER trigger
-CREATE POLICY IF NOT EXISTS "degux_profiles_owner_insert"
+DROP POLICY IF EXISTS "degux_profiles_owner_insert" ON public.degux_profiles;
+CREATE POLICY "degux_profiles_owner_insert"
   ON public.degux_profiles FOR INSERT
   WITH CHECK (auth.uid() = id);
 
 -- degux_connections: parties can read their own connections
-CREATE POLICY IF NOT EXISTS "degux_connections_parties_read"
+DROP POLICY IF EXISTS "degux_connections_parties_read" ON public.degux_connections;
+CREATE POLICY "degux_connections_parties_read"
   ON public.degux_connections FOR SELECT
   USING (auth.uid() = requester_id OR auth.uid() = receiver_id);
 
-CREATE POLICY IF NOT EXISTS "degux_connections_requester_insert"
+DROP POLICY IF EXISTS "degux_connections_requester_insert" ON public.degux_connections;
+CREATE POLICY "degux_connections_requester_insert"
   ON public.degux_connections FOR INSERT
   WITH CHECK (auth.uid() = requester_id);
 
-CREATE POLICY IF NOT EXISTS "degux_connections_receiver_update"
+DROP POLICY IF EXISTS "degux_connections_receiver_update" ON public.degux_connections;
+CREATE POLICY "degux_connections_receiver_update"
   ON public.degux_connections FOR UPDATE
   USING (auth.uid() = receiver_id OR auth.uid() = requester_id);
 
 -- degux_posts: published posts are public; owner manages all
-CREATE POLICY IF NOT EXISTS "degux_posts_public_read"
+DROP POLICY IF EXISTS "degux_posts_public_read" ON public.degux_posts;
+CREATE POLICY "degux_posts_public_read"
   ON public.degux_posts FOR SELECT
   USING (published = TRUE OR auth.uid() = user_id);
 
-CREATE POLICY IF NOT EXISTS "degux_posts_owner_write"
+DROP POLICY IF EXISTS "degux_posts_owner_write" ON public.degux_posts;
+CREATE POLICY "degux_posts_owner_write"
   ON public.degux_posts FOR ALL
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
 -- degux_events: published events are public; owner manages own events
-CREATE POLICY IF NOT EXISTS "degux_events_public_read"
+DROP POLICY IF EXISTS "degux_events_public_read" ON public.degux_events;
+CREATE POLICY "degux_events_public_read"
   ON public.degux_events FOR SELECT
   USING (status = 'PUBLISHED' OR auth.uid() = user_id);
 
-CREATE POLICY IF NOT EXISTS "degux_events_owner_write"
+DROP POLICY IF EXISTS "degux_events_owner_write" ON public.degux_events;
+CREATE POLICY "degux_events_owner_write"
   ON public.degux_events FOR ALL
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
 -- degux_professional_profiles: public read; owner write
-CREATE POLICY IF NOT EXISTS "degux_professional_profiles_public_read"
+DROP POLICY IF EXISTS "degux_professional_profiles_public_read" ON public.degux_professional_profiles;
+CREATE POLICY "degux_professional_profiles_public_read"
   ON public.degux_professional_profiles FOR SELECT
   USING (TRUE);
 
-CREATE POLICY IF NOT EXISTS "degux_professional_profiles_owner_write"
+DROP POLICY IF EXISTS "degux_professional_profiles_owner_write" ON public.degux_professional_profiles;
+CREATE POLICY "degux_professional_profiles_owner_write"
   ON public.degux_professional_profiles FOR ALL
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
 -- degux_chat_messages: owner only
-CREATE POLICY IF NOT EXISTS "degux_chat_messages_owner_all"
+DROP POLICY IF EXISTS "degux_chat_messages_owner_all" ON public.degux_chat_messages;
+CREATE POLICY "degux_chat_messages_owner_all"
   ON public.degux_chat_messages FOR ALL
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
 -- degux_audit_logs: owner read; system writes via SECURITY DEFINER functions
-CREATE POLICY IF NOT EXISTS "degux_audit_logs_owner_read"
+DROP POLICY IF EXISTS "degux_audit_logs_owner_read" ON public.degux_audit_logs;
+CREATE POLICY "degux_audit_logs_owner_read"
   ON public.degux_audit_logs FOR SELECT
   USING (auth.uid() = user_id);
 

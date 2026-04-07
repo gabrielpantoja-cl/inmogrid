@@ -4,13 +4,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { auth } from '@/lib/auth';
+import { getUser } from '@/lib/supabase/auth';
 import { z } from 'zod';
 import { ProfessionType } from '@prisma/client';
 
-// Schema de validación para actualización de perfil
 const profileUpdateSchema = z.object({
-  name: z.string().min(1, 'El nombre es requerido').max(100).optional(),
+  fullName: z.string().min(1, 'El nombre es requerido').max(100).optional(),
   bio: z.string().max(500, 'La biografía no puede exceder 500 caracteres').nullable().optional(),
   tagline: z.string().max(100, 'El tagline no puede exceder 100 caracteres').nullable().optional(),
   profession: z.nativeEnum(ProfessionType).nullable().optional(),
@@ -25,26 +24,21 @@ const profileUpdateSchema = z.object({
   identityTags: z.array(z.string().max(50)).max(10, 'Máximo 10 tags').optional(),
 });
 
-// GET - Obtiene el perfil completo del usuario autenticado
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
-    const session = await auth();
+    const authUser = await getUser();
 
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'No autenticado' },
-        { status: 401 }
-      );
+    if (!authUser?.id) {
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
+    const profile = await prisma.profile.findUnique({
+      where: { id: authUser.id },
       select: {
         id: true,
-        name: true,
-        email: true,
+        fullName: true,
+        avatarUrl: true,
         username: true,
-        image: true,
         bio: true,
         tagline: true,
         coverImageUrl: true,
@@ -64,41 +58,26 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Usuario no encontrado' },
-        { status: 404 }
-      );
+    if (!profile) {
+      return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
     }
 
-    return NextResponse.json({
-      success: true,
-      user,
-    });
+    return NextResponse.json({ success: true, profile });
   } catch (error) {
     console.error('[API Profile GET Error]:', error);
-    return NextResponse.json(
-      { error: 'Error al obtener perfil' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al obtener perfil' }, { status: 500 });
   }
 }
 
-// PUT - Actualiza el perfil del usuario autenticado
 export async function PUT(request: NextRequest) {
   try {
-    const session = await auth();
+    const authUser = await getUser();
 
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'No autenticado' },
-        { status: 401 }
-      );
+    if (!authUser?.id) {
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
     const body = await request.json();
-
-    // Validar datos con Zod
     const validation = profileUpdateSchema.safeParse(body);
 
     if (!validation.success) {
@@ -114,21 +93,14 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const updateData = validation.data;
-
-    // Actualizar usuario
-    const updatedUser = await prisma.user.update({
-      where: { id: session.user.id },
-      data: {
-        ...updateData,
-        updatedAt: new Date(),
-      },
+    const updatedProfile = await prisma.profile.update({
+      where: { id: authUser.id },
+      data: validation.data,
       select: {
         id: true,
-        name: true,
-        email: true,
+        fullName: true,
+        avatarUrl: true,
         username: true,
-        image: true,
         bio: true,
         tagline: true,
         coverImageUrl: true,
@@ -149,32 +121,21 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      user: updatedUser,
+      profile: updatedProfile,
       message: 'Perfil actualizado correctamente',
     });
   } catch (error) {
     console.error('[API Profile PUT Error]:', error);
 
-    // Manejo de errores de Prisma
     if (error && typeof error === 'object' && 'code' in error) {
       if (error.code === 'P2002') {
-        return NextResponse.json(
-          { error: 'Ya existe un usuario con esos datos' },
-          { status: 409 }
-        );
+        return NextResponse.json({ error: 'Ya existe un usuario con esos datos' }, { status: 409 });
       }
-
       if (error.code === 'P2025') {
-        return NextResponse.json(
-          { error: 'Usuario no encontrado' },
-          { status: 404 }
-        );
+        return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
       }
     }
 
-    return NextResponse.json(
-      { error: 'Error al actualizar perfil' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al actualizar perfil' }, { status: 500 });
   }
 }

@@ -2,10 +2,10 @@
 import { prisma } from '@/lib/prisma';
 
 export async function fetchUsers() {
-  return await prisma.user.findMany({
+  return await prisma.profile.findMany({
     select: {
       id: true,
-      name: true,
+      fullName: true,
     },
   });
 }

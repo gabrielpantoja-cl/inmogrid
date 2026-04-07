@@ -13,26 +13,25 @@ interface NotePageProps {
   }>;
 }
 
-// Generate metadata for SEO
 export async function generateMetadata({ params }: NotePageProps) {
   const { username, slug } = await params;
 
-  const user = await prisma.user.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: { username },
-    select: { id: true, name: true },
+    select: { id: true, fullName: true },
   });
 
-  if (!user) return { title: 'Nota no encontrada' };
+  if (!profile) return { title: 'Nota no encontrada' };
 
   const post = await prisma.post.findFirst({
-    where: { slug, userId: user.id, published: true },
+    where: { slug, userId: profile.id, published: true },
     select: { title: true, excerpt: true },
   });
 
   if (!post) return { title: 'Nota no encontrada' };
 
   return {
-    title: `${post.title} | by ${user.name || username}`,
+    title: `${post.title} | by ${profile.fullName || username}`,
     description: post.excerpt,
     openGraph: {
       title: post.title,
@@ -44,24 +43,24 @@ export async function generateMetadata({ params }: NotePageProps) {
 export default async function NotePage({ params }: NotePageProps) {
   const { username, slug } = await params;
 
-  const user = await prisma.user.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: { username },
     select: {
       id: true,
-      name: true,
+      fullName: true,
       username: true,
       isPublicProfile: true,
     },
   });
 
-  if (!user || !user.isPublicProfile) {
+  if (!profile || !profile.isPublicProfile) {
     notFound();
   }
 
   const post = await prisma.post.findFirst({
     where: {
       slug,
-      userId: user.id,
+      userId: profile.id,
       published: true,
     },
   });
@@ -73,11 +72,10 @@ export default async function NotePage({ params }: NotePageProps) {
   return (
     <div className="min-h-screen bg-white py-8">
       <div className="mx-auto max-w-4xl px-4 md:px-8">
-        
-        {/* Breadcrumb */}
+
         <nav className="mb-8 text-sm text-gray-600">
           <Link href={`/${username}`} className="hover:text-blue-700 hover:underline">
-            {user.name || username}
+            {profile.fullName || username}
           </Link>
           <span className="mx-2">/</span>
           <Link href={`/${username}/notas`} className="hover:text-blue-700 hover:underline">
@@ -85,7 +83,6 @@ export default async function NotePage({ params }: NotePageProps) {
           </Link>
         </nav>
 
-        {/* Post Header */}
         <header className="mb-8">
           <h1 className="mb-3 text-4xl font-extrabold leading-tight text-gray-900 md:text-5xl">
             {post.title}
@@ -99,14 +96,12 @@ export default async function NotePage({ params }: NotePageProps) {
           )}
         </header>
 
-        {/* Post Content */}
         <article className="prose prose-lg max-w-none prose-indigo">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {post.content}
           </ReactMarkdown>
         </article>
 
-        {/* Tags */}
         {post.tags && post.tags.length > 0 && (
           <div className="mt-12 flex flex-wrap items-center gap-2">
             <span className="font-semibold">Etiquetas:</span>
@@ -117,7 +112,6 @@ export default async function NotePage({ params }: NotePageProps) {
             ))}
           </div>
         )}
-
       </div>
     </div>
   );

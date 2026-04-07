@@ -6,10 +6,9 @@ import { ProfessionType } from '@prisma/client';
 
 interface User {
   id: string;
-  name: string | null;
-  email: string;
+  fullName: string | null;
   username: string | null;
-  image: string | null;
+  avatarUrl: string | null;
   bio: string | null;
   tagline: string | null;
   profession: ProfessionType | null;
@@ -69,7 +68,7 @@ export default function ProfileEditForm({ user }: ProfileEditFormProps) {
 
   // Estado del formulario
   const [formData, setFormData] = useState({
-    name: user.name || '',
+    fullName: user.fullName || '',
     bio: user.bio || '',
     tagline: user.tagline || '',
     profession: user.profession || '',
@@ -177,14 +176,14 @@ export default function ProfileEditForm({ user }: ProfileEditFormProps) {
         <div className="space-y-4">
           {/* Nombre */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
               Nombre <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="fullName"
+              name="fullName"
+              value={formData.fullName}
               onChange={handleChange}
               required
               maxLength={100}
@@ -458,10 +457,6 @@ export default function ProfileEditForm({ user }: ProfileEditFormProps) {
           📧 Información de la Cuenta (solo lectura)
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-          <div>
-            <span className="text-gray-500">Email:</span>{' '}
-            <span className="font-medium text-gray-900">{user.email}</span>
-          </div>
           <div>
             <span className="text-gray-500">Username:</span>{' '}
             <span className="font-medium text-gray-900">{user.username || 'No asignado'}</span>

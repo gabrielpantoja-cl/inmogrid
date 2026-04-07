@@ -1,13 +1,16 @@
 import { getUser } from '@/lib/supabase/auth';
 import DashboardContent from './DashboardContent';
 import { prisma } from '@/lib/prisma';
-import type { User, Post } from '@prisma/client';
 import { Suspense } from 'react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
-// Tipos mejorados
-interface LatestPost extends Pick<Post, 'id' | 'title' | 'excerpt' | 'slug' | 'createdAt'> {
-  User: Pick<User, 'name' | 'username'>;
+interface LatestPost {
+  id: string;
+  title: string;
+  excerpt: string | null;
+  slug: string;
+  createdAt: Date;
+  author: { fullName: string | null; username: string | null } | null;
 }
 
 interface DashboardError extends Error {
@@ -31,25 +34,21 @@ function ErrorMessage({ message }: { message: string }) {
 export default async function DashboardPage() {
   const user: SupabaseUser | null = await getUser();
 
-  // Permitir acceso anónimo — mostrar contenido limitado si no hay sesión
-
   try {
     const [latestPosts, totalPosts] = await Promise.all([
       prisma.post.findMany({
         take: 5,
         where: { published: true },
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           title: true,
           excerpt: true,
           slug: true,
           createdAt: true,
-          User: {
+          author: {
             select: {
-              name: true,
+              fullName: true,
               username: true,
             },
           },

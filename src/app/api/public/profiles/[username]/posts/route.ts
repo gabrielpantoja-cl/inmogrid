@@ -10,46 +10,40 @@ export async function GET(
   { params }: { params: Promise<{ username: string }> }
 ) {
   try {
-    const { username} = await params;
+    const { username } = await params;
     const { searchParams } = new URL(request.url);
 
-    // Parámetros opcionales
     const tag = searchParams.get('tag');
     const limit = parseInt(searchParams.get('limit') || '10');
 
-    // Buscar usuario por username
-    const user = await prisma.user.findUnique({
+    const profile = await prisma.profile.findUnique({
       where: { username },
       select: { id: true, isPublicProfile: true },
     });
 
-    if (!user) {
+    if (!profile) {
       return NextResponse.json(
         { error: 'Usuario no encontrado' },
         { status: 404 }
       );
     }
 
-    if (!user.isPublicProfile) {
+    if (!profile.isPublicProfile) {
       return NextResponse.json(
         { error: 'Este perfil es privado' },
         { status: 403 }
       );
     }
 
-    // Construir filtros
     const where: any = {
-      userId: user.id,
-      published: true, // Solo posts publicados
+      userId: profile.id,
+      published: true,
     };
 
     if (tag) {
-      where.tags = {
-        has: tag,
-      };
+      where.tags = { has: tag };
     }
 
-    // Obtener posts
     const posts = await prisma.post.findMany({
       where,
       select: {
@@ -63,9 +57,7 @@ export async function GET(
         publishedAt: true,
         createdAt: true,
       },
-      orderBy: {
-        publishedAt: 'desc',
-      },
+      orderBy: { publishedAt: 'desc' },
       take: limit,
     });
 

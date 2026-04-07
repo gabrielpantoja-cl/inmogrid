@@ -7,7 +7,6 @@ import { prisma } from '@/lib/prisma';
 import ProfileHero from '@/components/ui/profile/ProfileHero';
 import ProfileBio from '@/components/ui/profile/ProfileBio';
 import SocialLinks from '@/components/ui/profile/SocialLinks';
-import PlantCard from '@/components/ui/profile/PlantCard';
 
 interface ProfilePageProps {
   params: Promise<{
@@ -18,14 +17,13 @@ interface ProfilePageProps {
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { username } = await params;
 
-  // Obtener perfil de usuario
-  const user = await prisma.user.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: { username },
     select: {
       id: true,
-      name: true,
+      fullName: true,
       username: true,
-      image: true,
+      avatarUrl: true,
       bio: true,
       tagline: true,
       coverImageUrl: true,
@@ -41,38 +39,14 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     },
   });
 
-  // Si no existe o no es público
-  if (!user || !user.isPublicProfile) {
+  if (!profile || !profile.isPublicProfile) {
     notFound();
   }
-
-  // Obtener plantas del usuario (solo favoritas para home)
-  const plants = await prisma.plant.findMany({
-    where: {
-      userId: user.id,
-      isFavorite: true,
-    },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      scientificName: true,
-      description: true,
-      mainImageUrl: true,
-      category: true,
-      difficulty: true,
-      isFavorite: true,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-    take: 6,
-  });
 
   // Obtener posts recientes (solo publicados)
   const posts = await prisma.post.findMany({
     where: {
-      userId: user.id,
+      userId: profile.id,
       published: true,
     },
     select: {
@@ -84,9 +58,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       tags: true,
       publishedAt: true,
     },
-    orderBy: {
-      publishedAt: 'desc',
-    },
+    orderBy: { publishedAt: 'desc' },
     take: 3,
   });
 
@@ -94,12 +66,12 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <ProfileHero
-        name={user.name || user.username || 'Usuario'}
-        username={user.username}
-        tagline={user.tagline}
-        image={user.image}
-        coverImageUrl={user.coverImageUrl}
-        identityTags={user.identityTags}
+        name={profile.fullName || profile.username || 'Usuario'}
+        username={profile.username}
+        tagline={profile.tagline}
+        image={profile.avatarUrl}
+        coverImageUrl={profile.coverImageUrl}
+        identityTags={profile.identityTags}
       />
 
       {/* Contenido Principal */}
@@ -107,48 +79,22 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         {/* Bio Section */}
         <div className="mb-8">
           <ProfileBio
-            bio={user.bio}
-            location={user.location}
-            profession={user.profession || undefined}
-            company={user.company}
-            website={user.website}
+            bio={profile.bio}
+            location={profile.location}
+            profession={profile.profession || undefined}
+            company={profile.company}
+            website={profile.website}
           />
         </div>
 
         {/* Social Links */}
-        {user.externalLinks && (
+        {profile.externalLinks && (
           <div className="mb-12 rounded-xl bg-white p-6 shadow-md md:p-8">
             <h2 className="mb-4 text-xl font-bold text-gray-800">
               📬 Contacto y redes
             </h2>
-            <SocialLinks externalLinks={user.externalLinks} />
+            <SocialLinks externalLinks={profile.externalLinks} />
           </div>
-        )}
-
-        {/* Plantas Favoritas */}
-        {plants.length > 0 && (
-          <section className="mb-12">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-green-800">
-                💚 Mis Plantas Favoritas
-              </h2>
-              <a
-                href={`/${username}/plantas`}
-                className="text-green-700 underline hover:text-green-600"
-              >
-                Ver todas →
-              </a>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {plants.map((plant) => (
-                <PlantCard
-                  key={plant.id}
-                  plant={plant}
-                  username={user.username}
-                />
-              ))}
-            </div>
-          </section>
         )}
 
         {/* Posts Recientes */}
@@ -219,7 +165,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             {' '} - Ecosistema digital colaborativo
           </p>
           <p className="mt-2 text-xs">
-            Miembro desde {new Date(user.createdAt).toLocaleDateString('es-CL', {
+            Miembro desde {new Date(profile.createdAt).toLocaleDateString('es-CL', {
               month: 'long',
               year: 'numeric',
             })}
@@ -230,34 +176,31 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   );
 }
 
-// Generar metadata dinámica para SEO
 export async function generateMetadata({ params }: ProfilePageProps) {
   const { username } = await params;
 
-  const user = await prisma.user.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: { username },
     select: {
-      name: true,
+      fullName: true,
       username: true,
       bio: true,
       tagline: true,
-      image: true,
+      avatarUrl: true,
     },
   });
 
-  if (!user) {
-    return {
-      title: 'Perfil no encontrado | degux.cl',
-    };
+  if (!profile) {
+    return { title: 'Perfil no encontrado | degux.cl' };
   }
 
   return {
-    title: `${user.name || user.username} | degux.cl`,
-    description: user.tagline || user.bio?.substring(0, 160) || `Perfil de ${user.name} en degux.cl`,
+    title: `${profile.fullName || profile.username} | degux.cl`,
+    description: profile.tagline || profile.bio?.substring(0, 160) || `Perfil de ${profile.fullName} en degux.cl`,
     openGraph: {
-      title: user.name || user.username,
-      description: user.tagline || user.bio?.substring(0, 160),
-      images: user.image ? [user.image] : [],
+      title: profile.fullName || profile.username,
+      description: profile.tagline || profile.bio?.substring(0, 160),
+      images: profile.avatarUrl ? [profile.avatarUrl] : [],
     },
   };
 }

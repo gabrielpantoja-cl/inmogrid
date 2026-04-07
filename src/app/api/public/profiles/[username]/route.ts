@@ -12,14 +12,12 @@ export async function GET(
   try {
     const { username } = await params;
 
-    // Buscar usuario por username
-    const user = await prisma.user.findUnique({
+    const profile = await prisma.profile.findUnique({
       where: { username },
       select: {
         id: true,
-        name: true,
-        email: false, // NO exponer email en perfil público
-        image: true,
+        fullName: true,
+        avatarUrl: true,
         username: true,
         tagline: true,
         bio: true,
@@ -36,26 +34,23 @@ export async function GET(
       },
     });
 
-    // Si no existe el usuario
-    if (!user) {
+    if (!profile) {
       return NextResponse.json(
         { error: 'Usuario no encontrado' },
         { status: 404 }
       );
     }
 
-    // Si el perfil no es público
-    if (!user.isPublicProfile) {
+    if (!profile.isPublicProfile) {
       return NextResponse.json(
         { error: 'Este perfil es privado' },
         { status: 403 }
       );
     }
 
-    // Devolver perfil público
     return NextResponse.json({
       success: true,
-      profile: user,
+      profile,
     });
   } catch (error) {
     console.error('[API Public Profiles Error]:', error);

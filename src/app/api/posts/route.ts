@@ -23,8 +23,8 @@ function generateSlug(title: string): string {
 // GET - Lista posts del usuario autenticado
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
+    const authUser = await auth();
+    if (!authUser?.id) {
       return NextResponse.json(
         { error: 'No autenticado' },
         { status: 401 }
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 
     // Filtros
     const where: any = {
-      userId: session.user.id,
+      userId: authUser.id,
     };
 
     if (published !== null) {
@@ -80,8 +80,8 @@ export async function GET(request: NextRequest) {
 // POST - Crea un nuevo post
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
+    const authUser = await auth();
+    if (!authUser?.id) {
       return NextResponse.json(
         { error: 'No autenticado' },
         { status: 401 }
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
     const post = await prisma.post.create({
       data: {
         id: randomUUID(),
-        userId: session.user.id,
+        userId: authUser.id,
         title,
         slug,
         content,

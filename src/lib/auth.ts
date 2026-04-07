@@ -1,7 +1,11 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "./auth.config"
+import { createClient } from '@/lib/supabase/server'
 
+/**
+ * Returns the current authenticated Supabase user (server-side).
+ * Use this in Server Components and API routes.
+ */
 export const auth = async () => {
-  const session = await getServerSession(authOptions)
-  return session
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  return user
 }

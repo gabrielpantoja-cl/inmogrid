@@ -14,15 +14,13 @@ export const metadata = {
 export default async function ProfileEditPage() {
   const authUser = await requireAuth();
 
-  // Obtener datos completos del usuario desde Prisma
-  const user = await prisma.user.findUnique({
+  const profile = await prisma.profile.findUnique({
     where: { id: authUser.id },
     select: {
       id: true,
-      name: true,
-      email: true,
+      fullName: true,
+      avatarUrl: true,
       username: true,
-      image: true,
       bio: true,
       tagline: true,
       coverImageUrl: true,
@@ -41,13 +39,12 @@ export default async function ProfileEditPage() {
     },
   });
 
-  if (!user) {
+  if (!profile) {
     redirect('/auth/login');
   }
 
   return (
     <div className="mx-auto max-w-4xl">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">
           Editar Mi Perfil
@@ -57,8 +54,7 @@ export default async function ProfileEditPage() {
         </p>
       </div>
 
-      {/* Formulario de edición */}
-      <ProfileEditForm user={user} />
+      <ProfileEditForm user={profile} />
     </div>
   );
 }

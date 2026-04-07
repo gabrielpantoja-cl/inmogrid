@@ -29,8 +29,8 @@ ${Object.entries(faqs).map(([question, answer]) => `- "${question}": "${answer}"
 export async function POST(req: NextRequest) {
   try {
     // --- Authentication ---
-    const session = await auth();
-    const userId = session?.user?.id;
+    const authUser = await auth();
+    const userId = authUser?.id;
     if (!userId) {
       return new Response('Unauthorized', { status: 401 });
     }
