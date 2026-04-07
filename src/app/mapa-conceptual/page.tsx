@@ -103,6 +103,7 @@ const TIPS: Record<string, { title: string; text: string }> = {
   google:     { title: '🔑 Google OAuth',       text: "Cuando haces clic en 'Iniciar sesión con Google', Supabase le pregunta a Google «¿es realmente esta persona?». Google confirma y devuelve una llave de acceso. Sin contraseñas propias." },
   vps:        { title: '⚙️ VPS Oracle',         text: 'Un servidor propio que nunca se apaga. Corre automatizaciones con N8N (como Zapier pero privado): envía correos, procesa datos, conecta servicios externos en segundo plano.' },
   github:     { title: '🐙 GitHub',             text: "El historial completo del código. Cada mejora queda registrada aquí. Cuando Gabriel hace 'push', Vercel lo detecta y publica los cambios automáticamente." },
+  referenciales: { title: '🏠 referenciales.cl', text: 'Plataforma open-data con miles de compraventas inmobiliarias de Chile (CBR). degux.cl consulta su API pública para mostrar datos de mercado a los usuarios. Tiene su propia base de datos Neon (PostgreSQL + PostGIS), separada de Supabase.' },
 }
 
 export default function MapaConceptualPage() {
@@ -140,7 +141,7 @@ export default function MapaConceptualPage() {
         <p className="subtitle">Pasa el cursor sobre cada pieza para saber qué hace</p>
 
         <div className="map-wrap">
-          <svg className="map" viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg">
+          <svg className="map" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg">
             <defs>
               {/* Flechas */}
               <marker id="arrow-white"  markerWidth={8} markerHeight={8} refX={6} refY={3} orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#555"/></marker>
@@ -148,6 +149,7 @@ export default function MapaConceptualPage() {
               <marker id="arrow-violet" markerWidth={8} markerHeight={8} refX={6} refY={3} orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#818cf8"/></marker>
               <marker id="arrow-amber"  markerWidth={8} markerHeight={8} refX={6} refY={3} orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#f59e0b"/></marker>
               <marker id="arrow-purple" markerWidth={8} markerHeight={8} refX={6} refY={3} orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#a855f7"/></marker>
+              <marker id="arrow-cyan"   markerWidth={8} markerHeight={8} refX={6} refY={3} orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#06b6d4"/></marker>
 
               {/* Glow filters */}
               <filter id="glow-green">
@@ -187,6 +189,10 @@ export default function MapaConceptualPage() {
               <linearGradient id="grad-cf" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stopColor="#1a0e00"/>
                 <stop offset="100%" stopColor="#271500"/>
+              </linearGradient>
+              <linearGradient id="grad-ref" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#0a1f2e"/>
+                <stop offset="100%" stopColor="#0c2d3f"/>
               </linearGradient>
             </defs>
 
@@ -247,6 +253,12 @@ export default function MapaConceptualPage() {
               stroke="#f59e0b" strokeWidth={1.5} fill="none" strokeDasharray="4,4"
               markerEnd="url(#arrow-amber)"/>
             <text x={340} y={355} fill="#92400e" fontSize={9} transform="rotate(-45,340,355)">api.degux.cl</text>
+
+            {/* Vercel → referenciales.cl (consume API pública) */}
+            <path d="M 600,255 C 610,330 660,390 700,430"
+              stroke="#06b6d4" strokeWidth={1.8} fill="none" strokeDasharray="5,4"
+              markerEnd="url(#arrow-cyan)" className="flow-path"/>
+            <text x={648} y={348} fill="#0e7490" fontSize={9} transform="rotate(55,648,348)">API pública</text>
 
             {/* ── NODOS ── */}
 
@@ -316,6 +328,22 @@ export default function MapaConceptualPage() {
               <text x={570} y={518} textAnchor="middle" fill="#aaa" fontSize={9}>Código fuente · Historial</text>
             </g>
 
+            {/* referenciales.cl */}
+            <g className="map-node" data-tip="referenciales">
+              <rect x={660} y={430} width={225} height={120} rx={14} fill="url(#grad-ref)" stroke="#06b6d4" strokeWidth={1.8}/>
+              <text x={772} y={455} textAnchor="middle" fill="#67e8f9" fontSize={9} fontWeight={700} letterSpacing={1}>REFERENCIALES.CL</text>
+              <text x={772} y={474} textAnchor="middle" fontSize={20}>🏠</text>
+              <text x={772} y={496} textAnchor="middle" fill="#aaa" fontSize={9}>API pública · Open Data</text>
+              <text x={772} y={510} textAnchor="middle" fill="#aaa" fontSize={9}>Compraventas CBR de Chile</text>
+              <line x1={678} y1={521} x2={876} y2={521} stroke="#0c3040" strokeWidth={1}/>
+              <text x={772} y={535} textAnchor="middle" fill="#0e7490" fontSize={8}>Neon PostgreSQL + PostGIS</text>
+              <circle cx={876} cy={442} r={5} fill="#06b6d4" className="pulse"/>
+            </g>
+
+            {/* Zona: Servicios Externos */}
+            <rect x={648} y={418} width={242} height={145} rx={8} fill="none" stroke="#0c2a35" strokeWidth={1} strokeDasharray="6,4"/>
+            <text x={656} y={432} fill="#0c3040" fontSize={8} fontWeight={600} letterSpacing={1}>PLATAFORMA EXTERNA</text>
+
             {/* Zonas */}
             <rect x={60} y={38} width={380} height={115} rx={8} fill="none" stroke="#222" strokeWidth={1} strokeDasharray="6,4"/>
             <text x={68} y={52} fill="#333" fontSize={8} fontWeight={600} letterSpacing={1}>INTERNET PÚBLICO</text>
@@ -335,6 +363,7 @@ export default function MapaConceptualPage() {
             { color: '#a855f7', label: 'Google — Identidad' },
             { color: '#f59e0b', label: 'VPS Oracle — Automatizaciones' },
             { color: '#58a6ff', label: 'GitHub — Código fuente' },
+            { color: '#06b6d4', label: 'referenciales.cl — API pública open-data' },
           ].map(({ color, label }) => (
             <div key={label} className="legend-item">
               <div className="legend-dot" style={{ background: color }} />
