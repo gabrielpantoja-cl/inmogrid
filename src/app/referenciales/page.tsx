@@ -117,8 +117,9 @@ export default function ReferencialesPage() {
         <section className="mb-6 rounded-xl border border-gray-200 bg-white p-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Comuna</label>
+              <label htmlFor="ref-comuna" className="block text-xs font-medium text-gray-700 mb-1">Comuna</label>
               <select
+                id="ref-comuna"
                 value={selectedComuna}
                 onChange={(e) => setSelectedComuna(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -133,8 +134,9 @@ export default function ReferencialesPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Año</label>
+              <label htmlFor="ref-anio" className="block text-xs font-medium text-gray-700 mb-1">Año</label>
               <select
+                id="ref-anio"
                 value={selectedAnio}
                 onChange={(e) => setSelectedAnio(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -149,10 +151,11 @@ export default function ReferencialesPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
+              <label htmlFor="ref-limit" className="block text-xs font-medium text-gray-700 mb-1">
                 Máx. resultados
               </label>
               <select
+                id="ref-limit"
                 value={limit}
                 onChange={(e) => setLimit(Number(e.target.value))}
                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
