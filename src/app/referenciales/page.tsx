@@ -109,7 +109,7 @@ export default function ReferencialesPage() {
               referenciales.cl
             </a>
             . En degux.cl los exponemos de forma <strong>abierta y sin autenticación</strong>,
-            como parte de un ecosistema generoso para todo Chile.
+            como parte de un ecosistema para todos.
           </p>
         </header>
 
