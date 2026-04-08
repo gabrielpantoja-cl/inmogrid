@@ -27,7 +27,9 @@
       "@/types/*": ["./types/*"],
       "@/constants/*": ["./constants/*"],
       "@/hooks/*": ["./hooks/*"],
-      "@/utils/*": ["./lib/utils/*"]
+      "@/utils/*": ["./lib/utils/*"],
+      "@/features/*": ["./features/*"],
+      "@/shared/*": ["./shared/*"]
     }
   },
   "include": [

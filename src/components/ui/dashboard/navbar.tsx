@@ -16,7 +16,7 @@ import {
   MagnifyingGlassIcon,
   UserIcon
 } from '@heroicons/react/24/outline';
-import { useDeleteAccount } from '@/lib/hooks/useDeleteAccount';
+import { useDeleteAccount } from '@/hooks/useDeleteAccount';
 import { Dialog } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 

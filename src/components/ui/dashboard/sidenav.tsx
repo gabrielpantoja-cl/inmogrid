@@ -5,7 +5,7 @@ import Link from 'next/link';
 import NavLinks from '@/components/ui/dashboard/nav-links';
 import AcmeLogo from '@/components/ui/common/AcmeLogo';
 import { PowerIcon, ExclamationTriangleIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import { useDeleteAccount } from '@/lib/hooks/useDeleteAccount';
+import { useDeleteAccount } from '@/hooks/useDeleteAccount';
 import { Dialog } from '@/components/ui/dialog';
 import { robustSignOut } from '@/lib/auth-utils';
 
