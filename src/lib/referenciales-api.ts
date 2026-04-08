@@ -48,13 +48,16 @@ export interface ComunasResponse {
   metadata: { total: number; distinct: number; timestamp: string };
 }
 
-export interface MapDataFilters {
+export type MapDataFilters = {
   comuna?: string;
   anio?: number;
   limit?: number;
-}
+};
 
-function buildUrl(path: string, params?: Record<string, string | number | undefined>): string {
+function buildUrl(
+  path: string,
+  params?: Record<string, string | number | undefined>
+): string {
   const url = new URL(`${REFERENCIALES_API_BASE}${path}`);
   if (params) {
     for (const [k, v] of Object.entries(params)) {
