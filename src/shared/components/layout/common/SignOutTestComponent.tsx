@@ -6,7 +6,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/shared/lib/supabase/client';
 
 export default function SignOutTestComponent() {
   const [isSigningOut, setIsSigningOut] = useState(false);

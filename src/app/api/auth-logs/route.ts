@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getUser } from '@/lib/supabase/auth';
+import { getUser } from '@/shared/lib/supabase/auth';
 
 /**
  * Extrae la IP del cliente desde los headers HTTP

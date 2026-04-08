@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
-import type { DocItem } from '@/types/docs';
+import type { DocItem } from '@/shared/types/docs';
 
 interface DocsSidebarProps {
   structure: DocItem[];

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '@/shared/lib/supabase/client';
 import { toast } from 'react-hot-toast';
 
 interface DeleteAccountResponse {

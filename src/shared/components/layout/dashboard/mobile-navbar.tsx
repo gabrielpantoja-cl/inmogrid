@@ -15,10 +15,10 @@ import {
   Bars3Icon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
-import AcmeLogo from '@/components/ui/common/AcmeLogo';
-import { useDeleteAccount } from '@/hooks/useDeleteAccount';
-import { Dialog } from '@/components/ui/dialog';
-import { robustSignOut } from '@/lib/auth-utils';
+import AcmeLogo from '@/shared/components/layout/common/AcmeLogo';
+import { useDeleteAccount } from '@/shared/hooks/useDeleteAccount';
+import { Dialog } from '@/shared/components/ui/dialog';
+import { robustSignOut } from '@/shared/lib/auth-utils';
 
 const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon },

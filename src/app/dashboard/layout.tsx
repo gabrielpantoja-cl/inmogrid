@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '@/components/ui/dashboard/navbar';
-import SignOutTestComponent from '@/components/ui/common/SignOutTestComponent';
+import Navbar from '@/shared/components/layout/dashboard/navbar';
+import SignOutTestComponent from '@/shared/components/layout/common/SignOutTestComponent';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

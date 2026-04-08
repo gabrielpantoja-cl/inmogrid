@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAuth } from '@/hooks/useAuth';
-import { createClient } from '@/lib/supabase/client';
+import { useAuth } from '@/shared/hooks/useAuth';
+import { createClient } from '@/shared/lib/supabase/client';
 
 interface Post {
   id: string;

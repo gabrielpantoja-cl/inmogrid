@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { lusitana } from '@/lib/styles/fonts';
+import { lusitana } from '@/shared/lib/styles/fonts';
 import {
   ArrowLeftIcon,
   EyeIcon,

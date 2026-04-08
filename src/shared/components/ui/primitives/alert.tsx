@@ -1,7 +1,7 @@
 // components/ui/alert.tsx - Para mensajes informativos
 
 import React from 'react';
-import { cn } from '@/lib/utils'; // Asegúrate de tener una función de utilidad para concatenar clases
+import { cn } from '@/shared/lib/utils'; // Asegúrate de tener una función de utilidad para concatenar clases
 
 interface AlertProps {
   variant?: 'default' | 'destructive';

@@ -1,9 +1,9 @@
 // Página de edición de perfil del usuario
 // Ruta: /dashboard/perfil (autenticado)
 
-import { requireAuth } from '@/lib/supabase/auth';
+import { requireAuth } from '@/shared/lib/supabase/auth';
 import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/shared/lib/prisma';
 import { ProfileEditForm } from '@/features/profiles';
 
 export const metadata = {

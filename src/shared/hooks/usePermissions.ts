@@ -1,5 +1,5 @@
 // lib/hooks/usePermissions.ts
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 
 interface Permissions {
   canEdit: boolean

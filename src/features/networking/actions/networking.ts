@@ -11,8 +11,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { prisma } from '@/lib/prisma'
-import { getUser } from '@/lib/supabase/auth'
+import { prisma } from '@/shared/lib/prisma'
+import { getUser } from '@/shared/lib/supabase/auth'
 
 const ConnectionRequestSchema = z.object({
   receiverId: z.string().min(1, 'Usuario requerido'),

@@ -39,7 +39,7 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "boundaries/element-types": [
-      "warn",
+      "error",
       {
         "default": "allow",
         "rules": [
@@ -80,12 +80,9 @@
       { "type": "app", "pattern": "src/app/*", "mode": "folder" }
     ],
     "boundaries/ignore": [
-      "src/components/**",
-      "src/lib/**",
-      "src/hooks/**",
-      "src/types/**",
       "src/middleware.ts",
       "src/config/**",
+      "src/types/**",
       "__tests__/**"
     ]
   }

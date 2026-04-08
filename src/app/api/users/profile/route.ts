@@ -3,8 +3,8 @@
 // PUT /api/users/profile - Actualiza perfil del usuario
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { getUser } from '@/lib/supabase/auth';
+import { prisma } from '@/shared/lib/prisma';
+import { getUser } from '@/shared/lib/supabase/auth';
 import { z } from 'zod';
 import { ProfessionType } from '@prisma/client';
 

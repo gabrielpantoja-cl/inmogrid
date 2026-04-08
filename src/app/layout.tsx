@@ -2,14 +2,14 @@ import React from 'react';
 import './globals.css';
 import { Metadata, Viewport } from 'next';
 import { Toaster } from 'react-hot-toast';
-import { CookieConsentProvider } from '@/components/ui/legal/CookieConsentProvider';
-import CookieConsentBanner from '@/components/ui/legal/CookieConsentBanner';
+import { CookieConsentProvider } from '@/shared/components/layout/legal/CookieConsentProvider';
+import CookieConsentBanner from '@/shared/components/layout/legal/CookieConsentBanner';
 import {
   ConditionalGoogleAnalytics,
   ConditionalVercelAnalytics,
   ConditionalSpeedInsights
-} from '@/components/ui/legal/ConditionalAnalytics';
-import Footer from '@/components/ui/common/Footer';
+} from '@/shared/components/layout/legal/ConditionalAnalytics';
+import Footer from '@/shared/components/layout/common/Footer';
 
 // Configuración del Viewport
 export const viewport: Viewport = {

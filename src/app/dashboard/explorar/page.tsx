@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/shared/lib/prisma';
 import Link from 'next/link';
 
 export const metadata: Metadata = {

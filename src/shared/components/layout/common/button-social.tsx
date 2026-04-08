@@ -2,8 +2,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/primitives/button";
-import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/shared/components/ui/primitives/button";
+import { createClient } from "@/shared/lib/supabase/client";
 
 interface ButtonSocialProps {
   children: React.ReactNode;

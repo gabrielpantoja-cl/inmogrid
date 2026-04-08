@@ -2,7 +2,7 @@
 // Custom hook para usar la API de GitHub Stars con React
 
 import { useState, useEffect, useCallback } from 'react';
-import { fetchGithubStarsEnhanced, type FetchStarsResult } from '@/lib/githubStars';
+import { fetchGithubStarsEnhanced, type FetchStarsResult } from '@/shared/lib/githubStars';
 
 interface UseGitHubStarsOptions {
   token?: string;

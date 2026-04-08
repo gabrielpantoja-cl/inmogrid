@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createOpenAI } from '@ai-sdk/openai';
 import { streamText, type CoreMessage, type StreamTextResult } from 'ai';
-import { auth } from '@/lib/auth';
+import { auth } from '@/shared/lib/auth';
 import {
   faqs,
   SOFIA_SYSTEM_PROMPT,

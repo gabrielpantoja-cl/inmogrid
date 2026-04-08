@@ -1,7 +1,7 @@
 // src/app/[username]/notas/page.tsx
 
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/shared/lib/prisma';
 import Link from 'next/link';
 
 interface NotesPageProps {

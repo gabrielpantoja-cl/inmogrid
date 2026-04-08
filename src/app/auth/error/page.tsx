@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 import Link from 'next/link'
-import AcmeLogo from '@/components/ui/common/AcmeLogo'
+import AcmeLogo from '@/shared/components/layout/common/AcmeLogo'
 
 enum Error {
   Configuration = "Configuration",

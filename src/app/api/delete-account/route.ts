@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getUser } from '@/lib/supabase/auth';
-import { prisma } from '@/lib/prisma';
+import { getUser } from '@/shared/lib/supabase/auth';
+import { prisma } from '@/shared/lib/prisma';
 
 export async function DELETE() {
   try {

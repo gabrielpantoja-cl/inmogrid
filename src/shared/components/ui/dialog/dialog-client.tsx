@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { DialogProps } from './types';
 
 export function DialogClient({ open, onClose, title, description, buttons }: DialogProps) {

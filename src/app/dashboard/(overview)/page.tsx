@@ -1,6 +1,6 @@
-import { getUser } from '@/lib/supabase/auth';
+import { getUser } from '@/shared/lib/supabase/auth';
 import DashboardContent from './DashboardContent';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/shared/lib/prisma';
 import { Suspense } from 'react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 

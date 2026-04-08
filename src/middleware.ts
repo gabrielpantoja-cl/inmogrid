@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { updateSession } from '@/lib/supabase/middleware'
+import { updateSession } from '@/shared/lib/supabase/middleware'
 
 // Rutas completamente públicas — no requieren sesión
 const PUBLIC_PATHS = [

@@ -3,7 +3,7 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import AcmeLogo from '@/components/ui/common/AcmeLogo';
+import AcmeLogo from '@/shared/components/layout/common/AcmeLogo';
 
 function ErrorContent() {
   const searchParams = useSearchParams();

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import AcmeLogo from '@/components/ui/common/AcmeLogo';
+import AcmeLogo from '@/shared/components/layout/common/AcmeLogo';
 import {
   PowerIcon,
   ExclamationTriangleIcon,
@@ -16,9 +16,9 @@ import {
   MagnifyingGlassIcon,
   UserIcon
 } from '@heroicons/react/24/outline';
-import { useDeleteAccount } from '@/hooks/useDeleteAccount';
-import { Dialog } from '@/components/ui/dialog';
-import { useAuth } from '@/hooks/useAuth';
+import { useDeleteAccount } from '@/shared/hooks/useDeleteAccount';
+import { Dialog } from '@/shared/components/ui/dialog';
+import { useAuth } from '@/shared/hooks/useAuth';
 
 interface NavLink {
   name: string;

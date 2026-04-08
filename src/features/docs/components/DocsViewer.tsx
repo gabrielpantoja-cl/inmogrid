@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { DocsSidebar } from './DocsSidebar';
 import { DocsContent } from './DocsContent';
-import type { DocItem } from '@/types/docs';
+import type { DocItem } from '@/shared/types/docs';
 
 const DOCS_STRUCTURE: DocItem[] = [
   {

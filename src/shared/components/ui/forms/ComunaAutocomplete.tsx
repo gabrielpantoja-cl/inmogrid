@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { searchComunas, COMUNAS_CHILE } from '@/lib/comunas';
+import { searchComunas, COMUNAS_CHILE } from '@/shared/constants/comunas';
 
 interface ComunaAutocompleteProps {
   value: string;

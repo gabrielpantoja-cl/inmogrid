@@ -2,7 +2,7 @@
 // Filtra por status='published' (pantojapropiedades.cl) OR published=true (degux.cl)
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/shared/lib/prisma';
 import { Prisma } from '@prisma/client';
 
 type PostRow = {

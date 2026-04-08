@@ -5,7 +5,7 @@
  */
 
 import { randomUUID } from 'crypto';
-import { db } from '@/lib/prisma';
+import { db } from '@/shared/lib/prisma';
 import { MessageRole } from '@prisma/client';
 
 export async function saveUserMessage(userId: string, content: string) {

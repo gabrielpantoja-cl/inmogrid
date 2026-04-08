@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import NavLinks from '@/components/ui/dashboard/nav-links';
-import AcmeLogo from '@/components/ui/common/AcmeLogo';
+import NavLinks from '@/shared/components/layout/dashboard/nav-links';
+import AcmeLogo from '@/shared/components/layout/common/AcmeLogo';
 import { PowerIcon, ExclamationTriangleIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
-import { useDeleteAccount } from '@/hooks/useDeleteAccount';
-import { Dialog } from '@/components/ui/dialog';
-import { robustSignOut } from '@/lib/auth-utils';
+import { useDeleteAccount } from '@/shared/hooks/useDeleteAccount';
+import { Dialog } from '@/shared/components/ui/dialog';
+import { robustSignOut } from '@/shared/lib/auth-utils';
 
 export default function SideNav() {
   const { 

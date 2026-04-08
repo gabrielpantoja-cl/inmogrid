@@ -1,0 +1,22 @@
+# Feature: `docs`
+
+Visor de documentación pública de degux.cl. Renderiza los markdown de `docs/` con sidebar navegable.
+
+## Estructura
+
+```
+features/docs/
+└── components/
+    ├── DocsSidebar.tsx
+    ├── DocsViewer.tsx
+    └── DocsContent.tsx
+```
+
+## Consumido por
+
+- `src/app/dashboard/documentacion/page.tsx`
+
+## Pendiente
+
+- Agregar `index.ts` (barrel) con la API pública
+- README formal con scope y dependencias (por ahora este placeholder)

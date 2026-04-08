@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Shield, BarChart3, Zap, Settings as SettingsIcon, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/primitives/button';
-import { Card } from '@/components/ui/primitives/card';
+import { Button } from '@/shared/components/ui/primitives/button';
+import { Card } from '@/shared/components/ui/primitives/card';
 import { useCookieConsent, type CookiePreferences } from './CookieConsentProvider';
 
 interface CookiePreferencesModalProps {

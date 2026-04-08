@@ -1,5 +1,5 @@
 /* app/privacy/page.tsx */
-import TimeStamp from '@/components/ui/common/TimeStamp';
+import TimeStamp from '@/shared/components/layout/common/TimeStamp';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { unified } from 'unified';

@@ -2,7 +2,7 @@
  * Server-side Supabase Auth helpers for Server Components and Route Handlers.
  *
  * Usage:
- *   import { requireAuth, getUser, getProfile } from '@/lib/supabase/auth'
+ *   import { requireAuth, getUser, getProfile } from '@/shared/lib/supabase/auth'
  *
  * - getUser()            → returns the authenticated User or null (no redirect)
  * - getProfile(userId)   → fetches the degux_profiles row for a given user id
@@ -10,7 +10,7 @@
  */
 
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/shared/lib/supabase/server'
 import { type User } from '@supabase/supabase-js'
 
 // ---------------------------------------------------------------------------

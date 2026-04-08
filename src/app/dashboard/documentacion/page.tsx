@@ -1,5 +1,5 @@
-import { DocsViewer } from '@/components/features/docs/DocsViewer';
-import { getUser, getProfile } from '@/lib/supabase/auth';
+import { DocsViewer } from '@/features/docs/components/DocsViewer';
+import { getUser, getProfile } from '@/shared/lib/supabase/auth';
 import { redirect } from 'next/navigation';
 
 export default async function DocumentacionPage() {

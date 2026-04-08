@@ -3,7 +3,7 @@
 // NO requiere autenticación
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/shared/lib/prisma';
 
 export async function GET(
   request: NextRequest,

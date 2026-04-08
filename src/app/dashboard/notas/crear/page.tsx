@@ -1,4 +1,4 @@
-import { requireAuth } from '@/lib/supabase/auth';
+import { requireAuth } from '@/shared/lib/supabase/auth';
 import CrearNotaForm from './CrearNotaForm';
 
 export const metadata = {

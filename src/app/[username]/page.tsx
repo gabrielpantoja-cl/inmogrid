@@ -3,10 +3,10 @@
 
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
-import ProfileHero from '@/components/ui/profile/ProfileHero';
-import ProfileBio from '@/components/ui/profile/ProfileBio';
-import SocialLinks from '@/components/ui/profile/SocialLinks';
+import { prisma } from '@/shared/lib/prisma';
+import ProfileHero from '@/shared/components/layout/profile/ProfileHero';
+import ProfileBio from '@/shared/components/layout/profile/ProfileBio';
+import SocialLinks from '@/shared/components/layout/profile/SocialLinks';
 
 interface ProfilePageProps {
   params: Promise<{

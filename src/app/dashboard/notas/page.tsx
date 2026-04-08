@@ -1,7 +1,7 @@
-import { requireAuth, getProfile } from '@/lib/supabase/auth';
+import { requireAuth, getProfile } from '@/shared/lib/supabase/auth';
 import { redirect } from 'next/navigation';
 import NotasContent from './NotasContent';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/shared/lib/prisma';
 
 export const metadata = {
   title: 'Mis Notas - degux.cl',

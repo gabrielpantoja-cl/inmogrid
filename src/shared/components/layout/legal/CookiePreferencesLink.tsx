@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Settings, Cookie } from 'lucide-react';
-import { Button } from '@/components/ui/primitives/button';
+import { Button } from '@/shared/components/ui/primitives/button';
 import CookiePreferencesModal from './CookiePreferencesModal';
 
 export default function CookiePreferencesLink() {

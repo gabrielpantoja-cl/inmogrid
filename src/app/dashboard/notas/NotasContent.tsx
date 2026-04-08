@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { lusitana } from '@/lib/styles/fonts';
+import { lusitana } from '@/shared/lib/styles/fonts';
 import { useState } from 'react';
 import {
   PencilIcon,

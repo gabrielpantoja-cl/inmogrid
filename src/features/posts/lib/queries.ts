@@ -5,7 +5,7 @@
  */
 
 import { randomUUID } from 'crypto';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/shared/lib/prisma';
 import { generateSlug, estimateReadTime } from './slug';
 import {
   POST_LIST_SELECT,

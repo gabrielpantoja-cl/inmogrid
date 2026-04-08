@@ -4,8 +4,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useGitHubStars } from '@/hooks/useGitHubStars';
-import { checkGitHubRateLimit, getCacheInfo, clearGitHubStarsCache } from '@/lib/githubStars';
+import { useGitHubStars } from '@/shared/hooks/useGitHubStars';
+import { checkGitHubRateLimit, getCacheInfo, clearGitHubStarsCache } from '@/shared/lib/githubStars';
 
 interface GitHubStarsDisplayProps {
   repo: string; // "owner/repo"

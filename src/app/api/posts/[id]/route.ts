@@ -5,7 +5,7 @@
 // DELETE /api/posts/[id]
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { auth } from '@/shared/lib/auth';
 import {
   getPostByIdForUser,
   updatePostForUser,
