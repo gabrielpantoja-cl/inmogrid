@@ -1,73 +1,31 @@
-// API privada para gestionar posts del usuario autenticado
-// GET /api/posts - Lista posts del usuario
-// POST /api/posts - Crea un nuevo post
+// API privada para gestionar posts del usuario autenticado.
+// Handler delgado — toda la lógica vive en `@/features/posts`.
+// GET  /api/posts  → lista posts del usuario
+// POST /api/posts  → crea un nuevo post
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
-import { randomUUID } from 'crypto';
+import {
+  listPostsByUser,
+  createPostForUser,
+  createPostSchema,
+} from '@/features/posts';
 
-// Helper para generar slug único
-function generateSlug(title: string): string {
-  const baseSlug = title
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // Remover acentos
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, ''); // Remover guiones al inicio/fin
-
-  const timestamp = Date.now().toString(36);
-  return `${baseSlug}-${timestamp}`;
-}
-
-// GET - Lista posts del usuario autenticado
 export async function GET(request: NextRequest) {
   try {
     const authUser = await auth();
     if (!authUser?.id) {
-      return NextResponse.json(
-        { error: 'No autenticado' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const published = searchParams.get('published');
+    const publishedParam = searchParams.get('published');
+    const published =
+      publishedParam === null ? undefined : publishedParam === 'true';
 
-    // Filtros
-    const where: any = {
-      userId: authUser.id,
-    };
+    const posts = await listPostsByUser(authUser.id, { published });
 
-    if (published !== null) {
-      where.published = published === 'true';
-    }
-
-    const posts = await prisma.post.findMany({
-      where,
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        excerpt: true,
-        coverImageUrl: true,
-        published: true,
-        publishedAt: true,
-        tags: true,
-        readTime: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      posts,
-      count: posts.length,
-    });
+    return NextResponse.json({ success: true, posts, count: posts.length });
   } catch (error) {
     console.error('[API Posts GET Error]:', error);
     return NextResponse.json(
@@ -77,78 +35,25 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Crea un nuevo post
 export async function POST(request: NextRequest) {
   try {
     const authUser = await auth();
     if (!authUser?.id) {
-      return NextResponse.json(
-        { error: 'No autenticado' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
     }
 
     const body = await request.json();
-    const {
-      title,
-      content,
-      excerpt,
-      coverImageUrl,
-      published = false,
-      tags = [],
-    } = body;
-
-    // Validación
-    if (!title || !content) {
+    const parsed = createPostSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: 'Título y contenido son requeridos' },
+        { error: 'Datos inválidos', details: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
-    // Generar slug único
-    const slug = generateSlug(title);
+    const post = await createPostForUser(authUser.id, parsed.data);
 
-    // Calcular tiempo de lectura (aproximado: 200 palabras por minuto)
-    const words = content.split(/\s+/).length;
-    const readTime = Math.ceil(words / 200);
-
-    // Crear post
-    const post = await prisma.post.create({
-      data: {
-        id: randomUUID(),
-        userId: authUser.id,
-        title,
-        slug,
-        content,
-        excerpt: excerpt || content.substring(0, 160) + '...',
-        coverImageUrl,
-        published,
-        publishedAt: published ? new Date() : null,
-        tags,
-        readTime,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        excerpt: true,
-        coverImageUrl: true,
-        published: true,
-        publishedAt: true,
-        tags: true,
-        readTime: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      post,
-    });
+    return NextResponse.json({ success: true, post });
   } catch (error) {
     console.error('[API Posts POST Error]:', error);
     return NextResponse.json(

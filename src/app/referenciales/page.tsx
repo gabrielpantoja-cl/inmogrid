@@ -7,12 +7,12 @@ import {
   fetchReferenciales,
   fetchComunas,
   type Referencial,
-} from '@/lib/referenciales-api';
-import ReferencialesStats from '@/components/referenciales/ReferencialesStats';
+} from '@/features/referenciales';
+import { ReferencialesStats } from '@/features/referenciales';
 
 // Leaflet es browser-only → import dinámico sin SSR
 const ReferencialesMap = dynamic(
-  () => import('@/components/referenciales/ReferencialesMap'),
+  () => import('@/features/referenciales/components/ReferencialesMap'),
   {
     ssr: false,
     loading: () => (

@@ -4,7 +4,7 @@
 import { requireAuth } from '@/lib/supabase/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import ProfileEditForm from '@/components/forms/ProfileEditForm';
+import { ProfileEditForm } from '@/features/profiles';
 
 export const metadata = {
   title: 'Editar Perfil | degux.cl',
