@@ -53,6 +53,12 @@ export default function Page() {
           </Link>
 
           <div className="flex items-center gap-3">
+            <Link
+              href="/referenciales"
+              className="hidden sm:inline text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+            >
+              Referenciales
+            </Link>
             {authLoading ? null : isAuthenticated ? (
               <>
                 <Link
