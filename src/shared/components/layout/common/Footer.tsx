@@ -6,7 +6,7 @@ import { version as reactVersion } from 'react/package.json';
 
 const Footer: React.FC = () => {
   // --- URLs (Asegúrate que sean correctas) ---
-  const githubRepoUrl = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/degux.cl';
+  const githubRepoUrl = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/inmogrid.cl';
   const githubDiscussionsUrl = `${githubRepoUrl}/discussions`;
   // --- Fin URLs ---
 
@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
         {/* Columna 1: Botón/Enlace a inicio */}
         <div className="flex justify-center md:justify-start">
           <Link href="/" className="text-lg font-semibold text-blue-700 hover:text-blue-900 transition-colors">
-            degux.cl
+            inmogrid.cl
           </Link>
         </div>
 

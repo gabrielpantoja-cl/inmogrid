@@ -3,7 +3,7 @@
 # ==========================================
 # 🔍 Script de Verificación de Variables de Entorno
 # ==========================================
-# Proyecto: degux.cl
+# Proyecto: inmogrid.cl
 # Descripción: Verifica que todas las variables requeridas estén configuradas
 # Uso: ./scripts/check-env.sh
 # ==========================================
@@ -16,7 +16,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo "🔍 Verificando Variables de Entorno para degux.cl"
+echo "🔍 Verificando Variables de Entorno para inmogrid.cl"
 echo "=================================================="
 echo ""
 
@@ -134,10 +134,10 @@ NODE_ENV=$(grep "^NODE_ENV=" $ENV_FILE 2>/dev/null | cut -d '=' -f 2- | tr -d '"
 
 if [ ! -z "$NEXTAUTH_URL" ]; then
   if [ "$NODE_ENV" = "production" ]; then
-    if [[ "$NEXTAUTH_URL" == "https://degux.cl" ]]; then
+    if [[ "$NEXTAUTH_URL" == "https://inmogrid.cl" ]]; then
       echo -e "${GREEN}✅ NEXTAUTH_URL configurada para producción${NC}"
     else
-      echo -e "${YELLOW}⚠️  NEXTAUTH_URL no coincide con producción (esperado: https://degux.cl)${NC}"
+      echo -e "${YELLOW}⚠️  NEXTAUTH_URL no coincide con producción (esperado: https://inmogrid.cl)${NC}"
     fi
   else
     if [[ "$NEXTAUTH_URL" == "http://localhost:3000" ]]; then

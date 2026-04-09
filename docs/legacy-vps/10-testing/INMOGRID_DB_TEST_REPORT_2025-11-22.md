@@ -1,16 +1,16 @@
-# Reporte de Testing degux-db (PostgreSQL Dedicado)
+# Reporte de Testing inmogrid-db (PostgreSQL Dedicado)
 
 **Fecha**: 2025-11-22 01:20 UTC
 **Autor**: Claude Code (Test Automation)
 **VPS**: VPS_IP_REDACTED (Digital Ocean)
-**Database**: degux-db (PostgreSQL 15 + PostGIS 3.4)
+**Database**: inmogrid-db (PostgreSQL 15 + PostGIS 3.4)
 **Puerto**: 5433
 
 ---
 
 ## 📋 Resumen Ejecutivo
 
-La base de datos **degux-db** fue migrada exitosamente desde **n8n-db** y está funcionando correctamente en producción. Se ejecutaron 10 tests automatizados, de los cuales **8 pasaron exitosamente** (80% de éxito).
+La base de datos **inmogrid-db** fue migrada exitosamente desde **n8n-db** y está funcionando correctamente en producción. Se ejecutaron 10 tests automatizados, de los cuales **8 pasaron exitosamente** (80% de éxito).
 
 ### Estado General: ✅ OPERACIONAL
 
@@ -195,7 +195,7 @@ const data = await prisma.$queryRaw`
 **Evidencia**:
 ```bash
 # Página 1 (offset=0)
-$ curl "https://degux.cl/api/public/map-data?limit=3&offset=0"
+$ curl "https://inmogrid.cl/api/public/map-data?limit=3&offset=0"
 [
   { "id": "ref_1756340162270_evpjaf1rv", "comuna": "Longaví" },
   { "id": "ref_1755627955292_hpuu154yb", "comuna": "Valdivia" },
@@ -203,7 +203,7 @@ $ curl "https://degux.cl/api/public/map-data?limit=3&offset=0"
 ]
 
 # Página 2 (offset=3) - ❌ MISMO RESULTADO
-$ curl "https://degux.cl/api/public/map-data?limit=3&offset=3"
+$ curl "https://inmogrid.cl/api/public/map-data?limit=3&offset=3"
 [
   { "id": "ref_1756340162270_evpjaf1rv", "comuna": "Longaví" },  # ❌ Duplicado
   { "id": "ref_1755627955292_hpuu154yb", "comuna": "Valdivia" }, # ❌ Duplicado
@@ -252,7 +252,7 @@ $ curl "https://degux.cl/api/public/map-data?limit=3&offset=3"
 ├─────────────────────────────────────────┤
 │                                         │
 │  ┌─────────────┐      ┌──────────────┐ │
-│  │  degux-web  │ ───► │  degux-db    │ │
+│  │  inmogrid-web  │ ───► │  inmogrid-db    │ │
 │  │  (Next.js)  │      │ (PostgreSQL) │ │
 │  │  :3000      │      │  :5433       │ │
 │  └─────────────┘      └──────────────┘ │
@@ -348,7 +348,7 @@ $ curl "https://degux.cl/api/public/map-data?limit=3&offset=3"
    - Testear filtros de `comuna`, `anio`, `cbr`
 
 2. **Añadir tests automatizados** 🟡
-   - Integrar el script `scripts/test-degux-db.sh` en CI/CD
+   - Integrar el script `scripts/test-inmogrid-db.sh` en CI/CD
    - Ejecutar tests después de cada deployment
    - Alertar si algún test falla
 
@@ -378,7 +378,7 @@ $ curl "https://degux.cl/api/public/map-data?limit=3&offset=3"
 
 7. **Escalabilidad** 🔵
    - Considerar CDN para API pública (Cloudflare/Fastly)
-   - Implementar read replicas para degux-db
+   - Implementar read replicas para inmogrid-db
    - Migrar a cursor-based pagination para datasets grandes
 
 8. **Features adicionales** 🔵
@@ -392,31 +392,31 @@ $ curl "https://degux.cl/api/public/map-data?limit=3&offset=3"
 
 ### Ejecutar Suite Completa
 ```bash
-cd /home/gabriel/Documentos/degux.cl
-bash scripts/test-degux-db.sh
+cd /home/gabriel/Documentos/inmogrid.cl
+bash scripts/test-inmogrid-db.sh
 ```
 
 ### Tests Manuales Útiles
 
 **Health Check**:
 ```bash
-curl -sL https://degux.cl/api/public/health | python3 -m json.tool
+curl -sL https://inmogrid.cl/api/public/health | python3 -m json.tool
 ```
 
 **Map Data (primeros 5)**:
 ```bash
-curl -sL "https://degux.cl/api/public/map-data?limit=5" | python3 -m json.tool
+curl -sL "https://inmogrid.cl/api/public/map-data?limit=5" | python3 -m json.tool
 ```
 
 **Filtro por Comuna**:
 ```bash
-curl -sL "https://degux.cl/api/public/map-data?comuna=valdivia&limit=10" | python3 -m json.tool
+curl -sL "https://inmogrid.cl/api/public/map-data?comuna=valdivia&limit=10" | python3 -m json.tool
 ```
 
 **Test de Paginación** (actualmente fallará):
 ```bash
-curl -sL "https://degux.cl/api/public/map-data?limit=3&offset=0" | python3 -m json.tool
-curl -sL "https://degux.cl/api/public/map-data?limit=3&offset=3" | python3 -m json.tool
+curl -sL "https://inmogrid.cl/api/public/map-data?limit=3&offset=0" | python3 -m json.tool
+curl -sL "https://inmogrid.cl/api/public/map-data?limit=3&offset=3" | python3 -m json.tool
 ```
 
 ---
@@ -429,7 +429,7 @@ curl -sL "https://degux.cl/api/public/map-data?limit=3&offset=3" | python3 -m js
 2. **PostGIS funcional**: Datos geoespaciales precisos y validados para territorio chileno
 3. **APIs respondiendo**: Endpoints públicos operacionales y con CORS habilitado
 4. **Rendimiento aceptable**: Tiempos de respuesta < 1.2s para queries típicos
-5. **Infraestructura estable**: degux-db separado de n8n-db, mejor aislamiento
+5. **Infraestructura estable**: inmogrid-db separado de n8n-db, mejor aislamiento
 
 ### ⚠️ Áreas de Mejora
 
@@ -461,8 +461,8 @@ curl -sL "https://degux.cl/api/public/map-data?limit=3&offset=3" | python3 -m js
 ---
 
 **Generado por**: Claude Code Test Automation
-**Versión del Script**: `test-degux-db.sh` v1.0.0
+**Versión del Script**: `test-inmogrid-db.sh` v1.0.0
 **Fecha de Ejecución**: 2025-11-22 01:20 UTC
 **Duración del Test**: ~15 segundos
 **VPS**: VPS_IP_REDACTED (Digital Ocean)
-**Database**: degux-db (PostgreSQL 15 + PostGIS 3.4, puerto 5433)
+**Database**: inmogrid-db (PostgreSQL 15 + PostGIS 3.4, puerto 5433)

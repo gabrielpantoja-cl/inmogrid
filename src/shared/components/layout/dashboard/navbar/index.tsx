@@ -39,7 +39,7 @@ export default function Navbar() {
                     <AcmeLogo />
                   </div>
                   <span className="ml-2 text-xl font-bold text-gray-900 hidden sm:block">
-                    degux.cl
+                    inmogrid.cl
                   </span>
                 </Link>
               </div>

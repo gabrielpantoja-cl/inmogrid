@@ -1,4 +1,4 @@
-# 🏗️ Arquitectura degux.cl V2 - PostgreSQL Dedicado
+# 🏗️ Arquitectura inmogrid.cl V2 - PostgreSQL Dedicado
 
 **Fecha**: 2025-11-21
 **Versión**: 2.0
@@ -11,13 +11,13 @@
 ### ✅ Problema Resuelto
 
 **Antes (V1):**
-- degux compartía contenedor `n8n-db` con n8n workflows
-- Riesgo: Si n8n crashea, degux cae también
+- inmogrid compartía contenedor `n8n-db` con n8n workflows
+- Riesgo: Si n8n crashea, inmogrid cae también
 - Escalabilidad limitada
 - Backups mezclados
 
 **Ahora (V2):**
-- ✅ PostgreSQL **dedicado** para degux (`degux-db`)
+- ✅ PostgreSQL **dedicado** para inmogrid (`inmogrid-db`)
 - ✅ Aislamiento completo de n8n
 - ✅ Backups automáticos independientes
 - ✅ Escalabilidad mejorada
@@ -25,8 +25,8 @@
 
 ### 🎯 Beneficios
 
-1. **Resiliencia**: n8n y degux son independientes
-2. **Escalabilidad**: Podemos escalar degux-db sin afectar n8n
+1. **Resiliencia**: n8n y inmogrid son independientes
+2. **Escalabilidad**: Podemos escalar inmogrid-db sin afectar n8n
 3. **Seguridad**: Aislamiento de red Docker dedicada
 4. **Mantenimiento**: Backups y upgrades independientes
 5. **Recursos**: Límites de CPU/memoria por servicio
@@ -38,24 +38,24 @@
 ### Docker Compose Services
 
 ```yaml
-degux_network (172.25.0.0/16)
-├── degux-db (postgis/postgis:15-3.4)
-│   ├── Database: degux_core
-│   ├── User: degux_user
+inmogrid_network (172.25.0.0/16)
+├── inmogrid-db (postgis/postgis:15-3.4)
+│   ├── Database: inmogrid_core
+│   ├── User: inmogrid_user
 │   ├── Puerto externo: 5433
 │   ├── Puerto interno: 5432
-│   └── Volume: degux_db_data
+│   └── Volume: inmogrid_db_data
 │
-├── degux-web (nextjs:15.3.3)
+├── inmogrid-web (nextjs:15.3.3)
 │   ├── Framework: Next.js 15 + React 19
 │   ├── Puerto: 3000
-│   ├── Connects to: degux-db:5432
+│   ├── Connects to: inmogrid-db:5432
 │   └── Features: Server Actions, RSC
 │
-└── degux-backup (postgres-backup-local)
+└── inmogrid-backup (postgres-backup-local)
     ├── Schedule: Daily @ 00:00
     ├── Retention: 7 days, 4 weeks, 6 months
-    └── Location: /root/vps-do/degux/backups/
+    └── Location: /root/vps-do/inmogrid/backups/
 ```
 
 ### Network Topology
@@ -65,16 +65,16 @@ Internet
     ↓
 Nginx (systemd) :443 SSL
     ↓
-degux-web :3000 (Docker)
+inmogrid-web :3000 (Docker)
     ↓
-degux-db :5432 (Docker internal)
+inmogrid-db :5432 (Docker internal)
     ↓ (optional)
 n8n :5678 (webhooks) via vps_network
 ```
 
 ### Database Schema
 
-- **Database**: `degux_core`
+- **Database**: `inmogrid_core`
 - **Extensions**: PostGIS, pg_trgm, uuid-ossp
 - **Schema**: Ver `prisma/schema.prisma`
 - **Tablas principales**:
@@ -142,7 +142,7 @@ n8n :5678 (webhooks) via vps_network
 ## 📁 Estructura de Archivos (Nueva)
 
 ```
-degux.cl/
+inmogrid.cl/
 ├── src/
 │   ├── app/
 │   │   ├── actions/              # 🆕 Server Actions
@@ -179,11 +179,11 @@ degux.cl/
 
 ```env
 # Database (interno Docker network)
-POSTGRES_PRISMA_URL=postgresql://degux_user:PASSWORD@degux-db:5432/degux_core?schema=public
-POSTGRES_URL=postgresql://degux_user:PASSWORD@degux-db:5432/degux_core
+POSTGRES_PRISMA_URL=postgresql://inmogrid_user:PASSWORD@inmogrid-db:5432/inmogrid_core?schema=public
+POSTGRES_URL=postgresql://inmogrid_user:PASSWORD@inmogrid-db:5432/inmogrid_core
 
 # NextAuth.js
-NEXTAUTH_URL=https://degux.cl
+NEXTAUTH_URL=https://inmogrid.cl
 NEXTAUTH_SECRET=generated_secret_32chars
 
 # Google OAuth
@@ -198,10 +198,10 @@ GOOGLE_MAPS_API_KEY=AIza...
 
 ```env
 # Opción 1: SSH Tunnel al VPS
-POSTGRES_PRISMA_URL=postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5433/degux_core?sslmode=require
+POSTGRES_PRISMA_URL=postgresql://inmogrid_user:PASSWORD@VPS_IP_REDACTED:5433/inmogrid_core?sslmode=require
 
 # Opción 2: PostgreSQL local
-POSTGRES_PRISMA_URL=postgresql://user:pass@localhost:5432/degux_dev
+POSTGRES_PRISMA_URL=postgresql://user:pass@localhost:5432/inmogrid_dev
 ```
 
 ---
@@ -214,54 +214,54 @@ POSTGRES_PRISMA_URL=postgresql://user:pass@localhost:5432/degux_dev
 # En VPS
 cd /root/vps-do
 
-# 1. Levantar degux-db
-docker compose -f docker-compose.degux-v2.yml up -d degux-db
+# 1. Levantar inmogrid-db
+docker compose -f docker-compose.inmogrid-v2.yml up -d inmogrid-db
 
 # 2. Verificar
-docker logs degux-db
+docker logs inmogrid-db
 
-# 3. Build degux-web
-docker compose -f docker-compose.degux-v2.yml up -d --build degux-web
+# 3. Build inmogrid-web
+docker compose -f docker-compose.inmogrid-v2.yml up -d --build inmogrid-web
 
 # 4. Prisma migrations
-docker exec degux-web npx prisma generate
-docker exec degux-web npx prisma db push
+docker exec inmogrid-web npx prisma generate
+docker exec inmogrid-web npx prisma db push
 
 # 5. Verificar
-curl https://degux.cl/api/public/health
+curl https://inmogrid.cl/api/public/health
 ```
 
 ### 2. Migración desde V1
 
 ```bash
 # Ejecutar script de migración
-bash /root/vps-do/scripts/migrate-degux-db.sh
+bash /root/vps-do/scripts/migrate-inmogrid-db.sh
 
 # Verificar datos migrados
-docker exec degux-db psql -U degux_user -d degux_core -c "SELECT COUNT(*) FROM referenciales;"
+docker exec inmogrid-db psql -U inmogrid_user -d inmogrid_core -c "SELECT COUNT(*) FROM referenciales;"
 ```
 
 ### 3. Updates Continuos
 
 ```bash
 # Pull latest changes
-cd /root/degux.cl
+cd /root/inmogrid.cl
 git pull origin main
 
 # Rebuild y redeploy
 cd /root/vps-do
-docker compose -f docker-compose.degux-v2.yml up -d --build degux-web
+docker compose -f docker-compose.inmogrid-v2.yml up -d --build inmogrid-web
 
 # Aplicar migrations si hay cambios en schema
-docker exec degux-web npx prisma generate
-docker exec degux-web npx prisma db push
+docker exec inmogrid-web npx prisma generate
+docker exec inmogrid-web npx prisma db push
 ```
 
 ---
 
 ## 🔐 Backups
 
-### Automáticos (degux-backup service)
+### Automáticos (inmogrid-backup service)
 
 - **Frecuencia**: Diario @ 00:00 (America/Santiago)
 - **Formato**: PostgreSQL custom format (comprimido)
@@ -269,26 +269,26 @@ docker exec degux-web npx prisma db push
   - 7 backups diarios
   - 4 backups semanales
   - 6 backups mensuales
-- **Ubicación**: `/root/vps-do/degux/backups/`
+- **Ubicación**: `/root/vps-do/inmogrid/backups/`
 
 ### Restauración Manual
 
 ```bash
 # Listar backups
-ls -lh /root/vps-do/degux/backups/
+ls -lh /root/vps-do/inmogrid/backups/
 
 # Restaurar backup específico
-BACKUP_FILE="degux_core-2025-11-21.sql.gz"
-gunzip -c /root/vps-do/degux/backups/$BACKUP_FILE | \
-  docker exec -i degux-db psql -U degux_user -d degux_core
+BACKUP_FILE="inmogrid_core-2025-11-21.sql.gz"
+gunzip -c /root/vps-do/inmogrid/backups/$BACKUP_FILE | \
+  docker exec -i inmogrid-db psql -U inmogrid_user -d inmogrid_core
 ```
 
 ### Backup Manual On-Demand
 
 ```bash
 # Crear backup ahora
-docker exec degux-db pg_dump -U degux_user -d degux_core \
-  --format=custom --compress=9 > degux_backup_$(date +%Y%m%d_%H%M%S).dump
+docker exec inmogrid-db pg_dump -U inmogrid_user -d inmogrid_core \
+  --format=custom --compress=9 > inmogrid_backup_$(date +%Y%m%d_%H%M%S).dump
 ```
 
 ---
@@ -299,31 +299,31 @@ docker exec degux-db pg_dump -U degux_user -d degux_core \
 
 ```bash
 # API Health
-curl https://degux.cl/api/public/health
+curl https://inmogrid.cl/api/public/health
 
 # Database conexión
-docker exec degux-db psql -U degux_user -d degux_core -c "SELECT version();"
+docker exec inmogrid-db psql -U inmogrid_user -d inmogrid_core -c "SELECT version();"
 
 # Containers status
-docker ps --filter "name=degux"
+docker ps --filter "name=inmogrid"
 ```
 
 ### Performance Metrics
 
 ```bash
 # CPU/Memory usage
-docker stats degux-db degux-web
+docker stats inmogrid-db inmogrid-web
 
 # Database size
-docker exec degux-db psql -U degux_user -d degux_core -c \
-  "SELECT pg_size_pretty(pg_database_size('degux_core'));"
+docker exec inmogrid-db psql -U inmogrid_user -d inmogrid_core -c \
+  "SELECT pg_size_pretty(pg_database_size('inmogrid_core'));"
 
 # Active connections
-docker exec degux-db psql -U degux_user -d degux_core -c \
-  "SELECT count(*) FROM pg_stat_activity WHERE datname='degux_core';"
+docker exec inmogrid-db psql -U inmogrid_user -d inmogrid_core -c \
+  "SELECT count(*) FROM pg_stat_activity WHERE datname='inmogrid_core';"
 
 # Table sizes
-docker exec degux-db psql -U degux_user -d degux_core -c \
+docker exec inmogrid-db psql -U inmogrid_user -d inmogrid_core -c \
   "SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename))
    FROM pg_tables WHERE schemaname='public' ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;"
 ```
@@ -385,8 +385,8 @@ npm run api:health-stats
 ### Vertical Scaling (corto plazo)
 
 ```yaml
-# Aumentar recursos en docker-compose.degux-v2.yml
-degux-db:
+# Aumentar recursos en docker-compose.inmogrid-v2.yml
+inmogrid-db:
   deploy:
     resources:
       limits:
@@ -416,9 +416,9 @@ degux-db:
 
 ## 📚 Referencias
 
-- **Docker Compose V2**: `/home/gabriel/Documentos/vps-do/docker-compose.degux-v2.yml`
-- **Migration Script**: `/home/gabriel/Documentos/vps-do/scripts/migrate-degux-db.sh`
-- **Deployment Guide**: `/home/gabriel/Documentos/vps-do/degux/DEPLOYMENT_GUIDE_V2.md`
+- **Docker Compose V2**: `/home/gabriel/Documentos/vps-do/docker-compose.inmogrid-v2.yml`
+- **Migration Script**: `/home/gabriel/Documentos/vps-do/scripts/migrate-inmogrid-db.sh`
+- **Deployment Guide**: `/home/gabriel/Documentos/vps-do/inmogrid/DEPLOYMENT_GUIDE_V2.md`
 - **Server Actions**: `src/app/actions/networking.ts`
 - **React 19 Example**: `src/components/networking/ConnectionButton.tsx`
 - **Prisma Schema**: `prisma/schema.prisma`
@@ -444,7 +444,7 @@ degux-db:
 - [ ] Reportes automáticos
 
 ### Fase 4: Sofía AI Bot (Dec 2025-Jan 2026)
-- [ ] Vector DB (pgvector en degux-db)
+- [ ] Vector DB (pgvector en inmogrid-db)
 - [ ] Anthropic Claude API
 - [ ] RAG implementation
 

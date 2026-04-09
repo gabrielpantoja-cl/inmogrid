@@ -1,5 +1,5 @@
 // GET /api/public/posts - Feed público de posts publicados (sin autenticación)
-// Filtra por status='published' (pantojapropiedades.cl) OR published=true (degux.cl)
+// Filtra por status='published' (pantojapropiedades.cl) OR published=true (inmogrid.cl)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
           dp.full_name        AS "authorFullName",
           dp.avatar_url       AS "authorAvatarUrl"
         FROM posts p
-        LEFT JOIN degux_profiles dp ON dp.id = p.author_id
+        LEFT JOIN inmogrid_profiles dp ON dp.id = p.author_id
         WHERE p.status = 'published'
         ${tagFilter}
         ORDER BY p.created_at DESC

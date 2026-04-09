@@ -1,4 +1,4 @@
-# ✅ Solución de Deployment Final - degux.cl
+# ✅ Solución de Deployment Final - inmogrid.cl
 
 **Fecha**: 6 de Octubre, 2025
 **Estado**: Solución implementada, lista para ejecutar
@@ -11,7 +11,7 @@ He corregido completamente el enfoque de deployment basándome en tu **arquitect
 
 ### ❌ Error Anterior
 
-Los scripts `deploy-degux-simple.sh`, `setup-degux-production.sh` asumieron:
+Los scripts `deploy-inmogrid-simple.sh`, `setup-inmogrid-production.sh` asumieron:
 - Nginx nativo de systemd
 - PM2 nativo
 - Deployment directo en el VPS
@@ -25,7 +25,7 @@ VPS VPS_IP_REDACTED
     ↓
 nginx-proxy (Docker) :80, :443
     ↓
-degux-web (Docker) :3000
+inmogrid-web (Docker) :3000
 ```
 
 **Todo corre en Docker Compose, NO hay servicios nativos.**
@@ -52,7 +52,7 @@ GET /api/health → { status: "ok", database: "connected", ... }
 El script ejecuta:
 1. Limpia PM2 si existe (instalado por error)
 2. Pull cambios del repositorio en VPS
-3. Rebuild imagen Docker de degux-web
+3. Rebuild imagen Docker de inmogrid-web
 4. Reinicia contenedor
 5. Verifica health check
 6. Valida acceso público
@@ -83,7 +83,7 @@ Desde tu máquina local:
 
 ```bash
 # 1. Commit el código actualizado
-cd ~/Documentos/degux.cl
+cd ~/Documentos/inmogrid.cl
 git add .
 git commit -m "Fix: Agregar endpoint /api/health y deployment Docker"
 git push origin main
@@ -106,21 +106,21 @@ chmod +x scripts/deploy-to-vps.sh
 ssh gabriel@VPS_IP_REDACTED
 
 # 2. Limpiar PM2 (instalado por error)
-pm2 delete degux-app 2>/dev/null || true
+pm2 delete inmogrid-app 2>/dev/null || true
 pm2 kill 2>/dev/null || true
 
 # 3. Actualizar código
-cd ~/degux.cl
+cd ~/inmogrid.cl
 git pull origin main
 
 # 4. Rebuild contenedor
 cd ~/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build degux-web
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build inmogrid-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # 5. Verificar
-docker logs degux-web -f
-docker exec degux-web wget -q -O- http://localhost:3000/api/health
+docker logs inmogrid-web -f
+docker exec inmogrid-web wget -q -O- http://localhost:3000/api/health
 ```
 
 ---
@@ -131,25 +131,25 @@ Después del deploy:
 
 ### 1. Health Check Interno
 ```bash
-docker exec degux-web wget -q -O- http://localhost:3000/api/health
+docker exec inmogrid-web wget -q -O- http://localhost:3000/api/health
 # Debe responder:
 # {"status":"ok","timestamp":"...","database":"connected"}
 ```
 
 ### 2. Contenedor Healthy
 ```bash
-docker ps | grep degux-web
+docker ps | grep inmogrid-web
 # Debe mostrar:
-# degux-web    Up X minutes (healthy)  ← NO "unhealthy"
+# inmogrid-web    Up X minutes (healthy)  ← NO "unhealthy"
 ```
 
 ### 3. Acceso Público
 ```bash
-curl https://degux.cl/api/health
+curl https://inmogrid.cl/api/health
 # Debe responder:
 # {"status":"ok",...}
 
-curl -I https://degux.cl/
+curl -I https://inmogrid.cl/
 # Debe responder:
 # HTTP/2 200
 ```
@@ -160,7 +160,7 @@ curl -I https://degux.cl/
 
 ### Archivos Creados
 ```
-degux.cl/
+inmogrid.cl/
 ├── src/app/api/health/route.ts              ← Endpoint health check
 ├── scripts/deploy-to-vps.sh                 ← Script deployment automatizado
 ├── docs/06-deployment/DEPLOYMENT_GUIDE.md   ← Guía completa
@@ -169,7 +169,7 @@ degux.cl/
 
 ### Archivos Actualizados
 ```
-degux.cl/
+inmogrid.cl/
 └── CLAUDE.md  ← Arquitectura Docker documentada
 ```
 
@@ -185,7 +185,7 @@ degux.cl/
 ssh gabriel@VPS_IP_REDACTED "echo OK"
 
 # Verificar que repositorio está actualizado en VPS
-ssh gabriel@VPS_IP_REDACTED "cd ~/degux.cl && git pull"
+ssh gabriel@VPS_IP_REDACTED "cd ~/inmogrid.cl && git pull"
 
 # Ejecutar deploy manual (ver Opción 2 arriba)
 ```
@@ -195,13 +195,13 @@ ssh gabriel@VPS_IP_REDACTED "cd ~/degux.cl && git pull"
 **Solución:**
 ```bash
 # Verificar logs
-docker logs degux-web --tail 50
+docker logs inmogrid-web --tail 50
 
 # Verificar que endpoint existe
-docker exec degux-web ls -la /app/src/app/api/health/
+docker exec inmogrid-web ls -la /app/src/app/api/health/
 
 # Test manual
-docker exec degux-web wget --spider http://localhost:3000/api/health
+docker exec inmogrid-web wget --spider http://localhost:3000/api/health
 ```
 
 ### Problema: Cambios no se reflejan
@@ -210,8 +210,8 @@ docker exec degux-web wget --spider http://localhost:3000/api/health
 ```bash
 # Rebuild sin cache
 cd ~/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build --no-cache inmogrid-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # Purgar cache Cloudflare
 # Dashboard → Caching → Purge Everything
@@ -223,7 +223,7 @@ docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 
 ### Certificado SSL Dedicado
 
-Actualmente degux.cl usa el certificado de luanti.gabrielpantoja.cl (funciona pero no es ideal).
+Actualmente inmogrid.cl usa el certificado de luanti.gabrielpantoja.cl (funciona pero no es ideal).
 
 Para generar certificado dedicado:
 
@@ -234,11 +234,11 @@ ssh gabriel@VPS_IP_REDACTED
 # Generar cert dentro del contenedor nginx-proxy
 docker exec nginx-proxy certbot certonly --webroot \
   -w /var/www/certbot \
-  -d degux.cl -d www.degux.cl -d api.degux.cl \
-  --email admin@degux.cl --agree-tos
+  -d inmogrid.cl -d www.inmogrid.cl -d api.inmogrid.cl \
+  --email admin@inmogrid.cl --agree-tos
 
 # Actualizar config nginx para usar nuevo cert
-# (requiere editar /home/gabriel/vps-do/nginx/degux.cl.conf)
+# (requiere editar /home/gabriel/vps-do/nginx/inmogrid.cl.conf)
 ```
 
 ---
@@ -260,7 +260,7 @@ Antes de ejecutar el script:
 - [x] Script de deployment creado
 - [x] CLAUDE.md actualizado
 - [ ] Código commiteado y pusheado a GitHub
-- [ ] Variables de entorno verificadas en VPS (`/home/gabriel/degux.cl/.env`)
+- [ ] Variables de entorno verificadas en VPS (`/home/gabriel/inmogrid.cl/.env`)
 - [ ] SSH al VPS funcional
 
 ---
@@ -269,11 +269,11 @@ Antes de ejecutar el script:
 
 Después de ejecutar el deploy:
 
-- ✅ Contenedor `degux-web` en estado `healthy`
+- ✅ Contenedor `inmogrid-web` en estado `healthy`
 - ✅ PM2 eliminado (no se necesita con Docker)
 - ✅ Health check respondiendo correctamente
-- ✅ https://degux.cl/ accesible
-- ✅ https://degux.cl/api/health respondiendo
+- ✅ https://inmogrid.cl/ accesible
+- ✅ https://inmogrid.cl/api/health respondiendo
 - ✅ Logs sin errores críticos
 
 ---
@@ -283,7 +283,7 @@ Después de ejecutar el deploy:
 Si encuentras problemas:
 
 1. Revisa `docs/06-deployment/DEPLOYMENT_GUIDE.md` (troubleshooting completo)
-2. Verifica logs: `docker logs degux-web -f`
+2. Verifica logs: `docker logs inmogrid-web -f`
 3. Consulta documentos de diagnóstico en `docs/06-deployment/`
 
 ---
@@ -303,7 +303,7 @@ Si encuentras problemas:
 ### 📊 Diagnóstico Completo
 
 #### PROBLEMA RAÍZ:
-- Contenedor `degux-web` ejecutando versión antigua (4 días)
+- Contenedor `inmogrid-web` ejecutando versión antigua (4 días)
 - GitHub Actions no ejecutó correctamente el deployment
 - Health endpoint `/api/health` ausente → contenedor marcado "unhealthy"
 - Código actualizado en VPS (commit `281ece2`) pero imagen Docker obsoleta
@@ -321,13 +321,13 @@ Si encuentras problemas:
 ```bash
 cd /home/gabriel/vps-do
 docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
-  -f docker-compose.degux.yml build degux-web
+  -f docker-compose.inmogrid.yml build inmogrid-web
 ```
 
 #### 2. Recrear contenedor con nueva imagen
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
-  -f docker-compose.degux.yml up -d degux-web
+  -f docker-compose.inmogrid.yml up -d inmogrid-web
 ```
 
 ---
@@ -338,8 +338,8 @@ docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
 |-----------------|-----------|----------------------------------------|
 | Contenedor      | ✅ healthy | Up 24 seconds (healthy)                |
 | Health interno  | ✅ OK      | {"status":"ok","database":"connected"} |
-| Health público  | ✅ OK      | https://degux.cl/api/health → 200      |
-| Sitio principal | ✅ OK      | https://degux.cl/ → HTTP 200           |
+| Health público  | ✅ OK      | https://inmogrid.cl/api/health → 200      |
+| Sitio principal | ✅ OK      | https://inmogrid.cl/ → HTTP 200           |
 | Nginx proxy     | ✅ OK      | Routing correcto                       |
 
 ---
@@ -354,10 +354,10 @@ docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
 #### 2. Monitoreo:
 ```bash
 # Ver logs en tiempo real
-ssh gabriel@VPS_IP_REDACTED 'docker logs degux-web -f'
+ssh gabriel@VPS_IP_REDACTED 'docker logs inmogrid-web -f'
 
 # Verificar estado
-ssh gabriel@VPS_IP_REDACTED 'docker ps | grep degux'
+ssh gabriel@VPS_IP_REDACTED 'docker ps | grep inmogrid'
 ```
 
 #### 3. Documentar en el repo vps-do:
@@ -368,9 +368,9 @@ ssh gabriel@VPS_IP_REDACTED 'docker ps | grep degux'
 
 ### 🔗 URLs Funcionales
 
-- **App**: https://degux.cl/
-- **Health**: https://degux.cl/api/health
-- **API**: https://api.degux.cl/
+- **App**: https://inmogrid.cl/
+- **Health**: https://inmogrid.cl/api/health
+- **API**: https://api.inmogrid.cl/
 
 ---
 
@@ -387,7 +387,7 @@ ssh gabriel@VPS_IP_REDACTED 'docker ps | grep degux'
 # SIEMPRE usar este comando en caso de problemas
 cd /home/gabriel/vps-do && \
 docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
-  -f docker-compose.degux.yml build degux-web && \
+  -f docker-compose.inmogrid.yml build inmogrid-web && \
 docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
-  -f docker-compose.degux.yml up -d degux-web
+  -f docker-compose.inmogrid.yml up -d inmogrid-web
 ```

@@ -68,7 +68,7 @@ export async function fetchGithubStarsEnhanced(
   const headers: HeadersInit = {
     'Accept': 'application/vnd.github+json',
     'X-GitHub-Api-Version': GITHUB_API_VERSION,
-    'User-Agent': 'degux.cl/1.0' // Identificar tu aplicación
+    'User-Agent': 'inmogrid.cl/1.0' // Identificar tu aplicación
   };
 
   // Añadir autorización si hay token
@@ -209,7 +209,7 @@ export async function checkGitHubRateLimit(token?: string): Promise<RateLimitInf
   const headers: HeadersInit = {
     'Accept': 'application/vnd.github+json',
     'X-GitHub-Api-Version': GITHUB_API_VERSION,
-    'User-Agent': 'degux.cl/1.0'
+    'User-Agent': 'inmogrid.cl/1.0'
   };
 
   if (token) {

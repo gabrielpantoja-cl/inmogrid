@@ -1,4 +1,4 @@
-# 📋 VERIFICACIÓN DE DEGUX.CL - RESUMEN VISUAL
+# 📋 VERIFICACIÓN DE INMOGRID.CL - RESUMEN VISUAL
 
 **Fecha:** 2 de enero de 2026 | **Estado:** ✅ 100% OPERACIONAL
 
@@ -9,7 +9,7 @@
 ```
 ┌─────────────────────────────────────────────────────┐
 │                                                       │
-│  ✅ DEGUX.CL - COMPLETAMENTE CONFIGURADO            │
+│  ✅ INMOGRID.CL - COMPLETAMENTE CONFIGURADO            │
 │                                                       │
 │  Windows (Secundario) ←→ Linux (Principal)          │
 │         ↓                      ↓                       │
@@ -95,7 +95,7 @@
 ## 📦 DEPENDENCIAS PRINCIPALES
 
 ```
-degux-cl
+inmogrid-cl
 ├── next@15.3.1 ✅
 ├── react@19 ✅
 ├── typescript@5 ✅
@@ -214,7 +214,7 @@ degux-cl
 ## 📂 ESTRUCTURA DEL PROYECTO
 
 ```
-degux.cl/
+inmogrid.cl/
 │
 ├── 📄 Archivos Configuración (25 archivos)
 │   ├── package.json ✅
@@ -414,14 +414,14 @@ Hemos creado **5 documentos completos** para ti:
 ```
 ╔═══════════════════════════════════════════════════════╗
 ║                                                         ║
-║  ✅  DEGUX.CL ESTÁ 100% LISTO PARA PROGRAMAR  ✅     ║
+║  ✅  INMOGRID.CL ESTÁ 100% LISTO PARA PROGRAMAR  ✅     ║
 ║                                                         ║
 ║  Puedes comenzar en Windows o Linux sin problemas.    ║
 ║                                                         ║
 ║  Todos los scripts, herramientas y configuraciones    ║
 ║  están correctamente implementados y verificados.     ║
 ║                                                         ║
-║  ¡Bienvenido a degux.cl! 🚀                         ║
+║  ¡Bienvenido a inmogrid.cl! 🚀                         ║
 ║                                                         ║
 ╚═══════════════════════════════════════════════════════╝
 ```

@@ -1,4 +1,4 @@
-# Arquitectura de Resiliencia y Manejo de Errores - degux.cl
+# Arquitectura de Resiliencia y Manejo de Errores - inmogrid.cl
 
 **Guía completa de estrategias de resiliencia, error boundaries y recuperación de fallos.**
 
@@ -17,7 +17,7 @@
 
 ### Contexto
 
-El 01 de enero de 2026, degux.cl experimentó un incidente crítico de disponibilidad causado por un error de JavaScript no capturado que provocó que el contenedor Docker entrara en estado "unhealthy". La ausencia de error boundaries globales impidió la recuperación automática de la aplicación.
+El 01 de enero de 2026, inmogrid.cl experimentó un incidente crítico de disponibilidad causado por un error de JavaScript no capturado que provocó que el contenedor Docker entrara en estado "unhealthy". La ausencia de error boundaries globales impidió la recuperación automática de la aplicación.
 
 **Lección aprendida**: Una aplicación de producción robusta requiere múltiples capas de defensa contra errores inesperados.
 
@@ -211,7 +211,7 @@ function ErrorComponent({ error, reset }) {
 ```bash
 # Desde VPS
 cd /home/gabriel/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml restart degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml restart inmogrid-web
 ```
 
 **Tiempo de recuperación**: ~15 segundos
@@ -221,9 +221,9 @@ docker compose -f docker-compose.yml -f docker-compose.degux.yml restart degux-w
 ```bash
 # Desde VPS
 cd /home/gabriel/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml down degux-web
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml down inmogrid-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build --no-cache inmogrid-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 ```
 
 **Tiempo de recuperación**: ~3-5 minutos
@@ -237,7 +237,7 @@ docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 #### 1. Docker Container Health Check
 
 ```yaml
-# docker-compose.degux.yml
+# docker-compose.inmogrid.yml
 healthcheck:
   test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
   interval: 30s
@@ -260,14 +260,14 @@ healthcheck:
 {
   "status": "ok",
   "timestamp": "2026-01-01T12:00:00.000Z",
-  "service": "degux.cl",
+  "service": "inmogrid.cl",
   "database": "connected"
 }
 ```
 
 **Verificación manual**:
 ```bash
-curl https://degux.cl/api/health
+curl https://inmogrid.cl/api/health
 ```
 
 ### Logging Estructurado

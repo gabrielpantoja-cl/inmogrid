@@ -9,7 +9,7 @@
 
 ## Resumen
 
-El servidor de produccion de degux.cl fue comprometido mediante
+El servidor de produccion de inmogrid.cl fue comprometido mediante
 CVE-2025-55182 ("React2Shell"), una vulnerabilidad de deserializacion
 insegura en el protocolo Flight de React Server Components. El atacante
 ejecuto codigo arbitrario via POST requests al endpoint raiz, instalando

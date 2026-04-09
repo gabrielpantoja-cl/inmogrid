@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**degux.cl** is a collaborative digital ecosystem for personal branding and professional networking in the Chilean real estate space — think Substack + Behance + Linktree. Users create profiles, publish posts, connect with professionals, and access real estate tools.
+**inmogrid.cl** is a collaborative digital ecosystem for personal branding and professional networking in the Chilean real estate space — think Substack + Behance + Linktree. Users create profiles, publish posts, connect with professionals, and access real estate tools.
 
 **Stack**: Next.js 15 (App Router) · React 19 · TypeScript · Prisma ORM · Supabase PostgreSQL · Supabase Auth (Google OAuth) · Tailwind CSS · Vercel
 
@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Shared Database (Important)
 
-degux.cl and **pantojapropiedades.cl share the same Supabase database** during this transition/transformation period. Tables like `posts` are read by both platforms. This means:
+inmogrid.cl and **pantojapropiedades.cl share the same Supabase database** during this transition/transformation period. Tables like `posts` are read by both platforms. This means:
 - Do NOT drop or rename shared tables without coordinating with pantojapropiedades.cl
 - Schema migrations must be backward-compatible with the existing pantojapropiedades.cl data model
 - The `posts` table (and potentially others) contain data used by both sites
@@ -71,7 +71,7 @@ src/hooks/useAuth.ts  → useAuth() hook (isAuthenticated, user, profile, signOu
 ```typescript
 import { getUser } from '@/lib/supabase/auth'
 const user = await getUser()              // null if not logged in
-const profile = await getProfile(user.id) // degux_profiles row
+const profile = await getProfile(user.id) // inmogrid_profiles row
 ```
 
 **Server components / API routes** — hard check (redirects):
@@ -86,20 +86,20 @@ import { useAuth } from '@/hooks/useAuth'
 const { user, profile, isLoading, isAuthenticated, isAdmin } = useAuth()
 ```
 
-**Auth flow**: `/auth/login` → Supabase OAuth → Google → `/auth/callback` → creates Profile row in `degux_profiles` → redirect to `/dashboard`.
+**Auth flow**: `/auth/login` → Supabase OAuth → Google → `/auth/callback` → creates Profile row in `inmogrid_profiles` → redirect to `/dashboard`.
 
 ## Data Model
 
 The primary user model is **Profile** (not User). `Profile.id` is a UUID matching `auth.users.id` in Supabase.
 
 ```
-Profile             → degux_profiles table
+Profile             → inmogrid_profiles table
 Post                → posts table              (shared with pantojapropiedades.cl)
-Connection          → degux_connections table
-Event               → degux_events table
-ProfessionalProfile → degux_professional_profiles table
-AuditLog            → degux_audit_logs table
-ChatMessage         → degux_chat_messages table
+Connection          → inmogrid_connections table
+Event               → inmogrid_events table
+ProfessionalProfile → inmogrid_professional_profiles table
+AuditLog            → inmogrid_audit_logs table
+ChatMessage         → inmogrid_chat_messages table
 ```
 
 **Critical field mappings** (Prisma camelCase → DB snake_case):
@@ -165,7 +165,7 @@ NEXT_PUBLIC_SUPABASE_URL="https://[ref].supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJ..."
 
 # Optional
-NEXT_PUBLIC_BASE_URL="https://degux.cl"
+NEXT_PUBLIC_BASE_URL="https://inmogrid.cl"
 OPENAI_API_KEY="..."
 RESEND_API_KEY="..."
 ```
@@ -175,15 +175,15 @@ Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. Missing either cau
 ## Infrastructure
 
 - **Production**: Vercel (auto-deploy on push to `main`)
-- **DNS**: Cloudflare — `degux.cl` A→`76.76.21.21`, `www` CNAME→`cname.vercel-dns.com`, proxy OFF; `api.degux.cl` A→`VPS_IP_REDACTED`
+- **DNS**: Cloudflare — `inmogrid.cl` A→`76.76.21.21`, `www` CNAME→`cname.vercel-dns.com`, proxy OFF; `api.inmogrid.cl` A→`VPS_IP_REDACTED`
 - **Supabase project**: `SUPABASE_PROJECT_REF` (shared with pantojapropiedades.cl)
-- **VPS** (VPS_IP_REDACTED): runs N8N workflows, accessible at `api.degux.cl` — separate from Vercel web app
+- **VPS** (VPS_IP_REDACTED): runs N8N workflows, accessible at `api.inmogrid.cl` — separate from Vercel web app
 
 ## Specialized Agents (`.claude/agents/`)
 
 | Agent | Use for |
 |---|---|
-| `degux-orchestrator` | Multi-feature coordination, architecture decisions |
+| `inmogrid-orchestrator` | Multi-feature coordination, architecture decisions |
 | `api-developer-agent` | New API routes, OpenAPI docs |
 | `database-manager-agent` | Schema changes, RLS policies, query optimization |
 | `frontend-agent` | UI components, Next.js pages, hooks |

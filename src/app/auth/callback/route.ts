@@ -11,16 +11,16 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
     if (!error && data.user) {
-      // Upsert the DEGUX profile row on first login
+      // Upsert the INMOGRID profile row on first login
       const { data: existingProfile } = await supabase
-        .from('degux_profiles')
+        .from('inmogrid_profiles')
         .select('id')
         .eq('id', data.user.id)
         .single()
 
       if (!existingProfile) {
         const { error: insertError } = await supabase
-          .from('degux_profiles')
+          .from('inmogrid_profiles')
           .insert({
             id: data.user.id,
             full_name: data.user.user_metadata?.full_name ?? null,
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
           })
 
         if (insertError) {
-          console.error('[AUTH-CALLBACK] Failed to create degux_profile:', insertError.message)
+          console.error('[AUTH-CALLBACK] Failed to create inmogrid_profile:', insertError.message)
           // Non-fatal: the user is authenticated; continue to dashboard
         }
       }

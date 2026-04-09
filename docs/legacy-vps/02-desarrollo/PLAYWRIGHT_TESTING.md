@@ -1,6 +1,6 @@
 # 🎭 Playwright E2E Testing - Google OAuth 2.0
 
-Esta guía explica cómo ejecutar tests E2E para la autenticación con Google OAuth en degux.cl usando Playwright.
+Esta guía explica cómo ejecutar tests E2E para la autenticación con Google OAuth en inmogrid.cl usando Playwright.
 
 ## 📋 Requisitos Previos
 
@@ -34,7 +34,7 @@ Edita `.env.test.local` con tus credenciales reales:
 ```env
 GOOGLE_TEST_EMAIL=tu-email-test@gmail.com
 GOOGLE_TEST_PASSWORD=tu-password-seguro
-PLAYWRIGHT_BASE_URL=https://degux.cl
+PLAYWRIGHT_BASE_URL=https://inmogrid.cl
 ```
 
 ⚠️ **IMPORTANTE**: Nunca commitees `.env.test.local` al repositorio. Ya está incluido en `.gitignore`.
@@ -165,7 +165,7 @@ Agrega estos scripts a `package.json`:
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
-    "test:e2e:vps": "PLAYWRIGHT_BASE_URL=https://degux.cl playwright test",
+    "test:e2e:vps": "PLAYWRIGHT_BASE_URL=https://inmogrid.cl playwright test",
     "test:e2e:local": "PLAYWRIGHT_BASE_URL=http://localhost:3000 playwright test"
   }
 }
@@ -207,7 +207,7 @@ jobs:
         env:
           GOOGLE_TEST_EMAIL: ${{ secrets.GOOGLE_TEST_EMAIL }}
           GOOGLE_TEST_PASSWORD: ${{ secrets.GOOGLE_TEST_PASSWORD }}
-          PLAYWRIGHT_BASE_URL: https://degux.cl
+          PLAYWRIGHT_BASE_URL: https://inmogrid.cl
         run: npx playwright test
 
       - uses: actions/upload-artifact@v3

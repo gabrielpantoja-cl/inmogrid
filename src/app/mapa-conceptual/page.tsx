@@ -96,14 +96,14 @@ const css = `
 `
 
 const TIPS: Record<string, { title: string; text: string }> = {
-  usuario:    { title: '👤 Persona Usuaria',    text: 'Abre el navegador y escribe degux.cl. Ve perfiles, lee posts, inicia sesión. Todo arranca desde aquí.' },
+  usuario:    { title: '👤 Persona Usuaria',    text: 'Abre el navegador y escribe inmogrid.cl. Ve perfiles, lee posts, inicia sesión. Todo arranca desde aquí.' },
   cloudflare: { title: '🛡️ Cloudflare',         text: 'El primer guardia. Recibe cada visita, bloquea ataques y redirige el tráfico a Vercel (el sitio real). Actúa como intermediario invisible.' },
   vercel:     { title: '▲ Vercel — Frontend',   text: 'Aquí vive la página web que la gente ve. Cada vez que Gabriel sube código a GitHub, Vercel lo detecta y actualiza el sitio en segundos automáticamente.' },
   supabase:   { title: '🗄️ Supabase',           text: 'La bodega central. Guarda todos los datos (perfiles, posts, conexiones) y también controla quién puede entrar (autenticación Google). Compartida con pantojapropiedades.cl durante la transición.' },
   google:     { title: '🔑 Google OAuth',       text: "Cuando haces clic en 'Iniciar sesión con Google', Supabase le pregunta a Google «¿es realmente esta persona?». Google confirma y devuelve una llave de acceso. Sin contraseñas propias." },
   vps:        { title: '⚙️ VPS Oracle',         text: 'Un servidor propio que nunca se apaga. Corre automatizaciones con N8N (como Zapier pero privado): envía correos, procesa datos, conecta servicios externos en segundo plano.' },
   github:     { title: '🐙 GitHub',             text: "El historial completo del código. Cada mejora queda registrada aquí. Cuando Gabriel hace 'push', Vercel lo detecta y publica los cambios automáticamente." },
-  referenciales: { title: '🏠 referenciales.cl', text: 'Plataforma open-data con miles de compraventas inmobiliarias de Chile (CBR). degux.cl consulta su API pública para mostrar datos de mercado a los usuarios. Tiene su propia base de datos Neon (PostgreSQL + PostGIS), separada de Supabase.' },
+  referenciales: { title: '🏠 referenciales.cl', text: 'Plataforma open-data con miles de compraventas inmobiliarias de Chile (CBR). inmogrid.cl consulta su API pública para mostrar datos de mercado a los usuarios. Tiene su propia base de datos Neon (PostgreSQL + PostGIS), separada de Supabase.' },
 }
 
 export default function MapaConceptualPage() {
@@ -137,7 +137,7 @@ export default function MapaConceptualPage() {
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
       <div className="map-page">
-        <h1>🗺️ Mapa Conceptual — DEGUX</h1>
+        <h1>🗺️ Mapa Conceptual — INMOGRID</h1>
         <p className="subtitle">Pasa el cursor sobre cada pieza para saber qué hace</p>
 
         <div className="map-wrap">
@@ -201,7 +201,7 @@ export default function MapaConceptualPage() {
             <path d="M 200,90 C 250,90 270,130 310,145"
               stroke="#555" strokeWidth={1.8} fill="none" strokeDasharray="5,4"
               markerEnd="url(#arrow-white)" className="flow-path"/>
-            <text x={222} y={106} fill="#444" fontSize={9}>visita degux.cl</text>
+            <text x={222} y={106} fill="#444" fontSize={9}>visita inmogrid.cl</text>
 
             {/* Cloudflare → Vercel */}
             <path d="M 410,165 L 480,165"
@@ -252,7 +252,7 @@ export default function MapaConceptualPage() {
             <path d="M 250,480 C 300,440 480,300 530,220"
               stroke="#f59e0b" strokeWidth={1.5} fill="none" strokeDasharray="4,4"
               markerEnd="url(#arrow-amber)"/>
-            <text x={340} y={355} fill="#92400e" fontSize={9} transform="rotate(-45,340,355)">api.degux.cl</text>
+            <text x={340} y={355} fill="#92400e" fontSize={9} transform="rotate(-45,340,355)">api.inmogrid.cl</text>
 
             {/* Vercel → referenciales.cl (consume API pública) */}
             <path d="M 600,255 C 610,330 660,390 700,430"
@@ -285,7 +285,7 @@ export default function MapaConceptualPage() {
               <text x={570} y={170} textAnchor="middle" fontSize={24}>▲</text>
               <text x={570} y={196} textAnchor="middle" fill="#aaa" fontSize={9}>Next.js 15 · React 19</text>
               <text x={570} y={210} textAnchor="middle" fill="#aaa" fontSize={9}>Páginas · Dashboard · Feed</text>
-              <text x={570} y={226} textAnchor="middle" fill="#666" fontSize={8}>degux.cl</text>
+              <text x={570} y={226} textAnchor="middle" fill="#666" fontSize={8}>inmogrid.cl</text>
               <text x={570} y={242} textAnchor="middle" fill="#666" fontSize={8}>Auto-deploy desde GitHub</text>
             </g>
 
@@ -317,7 +317,7 @@ export default function MapaConceptualPage() {
               <text x={157} y={477} textAnchor="middle" fill="#fcd34d" fontSize={9} fontWeight={700} letterSpacing={1}>VPS ORACLE</text>
               <text x={157} y={494} textAnchor="middle" fontSize={18}>⚙️</text>
               <text x={157} y={515} textAnchor="middle" fill="#aaa" fontSize={9}>N8N · Automatizaciones</text>
-              <text x={157} y={530} textAnchor="middle" fill="#666" fontSize={8}>api.degux.cl</text>
+              <text x={157} y={530} textAnchor="middle" fill="#666" fontSize={8}>api.inmogrid.cl</text>
             </g>
 
             {/* GitHub */}

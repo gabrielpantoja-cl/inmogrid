@@ -1,7 +1,7 @@
 # 🚀 Guía de Deployment y Diagnóstico de Autenticación - Backend
 
 **Fecha**: 2025-10-06
-**Proyecto**: degux.cl
+**Proyecto**: inmogrid.cl
 **Propósito**: Resolver problemas de autenticación en producción
 
 ---
@@ -29,11 +29,11 @@ ssh gabriel@VPS_IP_REDACTED
 # Verificar contenedores activos
 docker ps
 
-# Ver logs de degux-web
-docker logs degux-web --tail 100 -f
+# Ver logs de inmogrid-web
+docker logs inmogrid-web --tail 100 -f
 
 # Verificar que el middleware NO está bloqueando en producción
-docker exec degux-web cat src/middleware.ts | grep "NODE_ENV"
+docker exec inmogrid-web cat src/middleware.ts | grep "NODE_ENV"
 ```
 
 ### 2. Síntomas Comunes
@@ -51,13 +51,13 @@ docker exec degux-web cat src/middleware.ts | grep "NODE_ENV"
 
 ### Archivo `.env` en VPS (Producción)
 
-**Ubicación**: `/home/gabriel/degux.cl/.env`
+**Ubicación**: `/home/gabriel/inmogrid.cl/.env`
 
 ```bash
 # =========================================
 # 🗄️ BASE DE DATOS
 # =========================================
-POSTGRES_PRISMA_URL="postgresql://degux_user:REAL_PASSWORD@VPS_IP_REDACTED:5433/degux?schema=public&sslmode=require"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:REAL_PASSWORD@VPS_IP_REDACTED:5433/inmogrid?schema=public&sslmode=require"
 
 # =========================================
 # 🔐 NEXTAUTH.JS
@@ -66,7 +66,7 @@ POSTGRES_PRISMA_URL="postgresql://degux_user:REAL_PASSWORD@VPS_IP_REDACTED:5433/
 NEXTAUTH_SECRET="TU_SECRET_AQUI_MINIMO_32_CARACTERES"
 
 # URL de producción
-NEXTAUTH_URL="https://degux.cl"
+NEXTAUTH_URL="https://inmogrid.cl"
 
 # ⚠️ IMPORTANTE: NO habilitar debug en producción
 # NEXTAUTH_DEBUG="false"
@@ -106,8 +106,8 @@ openssl rand -base64 32
 # Desde el VPS
 ssh gabriel@VPS_IP_REDACTED
 
-# Conectar a PostgreSQL (puerto 5433 - degux)
-docker exec -it degux-db psql -U degux_user -d degux
+# Conectar a PostgreSQL (puerto 5433 - inmogrid)
+docker exec -it inmogrid-db psql -U inmogrid_user -d inmogrid
 ```
 
 ### 2. Verificar Tablas de NextAuth
@@ -150,8 +150,8 @@ LIMIT 5;
 Si las tablas no existen o están desactualizadas:
 
 ```bash
-# Dentro del contenedor degux-web
-docker exec -it degux-web sh
+# Dentro del contenedor inmogrid-web
+docker exec -it inmogrid-web sh
 
 # Generar Prisma Client
 npx prisma generate
@@ -172,11 +172,11 @@ Ejecutar desde VPS:
 cat > check-db.sh << 'EOF'
 #!/bin/bash
 
-echo "🔍 Verificando Base de Datos degux..."
+echo "🔍 Verificando Base de Datos inmogrid..."
 echo "========================================"
 
 # Verificar conexión
-docker exec degux-db psql -U degux_user -d degux -c "SELECT version();" > /dev/null 2>&1
+docker exec inmogrid-db psql -U inmogrid_user -d inmogrid -c "SELECT version();" > /dev/null 2>&1
 
 if [ $? -eq 0 ]; then
   echo "✅ Conexión a PostgreSQL exitosa"
@@ -188,12 +188,12 @@ fi
 # Verificar tablas de NextAuth
 echo ""
 echo "📋 Tablas de NextAuth:"
-docker exec degux-db psql -U degux_user -d degux -c "\dt" | grep -E "(User|Account|Session|VerificationToken)"
+docker exec inmogrid-db psql -U inmogrid_user -d inmogrid -c "\dt" | grep -E "(User|Account|Session|VerificationToken)"
 
 # Contar usuarios
 echo ""
 echo "👥 Total de usuarios:"
-docker exec degux-db psql -U degux_user -d degux -c 'SELECT COUNT(*) as total_users FROM "User";'
+docker exec inmogrid-db psql -U inmogrid_user -d inmogrid -c 'SELECT COUNT(*) as total_users FROM "User";'
 
 echo ""
 echo "✅ Verificación completa"
@@ -215,12 +215,12 @@ chmod +x check-db.sh
 
 1. **Crear credenciales** → OAuth 2.0 Client ID
 2. **Tipo de aplicación**: Web application
-3. **Nombre**: degux.cl Production
+3. **Nombre**: inmogrid.cl Production
 
 ### 3. URIs de Redirección Autorizadas
 
 ```
-https://degux.cl/api/auth/callback/google
+https://inmogrid.cl/api/auth/callback/google
 http://localhost:3000/api/auth/callback/google
 ```
 
@@ -229,7 +229,7 @@ http://localhost:3000/api/auth/callback/google
 ### 4. Orígenes JavaScript Autorizados
 
 ```
-https://degux.cl
+https://inmogrid.cl
 http://localhost:3000
 ```
 
@@ -237,7 +237,7 @@ http://localhost:3000
 
 ```bash
 # Desde el VPS, verificar que las variables estén configuradas
-docker exec degux-web printenv | grep GOOGLE
+docker exec inmogrid-web printenv | grep GOOGLE
 ```
 
 Deberías ver:
@@ -254,7 +254,7 @@ GOOGLE_CLIENT_SECRET=xxxxx
 
 ```bash
 # En tu máquina local
-cd ~/Documentos/degux.cl
+cd ~/Documentos/inmogrid.cl
 
 # Verificar que .env.local tiene todas las variables
 cat .env.local
@@ -271,19 +271,19 @@ cat Dockerfile
 
 # Opción B: Manual
 # Build local
-docker build -t degux-web:latest .
+docker build -t inmogrid-web:latest .
 
 # Tag para registry (si usas uno)
-docker tag degux-web:latest your-registry.com/degux-web:latest
+docker tag inmogrid-web:latest your-registry.com/inmogrid-web:latest
 
 # Push
-docker push your-registry.com/degux-web:latest
+docker push your-registry.com/inmogrid-web:latest
 
 # En VPS: Pull y restart
 ssh gabriel@VPS_IP_REDACTED << 'EOF'
-cd ~/degux.cl
-docker compose pull degux-web
-docker compose up -d degux-web
+cd ~/inmogrid.cl
+docker compose pull inmogrid-web
+docker compose up -d inmogrid-web
 EOF
 ```
 
@@ -291,13 +291,13 @@ EOF
 
 ```bash
 # Ver logs en tiempo real
-ssh gabriel@VPS_IP_REDACTED "docker logs degux-web --tail 100 -f"
+ssh gabriel@VPS_IP_REDACTED "docker logs inmogrid-web --tail 100 -f"
 
 # Verificar que el contenedor está corriendo
-ssh gabriel@VPS_IP_REDACTED "docker ps | grep degux-web"
+ssh gabriel@VPS_IP_REDACTED "docker ps | grep inmogrid-web"
 
 # Probar endpoint de health
-curl https://degux.cl/api/health
+curl https://inmogrid.cl/api/health
 ```
 
 ---
@@ -327,8 +327,8 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'producti
 
 **Re-build y re-deploy**:
 ```bash
-docker exec degux-web npm run build
-docker restart degux-web
+docker exec inmogrid-web npm run build
+docker restart inmogrid-web
 ```
 
 ---
@@ -344,10 +344,10 @@ docker restart degux-web
 openssl rand -base64 32
 
 # Agregar a .env
-echo 'NEXTAUTH_SECRET="TU_SECRET_GENERADO"' >> ~/degux.cl/.env
+echo 'NEXTAUTH_SECRET="TU_SECRET_GENERADO"' >> ~/inmogrid.cl/.env
 
 # Restart container
-docker restart degux-web
+docker restart inmogrid-web
 ```
 
 ---
@@ -360,7 +360,7 @@ docker restart degux-web
 
 ```bash
 # Conectar al container
-docker exec -it degux-web sh
+docker exec -it inmogrid-web sh
 
 # Aplicar schema
 npx prisma db push
@@ -379,17 +379,17 @@ npx prisma studio
 
 1. Verificar en Google Console que la URL esté autorizada:
    ```
-   https://degux.cl/api/auth/callback/google
+   https://inmogrid.cl/api/auth/callback/google
    ```
 
 2. Verificar que `NEXTAUTH_URL` en `.env` coincida:
    ```bash
-   NEXTAUTH_URL="https://degux.cl"
+   NEXTAUTH_URL="https://inmogrid.cl"
    ```
 
 3. Reiniciar contenedor:
    ```bash
-   docker restart degux-web
+   docker restart inmogrid-web
    ```
 
 ---
@@ -417,7 +417,7 @@ REQUIRED_VARS=(
 MISSING_VARS=0
 
 for VAR in "${REQUIRED_VARS[@]}"; do
-  VALUE=$(docker exec degux-web printenv $VAR 2>/dev/null)
+  VALUE=$(docker exec inmogrid-web printenv $VAR 2>/dev/null)
 
   if [ -z "$VALUE" ]; then
     echo "❌ $VAR: NO CONFIGURADA"
@@ -451,17 +451,17 @@ echo "============================"
 # Test 1: API de NextAuth
 echo ""
 echo "1️⃣ Verificando API de NextAuth..."
-curl -s https://degux.cl/api/auth/providers | jq .
+curl -s https://inmogrid.cl/api/auth/providers | jq .
 
 # Test 2: Health check
 echo ""
 echo "2️⃣ Health check de la aplicación..."
-curl -s https://degux.cl/api/health | jq .
+curl -s https://inmogrid.cl/api/health | jq .
 
 # Test 3: Verificar redirección de login
 echo ""
 echo "3️⃣ Verificando redirección de login..."
-curl -I https://degux.cl/dashboard 2>&1 | grep -E "(Location|HTTP)"
+curl -I https://inmogrid.cl/dashboard 2>&1 | grep -E "(Location|HTTP)"
 
 echo ""
 echo "✅ Tests completados"
@@ -476,7 +476,7 @@ echo "✅ Tests completados"
 echo "📜 Logs de Autenticación (últimos 50 eventos)..."
 echo "================================================"
 
-docker logs degux-web --tail 200 2>&1 | grep -E "\[AUTH-|MIDDLEWARE\]" | tail -50
+docker logs inmogrid-web --tail 200 2>&1 | grep -E "\[AUTH-|MIDDLEWARE\]" | tail -50
 ```
 
 ---

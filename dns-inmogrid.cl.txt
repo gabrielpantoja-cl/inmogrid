@@ -1,6 +1,6 @@
 ;;
-;; Domain:     degux.cl.
-;; Exported:   2025-10-06 19:08:44
+;; Domain:     inmogrid.cl.
+;; Exported:   2026-04-07 01:39:59
 ;;
 ;; This file is intended for use for informational and archival
 ;; purposes ONLY and MUST be edited before use on a production
@@ -24,13 +24,16 @@
 ;;
 ;; Use at your own risk.
 ;; SOA Record
-degux.cl	3600	IN	SOA	matteo.ns.cloudflare.com. dns.cloudflare.com. 2051144432 10000 2400 604800 3600
+inmogrid.cl	3600	IN	SOA	matteo.ns.cloudflare.com. dns.cloudflare.com. 2052719259 10000 2400 604800 3600
 
 ;; NS Records
-degux.cl.	86400	IN	NS	matteo.ns.cloudflare.com.
-degux.cl.	86400	IN	NS	sara.ns.cloudflare.com.
+inmogrid.cl.	86400	IN	NS	matteo.ns.cloudflare.com.
+inmogrid.cl.	86400	IN	NS	sara.ns.cloudflare.com.
 
 ;; A Records
-api.degux.cl.	1	IN	A	VPS_IP_REDACTED ; cf_tags=cf-proxied:false
-degux.cl.	1	IN	A	VPS_IP_REDACTED ; dominio raíz cf_tags=cf-proxied:true
-www.degux.cl.	1	IN	A	VPS_IP_REDACTED ; Registro para `www` (`www.degux.cl`) cf_tags=cf-proxied:true
+api.inmogrid.cl.	1	IN	A	VPS_IP_REDACTED ; cf_tags=cf-proxied:false
+inmogrid.cl.	1	IN	A	76.76.21.21 ; Vercel — dominio raíz cf_tags=cf-proxied:false
+www.inmogrid.cl.	1	IN	CNAME	cname.vercel-dns.com. ; Vercel — www cf_tags=cf-proxied:false
+
+;; CNAME Records
+mona.inmogrid.cl.	1	IN	CNAME	33edcc7f-254d-4f54-98ca-4a936166fd33.cfargotunnel.com. ; cf_tags=cf-proxied:true

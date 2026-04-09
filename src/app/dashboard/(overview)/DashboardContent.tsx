@@ -47,13 +47,13 @@ export default function DashboardContent({
               ¡Hola, <span className="font-bold text-green-700">{displayName}</span>!
             </h1>
             <p className="text-gray-600">
-              Bienvenid@ a <span className="font-semibold text-green-700">degux.cl</span> - Tu ecosistema digital colaborativo
+              Bienvenid@ a <span className="font-semibold text-green-700">inmogrid.cl</span> - Tu ecosistema digital colaborativo
             </p>
           </div>
         ) : (
           <div className="space-y-2">
             <h1 className={`${lusitana.className} text-2xl md:text-3xl text-gray-800`}>
-              Bienvenid@ a degux.cl
+              Bienvenid@ a inmogrid.cl
             </h1>
             <p className="text-gray-600">
               <Link href="/auth/login" className="font-semibold text-green-700 underline hover:text-green-600">

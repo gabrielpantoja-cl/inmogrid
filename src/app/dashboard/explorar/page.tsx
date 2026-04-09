@@ -3,8 +3,8 @@ import { prisma } from '@/shared/lib/prisma';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Explorar | degux.cl',
-  description: 'Descubre perfiles y notas de la comunidad degux.cl',
+  title: 'Explorar | inmogrid.cl',
+  description: 'Descubre perfiles y notas de la comunidad inmogrid.cl',
 };
 
 type PostRow = {
@@ -29,7 +29,7 @@ export default async function ExplorarPage() {
         dp.full_name  AS "authorFullName",
         dp.username   AS "authorUsername"
       FROM posts p
-      LEFT JOIN degux_profiles dp ON dp.id = p.author_id
+      LEFT JOIN inmogrid_profiles dp ON dp.id = p.author_id
       WHERE p.status = 'published'
       ORDER BY p.created_at DESC
       LIMIT 10

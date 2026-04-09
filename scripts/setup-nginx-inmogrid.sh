@@ -1,23 +1,23 @@
 #!/bin/bash
 
-# Script para configurar Nginx para degux.cl
-# Ejecutar con: sudo bash setup-nginx-degux.sh
+# Script para configurar Nginx para inmogrid.cl
+# Ejecutar con: sudo bash setup-nginx-inmogrid.sh
 
 set -e
 
-echo "🔧 Configurando Nginx para degux.cl..."
+echo "🔧 Configurando Nginx para inmogrid.cl..."
 echo ""
 
 # Verificar si estamos corriendo con sudo
 if [ "$EUID" -ne 0 ]; then
     echo "❌ Este script debe ejecutarse con sudo"
-    echo "   Ejecutar: sudo bash setup-nginx-degux.sh"
+    echo "   Ejecutar: sudo bash setup-nginx-inmogrid.sh"
     exit 1
 fi
 
 # Verificar si ya existe configuración
-if [ -f /etc/nginx/sites-available/degux.cl ]; then
-    echo "⚠️  Ya existe configuración para degux.cl"
+if [ -f /etc/nginx/sites-available/inmogrid.cl ]; then
+    echo "⚠️  Ya existe configuración para inmogrid.cl"
     echo "   ¿Desea sobrescribir? (s/N)"
     read -r response
     if [[ ! "$response" =~ ^[Ss]$ ]]; then
@@ -27,10 +27,10 @@ if [ -f /etc/nginx/sites-available/degux.cl ]; then
 fi
 
 # Crear archivo de configuración
-echo "1️⃣ Creando configuración Nginx para degux.cl..."
-cat > /etc/nginx/sites-available/degux.cl <<'EOF'
+echo "1️⃣ Creando configuración Nginx para inmogrid.cl..."
+cat > /etc/nginx/sites-available/inmogrid.cl <<'EOF'
 server {
-    server_name degux.cl www.degux.cl;
+    server_name inmogrid.cl www.inmogrid.cl;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
@@ -45,34 +45,34 @@ server {
     }
 
     listen 443 ssl;
-    ssl_certificate /etc/letsencrypt/live/degux.cl/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/degux.cl/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/inmogrid.cl/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/inmogrid.cl/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 }
 
 server {
-    if ($host = www.degux.cl) {
+    if ($host = www.inmogrid.cl) {
         return 301 https://$host$request_uri;
     }
 
-    if ($host = degux.cl) {
+    if ($host = inmogrid.cl) {
         return 301 https://$host$request_uri;
     }
 
     listen 80;
-    server_name degux.cl www.degux.cl;
+    server_name inmogrid.cl www.inmogrid.cl;
     return 404;
 }
 EOF
 
-echo "   ✅ Archivo creado: /etc/nginx/sites-available/degux.cl"
+echo "   ✅ Archivo creado: /etc/nginx/sites-available/inmogrid.cl"
 
 # Verificar si certificado SSL existe
 echo ""
 echo "2️⃣ Verificando certificado SSL..."
-if [ ! -f /etc/letsencrypt/live/degux.cl/fullchain.pem ]; then
-    echo "   ⚠️  NO se encontró certificado SSL para degux.cl"
+if [ ! -f /etc/letsencrypt/live/inmogrid.cl/fullchain.pem ]; then
+    echo "   ⚠️  NO se encontró certificado SSL para inmogrid.cl"
     echo "   Generando certificado con Certbot..."
 
     # Verificar si certbot está instalado
@@ -83,7 +83,7 @@ if [ ! -f /etc/letsencrypt/live/degux.cl/fullchain.pem ]; then
     fi
 
     # Generar certificado
-    certbot --nginx -d degux.cl -d www.degux.cl --non-interactive --agree-tos --email gabrielpantojarivera@gmail.com
+    certbot --nginx -d inmogrid.cl -d www.inmogrid.cl --non-interactive --agree-tos --email gabrielpantojarivera@gmail.com
 
     if [ $? -eq 0 ]; then
         echo "   ✅ Certificado SSL generado exitosamente"
@@ -98,12 +98,12 @@ fi
 # Crear symlink en sites-enabled
 echo ""
 echo "3️⃣ Activando sitio..."
-if [ -L /etc/nginx/sites-enabled/degux.cl ]; then
+if [ -L /etc/nginx/sites-enabled/inmogrid.cl ]; then
     echo "   ℹ️  Symlink ya existe, removiendo..."
-    rm /etc/nginx/sites-enabled/degux.cl
+    rm /etc/nginx/sites-enabled/inmogrid.cl
 fi
 
-ln -s /etc/nginx/sites-available/degux.cl /etc/nginx/sites-enabled/degux.cl
+ln -s /etc/nginx/sites-available/inmogrid.cl /etc/nginx/sites-enabled/inmogrid.cl
 echo "   ✅ Symlink creado"
 
 # Verificar configuración de Nginx
@@ -143,15 +143,15 @@ else
 fi
 
 echo ""
-echo "✅ Configuración de Nginx para degux.cl completada!"
+echo "✅ Configuración de Nginx para inmogrid.cl completada!"
 echo ""
 echo "📊 Resumen:"
-echo "   - Configuración: /etc/nginx/sites-available/degux.cl"
-echo "   - Symlink: /etc/nginx/sites-enabled/degux.cl"
-echo "   - SSL: /etc/letsencrypt/live/degux.cl/"
+echo "   - Configuración: /etc/nginx/sites-available/inmogrid.cl"
+echo "   - Symlink: /etc/nginx/sites-enabled/inmogrid.cl"
+echo "   - SSL: /etc/letsencrypt/live/inmogrid.cl/"
 echo "   - Proxy a: http://127.0.0.1:3000 (PM2)"
 echo ""
 echo "🔍 Verificar:"
-echo "   curl -k -H \"Host: degux.cl\" https://127.0.0.1/ | grep 'application-name'"
+echo "   curl -k -H \"Host: inmogrid.cl\" https://127.0.0.1/ | grep 'application-name'"
 echo ""
 echo "🚀 Siguiente paso: Purgar cache de Cloudflare"

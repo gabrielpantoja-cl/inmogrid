@@ -22,7 +22,7 @@ fi
 
 echo ""
 echo "🚀 Iniciando Prisma Studio con base de datos de PRODUCCIÓN..."
-echo "📊 Base de datos: degux_core (VPS: VPS_IP_REDACTED)"
+echo "📊 Base de datos: inmogrid_core (VPS: VPS_IP_REDACTED)"
 echo "🌐 Prisma Studio estará disponible en: http://localhost:5555"
 echo ""
 echo "⚠️  ADVERTENCIA: Estás conectado a la base de datos de PRODUCCIÓN"

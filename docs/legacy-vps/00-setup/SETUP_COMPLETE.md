@@ -1,4 +1,4 @@
-# ✅ VERIFICACIÓN COMPLETADA - degux.cl
+# ✅ VERIFICACIÓN COMPLETADA - inmogrid.cl
 
 **Fecha:** 2 de enero de 2026  
 **Estado:** 🟢 **TODO CORRECTO - LISTO PARA PROGRAMAR**
@@ -7,7 +7,7 @@
 
 ## 🎯 Resumen Ejecutivo
 
-Tu repositorio **degux.cl** ha sido **completamente verificado** y está **100% configurado** para desarrollo tanto en **Windows** como en **Linux**.
+Tu repositorio **inmogrid.cl** ha sido **completamente verificado** y está **100% configurado** para desarrollo tanto en **Windows** como en **Linux**.
 
 ### ✅ Lo que está correcto:
 - ✅ Node.js v22.15.0 instalado (requiere 18.17.0+)
@@ -136,7 +136,7 @@ npm run dev
 
 | Aspecto | Detalles |
 |--------|----------|
-| **Nombre** | degux-cl |
+| **Nombre** | inmogrid-cl |
 | **Framework** | Next.js 15 + React 19 |
 | **Lenguaje** | TypeScript |
 | **Base de Datos** | PostgreSQL 15 + PostGIS |
@@ -154,7 +154,7 @@ npm run dev
 Crear `.env.local` con:
 ```env
 # Base de datos
-POSTGRES_PRISMA_URL="postgresql://degux_user:degux_local_password@localhost:5432/degux_dev?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev?schema=public"
 
 # Autenticación
 NEXTAUTH_SECRET="IfBvEpoXetsQVqiCAwOTxkdJNSlzYcgm"
@@ -295,7 +295,7 @@ Puedes comenzar a programar inmediatamente en:
 - ✅ **Windows** (máquina actual)
 - ✅ **Linux** (máquina principal)
 
-**¡Bienvenido a degux.cl! 🚀**
+**¡Bienvenido a inmogrid.cl! 🚀**
 
 ---
 

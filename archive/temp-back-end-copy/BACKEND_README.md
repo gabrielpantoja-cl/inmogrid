@@ -1,4 +1,4 @@
-# 🚀 Instrucciones para el Equipo de Backend - degux.cl
+# 🚀 Instrucciones para el Equipo de Backend - inmogrid.cl
 
 **Última actualización**: 2025-10-06
 **Versión**: 1.0.0
@@ -7,11 +7,11 @@
 
 ## 📋 Resumen Ejecutivo
 
-Este documento proporciona instrucciones paso a paso para diagnosticar y resolver problemas de autenticación en producción para degux.cl.
+Este documento proporciona instrucciones paso a paso para diagnosticar y resolver problemas de autenticación en producción para inmogrid.cl.
 
 **Problema actual**: La autenticación de Google OAuth no está funcionando en producción.
 
-**Objetivo**: Dejar la autenticación funcionando HOY MISMO en https://degux.cl
+**Objetivo**: Dejar la autenticación funcionando HOY MISMO en https://inmogrid.cl
 
 ---
 
@@ -24,7 +24,7 @@ Ejecuta estos pasos en orden:
 ssh gabriel@VPS_IP_REDACTED
 
 # 2. Ir al directorio del proyecto
-cd ~/degux.cl
+cd ~/inmogrid.cl
 
 # 3. Ejecutar script de verificación de variables
 ./scripts/check-env.sh
@@ -36,7 +36,7 @@ cd ~/degux.cl
 ./scripts/test-auth.sh vps
 
 # 6. Ver logs en tiempo real
-docker logs degux-web --tail 100 -f
+docker logs inmogrid-web --tail 100 -f
 ```
 
 Si todos los scripts pasan ✅, la autenticación debería funcionar.
@@ -80,11 +80,11 @@ openssl rand -base64 32
 
 # Agregar a .env en VPS
 ssh gabriel@VPS_IP_REDACTED
-cd ~/degux.cl
+cd ~/inmogrid.cl
 echo 'NEXTAUTH_SECRET="TU_SECRET_GENERADO_AQUI"' >> .env
 
 # Restart container
-docker restart degux-web
+docker restart inmogrid-web
 ```
 
 ---
@@ -98,7 +98,7 @@ docker restart degux-web
 ```bash
 # En VPS
 ssh gabriel@VPS_IP_REDACTED
-cd ~/degux.cl
+cd ~/inmogrid.cl
 
 # Editar middleware para deshabilitar auth en producción
 # Cambiar línea 12-15 en src/middleware.ts
@@ -110,8 +110,8 @@ nano src/middleware.ts
 # if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production') {
 
 # Rebuild y restart
-docker exec degux-web npm run build
-docker restart degux-web
+docker exec inmogrid-web npm run build
+docker restart inmogrid-web
 ```
 
 ⚠️ **IMPORTANTE**: Esta es una solución temporal para diagnosticar. NO dejar así en producción.
@@ -128,7 +128,7 @@ docker restart degux-web
 ssh gabriel@VPS_IP_REDACTED
 
 # Conectar al contenedor de la app
-docker exec -it degux-web sh
+docker exec -it inmogrid-web sh
 
 # Aplicar schema de Prisma
 npx prisma db push
@@ -146,10 +146,10 @@ npx prisma studio
 **Solución**:
 
 1. Ir a https://console.cloud.google.com/apis/credentials
-2. Seleccionar el OAuth 2.0 Client ID de degux
+2. Seleccionar el OAuth 2.0 Client ID de inmogrid
 3. En "Authorized redirect URIs" agregar:
    ```
-   https://degux.cl/api/auth/callback/google
+   https://inmogrid.cl/api/auth/callback/google
    ```
 4. Guardar cambios
 5. Esperar 1-2 minutos para que se propague
@@ -166,7 +166,7 @@ npx prisma studio
 ssh gabriel@VPS_IP_REDACTED
 
 # Conectar a PostgreSQL
-docker exec -it degux-db psql -U degux_user -d degux
+docker exec -it inmogrid-db psql -U inmogrid_user -d inmogrid
 ```
 
 ### Comandos Útiles SQL
@@ -205,30 +205,30 @@ WHERE email = 'tu_email@gmail.com';
 # Ver todos los contenedores
 docker ps
 
-# Ver logs de degux-web
-docker logs degux-web --tail 100 -f
+# Ver logs de inmogrid-web
+docker logs inmogrid-web --tail 100 -f
 
-# Ver logs de degux-db
-docker logs degux-db --tail 50
+# Ver logs de inmogrid-db
+docker logs inmogrid-db --tail 50
 
 # Restart contenedor
-docker restart degux-web
+docker restart inmogrid-web
 
 # Entrar al contenedor
-docker exec -it degux-web sh
+docker exec -it inmogrid-web sh
 ```
 
 ### Ver Variables de Entorno
 
 ```bash
 # Ver todas las variables
-docker exec degux-web printenv
+docker exec inmogrid-web printenv
 
 # Ver solo las de Google
-docker exec degux-web printenv | grep GOOGLE
+docker exec inmogrid-web printenv | grep GOOGLE
 
 # Ver solo las de NextAuth
-docker exec degux-web printenv | grep NEXTAUTH
+docker exec inmogrid-web printenv | grep NEXTAUTH
 ```
 
 ---
@@ -267,18 +267,18 @@ docker exec degux-web printenv | grep NEXTAUTH
 
 ```bash
 # Ver solo logs de autenticación
-docker logs degux-web 2>&1 | grep -E "\[AUTH-|MIDDLEWARE\]" | tail -50
+docker logs inmogrid-web 2>&1 | grep -E "\[AUTH-|MIDDLEWARE\]" | tail -50
 
 # Seguir logs en tiempo real
-docker logs degux-web -f 2>&1 | grep -E "\[AUTH-|MIDDLEWARE\]"
+docker logs inmogrid-web -f 2>&1 | grep -E "\[AUTH-|MIDDLEWARE\]"
 ```
 
 ### Test Manual de Login
 
-1. Abrir https://degux.cl en navegador
+1. Abrir https://inmogrid.cl en navegador
 2. Abrir DevTools (F12)
 3. Ir a pestaña Network
-4. Intentar acceder a https://degux.cl/dashboard
+4. Intentar acceder a https://inmogrid.cl/dashboard
 5. Observar:
    - ¿Se redirige a `/auth/signin`? ✅ Middleware funciona
    - ¿Da error 500? ❌ Revisar logs
@@ -303,7 +303,7 @@ docker logs degux-web -f 2>&1 | grep -E "\[AUTH-|MIDDLEWARE\]"
 - Puerto SSH: `22`
 
 **URLs Importantes**:
-- Aplicación: https://degux.cl
+- Aplicación: https://inmogrid.cl
 - Portainer: https://VPS_IP_REDACTED:9443
 - Google Console: https://console.cloud.google.com/apis/credentials
 
@@ -312,7 +312,7 @@ docker logs degux-web -f 2>&1 | grep -E "\[AUTH-|MIDDLEWARE\]"
 ## 📂 Estructura de Archivos Importantes
 
 ```
-degux.cl/
+inmogrid.cl/
 ├── .env                          # Variables de entorno (VPS)
 ├── .env.example                  # Plantilla de variables
 ├── prisma/schema.prisma          # Schema de base de datos

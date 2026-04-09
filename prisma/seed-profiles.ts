@@ -14,11 +14,11 @@ async function main() {
   console.log('👤 Creando perfil de Mona...');
 
   const monaUser = await prisma.user.upsert({
-    where: { email: 'mona@degux.cl' },
+    where: { email: 'mona@inmogrid.cl' },
     update: {},
     create: {
       id: 'user-mona-001',
-      email: 'mona@degux.cl',
+      email: 'mona@inmogrid.cl',
       name: 'Mona',
       username: 'mona',
       image: 'https://ui-avatars.com/api/?name=Mona&size=200&background=7ab56f&color=fff&bold=true',
@@ -211,11 +211,11 @@ Lo más hermoso de cultivar plantas es que te enseñan paciencia, observación y
   console.log('👤 Creando perfil de Gabriel...');
 
   const gabrielUser = await prisma.user.upsert({
-    where: { email: 'gabriel@degux.cl' },
+    where: { email: 'gabriel@inmogrid.cl' },
     update: {},
     create: {
       id: 'user-gabriel-001',
-      email: 'gabriel@degux.cl',
+      email: 'gabriel@inmogrid.cl',
       name: 'Gabriel Pantoja',
       username: 'gabrielpantoja',
       image: 'https://ui-avatars.com/api/?name=Gabriel+Pantoja&size=200&background=2d5016&color=fff&bold=true',
@@ -227,7 +227,7 @@ Lo más hermoso de cultivar plantas es que te enseñan paciencia, observación y
 
 Actualmente en transición hacia el desarrollo web full stack, combinando mi profundo conocimiento del mercado inmobiliario chileno con tecnologías modernas para crear soluciones PropTech.
 
-Fundador de degux.cl, un ecosistema digital colaborativo que democratiza el acceso a datos inmobiliarios públicos en Chile.`,
+Fundador de inmogrid.cl, un ecosistema digital colaborativo que democratiza el acceso a datos inmobiliarios públicos en Chile.`,
 
       coverImageUrl: 'https://images.unsplash.com/photo-1507149677481-d85e20f7da5e?w=1600&h=400&fit=crop',
       location: 'Chile',
@@ -281,9 +281,9 @@ Empecé con HTML y CSS en YouTube. Luego JavaScript. Después React. Finalmente 
 
 Cada tecnología era un mundo nuevo, pero mi conocimiento del dominio inmobiliario me daba una ventaja: **sabía exactamente qué problema quería resolver**.
 
-## degux.cl
+## inmogrid.cl
 
-Así nació degux.cl: una plataforma que centraliza datos públicos inmobiliarios de Chile y los hace accesibles para todos.
+Así nació inmogrid.cl: una plataforma que centraliza datos públicos inmobiliarios de Chile y los hace accesibles para todos.
 
 Combina mi experiencia de 14 años en el rubro con stack moderno de desarrollo web.
 

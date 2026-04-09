@@ -1,4 +1,4 @@
-# 🚀 GUÍA COMPLETA DE LA API PÚBLICA DE DEGUX.CL
+# 🚀 GUÍA COMPLETA DE LA API PÚBLICA DE INMOGRID.CL
 
 ## 📋 Resumen
 
@@ -16,7 +16,7 @@ Para el correcto funcionamiento de la API, se requieren los siguientes component
 ## 🎯 Endpoints Disponibles
 
 ### Base URL
-`https://degux.cl/api/public`
+`https://inmogrid.cl/api/public`
 
 ### 1. Datos del Mapa (`/map-data`)
 
@@ -31,7 +31,7 @@ Para el correcto funcionamiento de la API, se requieren los siguientes component
 | `limit`   | `number`| Limita el número de resultados retornados.      | `50` (por defecto: 100)  |
 
 *   **Ejemplo de Uso:**
-    `https://degux.cl/api/public/map-data?comuna=santiago&anio=2024&limit=50`
+    `https://inmogrid.cl/api/public/map-data?comuna=santiago&anio=2024&limit=50`
 
 *   **Respuesta Exitosa (200 OK):**
     ```json
@@ -71,7 +71,7 @@ Para el correcto funcionamiento de la API, se requieren los siguientes component
 *   **Método:** `GET`
 *   **Descripción:** Proporciona metadatos y configuraciones generales de la API, como la versión, fecha de última actualización, y campos disponibles.
 *   **Ejemplo de Uso:**
-    `https://degux.cl/api/public/map-config`
+    `https://inmogrid.cl/api/public/map-config`
 
 *   **Respuesta Exitosa (200 OK):**
     ```json
@@ -85,7 +85,7 @@ Para el correcto funcionamiento de la API, se requieren los siguientes component
           "comuna", "rol", "fechaescritura", "superficie", "monto", "observaciones"
         ],
         "dataSources": ["Conservadores de Bienes Raíces"],
-        "contact": "api@degux.cl"
+        "contact": "api@inmogrid.cl"
       }
     }
     ```
@@ -205,7 +205,7 @@ const useReferenciales = (comuna?: string) => {
       try {
         const params = comuna ? `?comuna=${comuna}` : '';
         const response = await fetch(
-          `https://degux.cl/api/public/map-data${params}`
+          `https://inmogrid.cl/api/public/map-data${params}`
         );
         const result = await response.json();
         
@@ -232,7 +232,7 @@ const useReferenciales = (comuna?: string) => {
 // Obtener datos
 async function getReferenciales(filters = {}) {
   const params = new URLSearchParams(filters);
-  const url = `https://degux.cl/api/public/map-data?${params}`;
+  const url = `https://inmogrid.cl/api/public/map-data?${params}`;
   
   try {
     const response = await fetch(url);
@@ -584,7 +584,7 @@ if (DEBUG_MODE) {
 
 ## 📞 Soporte
 
-Para cualquier consulta o problema con la API, por favor, abre un issue en el repositorio de GitHub o contacta a `api@degux.cl`.
+Para cualquier consulta o problema con la API, por favor, abre un issue en el repositorio de GitHub o contacta a `api@inmogrid.cl`.
 
 ## 🔒 Consideraciones Futuras
 

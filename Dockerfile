@@ -1,5 +1,5 @@
 # ============================================
-# Degux.cl - Optimized Next.js Production Dockerfile
+# Inmogrid.cl - Optimized Next.js Production Dockerfile
 # Node 22 + Multi-stage build + Optimized caching
 # ============================================
 

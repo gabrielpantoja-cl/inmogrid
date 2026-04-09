@@ -9,21 +9,21 @@
 
 ## Estado Actual (Actualizado 2026-02-07 03:30 UTC)
 
-- [x] **CONTENIDO**: degux-web detenido, malware eliminado, DDoS parado
+- [x] **CONTENIDO**: inmogrid-web detenido, malware eliminado, DDoS parado
 - [x] **HARDENING COMPLETADO**: Puertos, security_opt, cap_drop, health checks
-- [x] **DEGUX-WEB RECONSTRUIDO**: Imagen limpia, verificada, operativa
-- [x] **FILESYSTEM READ-ONLY**: degux-web con read_only + tmpfs noexec (neutraliza exploit activo)
+- [x] **INMOGRID-WEB RECONSTRUIDO**: Imagen limpia, verificada, operativa
+- [x] **FILESYSTEM READ-ONLY**: inmogrid-web con read_only + tmpfs noexec (neutraliza exploit activo)
 - [x] **SUPABASE ELIMINADO**: Compose file eliminado del repo
 - [x] **SOFIA ASEGURADA**: Puerto 3002 movido a 127.0.0.1 + security_opt
 - [x] **N8N ASEGURADO**: Puerto 5678 movido a 127.0.0.1 + security_opt
 - [x] **REGISTRO IPs**: docs/security/BLOCKED_IPS.md (3 IPs: 77.90.185.76, 205.185.127.97, 91.92.243.113)
 - [x] **AGENTE SEGURIDAD**: .claude/agents/vps-security-specialist.md creado
 - [x] **RESPUESTA DO PREPARADA**: docs/reports/2026-02-07_RESPUESTA_DIGITALOCEAN_TICKET_11599402.md
-- [x] **REPORTE DEGUX.CL**: docs/reports/2026-02-07_REPORTE_SEGURIDAD_DEGUX_CL.md
+- [x] **REPORTE INMOGRID.CL**: docs/reports/2026-02-07_REPORTE_SEGURIDAD_INMOGRID_CL.md
 - [ ] **PENDIENTE (requiere sudo)**: Eliminar user supabase, bloquear IPs en UFW
 - [ ] **PENDIENTE**: Rotacion de credenciales
 - [ ] **PENDIENTE**: Enviar respuesta a DigitalOcean
-- [ ] **PENDIENTE (equipo degux.cl)**: Parchear vulnerabilidad RCE en Next.js (POST /)
+- [ ] **PENDIENTE (equipo inmogrid.cl)**: Parchear vulnerabilidad RCE en Next.js (POST /)
 
 ---
 
@@ -47,7 +47,7 @@ sudo userdel supabase
 grep supabase /etc/passwd  # No debe devolver nada
 ```
 
-**Por que**: El UID 1001 del host mapea al user `nextjs` dentro de degux-web. Si un atacante escapa del contenedor, tendria acceso sudo+docker. Ademas, este usuario nunca se uso realmente (la instancia Supabase nunca fue desplegada).
+**Por que**: El UID 1001 del host mapea al user `nextjs` dentro de inmogrid-web. Si un atacante escapa del contenedor, tendria acceso sudo+docker. Ademas, este usuario nunca se uso realmente (la instancia Supabase nunca fue desplegada).
 
 ### 1.2 Bloquear IPs maliciosas en UFW
 
@@ -60,17 +60,17 @@ sudo ufw deny out to 205.185.127.97
 sudo ufw status | grep -E '77.90|205.185'
 ```
 
-### 1.3 Limpiar imagen comprometida de degux-web
+### 1.3 Limpiar imagen comprometida de inmogrid-web
 
 ```bash
 # Eliminar imagen contaminada
-docker rmi vps-do-degux-web
+docker rmi vps-do-inmogrid-web
 
 # Limpiar build cache (puede contener capas infectadas)
 docker builder prune -af
 
 # Verificar
-docker images | grep degux
+docker images | grep inmogrid
 ```
 
 ### 1.4 Eliminar archivo docker-compose.supabase.yml
@@ -89,11 +89,11 @@ git rm docker-compose.supabase.yml
 
 ---
 
-## Fase 2: Hardening de degux-web (ANTES de reiniciar)
+## Fase 2: Hardening de inmogrid-web (ANTES de reiniciar)
 
 ### 2.1 Corregir exposicion de puerto
 
-**Archivo**: `docker-compose.degux.yml`
+**Archivo**: `docker-compose.inmogrid.yml`
 
 ```yaml
 # ANTES (INSEGURO - accesible desde internet)
@@ -108,7 +108,7 @@ ports:
 ### 2.2 Agregar opciones de seguridad al contenedor
 
 ```yaml
-degux-web:
+inmogrid-web:
   # ... configuracion existente ...
   security_opt:
     - no-new-privileges:true
@@ -143,9 +143,9 @@ healthcheck:
 Crear red Docker con driver que permita control de egress, o usar iptables:
 
 ```bash
-# Permitir solo trafico necesario desde degux-web
-# degux-web solo necesita: degux-db (5432), n8n (5678), DNS (53)
-sudo iptables -I DOCKER-USER -s 172.25.0.0/16 -d 172.25.0.0/16 -j ACCEPT  # red interna degux
+# Permitir solo trafico necesario desde inmogrid-web
+# inmogrid-web solo necesita: inmogrid-db (5432), n8n (5678), DNS (53)
+sudo iptables -I DOCKER-USER -s 172.25.0.0/16 -d 172.25.0.0/16 -j ACCEPT  # red interna inmogrid
 sudo iptables -I DOCKER-USER -s 172.25.0.0/16 -d 172.18.0.0/16 -j ACCEPT  # red vps_network
 sudo iptables -I DOCKER-USER -s 172.25.0.0/16 -j DROP  # bloquear todo lo demas
 ```
@@ -160,10 +160,10 @@ Todas las credenciales expuestas en el contenedor comprometido deben ser rotadas
 
 | Credencial | Archivo | Prioridad |
 |------------|---------|-----------|
-| DEGUX_DB_PASSWORD | .env.production | CRITICA |
-| DEGUX_NEXTAUTH_SECRET | .env.production | CRITICA |
-| DEGUX_GOOGLE_CLIENT_SECRET | Google Console | ALTA |
-| DEGUX_GOOGLE_MAPS_API_KEY | Google Console | ALTA |
+| INMOGRID_DB_PASSWORD | .env.production | CRITICA |
+| INMOGRID_NEXTAUTH_SECRET | .env.production | CRITICA |
+| INMOGRID_GOOGLE_CLIENT_SECRET | Google Console | ALTA |
+| INMOGRID_GOOGLE_MAPS_API_KEY | Google Console | ALTA |
 | N8N_WEBHOOK_SECRET | .env.production | MEDIA |
 
 ### 3.2 Procedimiento
@@ -175,45 +175,45 @@ openssl rand -base64 32  # Para cada password/secret
 # 2. Actualizar .env.production en el VPS
 nano ~/vps-do/.env.production
 
-# 3. Actualizar password en degux-db
-docker exec -it degux-db psql -U degux_user -d degux_core -c \
-  "ALTER USER degux_user WITH PASSWORD 'NUEVA_PASSWORD';"
+# 3. Actualizar password en inmogrid-db
+docker exec -it inmogrid-db psql -U inmogrid_user -d inmogrid_core -c \
+  "ALTER USER inmogrid_user WITH PASSWORD 'NUEVA_PASSWORD';"
 
 # 4. Revocar Google Client Secret (console.cloud.google.com)
 # Crear nuevo secret y actualizar
 
 # 5. Restringir Google Maps API Key (console.cloud.google.com)
-# Limitar a dominios degux.cl y api.degux.cl solamente
+# Limitar a dominios inmogrid.cl y api.inmogrid.cl solamente
 
 # 6. Reconstruir y reiniciar
 cd ~/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d --build degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d --build inmogrid-web
 ```
 
 ---
 
-## Fase 4: Reconstruccion Segura de degux-web
+## Fase 4: Reconstruccion Segura de inmogrid-web
 
 ### 4.1 Rebuild sin cache
 
 ```bash
 cd ~/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build --no-cache inmogrid-web
 ```
 
 ### 4.2 Verificar imagen limpia
 
 ```bash
 # Verificar que no hay binarios sospechosos
-docker run --rm --entrypoint sh vps-do-degux-web -c "find / -name '*.kok' -o -name 'udevr' -o -name '.monitor' 2>/dev/null"
+docker run --rm --entrypoint sh vps-do-inmogrid-web -c "find / -name '*.kok' -o -name 'udevr' -o -name '.monitor' 2>/dev/null"
 
 # Verificar que wget no esta disponible (Alpine lo incluye por defecto)
-docker run --rm --entrypoint sh vps-do-degux-web -c "which wget; which curl"
+docker run --rm --entrypoint sh vps-do-inmogrid-web -c "which wget; which curl"
 
 # Listar procesos despues de arrancar
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 sleep 30
-docker exec degux-web ps aux
+docker exec inmogrid-web ps aux
 ```
 
 ### 4.3 Monitoreo post-deploy
@@ -223,10 +223,10 @@ docker exec degux-web ps aux
 watch -n 300 'ss -tnp | grep -v "VPS_IP_REDACTED:22\|127.0.0"'
 
 # Verificar CPU normal
-docker stats --no-stream degux-web
+docker stats --no-stream inmogrid-web
 
 # Verificar logs limpios
-docker logs -f degux-web
+docker logs -f inmogrid-web
 ```
 
 ---
@@ -268,7 +268,7 @@ ubuntu-s-2vcpu-2gb-amd-nyc3-01 (VPS_IP_REDACTED).
 We have completed our investigation and remediation:
 
 FINDINGS:
-- The compromise was traced to a Docker container (degux-web) running
+- The compromise was traced to a Docker container (inmogrid-web) running
   a Next.js application, which was exploited to deploy DDoS malware
   (udevr bot, x86_64.kok binaries)
 - The vulnerability CVE-2026-21858 (Ni8mare) in our n8n instance was
@@ -363,17 +363,17 @@ CVE-2026-21858 fue divulgada 2026-01-07. El parche existia desde n8n 1.121.0 (No
 
 - [ ] Usuario `supabase` eliminado del host
 - [ ] IPs C2 bloqueadas en UFW
-- [ ] Imagen degux-web purgada y reconstruida
+- [ ] Imagen inmogrid-web purgada y reconstruida
 - [ ] docker-compose.supabase.yml eliminado
 - [ ] Puerto 3000 bound a 127.0.0.1
-- [ ] Security options agregadas a degux-web
+- [ ] Security options agregadas a inmogrid-web
 - [ ] Health check cambiado a node (sin wget)
-- [ ] DEGUX_DB_PASSWORD rotada
-- [ ] DEGUX_NEXTAUTH_SECRET rotado
+- [ ] INMOGRID_DB_PASSWORD rotada
+- [ ] INMOGRID_NEXTAUTH_SECRET rotado
 - [ ] Google Client Secret rotado
 - [ ] Google Maps API Key restringida
 - [ ] N8N_WEBHOOK_SECRET rotado
-- [ ] degux-web reconstruido y verificado limpio
+- [ ] inmogrid-web reconstruido y verificado limpio
 - [ ] Monitoreo post-deploy ejecutado (1 hora)
 - [ ] Respuesta enviada a DigitalOcean
 - [ ] Documentacion actualizada (CLAUDE.md, puertos)

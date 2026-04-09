@@ -1,10 +1,10 @@
 # GEMINI.md
 
-This file provides context, philosophy, and technical guidance to Gemini/AI when working on the **degux.cl** repository.
+This file provides context, philosophy, and technical guidance to Gemini/AI when working on the **inmogrid.cl** repository.
 
 ## 1. Project Identity & Vision: "The Digital Garden"
 
-**degux.cl** has evolved. It is no longer just a real estate platform; it is a **Digital Ecosystem for Personal Branding and Community Connection** in Chile.
+**inmogrid.cl** has evolved. It is no longer just a real estate platform; it is a **Digital Ecosystem for Personal Branding and Community Connection** in Chile.
 
 **The Core Concept:**
 Imagine a blend of **Substack** (publishing), **Behance** (portfolio), and **Linktree** (aggregation), but rooted in local community and specific passions: **Plants, Programming, Gamer Life, and Professional Valuation (Tasaciones).**
@@ -38,7 +38,7 @@ We use modern, "bleeding-edge" tech to build a fast, open web.
 
 The database schema reflects the eclectic mix of interests. We use a modular approach to User Profiles.
 
-### Core: The User Profile (`/degux/tu-nombre`)
+### Core: The User Profile (`/inmogrid/tu-nombre`)
 * **Bio & Links:** The Linktree replacement.
 * **The "Stack":** What hardware/software do you use? (Gamer/Dev focus).
 * **Location:** PostGIS point (fuzzy location for privacy) to find local peers.

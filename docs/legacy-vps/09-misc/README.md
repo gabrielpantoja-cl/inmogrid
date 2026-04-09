@@ -1,6 +1,6 @@
 # 09 - Research & Market Analysis
 
-Este directorio contiene investigaciones de mercado, análisis competitivos y estudios de usuario para el ecosistema degux.cl.
+Este directorio contiene investigaciones de mercado, análisis competitivos y estudios de usuario para el ecosistema inmogrid.cl.
 
 ## Subdirectorios
 
@@ -9,7 +9,7 @@ Informes completos generados con Gemini 2.5 Pro Deep Research sobre:
 - Análisis competitivo de plataformas inmobiliarias chilenas
 - Críticas y pain points de usuarios (corredores, tasadores, etc.)
 - Tendencias del mercado inmobiliario chileno
-- Oportunidades de diferenciación para degux.cl
+- Oportunidades de diferenciación para inmogrid.cl
 
 ## Propósito
 
@@ -32,7 +32,7 @@ Cada informe sigue la estructura:
 1. **Resumen Ejecutivo**: Key findings y recomendaciones
 2. **Metodología**: Fuentes consultadas y approach
 3. **Hallazgos Detallados**: Análisis profundo por categoría
-4. **Implicaciones para degux.cl**: Cómo aplicar los insights
+4. **Implicaciones para inmogrid.cl**: Cómo aplicar los insights
 5. **Próximos Pasos**: Acciones recomendadas
 
 ## Uso en el Proyecto

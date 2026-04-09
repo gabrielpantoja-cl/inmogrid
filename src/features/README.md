@@ -1,6 +1,6 @@
 # `src/features/`
 
-Dominios de negocio de degux.cl. Cada feature es **autocontenido**: tiene sus componentes, hooks, lib, types y API routes en una sola carpeta.
+Dominios de negocio de inmogrid.cl. Cada feature es **autocontenido**: tiene sus componentes, hooks, lib, types y API routes en una sola carpeta.
 
 ## Estructura esperada de un feature
 

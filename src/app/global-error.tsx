@@ -40,7 +40,7 @@ export default function GlobalError({
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Error - degux.cl</title>
+        <title>Error - inmogrid.cl</title>
         <style>{`
           * {
             margin: 0;
@@ -214,7 +214,7 @@ export default function GlobalError({
           <div className="footer">
             Si el problema persiste, repórtalo en{' '}
             <a
-              href="https://github.com/gabrielpantoja-cl/degux.cl/issues"
+              href="https://github.com/gabrielpantoja-cl/inmogrid.cl/issues"
               target="_blank"
               rel="noopener noreferrer"
             >

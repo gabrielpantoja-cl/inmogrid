@@ -1,4 +1,4 @@
-# ✅ Migración Completada - Base de Datos degux.cl
+# ✅ Migración Completada - Base de Datos inmogrid.cl
 
 **Fecha**: 2025-10-06
 **Estado**: ✅ COMPLETADO
@@ -8,15 +8,15 @@
 
 ## 📊 Resumen Ejecutivo
 
-La migración de la base de datos PostgreSQL para **degux.cl** ha sido completada exitosamente. La base de datos está configurada, sincronizada con Prisma y lista para recibir datos de producción.
+La migración de la base de datos PostgreSQL para **inmogrid.cl** ha sido completada exitosamente. La base de datos está configurada, sincronizada con Prisma y lista para recibir datos de producción.
 
 ---
 
 ## ✅ Tareas Completadas
 
 ### 1. Configuración de Base de Datos
-- ✅ Base de datos `degux` creada en contenedor `n8n-db`
-- ✅ Usuario `degux_user` configurado con permisos apropiados
+- ✅ Base de datos `inmogrid` creada en contenedor `n8n-db`
+- ✅ Usuario `inmogrid_user` configurado con permisos apropiados
 - ✅ Conexión interna VPS establecida (n8n-db:5432)
 
 ### 2. Schema de Prisma
@@ -51,10 +51,10 @@ La migración de la base de datos PostgreSQL para **degux.cl** ha sido completad
 
 | Archivo | Descripción | Ubicación |
 |---------|-------------|-----------|
-| `02_nextauth_schema.sql` | Migration SQL inicial | `/degux/migrations/` |
-| `DATABASE_SETUP_SUMMARY.md` | Documentación detallada | `/degux/` |
-| `verify-migration.sh` | Script de verificación | `/degux/` |
-| `MIGRATION_COMPLETE.md` | Este archivo | `/degux/` |
+| `02_nextauth_schema.sql` | Migration SQL inicial | `/inmogrid/migrations/` |
+| `DATABASE_SETUP_SUMMARY.md` | Documentación detallada | `/inmogrid/` |
+| `verify-migration.sh` | Script de verificación | `/inmogrid/` |
+| `MIGRATION_COMPLETE.md` | Este archivo | `/inmogrid/` |
 
 ---
 
@@ -103,7 +103,7 @@ User (1) ←→ (N) ChatMessage   [Chat history]
 
 ### Producción (dentro del VPS)
 ```env
-POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@n8n-db:5432/degux?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:PASSWORD@n8n-db:5432/inmogrid?schema=public"
 ```
 
 ### Desarrollo Local
@@ -120,13 +120,13 @@ Para desarrollo local, usar SSH tunnel o ejecutar Prisma dentro del VPS.
 ssh gabriel@VPS_IP_REDACTED
 
 # Ejecutar script de verificación
-~/vps-do/degux/verify-migration.sh
+~/vps-do/inmogrid/verify-migration.sh
 ```
 
 ### Resultado Esperado
 ```
 ✅ Test 1: Contenedor PostgreSQL (n8n-db) - Running
-✅ Test 2: Base de datos degux - Conectado
+✅ Test 2: Base de datos inmogrid - Conectado
 ✅ Test 3: Tablas creadas - 11 tablas
 ✅ Test 4: Columnas de tabla User - 18 columnas
 ✅ Test 5: Índices configurados - OK
@@ -140,7 +140,7 @@ ssh gabriel@VPS_IP_REDACTED
 | Componente | Estado | Detalles |
 |------------|--------|----------|
 | Contenedor n8n-db | ✅ Running | Healthy (2 mins) |
-| Base de datos degux | ✅ Activa | Usuario: degux_user |
+| Base de datos inmogrid | ✅ Activa | Usuario: inmogrid_user |
 | Tablas | ✅ 11 tablas | Schema completo |
 | Datos | ⚪ Vacío | 0 registros (esperado) |
 | Índices | ✅ Configurados | 4 índices principales |
@@ -152,28 +152,28 @@ ssh gabriel@VPS_IP_REDACTED
 
 ### 1. Configurar Variables de Entorno en Aplicación
 ```bash
-# En el proyecto degux.cl, configurar .env.production:
-POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@n8n-db:5432/degux?schema=public"
+# En el proyecto inmogrid.cl, configurar .env.production:
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:PASSWORD@n8n-db:5432/inmogrid?schema=public"
 NEXTAUTH_SECRET="<generar_con_openssl>"
-NEXTAUTH_URL="https://degux.cl"
+NEXTAUTH_URL="https://inmogrid.cl"
 GOOGLE_CLIENT_ID="<tu_client_id>"
 GOOGLE_CLIENT_SECRET="<tu_client_secret>"
 ```
 
 ### 2. Deploy de la Aplicación
 ```bash
-# Construir y deployar degux.cl
-cd ~/degux.cl
-docker build -t degux-web:latest .
-docker compose up -d degux-web
+# Construir y deployar inmogrid.cl
+cd ~/inmogrid.cl
+docker build -t inmogrid-web:latest .
+docker compose up -d inmogrid-web
 ```
 
 ### 3. Probar Autenticación
-1. Visitar https://degux.cl/auth/signin
+1. Visitar https://inmogrid.cl/auth/signin
 2. Login con Google
 3. Verificar creación de usuario:
 ```bash
-docker exec n8n-db psql -U degux_user -d degux -c "SELECT id, email, name, role FROM \"User\";"
+docker exec n8n-db psql -U inmogrid_user -d inmogrid -c "SELECT id, email, name, role FROM \"User\";"
 ```
 
 ### 4. Crear Usuario Admin (Opcional)
@@ -210,7 +210,7 @@ WHERE email = 'tu_email@gmail.com';
 ```bash
 # Desde VPS
 ssh gabriel@VPS_IP_REDACTED
-docker exec -it n8n-db psql -U degux_user -d degux
+docker exec -it n8n-db psql -U inmogrid_user -d inmogrid
 ```
 
 ### Ver Usuarios
@@ -258,25 +258,25 @@ ORDER BY a."createdAt" DESC;
 ## 📚 Referencias
 
 ### Documentación
-- `/degux/DATABASE_SETUP_SUMMARY.md` - Setup detallado
-- `/degux/temp-back-end-copy/BACKEND_README.md` - Guía backend
-- `/degux/temp-back-end-copy/BACKEND_AUTH_DEPLOYMENT_GUIDE.md` - Guía de autenticación
+- `/inmogrid/DATABASE_SETUP_SUMMARY.md` - Setup detallado
+- `/inmogrid/temp-back-end-copy/BACKEND_README.md` - Guía backend
+- `/inmogrid/temp-back-end-copy/BACKEND_AUTH_DEPLOYMENT_GUIDE.md` - Guía de autenticación
 
 ### Scripts
-- `/degux/verify-migration.sh` - Verificación de migración
-- `/degux/temp-back-end-copy/check-db.sh` - Diagnóstico de BD
-- `/degux/temp-back-end-copy/test-auth.sh` - Test de autenticación
+- `/inmogrid/verify-migration.sh` - Verificación de migración
+- `/inmogrid/temp-back-end-copy/check-db.sh` - Diagnóstico de BD
+- `/inmogrid/temp-back-end-copy/test-auth.sh` - Test de autenticación
 
 ### Migrations
-- `/degux/migrations/01_init_postgis.sql` - PostGIS (no instalado)
-- `/degux/migrations/02_nextauth_schema.sql` - Schema NextAuth inicial
+- `/inmogrid/migrations/01_init_postgis.sql` - PostGIS (no instalado)
+- `/inmogrid/migrations/02_nextauth_schema.sql` - Schema NextAuth inicial
 
 ---
 
 ## ✅ Checklist de Migración
 
-- [x] Base de datos degux creada
-- [x] Usuario degux_user configurado
+- [x] Base de datos inmogrid creada
+- [x] Usuario inmogrid_user configurado
 - [x] Tablas de NextAuth creadas (User, Account, Session, VerificationToken)
 - [x] Tablas de aplicación creadas (Property, Connection, etc.)
 - [x] Índices configurados
@@ -294,13 +294,13 @@ ORDER BY a."createdAt" DESC;
 
 ## 💡 Notas Importantes
 
-1. **Compartición de Contenedor**: La base de datos `degux` comparte el contenedor `n8n-db` con N8N, optimizando recursos (~300MB RAM ahorrados).
+1. **Compartición de Contenedor**: La base de datos `inmogrid` comparte el contenedor `n8n-db` con N8N, optimizando recursos (~300MB RAM ahorrados).
 
 2. **PostGIS**: No está instalado en el contenedor actual. Si se necesita funcionalidad geoespacial avanzada, considerar instalar o cambiar a imagen con PostGIS.
 
-3. **Backups**: Configurar backups regulares con el script `/scripts/backup-degux.sh`.
+3. **Backups**: Configurar backups regulares con el script `/scripts/backup-inmogrid.sh`.
 
-4. **Escalabilidad**: Si degux.cl crece significativamente, considerar separar la base de datos a su propio contenedor.
+4. **Escalabilidad**: Si inmogrid.cl crece significativamente, considerar separar la base de datos a su propio contenedor.
 
 5. **Development**: Para desarrollo local, usar SSH tunnel o ejecutar comandos Prisma dentro del VPS.
 
@@ -308,7 +308,7 @@ ORDER BY a."createdAt" DESC;
 
 ## 🎉 Conclusión
 
-La migración de la base de datos para **degux.cl** está **100% completa y lista para producción**.
+La migración de la base de datos para **inmogrid.cl** está **100% completa y lista para producción**.
 
 **Estado Final**:
 - ✅ Base de datos configurada

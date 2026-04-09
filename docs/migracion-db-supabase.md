@@ -1,4 +1,4 @@
-# Migración DB: pantojapropiedades.cl → DEGUX
+# Migración DB: pantojapropiedades.cl → INMOGRID
 
 **Fecha de análisis:** 2026-04-06  
 **Supabase project ref:** `SUPABASE_PROJECT_REF`  
@@ -8,9 +8,9 @@
 
 ## Contexto
 
-El proyecto Supabase de `pantojapropiedades.cl` se reutiliza como base de datos de DEGUX. pantojapropiedades.cl sigue activo hasta que venza el dominio. **Nunca borrar tablas ni datos existentes.**
+El proyecto Supabase de `pantojapropiedades.cl` se reutiliza como base de datos de INMOGRID. pantojapropiedades.cl sigue activo hasta que venza el dominio. **Nunca borrar tablas ni datos existentes.**
 
-DEGUX es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existentes preservados.
+INMOGRID es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existentes preservados.
 
 ---
 
@@ -18,9 +18,9 @@ DEGUX es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existen
 
 ### Inventario completo de tablas
 
-| Tabla | Filas | Origen | Decisión DEGUX |
+| Tabla | Filas | Origen | Decisión INMOGRID |
 |-------|-------|--------|----------------|
-| `site_page_views` | 5.671 | Analytics | Ignorar — no relevante para DEGUX |
+| `site_page_views` | 5.671 | Analytics | Ignorar — no relevante para INMOGRID |
 | `site_session_analytics` | 1.447 | Analytics | Ignorar |
 | `documents` | 238 | RAG / pgvector | ✅ **Reutilizar** — base vectorial de Sofia (embeddings de propiedades y PDFs) |
 | `site_daily_stats` | 83 | Analytics | Ignorar |
@@ -29,12 +29,12 @@ DEGUX es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existen
 | `chat_messages` | 68 | Chatbot Sofia | ✅ Reutilizar — historial Sofia |
 | `team_notifications` | 48 | Equipos | Ignorar por ahora |
 | `chat_conversations` | 21 | Chatbot Sofia | ✅ Reutilizar — historial Sofia |
-| `posts` | 15 | Blog | ✅ **MIGRAR** — blog completo a DEGUX |
+| `posts` | 15 | Blog | ✅ **MIGRAR** — blog completo a INMOGRID |
 | `external_portals` | 9 | Portales | Ignorar |
 | `properties` | 7 | Propiedades | ✅ Reutilizar en Fase 1 |
 | `crm_clientes` | 6 | CRM | ✅ Reutilizar en Fase 5 |
 | `crm_clientes_estadisticas` | 6 | CRM | ✅ Reutilizar en Fase 5 |
-| `profiles` | 4 | Auth | ⚠️ Incompatible — usa Supabase Auth (auth.users), DEGUX usa NextAuth |
+| `profiles` | 4 | Auth | ⚠️ Incompatible — usa Supabase Auth (auth.users), INMOGRID usa NextAuth |
 | `property_videos` | 4 | Propiedades | ✅ Reutilizar en Fase 1 |
 | `blog_guidelines_versions` | 3 | CMS | ⚠️ **Bloquea Prisma** — tiene FK a auth.users |
 | `inmobloques_scores` | 3 | ❓ Desconocido | Investigar |
@@ -42,7 +42,7 @@ DEGUX es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existen
 | `cotizaciones` | 2 | Ventas | Ignorar por ahora |
 | `crm_oportunidades` | 2 | CRM | ✅ Reutilizar en Fase 5 |
 | `team_members` | 2 | Equipos | Ignorar |
-| `user_google_tokens` | 2 | Auth | Ignorar — DEGUX usa NextAuth |
+| `user_google_tokens` | 2 | Auth | Ignorar — INMOGRID usa NextAuth |
 | `user_notification_preferences` | 2 | Notificaciones | Ignorar por ahora |
 | `crm_ordenes_visita` | 1 | CRM | ✅ Reutilizar en Fase 5 |
 | `teams` | 1 | Equipos | Ignorar |
@@ -72,9 +72,9 @@ DEGUX es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existen
 | `excerpt` | text | YES | — |
 | `slug` | text | YES | — |
 
-**Compatibilidad con DEGUX:** Alta. El modelo `Post` en el schema de DEGUX tiene campos similares. Mapear `author_id` al sistema NextAuth requiere una tabla de correspondencia o migración de IDs.
+**Compatibilidad con INMOGRID:** Alta. El modelo `Post` en el schema de INMOGRID tiene campos similares. Mapear `author_id` al sistema NextAuth requiere una tabla de correspondencia o migración de IDs.
 
-**Nota:** `author_id` referencia `auth.users` de Supabase (UUID). DEGUX usa NextAuth con IDs tipo `cuid`. Al integrar el blog en DEGUX, los posts existentes se mostrarán correctamente si se mantiene la tabla original y se accede via Supabase client, o se migran los IDs en una segunda etapa.
+**Nota:** `author_id` referencia `auth.users` de Supabase (UUID). INMOGRID usa NextAuth con IDs tipo `cuid`. Al integrar el blog en INMOGRID, los posts existentes se mostrarán correctamente si se mantiene la tabla original y se accede via Supabase client, o se migran los IDs en una segunda etapa.
 
 ### `documents` — RAG / Vector embeddings (238 filas)
 
@@ -104,7 +104,7 @@ DEGUX es pantojapropiedades 2.0 — mismo Supabase, nuevas tablas, datos existen
 
 **Qué es:** La base de datos vectorial del chatbot **Sofia** (RAG). Contiene chunks de documentos inmobiliarios (propiedades, PDFs de Google Drive) con sus embeddings (`pgvector`). Es el corazón del sistema de respuestas contextuales de Sofia.
 
-**Decisión para DEGUX:** ✅ **Reutilizar directamente** — Es exactamente lo que necesita la Fase 4 de DEGUX (Sofia AI Bot RAG). Los 238 documentos ya embebidos son un activo valioso. No tocar.
+**Decisión para INMOGRID:** ✅ **Reutilizar directamente** — Es exactamente lo que necesita la Fase 4 de INMOGRID (Sofia AI Bot RAG). Los 238 documentos ya embebidos son un activo valioso. No tocar.
 
 **Requiere:** Extensión `pgvector` habilitada en Supabase (ya está activa, confirmado por el tipo `USER-DEFINED` en `embedding`).
 
@@ -147,11 +147,11 @@ Debe retornar 0 filas.
 
 ---
 
-## Plan de migración DEGUX — SQL scripts
+## Plan de migración INMOGRID — SQL scripts
 
 Una vez resuelto el constraint FK, aplicar los siguientes scripts en orden via Supabase Studio.
 
-### Script 001 — Nuevas tablas DEGUX (Fase 0 MVP)
+### Script 001 — Nuevas tablas INMOGRID (Fase 0 MVP)
 
 > **Estado:** ⏳ Pendiente de escribir  
 > **Aplica:** Después de resolver el constraint FK  
@@ -165,7 +165,7 @@ Una vez resuelto el constraint FK, aplicar los siguientes scripts en orden via S
 
 ### Script 002 — NextAuth tables (si no existen)
 
-DEGUX usa NextAuth v4 con Prisma Adapter. Las tablas necesarias son:
+INMOGRID usa NextAuth v4 con Prisma Adapter. Las tablas necesarias son:
 `Account`, `Session`, `User`, `VerificationToken`
 
 > **Estado:** ⏳ Verificar si ya existen en el schema actual  
@@ -209,7 +209,7 @@ Prisma schema (fuente de verdad TypeScript)
 - [ ] Investigar tabla `inmobloques_scores` (3 filas, origen desconocido)
 - [x] Eliminar FK constraint de `blog_guidelines_versions`
 - [ ] Verificar si tablas NextAuth (`Account`, `Session`, `User`) ya existen
-- [ ] Escribir Script 001 — nuevas tablas DEGUX
+- [ ] Escribir Script 001 — nuevas tablas INMOGRID
 - [ ] Aplicar Script 001 en Supabase Studio
 - [ ] Ejecutar `npm run prisma:generate`
 - [ ] Configurar variables de entorno en Vercel

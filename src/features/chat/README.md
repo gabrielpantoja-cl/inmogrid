@@ -1,6 +1,6 @@
 # Feature: `chat` (Sofia)
 
-Asistente conversacional de degux.cl. Usa OpenAI `gpt-4o-mini` vía Vercel AI SDK con streaming, short-circuit para FAQs y persistencia best-effort en `degux_chat_messages`.
+Asistente conversacional de inmogrid.cl. Usa OpenAI `gpt-4o-mini` vía Vercel AI SDK con streaming, short-circuit para FAQs y persistencia best-effort en `inmogrid_chat_messages`.
 
 ## Scope
 

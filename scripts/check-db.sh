@@ -3,7 +3,7 @@
 # ==========================================
 # 🗄️ Script de Diagnóstico de Base de Datos
 # ==========================================
-# Proyecto: degux.cl
+# Proyecto: inmogrid.cl
 # Descripción: Verifica conectividad, tablas y datos de NextAuth
 # Uso: ./scripts/check-db.sh [local|vps]
 # ==========================================
@@ -20,21 +20,21 @@ NC='\033[0m' # No Color
 # Determinar modo
 MODE="${1:-local}"
 
-echo "🗄️  Diagnóstico de Base de Datos - degux.cl"
+echo "🗄️  Diagnóstico de Base de Datos - inmogrid.cl"
 echo "============================================="
 echo ""
 
 if [ "$MODE" = "vps" ]; then
   echo "📍 Modo: VPS (Producción)"
   echo "🔌 Puerto: 5433 (PostgreSQL dedicado)"
-  CONTAINER_NAME="degux-db"
-  DB_USER="degux_user"
-  DB_NAME="degux"
+  CONTAINER_NAME="inmogrid-db"
+  DB_USER="inmogrid_user"
+  DB_NAME="inmogrid"
 else
   echo "📍 Modo: Local (Desarrollo)"
   CONTAINER_NAME="postgres"
   DB_USER="postgres"
-  DB_NAME="degux_dev"
+  DB_NAME="inmogrid_dev"
 fi
 
 echo ""

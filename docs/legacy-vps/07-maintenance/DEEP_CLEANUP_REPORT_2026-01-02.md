@@ -2,13 +2,13 @@
 
 **Fecha:** 2026-01-02
 **Objetivo:** Eliminar todo el código y documentación legacy del proyecto anterior (referenciales.cl - plataforma inmobiliaria)
-**Proyecto Actual:** degux.cl - Plataforma colaborativa para marca personal con enfoque en plantas
+**Proyecto Actual:** inmogrid.cl - Plataforma colaborativa para marca personal con enfoque en plantas
 
 ---
 
 ## 📋 Resumen Ejecutivo
 
-Esta limpieza profunda completa la migración del código de degux.cl, eliminando **todos** los archivos de código y documentación relacionados con el proyecto anterior (referenciales.cl - base de datos inmobiliarias).
+Esta limpieza profunda completa la migración del código de inmogrid.cl, eliminando **todos** los archivos de código y documentación relacionados con el proyecto anterior (referenciales.cl - base de datos inmobiliarias).
 
 **Total de archivos eliminados:** 7
 **Líneas de código removidas:** ~1000
@@ -68,7 +68,7 @@ Esta limpieza profunda completa la migración del código de degux.cl, eliminand
   - Testing strategy
   - Roadmap de mejoras futuras
 - **Última actualización:** 2 de Septiembre de 2025
-- **Razón de archivo:** Documentación histórica valiosa, pero 100% irrelevante para degux.cl actual
+- **Razón de archivo:** Documentación histórica valiosa, pero 100% irrelevante para inmogrid.cl actual
 
 #### 2. `docs/04-api/api-publica.md` 📁
 - **Contenido:** Documentación de la API pública de referenciales inmobiliarias
@@ -103,12 +103,12 @@ grep -r "from.*validation" src/
 ### 3. Prisma Schema ✅
 - **Verificado:** El schema NO contiene modelos `Referenciales` ni `Conservadores`
 - **Modelos actuales:** User, Post, Plant, Collection, Connection, ChatMessage, AuditLog
-- **Estado:** 100% alineado con degux.cl (plataforma de marca personal y plantas)
+- **Estado:** 100% alineado con inmogrid.cl (plataforma de marca personal y plantas)
 
 ### 4. Rutas de la Aplicación ✅
 - **Verificado:** No existen rutas `/dashboard/referenciales` en `src/app/dashboard/`
 - **Rutas actuales:** `/dashboard/perfil`, `/dashboard/notas`, `/dashboard/plantas`, `/dashboard/colecciones`
-- **Estado:** 100% alineado con degux.cl
+- **Estado:** 100% alineado con inmogrid.cl
 
 ### 5. API Pública Actual ✅
 - **Endpoints actuales:**
@@ -116,7 +116,7 @@ grep -r "from.*validation" src/
   - `/api/public/profiles/[username]/plants` - Plantas del usuario
   - `/api/public/profiles/[username]/posts` - Publicaciones del usuario
   - `/api/public/health` - Health check general (NO datos inmobiliarios)
-- **Estado:** 100% alineado con degux.cl (NO hay endpoints de referenciales)
+- **Estado:** 100% alineado con inmogrid.cl (NO hay endpoints de referenciales)
 
 ---
 
@@ -135,7 +135,7 @@ grep -r "from.*validation" src/
 
 ### Modelos de Datos
 - **Modelos eliminados previamente:** Referenciales, Conservadores, PropertyListing
-- **Modelos actuales (100% degux.cl):**
+- **Modelos actuales (100% inmogrid.cl):**
   - User - Usuarios con perfiles profesionales
   - Post - Publicaciones/notas de blog
   - Plant - Catálogo de plantas
@@ -146,7 +146,7 @@ grep -r "from.*validation" src/
 
 ### Enfoque del Proyecto
 - **Antes (referenciales.cl):** Base de datos de transacciones inmobiliarias chilenas
-- **Ahora (degux.cl):** Plataforma colaborativa para marca personal con enfoque en plantas y contenido creativo
+- **Ahora (inmogrid.cl):** Plataforma colaborativa para marca personal con enfoque en plantas y contenido creativo
 
 ---
 
@@ -155,7 +155,7 @@ grep -r "from.*validation" src/
 Las siguientes referencias a "referenciales" permanecen **solo con propósito histórico y de contexto**:
 
 ### Archivos de Documentación Histórica
-- `CLAUDE.md` - Menciona la migración de referenciales.cl → degux.cl
+- `CLAUDE.md` - Menciona la migración de referenciales.cl → inmogrid.cl
 - `LEGACY_CLEANUP_2026-01-02.md` - Documenta el primer cleanup (scripts)
 - `SCRIPTS_CLEANUP_ANALYSIS.md` - Análisis de scripts eliminados
 - `archive/legacy-docs/` - Documentación archivada del proyecto anterior
@@ -193,7 +193,7 @@ Las siguientes referencias a "referenciales" permanecen **solo con propósito hi
 - ❌ No hay seeds de datos inmobiliarios
 - ❌ No hay rutas de dashboard para referenciales
 - ❌ No hay API pública de datos inmobiliarios
-- ✅ Solo código relevante para degux.cl (marca personal + plantas)
+- ✅ Solo código relevante para inmogrid.cl (marca personal + plantas)
 
 ### Documentación: Archivada ✅
 - ✅ Documentación legacy movida a `archive/legacy-docs/`
@@ -204,8 +204,8 @@ Las siguientes referencias a "referenciales" permanecen **solo con propósito hi
 ### Testing: Completo ✅
 - ✅ TypeScript type checking: Sin errores
 - ✅ Importaciones: Sin referencias rotas
-- ✅ Modelos: 100% alineados con degux.cl
-- ✅ Rutas: 100% alineadas con degux.cl
+- ✅ Modelos: 100% alineados con inmogrid.cl
+- ✅ Rutas: 100% alineadas con inmogrid.cl
 
 ---
 

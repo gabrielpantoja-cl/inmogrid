@@ -1,4 +1,4 @@
-# 🤖 AI Prompts - degux.cl
+# 🤖 AI Prompts - inmogrid.cl
 
 Archivos de configuración para asistentes de IA (Claude, Gemini, etc.).
 
@@ -168,4 +168,4 @@ Links to detailed docs
 ---
 
 **Última actualización**: 2026-01-03
-**Mantenedor**: Gabriel (gabriel@degux.cl)
+**Mantenedor**: Gabriel (gabriel@inmogrid.cl)

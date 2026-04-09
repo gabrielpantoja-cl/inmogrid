@@ -1,8 +1,8 @@
-# 🏗️ Arquitectura General - degux.cl
+# 🏗️ Arquitectura General - inmogrid.cl
 
 ## 📋 Visión Arquitectónica
 
-degux.cl está construido siguiendo principios de arquitectura moderna web, con énfasis en escalabilidad, performance y mantenibilidad. La aplicación utiliza Next.js 15 con App Router como framework principal, integrando tecnologías especializadas para manejo geoespacial y análisis de datos.
+inmogrid.cl está construido siguiendo principios de arquitectura moderna web, con énfasis en escalabilidad, performance y mantenibilidad. La aplicación utiliza Next.js 15 con App Router como framework principal, integrando tecnologías especializadas para manejo geoespacial y análisis de datos.
 
 ---
 

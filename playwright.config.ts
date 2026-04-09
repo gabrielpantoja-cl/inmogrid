@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Configuración de Playwright para degux.cl
+ * Configuración de Playwright para inmogrid.cl
  * Tests E2E de autenticación OAuth 2.0 con Google
  */
 export default defineConfig({
@@ -25,7 +25,7 @@ export default defineConfig({
 
   use: {
     // Base URL del VPS en producción
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'https://degux.cl',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'https://inmogrid.cl',
 
     // Tomar screenshots en fallos
     screenshot: 'only-on-failure',

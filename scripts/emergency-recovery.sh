@@ -2,7 +2,7 @@
 
 # ========================================
 # Script de Diagnóstico y Recuperación de Emergencia
-# degux.cl - VPS Digital Ocean
+# inmogrid.cl - VPS Digital Ocean
 # ========================================
 
 set -e
@@ -17,9 +17,9 @@ NC='\033[0m' # No Color
 
 # Variables
 VPS_HOST="gabriel@VPS_IP_REDACTED"
-VPS_DIR_APP="/home/gabriel/degux.cl"
+VPS_DIR_APP="/home/gabriel/inmogrid.cl"
 VPS_DIR_DOCKER="/home/gabriel/vps-do"
-CONTAINER_NAME="degux-web"
+CONTAINER_NAME="inmogrid-web"
 
 echo -e "${RED}🚨 EMERGENCY RECOVERY SCRIPT${NC}"
 echo -e "${RED}============================${NC}\n"
@@ -62,7 +62,7 @@ echo -e "\n${YELLOW}📊 Verificando uso de recursos del sistema...${NC}"
 run_on_vps "df -h | grep -E 'Filesystem|/dev/vda'" || true
 run_on_vps "free -h" || true
 
-echo -e "\n${YELLOW}🔍 Verificando estado específico de degux-web...${NC}"
+echo -e "\n${YELLOW}🔍 Verificando estado específico de inmogrid-web...${NC}"
 CONTAINER_STATUS=$(ssh "$VPS_HOST" "docker ps -a --filter name=$CONTAINER_NAME --format '{{.Status}}'" 2>/dev/null || echo "no encontrado")
 echo -e "Estado del contenedor $CONTAINER_NAME: ${CYAN}$CONTAINER_STATUS${NC}"
 
@@ -89,9 +89,9 @@ echo -e "\n${YELLOW}🌐 Verificando estado de nginx-proxy...${NC}"
 NGINX_STATUS=$(ssh "$VPS_HOST" "docker ps --filter name=nginx-proxy --format '{{.Status}}'" 2>/dev/null || echo "no encontrado")
 echo -e "Estado de nginx-proxy: ${CYAN}$NGINX_STATUS${NC}"
 
-echo -e "\n${YELLOW}🗄️  Verificando estado de degux-db...${NC}"
-DB_STATUS=$(ssh "$VPS_HOST" "docker ps --filter name=degux-db --format '{{.Status}}'" 2>/dev/null || echo "no encontrado")
-echo -e "Estado de degux-db: ${CYAN}$DB_STATUS${NC}"
+echo -e "\n${YELLOW}🗄️  Verificando estado de inmogrid-db...${NC}"
+DB_STATUS=$(ssh "$VPS_HOST" "docker ps --filter name=inmogrid-db --format '{{.Status}}'" 2>/dev/null || echo "no encontrado")
+echo -e "Estado de inmogrid-db: ${CYAN}$DB_STATUS${NC}"
 
 # ====================
 # FASE 2: DECISIÓN
@@ -100,9 +100,9 @@ echo -e "Estado de degux-db: ${CYAN}$DB_STATUS${NC}"
 section "FASE 2: PLAN DE RECUPERACIÓN"
 
 echo -e "${YELLOW}Opciones disponibles:${NC}"
-echo -e "  ${CYAN}1)${NC} Reiniciar contenedor degux-web (rápido, preserva configuración)"
+echo -e "  ${CYAN}1)${NC} Reiniciar contenedor inmogrid-web (rápido, preserva configuración)"
 echo -e "  ${CYAN}2)${NC} Rebuild completo con pull de código (soluciona problemas de build)"
-echo -e "  ${CYAN}3)${NC} Reiniciar todos los servicios (nginx-proxy, degux-web, degux-db)"
+echo -e "  ${CYAN}3)${NC} Reiniciar todos los servicios (nginx-proxy, inmogrid-web, inmogrid-db)"
 echo -e "  ${CYAN}4)${NC} Solo mostrar logs detallados"
 echo -e "  ${CYAN}5)${NC} Salir sin hacer cambios"
 echo ""
@@ -110,13 +110,13 @@ read -p "$(echo -e ${YELLOW}"Selecciona una opción (1-5): "${NC})" option
 
 case $option in
     1)
-        section "OPCIÓN 1: REINICIO SIMPLE DE DEGUX-WEB"
+        section "OPCIÓN 1: REINICIO SIMPLE DE INMOGRID-WEB"
 
         echo -e "${YELLOW}🛑 Deteniendo contenedor...${NC}"
-        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.degux.yml stop $CONTAINER_NAME"
+        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml stop $CONTAINER_NAME"
 
         echo -e "${YELLOW}▶️  Iniciando contenedor...${NC}"
-        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d $CONTAINER_NAME"
+        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d $CONTAINER_NAME"
 
         echo -e "${YELLOW}⏳ Esperando 15 segundos para que el contenedor inicie...${NC}"
         sleep 15
@@ -129,14 +129,14 @@ case $option in
         run_on_vps "cd $VPS_DIR_APP && git pull origin main"
 
         echo -e "${YELLOW}🛑 Deteniendo y eliminando contenedor...${NC}"
-        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.degux.yml stop $CONTAINER_NAME" || true
-        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.degux.yml rm -f $CONTAINER_NAME" || true
+        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml stop $CONTAINER_NAME" || true
+        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml rm -f $CONTAINER_NAME" || true
 
         echo -e "${YELLOW}🏗️  Rebuilding imagen (sin cache)...${NC}"
-        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache $CONTAINER_NAME"
+        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build --no-cache $CONTAINER_NAME"
 
         echo -e "${YELLOW}▶️  Iniciando nuevo contenedor...${NC}"
-        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d $CONTAINER_NAME"
+        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d $CONTAINER_NAME"
 
         echo -e "${YELLOW}🧹 Limpiando imágenes antiguas...${NC}"
         run_on_vps "docker image prune -f" || true
@@ -148,11 +148,11 @@ case $option in
     3)
         section "OPCIÓN 3: REINICIO COMPLETO DE SERVICIOS"
 
-        echo -e "${YELLOW}🛑 Deteniendo todos los servicios degux...${NC}"
-        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.degux.yml stop"
+        echo -e "${YELLOW}🛑 Deteniendo todos los servicios inmogrid...${NC}"
+        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml stop"
 
-        echo -e "${YELLOW}▶️  Iniciando todos los servicios degux...${NC}"
-        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d"
+        echo -e "${YELLOW}▶️  Iniciando todos los servicios inmogrid...${NC}"
+        run_on_vps "cd $VPS_DIR_DOCKER && docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d"
 
         echo -e "${YELLOW}⏳ Esperando 30 segundos para que los servicios inicien...${NC}"
         sleep 30
@@ -161,7 +161,7 @@ case $option in
     4)
         section "OPCIÓN 4: LOGS DETALLADOS"
 
-        echo -e "${YELLOW}📋 Logs completos de degux-web (últimas 200 líneas):${NC}"
+        echo -e "${YELLOW}📋 Logs completos de inmogrid-web (últimas 200 líneas):${NC}"
         run_on_vps "docker logs $CONTAINER_NAME --tail 200"
 
         echo -e "\n${YELLOW}📋 Logs de nginx-proxy (últimas 50 líneas):${NC}"
@@ -200,12 +200,12 @@ echo -e "\n${YELLOW}🏥 Health check de la aplicación...${NC}"
 sleep 5  # Dar tiempo extra para que la app responda
 
 # Health check
-if curl -f -s -m 10 https://degux.cl/api/health > /dev/null 2>&1; then
+if curl -f -s -m 10 https://inmogrid.cl/api/health > /dev/null 2>&1; then
     echo -e "${GREEN}✅ Health check EXITOSO${NC}"
 else
     echo -e "${RED}⚠️  Health check FALLÓ${NC}"
     echo -e "${YELLOW}Intentando con HTTP...${NC}"
-    if curl -f -s -m 10 http://degux.cl/api/health > /dev/null 2>&1; then
+    if curl -f -s -m 10 http://inmogrid.cl/api/health > /dev/null 2>&1; then
         echo -e "${YELLOW}⚠️  HTTP funciona pero HTTPS no - problema con SSL/nginx-proxy${NC}"
     else
         echo -e "${RED}❌ La aplicación no responde${NC}"
@@ -215,7 +215,7 @@ fi
 
 # Verificar página principal
 echo -e "\n${YELLOW}🌐 Verificando página principal...${NC}"
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -m 10 https://degux.cl 2>/dev/null || echo "000")
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -m 10 https://inmogrid.cl 2>/dev/null || echo "000")
 if [ "$HTTP_CODE" = "200" ]; then
     echo -e "${GREEN}✅ Sitio web accesible (HTTP $HTTP_CODE)${NC}"
 elif [ "$HTTP_CODE" = "000" ]; then
@@ -232,7 +232,7 @@ section "RESUMEN FINAL"
 
 echo -e "${GREEN}✅ Script de recuperación completado${NC}\n"
 echo -e "${CYAN}Próximos pasos:${NC}"
-echo -e "  1. Visita ${BLUE}https://degux.cl${NC} para verificar que el sitio esté funcionando"
+echo -e "  1. Visita ${BLUE}https://inmogrid.cl${NC} para verificar que el sitio esté funcionando"
 echo -e "  2. Si persisten problemas, revisa logs detallados:"
 echo -e "     ${YELLOW}ssh $VPS_HOST 'docker logs $CONTAINER_NAME --tail 100'${NC}"
 echo -e "  3. Para monitoreo continuo:"

@@ -51,7 +51,7 @@ export const getTestDatabaseUrl = () => {
 };
 
 export const displayTestInfo = () => {
-  console.log('\n🧪 CONFIGURACIÓN DE TESTS - DEGUX.CL');
+  console.log('\n🧪 CONFIGURACIÓN DE TESTS - INMOGRID.CL');
   console.log('=' .repeat(50));
   console.log(`📊 Base de datos: ${getTestDatabaseUrl().split('@')[1] || 'Neon PostgreSQL'}`);
   console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'test'}`);

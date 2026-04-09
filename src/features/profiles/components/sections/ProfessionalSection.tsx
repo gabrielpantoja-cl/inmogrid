@@ -34,7 +34,7 @@ export function ProfessionalSection({ formData, onChange }: Props) {
             value={formData.company}
             onChange={onChange}
             maxLength={100}
-            placeholder="Ej: Degux SpA"
+            placeholder="Ej: Inmogrid SpA"
           />
         </div>
       </FormSection>

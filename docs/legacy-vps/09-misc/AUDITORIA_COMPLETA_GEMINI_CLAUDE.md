@@ -1,4 +1,4 @@
-# Auditoría Completa de Código - degux.cl
+# Auditoría Completa de Código - inmogrid.cl
 ## Análisis Conjunto: Gemini + Claude Code
 
 **Fecha de Auditoría Original (Gemini):** 06 de Octubre, 2025
@@ -9,7 +9,7 @@
 
 ## 📋 Resumen Ejecutivo
 
-El proyecto `degux.cl` presenta una base de código moderna con Next.js 15, TypeScript y arquitectura bien estructurada. Sin embargo, esta auditoría conjunta ha identificado **áreas críticas de seguridad** y oportunidades de mejora que requieren atención inmediata.
+El proyecto `inmogrid.cl` presenta una base de código moderna con Next.js 15, TypeScript y arquitectura bien estructurada. Sin embargo, esta auditoría conjunta ha identificado **áreas críticas de seguridad** y oportunidades de mejora que requieren atención inmediata.
 
 ### Hallazgos Críticos
 
@@ -386,7 +386,7 @@ export async function middleware(req: NextRequest) {
   - Verificar que no rompa flujo de desarrollo
 
 - [ ] **CRÍTICO**: Verificar Google OAuth en producción
-  - URL callback: `https://degux.cl/api/auth/callback/google`
+  - URL callback: `https://inmogrid.cl/api/auth/callback/google`
   - Verificar configuración en Google Cloud Console
   - Test manual de login en producción
 

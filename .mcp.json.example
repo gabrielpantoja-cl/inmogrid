@@ -1,5 +1,5 @@
 {
-  "_comment": "Plantilla portable de configuración MCP para degux.cl. Cópiala como .mcp.json (gitignoreada) y ajusta según tu sistema operativo. Reemplaza los placeholders ${...} por tus propios valores o exporta las variables en tu shell.",
+  "_comment": "Plantilla portable de configuración MCP para inmogrid.cl. Cópiala como .mcp.json (gitignoreada) y ajusta según tu sistema operativo. Reemplaza los placeholders ${...} por tus propios valores o exporta las variables en tu shell.",
 
   "mcpServers": {
     "Neon": {

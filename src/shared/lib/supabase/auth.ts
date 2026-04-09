@@ -5,7 +5,7 @@
  *   import { requireAuth, getUser, getProfile } from '@/shared/lib/supabase/auth'
  *
  * - getUser()            → returns the authenticated User or null (no redirect)
- * - getProfile(userId)   → fetches the degux_profiles row for a given user id
+ * - getProfile(userId)   → fetches the inmogrid_profiles row for a given user id
  * - requireAuth()        → returns the User or redirects to /auth/login
  */
 
@@ -17,7 +17,7 @@ import { type User } from '@supabase/supabase-js'
 // Types
 // ---------------------------------------------------------------------------
 
-export interface DeguxProfile {
+export interface InmogridProfile {
   id: string
   username: string | null
   full_name: string | null
@@ -59,13 +59,13 @@ export async function getUser(): Promise<User | null> {
 }
 
 /**
- * Fetches a single degux_profiles row by user id.
+ * Fetches a single inmogrid_profiles row by user id.
  * Returns null if the profile does not exist.
  */
-export async function getProfile(userId: string): Promise<DeguxProfile | null> {
+export async function getProfile(userId: string): Promise<InmogridProfile | null> {
   const supabase = await createClient()
   const { data } = await supabase
-    .from('degux_profiles')
+    .from('inmogrid_profiles')
     .select('*')
     .eq('id', userId)
     .single()

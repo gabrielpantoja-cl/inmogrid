@@ -2,7 +2,7 @@
 
 /**
  * ========================================
- * DEGUX.CL - SERVER ACTIONS (NETWORKING)
+ * INMOGRID.CL - SERVER ACTIONS (NETWORKING)
  * ========================================
  * Next.js 15 + React 19 Server Actions
  * Implementación moderna sin API routes tradicionales

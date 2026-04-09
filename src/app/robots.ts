@@ -13,7 +13,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://degux.cl/sitemap.xml',
-    host: 'https://degux.cl',
+    sitemap: 'https://inmogrid.cl/sitemap.xml',
+    host: 'https://inmogrid.cl',
   }
 }

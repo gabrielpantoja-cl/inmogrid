@@ -112,7 +112,7 @@ Valida endpoint /api/health
 | Plataforma | Tiempo | Optimizaciones |
 |------------|--------|----------------|
 | **Vercel** | 3-6 min | Build automático, CDN global |
-| **degux.cl** | 3-5 min | Multi-stage Docker, cache, standalone |
+| **inmogrid.cl** | 3-5 min | Multi-stage Docker, cache, standalone |
 
 **✅ Meta alcanzada: Match o superar velocidad de Vercel**
 
@@ -218,7 +218,7 @@ Los tests validan:
 
 ### Criterios de Comparación
 
-| Criterio | Vercel | degux.cl | Resultado |
+| Criterio | Vercel | inmogrid.cl | Resultado |
 |----------|--------|----------|-----------|
 | **Tiempo de deploy** | 3-6 min | 3-5 min | ✅ **MATCH** |
 | **Build time** | 2-4 min | 1.5-3 min | ✅ **MEJOR** |
@@ -242,7 +242,7 @@ git commit -m "test: Add deployment tests (76 tests, Vercel comparison)"
 git push origin main
 
 # Monitorear tiempo real de deploy
-# URL: https://github.com/[usuario]/degux.cl/actions
+# URL: https://github.com/[usuario]/inmogrid.cl/actions
 ```
 
 ### 2. Documentar Tiempo Real

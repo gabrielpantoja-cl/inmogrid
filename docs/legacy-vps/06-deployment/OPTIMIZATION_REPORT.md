@@ -1,4 +1,4 @@
-# 🚀 Reporte de Optimización - Deployment degux.cl
+# 🚀 Reporte de Optimización - Deployment inmogrid.cl
 
 **Fecha**: 2026-01-03
 **Objetivo**: Reducir tiempo de despliegue de GitHub Actions
@@ -175,8 +175,8 @@ const nextConfig = {
 
 **d) Docker Build CON Cache**
 ```diff
-- docker compose build --no-cache degux-web  # ❌ Rebuild completo
-+ docker compose build degux-web  # ✅ Usa cache
+- docker compose build --no-cache inmogrid-web  # ❌ Rebuild completo
++ docker compose build inmogrid-web  # ✅ Usa cache
 ```
 
 **Beneficios**:
@@ -256,8 +256,8 @@ TOTAL:                          3-5 minutos
 - name: Build with cache
   uses: docker/build-push-action@v5
   with:
-    cache-from: type=registry,ref=ghcr.io/degux/degux:buildcache
-    cache-to: type=registry,ref=ghcr.io/degux/degux:buildcache,mode=max
+    cache-from: type=registry,ref=ghcr.io/inmogrid/inmogrid:buildcache
+    cache-to: type=registry,ref=ghcr.io/inmogrid/inmogrid:buildcache,mode=max
 ```
 
 **Beneficio potencial**: +30-40% más rápido (cache compartido entre builds)
@@ -310,18 +310,18 @@ Antes del próximo deploy, verificar:
    ```
 
 2. **Monitorear tiempo en GitHub Actions**:
-   - URL: https://github.com/[usuario]/degux.cl/actions
+   - URL: https://github.com/[usuario]/inmogrid.cl/actions
    - Comparar con runs anteriores
 
 3. **Verificar tamaño de imagen**:
    ```bash
    ssh gabriel@VPS_IP_REDACTED
-   docker images | grep degux-web
+   docker images | grep inmogrid-web
    ```
 
 4. **Verificar health check**:
    ```bash
-   docker inspect degux-web --format '{{.State.Health.Status}}'
+   docker inspect inmogrid-web --format '{{.State.Health.Status}}'
    ```
 
 ### Si Hay Problemas:

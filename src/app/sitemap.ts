@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import prisma from '@/shared/lib/prisma'
 
-const BASE_URL = 'https://degux.cl'
+const BASE_URL = 'https://inmogrid.cl'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Páginas estáticas públicas

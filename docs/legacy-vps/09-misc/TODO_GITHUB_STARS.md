@@ -1,7 +1,7 @@
 # TODO: Reactivar GitHub Stars
 
 ## Contexto
-El contador de estrellas de GitHub está temporalmente deshabilitado porque el repositorio `gabrielpantoja-cl/degux.cl` es privado y genera errores 404 en la API de GitHub.
+El contador de estrellas de GitHub está temporalmente deshabilitado porque el repositorio `gabrielpantoja-cl/inmogrid.cl` es privado y genera errores 404 en la API de GitHub.
 
 ## Archivos Modificados
 - `src/app/page.tsx` (líneas 14 y 32-38)
@@ -9,7 +9,7 @@ El contador de estrellas de GitHub está temporalmente deshabilitado porque el r
 ## Pasos para Reactivar
 
 ### 1. Hacer el repositorio público en GitHub
-1. Ir a https://github.com/gabrielpantoja-cl/degux.cl/settings
+1. Ir a https://github.com/gabrielpantoja-cl/inmogrid.cl/settings
 2. Scroll hasta "Danger Zone"
 3. Click en "Change visibility" → "Make public"
 4. Confirmar el cambio
@@ -50,7 +50,7 @@ import { fetchGithubStars } from '../lib/githubStars';
 ### 3. Verificar que funciona
 1. Hacer commit y push de los cambios
 2. Esperar el despliegue automático (GitHub Actions)
-3. Verificar en https://degux.cl que no hay errores 404 en la consola
+3. Verificar en https://inmogrid.cl que no hay errores 404 en la consola
 4. El contador de estrellas debería aparecer en la página de inicio
 
 ### 4. Opcional: Configurar GitHub Token para mayor rate limit
@@ -77,7 +77,7 @@ Si tienes muchas visitas y te quedas sin rate limit de GitHub API (60 requests/h
 
 ## Error Actual
 ```
-GET https://api.github.com/repos/gabrielpantoja-cl/degux.cl 404 (Not Found)
+GET https://api.github.com/repos/gabrielpantoja-cl/inmogrid.cl 404 (Not Found)
 ```
 
 ## Funcionalidad del Contador

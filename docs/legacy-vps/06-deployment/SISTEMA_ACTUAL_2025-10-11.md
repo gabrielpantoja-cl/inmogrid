@@ -23,9 +23,9 @@
 
 | Dominio | Tipo | Tecnología | SSL | Estado |
 |---------|------|------------|-----|--------|
-| **degux.cl** | Aplicación Web | Next.js 15 + React 19 | ✅ Valid | 🟢 Activo |
-| **www.degux.cl** | Alias | Redirect a degux.cl | ✅ Valid | 🟢 Activo |
-| **api.degux.cl** | API (planeado) | - | ✅ Cert obtenido | ⚠️ Sin configurar |
+| **inmogrid.cl** | Aplicación Web | Next.js 15 + React 19 | ✅ Valid | 🟢 Activo |
+| **www.inmogrid.cl** | Alias | Redirect a inmogrid.cl | ✅ Valid | 🟢 Activo |
+| **api.inmogrid.cl** | API (planeado) | - | ✅ Cert obtenido | ⚠️ Sin configurar |
 | **luanti.gabrielpantoja.cl** | Landing Page | HTML/CSS/JS estático | ✅ Valid | 🟢 Activo |
 | **N8N_HOST_REDACTED** | Automatización | n8n latest | ✅ Valid | 🟢 Activo |
 | **pitutito.cl** | Landing | HTML estático | ✅ Valid | 🟢 Activo |
@@ -52,7 +52,7 @@ systemctl list-timers | grep certbot
 ```
 CONTAINER NAME              IMAGE                       STATUS              PORTS
 ────────────────────────────────────────────────────────────────────────────────────────────
-degux-web                   vps-do-degux-web           Up (healthy)        0.0.0.0:3000->3000/tcp
+inmogrid-web                   vps-do-inmogrid-web           Up (healthy)        0.0.0.0:3000->3000/tcp
 n8n                         n8nio/n8n:latest           Up (healthy)        0.0.0.0:5678->5678/tcp
 n8n-db                      postgis/postgis:15-3.4     Up (healthy)        5432/tcp (interno)
 n8n-redis                   redis:7-alpine             Up (healthy)        6379/tcp (interno)
@@ -68,7 +68,7 @@ luanti-voxelibre-backup     alpine:latest              Up                  -
 172.18.0.0/16 (subnet auto-asignada)
 
 Contenedores:
-├─ degux-web (172.18.0.X)
+├─ inmogrid-web (172.18.0.X)
 ├─ n8n (172.18.0.X)
 ├─ n8n-db (172.18.0.X)
 ├─ n8n-redis (172.18.0.X)
@@ -95,7 +95,7 @@ Contenedores:
 | **22** | TCP | SSH | 0.0.0.0 | Acceso administrativo |
 | **80** | TCP | HTTP | 0.0.0.0 | Nginx (redirect a HTTPS) |
 | **443** | TCP | HTTPS | 0.0.0.0 | Nginx reverse proxy |
-| **3000** | TCP | degux-web | 0.0.0.0 | Interno (proxy nginx) |
+| **3000** | TCP | inmogrid-web | 0.0.0.0 | Interno (proxy nginx) |
 | **5678** | TCP | n8n | 0.0.0.0 | Interno (proxy nginx) |
 | **8000** | TCP | Portainer | 0.0.0.0 | Gestión contenedores |
 | **9443** | TCP | Portainer HTTPS | 0.0.0.0 | Gestión contenedores |
@@ -105,7 +105,7 @@ Contenedores:
 
 | Puerto | Protocolo | Servicio | Red | Uso |
 |--------|-----------|----------|-----|-----|
-| **5432** | TCP | PostgreSQL | vps_network | n8n-db (databases: n8n, degux) |
+| **5432** | TCP | PostgreSQL | vps_network | n8n-db (databases: n8n, inmogrid) |
 | **6379** | TCP | Redis | vps_network | n8n-redis (cache) |
 
 ---
@@ -127,10 +127,10 @@ Owner: n8n
 Purpose: Almacena workflows, credenciales, ejecuciones de n8n
 Tables: ~30 (schema manejado por n8n)
 
--- Database 2: degux.cl application
-Name: degux
-Owner: degux_user
-Purpose: Datos de aplicación degux.cl
+-- Database 2: inmogrid.cl application
+Name: inmogrid
+Owner: inmogrid_user
+Purpose: Datos de aplicación inmogrid.cl
 Tables: Prisma schema (users, properties, profiles, etc.)
 Schema: Migrations vía Prisma ORM
 ```
@@ -146,14 +146,14 @@ User: n8n
 Password: ${N8N_DB_PASSWORD}
 ```
 
-**Desde degux-web**:
+**Desde inmogrid-web**:
 ```
 Host: n8n-db
 Port: 5432
-Database: degux
-User: degux_user
-Password: ${DEGUX_DB_PASSWORD}
-POSTGRES_PRISMA_URL: postgresql://degux_user:password@n8n-db:5432/degux?schema=public
+Database: inmogrid
+User: inmogrid_user
+Password: ${INMOGRID_DB_PASSWORD}
+POSTGRES_PRISMA_URL: postgresql://inmogrid_user:password@n8n-db:5432/inmogrid?schema=public
 ```
 
 #### Backups
@@ -163,7 +163,7 @@ POSTGRES_PRISMA_URL: postgresql://degux_user:password@n8n-db:5432/degux?schema=p
 **Comando de backup manual**:
 ```bash
 docker exec n8n-db pg_dump -U n8n n8n > backup_n8n_$(date +%Y%m%d).sql
-docker exec n8n-db pg_dump -U degux_user degux > backup_degux_$(date +%Y%m%d).sql
+docker exec n8n-db pg_dump -U inmogrid_user inmogrid > backup_inmogrid_$(date +%Y%m%d).sql
 ```
 
 **⚠️ TODO**: Implementar backup automático diario
@@ -202,12 +202,12 @@ sudo nginx -t
 /etc/nginx/
 ├── nginx.conf                  # Configuración principal
 ├── sites-available/            # Configs disponibles
-│   ├── degux.cl
+│   ├── inmogrid.cl
 │   ├── luanti.gabrielpantoja.cl
 │   ├── N8N_HOST_REDACTED
 │   └── pitutito.cl
 ├── sites-enabled/              # Configs activas (symlinks)
-│   ├── degux.cl -> ../sites-available/degux.cl
+│   ├── inmogrid.cl -> ../sites-available/inmogrid.cl
 │   ├── luanti.gabrielpantoja.cl -> ../sites-available/luanti.gabrielpantoja.cl
 │   ├── N8N_HOST_REDACTED -> ../sites-available/N8N_HOST_REDACTED
 │   └── pitutito.cl -> ../sites-available/pitutito.cl
@@ -220,11 +220,11 @@ sudo nginx -t
 Internet (puertos 80/443)
     ↓
 Nginx (0.0.0.0:80, 0.0.0.0:443)
-    ├─ degux.cl               → proxy_pass http://127.0.0.1:3000
-    ├─ www.degux.cl           → proxy_pass http://127.0.0.1:3000
+    ├─ inmogrid.cl               → proxy_pass http://127.0.0.1:3000
+    ├─ www.inmogrid.cl           → proxy_pass http://127.0.0.1:3000
     ├─ luanti.gabrielpantoja.cl → try_files (archivos estáticos)
     ├─ N8N_HOST_REDACTED  → proxy_pass http://127.0.0.1:5678
-    ├─ pitutito.cl            → proxy_pass http://127.0.0.1:3000 (⚠️ conflicto con degux?)
+    ├─ pitutito.cl            → proxy_pass http://127.0.0.1:3000 (⚠️ conflicto con inmogrid?)
     └─ studio.pitutito.cl     → proxy_pass http://127.0.0.1:8005
 ```
 
@@ -307,10 +307,10 @@ PubkeyAuthentication yes
 
 | Servicio | Método | Credenciales |
 |----------|--------|--------------|
-| **degux.cl** | Google OAuth (NextAuth.js) | GOOGLE_CLIENT_ID/SECRET en .env |
+| **inmogrid.cl** | Google OAuth (NextAuth.js) | GOOGLE_CLIENT_ID/SECRET en .env |
 | **n8n** | Basic Auth | N8N_BASIC_AUTH_USER/PASSWORD en .env |
 | **Portainer** | Web UI Login | Admin password configurado en primer acceso |
-| **PostgreSQL** | Password | N8N_DB_PASSWORD, DEGUX_DB_PASSWORD en .env |
+| **PostgreSQL** | Password | N8N_DB_PASSWORD, INMOGRID_DB_PASSWORD en .env |
 
 ### Gestión de Secretos
 
@@ -324,10 +324,10 @@ N8N_DB_PASSWORD=...
 N8N_ENCRYPTION_KEY=...
 N8N_REDIS_PASSWORD=...
 
-DEGUX_NEXTAUTH_SECRET=...
-DEGUX_GOOGLE_CLIENT_ID=...
-DEGUX_GOOGLE_CLIENT_SECRET=...
-DEGUX_DB_PASSWORD=...
+INMOGRID_NEXTAUTH_SECRET=...
+INMOGRID_GOOGLE_CLIENT_ID=...
+INMOGRID_GOOGLE_CLIENT_SECRET=...
+INMOGRID_DB_PASSWORD=...
 
 APIFY_API_TOKEN=...
 ```
@@ -347,7 +347,7 @@ APIFY_API_TOKEN=...
 /home/gabriel/vps-do/
 ├── docker-compose.yml              # Servicios base (Nginx Docker-deshabilitado, Portainer)
 ├── docker-compose.n8n.yml          # Stack n8n (n8n, PostgreSQL, Redis)
-├── docker-compose.degux.yml        # Aplicación degux.cl
+├── docker-compose.inmogrid.yml        # Aplicación inmogrid.cl
 ├── docker-compose.web.yml          # Sitios estáticos (si se usa)
 ├── docker-compose.rag.yml          # RAG stack (deshabilitado)
 ├── docker-compose.supabase.yml     # Supabase (deshabilitado)
@@ -369,10 +369,10 @@ APIFY_API_TOKEN=...
 └── workflows/                      # n8n workflows (JSON exports)
 ```
 
-### Proyecto degux.cl
+### Proyecto inmogrid.cl
 
 ```
-/home/gabriel/degux.cl/
+/home/gabriel/inmogrid.cl/
 ├── app/                            # Next.js App Router
 ├── components/                     # React components
 ├── lib/                            # Utilities
@@ -423,54 +423,54 @@ docker compose up -d
 # Stack n8n
 docker compose -f docker-compose.yml -f docker-compose.n8n.yml up -d
 
-# degux.cl
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d
+# inmogrid.cl
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml up -d
 ```
 
 #### Detener Servicios Específicos
 
 ```bash
-# Detener degux-web
-docker stop degux-web
+# Detener inmogrid-web
+docker stop inmogrid-web
 
 # Detener stack n8n completo
 docker compose -f docker-compose.yml -f docker-compose.n8n.yml stop
 
 # Detener todo
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml down
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml down
 ```
 
 #### Reiniciar Servicios
 
 ```bash
 # Reinicio graceful de un contenedor
-docker restart degux-web
+docker restart inmogrid-web
 
 # Recrear contenedor (rebuild si hay cambios)
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d --force-recreate degux-web
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml up -d --force-recreate inmogrid-web
 ```
 
 ### Logs y Diagnóstico
 
 ```bash
 # Logs de un contenedor (tiempo real)
-docker logs -f degux-web
+docker logs -f inmogrid-web
 
 # Logs de nginx
 sudo tail -f /var/log/nginx/error.log
-sudo tail -f /var/log/nginx/degux_access.log
+sudo tail -f /var/log/nginx/inmogrid_access.log
 
 # Health check de contenedores
 docker ps --format "table {{.Names}}\t{{.Status}}"
 
 # Inspeccionar health status
-docker inspect degux-web --format '{{.State.Health.Status}}'
+docker inspect inmogrid-web --format '{{.State.Health.Status}}'
 
 # Ver procesos dentro de un contenedor
-docker top degux-web
+docker top inmogrid-web
 
 # Entrar a un contenedor (troubleshooting)
-docker exec -it degux-web sh
+docker exec -it inmogrid-web sh
 docker exec -it n8n-db psql -U n8n
 ```
 
@@ -492,7 +492,7 @@ SELECT
     pg_database.datname,
     pg_size_pretty(pg_database_size(pg_database.datname)) AS size
 FROM pg_database
-WHERE datname IN ('n8n', 'degux');"
+WHERE datname IN ('n8n', 'inmogrid');"
 
 # Vacuuming (mantenimiento)
 docker exec n8n-db psql -U n8n -d n8n -c "VACUUM ANALYZE;"
@@ -519,18 +519,18 @@ docker image prune -a
 
 ## 🚨 Procedimientos de Emergencia
 
-### Si degux.cl No Responde
+### Si inmogrid.cl No Responde
 
 ```bash
 # 1. Verificar contenedor
-docker ps -a | grep degux-web
+docker ps -a | grep inmogrid-web
 
 # 2. Si está detenido, iniciarlo
 cd /home/gabriel/vps-do
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # 3. Verificar logs
-docker logs degux-web --tail 50
+docker logs inmogrid-web --tail 50
 
 # 4. Verificar puerto 3000
 curl http://localhost:3000/api/health
@@ -572,7 +572,7 @@ sudo journalctl -xeu nginx.service | tail -50
 sudo nginx -t
 
 # 5. Si hay error de sintaxis, restaurar backup
-sudo cp /etc/nginx/sites-available/degux.cl.backup-* /etc/nginx/sites-available/degux.cl
+sudo cp /etc/nginx/sites-available/inmogrid.cl.backup-* /etc/nginx/sites-available/inmogrid.cl
 sudo systemctl restart nginx
 ```
 
@@ -595,7 +595,7 @@ docker restart n8n-db
 watch -n 1 'docker inspect n8n-db --format "{{.State.Health.Status}}"'
 
 # 6. Reiniciar servicios dependientes
-docker restart degux-web n8n
+docker restart inmogrid-web n8n
 ```
 
 ### Rollback de Deployment
@@ -619,7 +619,7 @@ cd /home/gabriel/vps-do
 git pull
 
 # 6. Recrear servicios
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d --force-recreate
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml up -d --force-recreate
 ```
 
 ---
@@ -630,7 +630,7 @@ docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose
 
 | Servicio | Endpoint | Intervalo | Timeout | Retries |
 |----------|----------|-----------|---------|---------|
-| **degux-web** | http://localhost:3000/api/health | 30s | 10s | 5 |
+| **inmogrid-web** | http://localhost:3000/api/health | 30s | 10s | 5 |
 | **n8n** | http://localhost:5678/healthz | 30s | 10s | 5 |
 | **n8n-db** | pg_isready -U n8n -d n8n | 30s | 10s | 5 |
 | **n8n-redis** | redis-cli ping | 30s | 10s | 5 |
@@ -650,7 +650,7 @@ df -h
 docker system df
 
 # Ver logs de todos los contenedores
-docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.degux.yml logs --tail=20
+docker compose -f docker-compose.yml -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml logs --tail=20
 ```
 
 ### Métricas Importantes
@@ -681,11 +681,11 @@ done
 
 ### Variables de Entorno Necesarias
 
-Para trabajar localmente en degux.cl:
+Para trabajar localmente en inmogrid.cl:
 
 ```bash
-# .env.local en /home/gabriel/degux.cl/
-DATABASE_URL="postgresql://user:pass@localhost:5432/degux"
+# .env.local en /home/gabriel/inmogrid.cl/
+DATABASE_URL="postgresql://user:pass@localhost:5432/inmogrid"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="..."
 GOOGLE_CLIENT_ID="..."
@@ -705,7 +705,7 @@ Para VPS:
 # Port forwarding para acceder a servicios en VPS desde local
 ssh -L 5432:localhost:5432 gabriel@VPS_IP_REDACTED  # PostgreSQL
 ssh -L 5678:localhost:5678 gabriel@VPS_IP_REDACTED  # n8n
-ssh -L 3000:localhost:3000 gabriel@VPS_IP_REDACTED  # degux-web
+ssh -L 3000:localhost:3000 gabriel@VPS_IP_REDACTED  # inmogrid-web
 ```
 
 ---
@@ -724,7 +724,7 @@ ssh -L 3000:localhost:3000 gabriel@VPS_IP_REDACTED  # degux-web
 
 - n8n: `/home/gabriel/Documentos/vps-do/docs/services/n8n/n8n-guide.md`
 - Luanti: `/home/gabriel/Documentos/vps-do/docs/services/luanti/README.md`
-- degux.cl: `/home/gabriel/Documentos/degux.cl/CLAUDE.md`
+- inmogrid.cl: `/home/gabriel/Documentos/inmogrid.cl/CLAUDE.md`
 
 ---
 
@@ -734,20 +734,20 @@ ssh -L 3000:localhost:3000 gabriel@VPS_IP_REDACTED  # degux-web
 
 **Incidentes Resueltos**:
 1. ✅ Luanti Landing Page restaurada (ruta obsoleta corregida)
-2. ✅ degux.cl restaurado (servicios Docker levantados, puerto 3000 expuesto, SSL configurado)
+2. ✅ inmogrid.cl restaurado (servicios Docker levantados, puerto 3000 expuesto, SSL configurado)
 3. ✅ N8N_HOST_REDACTED configurado (puerto 5678 expuesto, nginx + SSL configurado)
 
 **Cambios en Configuración**:
-- `docker-compose.degux.yml`: Agregado `ports: ["3000:3000"]`
+- `docker-compose.inmogrid.yml`: Agregado `ports: ["3000:3000"]`
 - `docker-compose.n8n.yml`: Agregado `ports: ["5678:5678"]`
 - `/etc/nginx/sites-available/luanti.gabrielpantoja.cl`: Creado
-- `/etc/nginx/sites-available/degux.cl`: Actualizado con SSL
+- `/etc/nginx/sites-available/inmogrid.cl`: Actualizado con SSL
 - `/etc/nginx/sites-available/N8N_HOST_REDACTED`: Creado
 - Certificados SSL obtenidos para todos los dominios
 
 **Documentos Creados**:
 - `POSTMORTEM_2025-10-11_LUANTI_LANDING_PAGE_RESTORATION.md`
-- `POSTMORTEM_2025-10-11_DEGUX_CL_RESTORATION.md`
+- `POSTMORTEM_2025-10-11_INMOGRID_CL_RESTORATION.md`
 - `SISTEMA_ACTUAL_2025-10-11.md` (este documento)
 
 ---

@@ -39,7 +39,7 @@ export function useAuth() {
 
       if (currentUser) {
         const { data } = await supabase
-          .from('degux_profiles')
+          .from('inmogrid_profiles')
           .select('*')
           .eq('id', currentUser.id)
           .single()

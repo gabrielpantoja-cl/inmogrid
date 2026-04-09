@@ -522,8 +522,8 @@ Claridad del proyecto:    ↑ 100%
 ## 📚 Referencias
 
 - **Investigación original**: Task agent `aab3fe1`
-- **Documentación del proyecto**: `/home/gabriel/Documentos/degux.cl/CLAUDE.md`
-- **Schema Prisma**: `/home/gabriel/Documentos/degux.cl/prisma/schema.prisma`
+- **Documentación del proyecto**: `/home/gabriel/Documentos/inmogrid.cl/CLAUDE.md`
+- **Schema Prisma**: `/home/gabriel/Documentos/inmogrid.cl/prisma/schema.prisma`
 
 ---
 

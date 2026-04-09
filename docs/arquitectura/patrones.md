@@ -1,4 +1,4 @@
-# Patrones de Código — degux.cl
+# Patrones de Código — inmogrid.cl
 
 **Estado**: Vivo — actualizar cuando un patrón cambie o se agregue uno nuevo.
 **Última actualización**: 2026-04-08 (post Sprint 3)

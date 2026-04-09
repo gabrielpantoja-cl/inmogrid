@@ -122,7 +122,7 @@ Vercel:
 ├── Build: 2-4 minutes
 └── Deploy: 1-2 minutes
 
-degux.cl (optimizado):
+inmogrid.cl (optimizado):
 ├── Estimated: 3-5 minutes  ⚡
 ├── Build: 1.5-3 minutes (with cache)
 └── Deploy: 1.5-2 minutes

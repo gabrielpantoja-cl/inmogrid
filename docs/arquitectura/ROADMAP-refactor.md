@@ -2,7 +2,7 @@
 
 **Fecha**: 2026-04-08
 **Estado**: En ejecución (Sprint 1)
-**Objetivo**: Migrar degux.cl de una estructura layer/híbrida a una arquitectura por features que escale a 10+ módulos sin deuda técnica.
+**Objetivo**: Migrar inmogrid.cl de una estructura layer/híbrida a una arquitectura por features que escale a 10+ módulos sin deuda técnica.
 
 ---
 

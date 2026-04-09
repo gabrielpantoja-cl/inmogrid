@@ -169,7 +169,7 @@ git push origin main
 ### 2. Monitorear el Deploy
 ```bash
 # Ver progreso en GitHub Actions
-# URL: https://github.com/[usuario]/degux.cl/actions
+# URL: https://github.com/[usuario]/inmogrid.cl/actions
 
 # Anotar el tiempo real que toma
 ```
@@ -179,13 +179,13 @@ git push origin main
 ssh gabriel@VPS_IP_REDACTED
 
 # Ver tamaño de imagen (debería ser ~200 MB)
-docker images | grep degux-web
+docker images | grep inmogrid-web
 
 # Ver health check (debería ser "healthy")
-docker inspect degux-web --format '{{.State.Health.Status}}'
+docker inspect inmogrid-web --format '{{.State.Health.Status}}'
 
 # Ver logs
-docker logs degux-web --tail 50
+docker logs inmogrid-web --tail 50
 ```
 
 ---

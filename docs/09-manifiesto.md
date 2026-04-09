@@ -1,5 +1,5 @@
 # Manifiesto
-### DEGUX — Ecosistema Abierto de Conocimiento Inmobiliario
+### INMOGRID — Ecosistema Abierto de Conocimiento Inmobiliario
 
 ---
 
@@ -84,4 +84,4 @@ Si algún día hacemos alguna de esas cosas, este manifiesto habrá dejado de se
 ---
 
 *Mona y Gabriel — Chile, 2026*
-*DEGUX — conocimiento inmobiliario abierto*
+*INMOGRID — conocimiento inmobiliario abierto*

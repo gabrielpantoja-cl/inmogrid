@@ -170,7 +170,7 @@ describe('Deployment: GitHub Actions Workflow', () => {
       );
 
       expect(verifyStep.with.script).toContain('localhost:3000/api/health');
-      expect(verifyStep.with.script).toContain('degux.cl/api/health');
+      expect(verifyStep.with.script).toContain('inmogrid.cl/api/health');
     });
   });
 

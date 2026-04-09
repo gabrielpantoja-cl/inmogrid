@@ -1,6 +1,6 @@
-# 🛠️ Scripts de Desarrollo - degux.cl
+# 🛠️ Scripts de Desarrollo - inmogrid.cl
 
-Colección de scripts útiles para desarrollo, debugging y deployment de la plataforma degux.cl.
+Colección de scripts útiles para desarrollo, debugging y deployment de la plataforma inmogrid.cl.
 
 ---
 
@@ -66,11 +66,11 @@ Colección de scripts útiles para desarrollo, debugging y deployment de la plat
 
 ---
 
-### `test-degux-db.sh`
+### `test-inmogrid-db.sh`
 **Descripción:** Suite de tests para integridad de la base de datos
 **Uso:**
 ```bash
-./scripts/test-degux-db.sh
+./scripts/test-inmogrid-db.sh
 ```
 **Tests incluidos:**
 - Estructura de tablas
@@ -151,11 +151,11 @@ Colección de scripts útiles para desarrollo, debugging y deployment de la plat
 
 ---
 
-### `setup-nginx-degux.sh`
-**Descripción:** Configura Nginx para degux.cl
+### `setup-nginx-inmogrid.sh`
+**Descripción:** Configura Nginx para inmogrid.cl
 **Uso:**
 ```bash
-./scripts/setup-nginx-degux.sh
+./scripts/setup-nginx-inmogrid.sh
 ```
 **Configura:**
 - Reverse proxy
@@ -267,7 +267,7 @@ Los siguientes scripts fueron removidos en la limpieza de código (2026-01-02):
 ❌ `migrate-auth-fix.sh` - Migración histórica de auth
 ❌ `verify-auth-config.js` - Verificación de config con referencias legacy
 
-**Razón de eliminación:** Estos scripts eran específicos del proyecto anterior (referenciales.cl - plataforma inmobiliaria) y no son relevantes para degux.cl (plataforma colaborativa para marca personal con enfoque en plantas).
+**Razón de eliminación:** Estos scripts eran específicos del proyecto anterior (referenciales.cl - plataforma inmobiliaria) y no son relevantes para inmogrid.cl (plataforma colaborativa para marca personal con enfoque en plantas).
 
 ---
 
@@ -282,5 +282,5 @@ Al agregar nuevos scripts:
 ---
 
 **Última actualización:** 2026-01-02
-**Proyecto:** degux.cl
+**Proyecto:** inmogrid.cl
 **Mantenedor:** Gabriel Pantoja

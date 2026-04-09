@@ -31,7 +31,7 @@ Referencias oficiales:
 ## Estado Actual (Actualizado 2026-02-07)
 
 ### Completado - Infraestructura (VPS)
-- [x] degux-web detenido, malware eliminado, DDoS parado
+- [x] inmogrid-web detenido, malware eliminado, DDoS parado
 - [x] Puertos bound a 127.0.0.1 (3000, 5678, 3002)
 - [x] security_opt: no-new-privileges en todos los contenedores
 - [x] cap_drop: ALL en todos los contenedores
@@ -56,12 +56,12 @@ Referencias oficiales:
 - [x] **Committed en git**: todos los cambios en rama main
 
 ### Completado - Documentacion
-- [x] Reporte seguridad degux.cl: `2026-02-07_REPORTE_SEGURIDAD_DEGUX_CL.md`
+- [x] Reporte seguridad inmogrid.cl: `2026-02-07_REPORTE_SEGURIDAD_INMOGRID_CL.md`
 - [x] Respuesta DigitalOcean v2: `2026-02-07_RESPUESTA_DIGITALOCEAN_TICKET_11599402-v.2.md`
 
 ### Pendiente - Requiere accion manual
-- [ ] **DEPLOY AL VPS**: git pull + rebuild Docker + restart degux-web
-- [ ] **VERIFICAR SITIO**: confirmar degux.cl operativo post-deploy
+- [ ] **DEPLOY AL VPS**: git pull + rebuild Docker + restart inmogrid-web
+- [ ] **VERIFICAR SITIO**: confirmar inmogrid.cl operativo post-deploy
 - [ ] **SUDO EN VPS**: Eliminar user supabase, bloquear IPs en UFW
 - [ ] **ROTACION CREDENCIALES**: DB password, NextAuth secret, Google OAuth, Maps API, N8N webhook
 - [ ] **ENVIAR RESPUESTA DO**: Solo despues de deploy exitoso
@@ -78,12 +78,12 @@ Referencias oficiales:
 ssh gabriel@VPS_IP_REDACTED
 
 # Pull cambios con parches de seguridad
-cd ~/vps-do/degux.cl  # o donde este el repo en el VPS
+cd ~/vps-do/inmogrid.cl  # o donde este el repo en el VPS
 git pull origin main
 
 # Rebuild imagen Docker sin cache (asegurar imagen limpia)
 cd ~/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build --no-cache inmogrid-web
 
 # Purgar imagen anterior
 docker image prune -f
@@ -92,30 +92,30 @@ docker image prune -f
 ### 1.2 Restart con hardening
 
 ```bash
-# Restart solo degux-web
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+# Restart solo inmogrid-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # Verificar que arranca
-docker logs -f degux-web --tail 50
+docker logs -f inmogrid-web --tail 50
 ```
 
 ### 1.3 Verificar parche aplicado
 
 ```bash
 # Verificar version de Next.js en el contenedor
-docker exec degux-web node -e "console.log(require('/app/node_modules/next/package.json').version)"
+docker exec inmogrid-web node -e "console.log(require('/app/node_modules/next/package.json').version)"
 # Debe mostrar: 15.5.10
 
 # Verificar que no hay malware
-docker exec degux-web ps aux
+docker exec inmogrid-web ps aux
 # Solo debe mostrar: node server.js
 
 # Verificar CPU normal
-docker stats --no-stream degux-web
+docker stats --no-stream inmogrid-web
 # CPU debe estar < 5%
 
 # Verificar sitio responde
-curl -s -o /dev/null -w "%{http_code}" https://degux.cl
+curl -s -o /dev/null -w "%{http_code}" https://inmogrid.cl
 # Debe retornar: 200
 ```
 
@@ -167,8 +167,8 @@ sudo usermod -aG adm gabriel
 
 | Credencial | Donde rotar | Prioridad |
 |------------|-------------|-----------|
-| DEGUX_DB_PASSWORD | VPS .env + degux-db container | CRITICA |
-| DEGUX_NEXTAUTH_SECRET | VPS .env | CRITICA |
+| INMOGRID_DB_PASSWORD | VPS .env + inmogrid-db container | CRITICA |
+| INMOGRID_NEXTAUTH_SECRET | VPS .env | CRITICA |
 | GOOGLE_CLIENT_SECRET | Google Cloud Console + VPS .env | ALTA |
 | GOOGLE_MAPS_API_KEY | Google Cloud Console (restringir dominios) | ALTA |
 | N8N_WEBHOOK_SECRET | VPS .env + n8n config | MEDIA |
@@ -182,19 +182,19 @@ openssl rand -base64 32  # Para cada password/secret
 # 2. Actualizar .env.production en el VPS
 nano ~/vps-do/.env.production
 
-# 3. Actualizar password en degux-db
-docker exec -it degux-db psql -U degux_user -d degux_core -c \
-  "ALTER USER degux_user WITH PASSWORD 'NUEVA_PASSWORD';"
+# 3. Actualizar password en inmogrid-db
+docker exec -it inmogrid-db psql -U inmogrid_user -d inmogrid_core -c \
+  "ALTER USER inmogrid_user WITH PASSWORD 'NUEVA_PASSWORD';"
 
 # 4. Revocar Google Client Secret
 # -> console.cloud.google.com -> APIs & Services -> Credentials
 # -> Crear nuevo secret, actualizar en .env.production
 
 # 5. Restringir Google Maps API Key
-# -> console.cloud.google.com -> Limitar a dominios degux.cl
+# -> console.cloud.google.com -> Limitar a dominios inmogrid.cl
 
 # 6. Restart servicios afectados
-docker compose -f docker-compose.yml -f docker-compose.degux.yml restart degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml restart inmogrid-web
 ```
 
 ---
@@ -208,10 +208,10 @@ docker compose -f docker-compose.yml -f docker-compose.degux.yml restart degux-w
 watch -n 60 'ss -tnp | grep -v "VPS_IP_REDACTED:22\|127.0.0"'
 
 # Monitorear CPU
-watch -n 30 'docker stats --no-stream degux-web'
+watch -n 30 'docker stats --no-stream inmogrid-web'
 
 # Monitorear logs (buscar intentos de exploit)
-docker logs -f degux-web 2>&1 | grep -i "POST / "
+docker logs -f inmogrid-web 2>&1 | grep -i "POST / "
 ```
 
 ### 4.2 Enviar respuesta a DigitalOcean
@@ -289,9 +289,9 @@ ports:
 ### Deploy y verificacion (VPS)
 - [ ] git pull en VPS
 - [ ] Docker rebuild --no-cache
-- [ ] degux-web reiniciado
+- [ ] inmogrid-web reiniciado
 - [ ] Version 15.5.10 confirmada en contenedor
-- [ ] Sitio degux.cl responde 200
+- [ ] Sitio inmogrid.cl responde 200
 - [ ] CPU < 5%
 - [ ] Sin procesos sospechosos
 - [ ] Monitoreo 1 hora limpio

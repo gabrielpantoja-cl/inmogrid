@@ -69,7 +69,7 @@ setup('authenticate with Google OAuth', async ({ page, context }) => {
 
     console.log('⏳ Waiting for OAuth redirect...');
 
-    // Esperar a que Google redirija de vuelta a degux.cl
+    // Esperar a que Google redirija de vuelta a inmogrid.cl
     await page.waitForURL('**/dashboard', { timeout: 30000 });
 
     console.log('✅ Successfully authenticated!');

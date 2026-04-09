@@ -9,7 +9,7 @@ disable-model-invocation: false
 
 # Optimize Database Queries
 
-Analyze and optimize slow database queries in the degux.cl project.
+Analyze and optimize slow database queries in the inmogrid.cl project.
 
 ## Analysis Steps
 

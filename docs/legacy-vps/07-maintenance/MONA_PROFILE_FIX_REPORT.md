@@ -9,16 +9,16 @@
 
 ## 📋 Resumen Ejecutivo
 
-Se identificó y corrigió un bug crítico en la plataforma **degux.cl** donde las rutas dinámicas para plantas individuales (`/{username}/plantas/{slug}`) no existían, causando errores 404 cuando los usuarios intentaban acceder a las páginas de plantas desde el perfil público.
+Se identificó y corrigió un bug crítico en la plataforma **inmogrid.cl** donde las rutas dinámicas para plantas individuales (`/{username}/plantas/{slug}`) no existían, causando errores 404 cuando los usuarios intentaban acceder a las páginas de plantas desde el perfil público.
 
 ### Estado Actual
 
-- ✅ Perfil de Mona funcionando: `degux.cl/mona`
-- ✅ Listado de plantas funcionando: `degux.cl/mona/plantas`
+- ✅ Perfil de Mona funcionando: `inmogrid.cl/mona`
+- ✅ Listado de plantas funcionando: `inmogrid.cl/mona/plantas`
 - ❌ **PROBLEMA ENCONTRADO**: Páginas individuales de plantas daban 404
-  - `degux.cl/mona/plantas/echeveria-elegans` → 404
-  - `degux.cl/mona/plantas/cactus-san-pedro` → 404
-  - `degux.cl/mona/plantas/monstera-deliciosa` → 404
+  - `inmogrid.cl/mona/plantas/echeveria-elegans` → 404
+  - `inmogrid.cl/mona/plantas/cactus-san-pedro` → 404
+  - `inmogrid.cl/mona/plantas/monstera-deliciosa` → 404
 
 ### Solución Implementada
 
@@ -35,9 +35,9 @@ Se identificó y corrigió un bug crítico en la plataforma **degux.cl** donde l
 ### 1. Errores en Console (Chrome DevTools)
 
 ```
-GET https://degux.cl/mona/plantas/echeveria-elegans?_rsc=1w7hf 404 (Not Found)
-GET https://degux.cl/mona/plantas/cactus-san-pedro?_rsc=1w7hf 404 (Not Found)
-GET https://degux.cl/mona/plantas/monstera-deliciosa?_rsc=1w7hf 404 (Not Found)
+GET https://inmogrid.cl/mona/plantas/echeveria-elegans?_rsc=1w7hf 404 (Not Found)
+GET https://inmogrid.cl/mona/plantas/cactus-san-pedro?_rsc=1w7hf 404 (Not Found)
+GET https://inmogrid.cl/mona/plantas/monstera-deliciosa?_rsc=1w7hf 404 (Not Found)
 ```
 
 **Causa**: Next.js estaba intentando hacer prefetch de las rutas dinámicas, pero la ruta `[slug]/page.tsx` no existía.
@@ -169,23 +169,23 @@ src/app/[username]/
 
 ```bash
 # Test 1: Perfil principal (✅ Funcionando)
-curl -I https://degux.cl/mona
+curl -I https://inmogrid.cl/mona
 # HTTP/2 200
 
 # Test 2: Listado de plantas (✅ Funcionando)
-curl -I https://degux.cl/mona/plantas
+curl -I https://inmogrid.cl/mona/plantas
 # HTTP/2 200
 
 # Test 3: Planta individual (❌ 404)
-curl -I https://degux.cl/mona/plantas/echeveria-elegans
+curl -I https://inmogrid.cl/mona/plantas/echeveria-elegans
 # HTTP/2 404
 
 # Test 4: Planta individual (❌ 404)
-curl -I https://degux.cl/mona/plantas/cactus-san-pedro
+curl -I https://inmogrid.cl/mona/plantas/cactus-san-pedro
 # HTTP/2 404
 
 # Test 5: Planta individual (❌ 404)
-curl -I https://degux.cl/mona/plantas/monstera-deliciosa
+curl -I https://inmogrid.cl/mona/plantas/monstera-deliciosa
 # HTTP/2 404
 ```
 
@@ -228,7 +228,7 @@ git commit -m "fix: Add dynamic route for individual plant pages
 - Fixes 404 errors on plant detail pages
 - Includes SEO metadata, breadcrumbs, image gallery
 - Responsive design with proper accessibility
-- Related to Mona profile at degux.cl/mona"
+- Related to Mona profile at inmogrid.cl/mona"
 
 # 4. Push to GitHub
 git push origin main
@@ -413,4 +413,4 @@ El bug de las rutas 404 en las páginas de plantas ha sido **corregido exitosame
 **Archivo generado**: `docs/MONA_PROFILE_FIX_REPORT.md`
 **Fecha**: 2025-11-22 01:35 UTC
 **Autor**: Claude Code (AI Assistant)
-**Proyecto**: degux.cl - Ecosistema Digital Colaborativo
+**Proyecto**: inmogrid.cl - Ecosistema Digital Colaborativo

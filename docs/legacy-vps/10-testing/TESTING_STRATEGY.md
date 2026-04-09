@@ -1,4 +1,4 @@
-# Estrategia de Testing - degux.cl
+# Estrategia de Testing - inmogrid.cl
 
 **Fecha**: 2025-11-22
 **Estado**: Post-limpieza de dependencias
@@ -78,7 +78,7 @@ El test busca un `<h1>` con texto "Inicio", pero el componente `DashboardContent
 ```typescript
 <h1>👋 ¡Hola, {session.user.name}!</h1> // Usuario autenticado
 // O
-<h1>👋 Bienvenid@ a degux.cl</h1> // Usuario anónimo
+<h1>👋 Bienvenid@ a inmogrid.cl</h1> // Usuario anónimo
 ```
 
 **Solución**:
@@ -167,7 +167,7 @@ jest.mock('@/lib/prisma', () => ({
     user: {
       findUnique: jest.fn().mockResolvedValue({
         id: 'test-id',
-        email: 'test@degux.cl',
+        email: 'test@inmogrid.cl',
         role: 'user'
       })
     }

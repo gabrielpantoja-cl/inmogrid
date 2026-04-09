@@ -5,20 +5,20 @@
 
 ## Veredicto: Base de código
 
-### `proptech/degux.cl` — **ES el proyecto. Usar desde hoy.**
+### `proptech/inmogrid.cl` — **ES el proyecto. Usar desde hoy.**
 
 Después de auditar los 4 repositorios candidatos, la respuesta es inequívoca.
 
 | Repo | Next.js 15 | Comunidad | Perfiles | Networking | Auth | Decisión |
 |------|-----------|-----------|---------|-----------|------|----------|
-| `proptech/degux.cl` | ✅ 15.5.10 | ✅ Sí | ✅ [username] routes | ✅ Modelo listo | ✅ Google OAuth | ✅ **USAR** |
+| `proptech/inmogrid.cl` | ✅ 15.5.10 | ✅ Sí | ✅ [username] routes | ✅ Modelo listo | ✅ Google OAuth | ✅ **USAR** |
 | `proptech/referenciales.cl` | ✅ 15.x | ❌ Solo datos | ❌ No | ❌ No | ✅ Google OAuth | Referencia técnica |
 | `proptech/pantojapropiedades.cl` | ❌ Vite+React | ✅ Parcial | ❌ No | ❌ No | ✅ Supabase | Migrar features |
 | `proptech/gabrielpantoja.cl` | ❌ Vite+React | ❌ Blog solo | ❌ No | ❌ No | ✅ Supabase | No relevante |
 
-### Por qué `proptech/degux.cl`
+### Por qué `proptech/inmogrid.cl`
 
-1. **Es literalmente el mismo proyecto** — mismo nombre, mismo dominio, misma visión de comunidad. No es coincidencia: fue el intento anterior de construir DEGUX.
+1. **Es literalmente el mismo proyecto** — mismo nombre, mismo dominio, misma visión de comunidad. No es coincidencia: fue el intento anterior de construir INMOGRID.
 
 2. **Next.js 15.5.10 con App Router** — el único candidato que cumple el requisito arquitectónico principal. React 19. TypeScript 5.2. Todo actualizado.
 
@@ -76,7 +76,7 @@ Después de auditar los 4 repositorios candidatos, la respuesta es inequívoca.
 
 **La relación Prisma + Supabase:**
 Supabase es PostgreSQL gestionado. Prisma se conecta a él con `DATABASE_URL` apuntando al connection string de Supabase. No hay incompatibilidad — es la misma combinación que usa referenciales.cl con Neon (otro PostgreSQL gestionado). El plan es:
-1. Crear proyecto Supabase para DEGUX
+1. Crear proyecto Supabase para INMOGRID
 2. Cambiar `POSTGRES_PRISMA_URL` → connection string Supabase
 3. `npx prisma db push` — schema aplicado en minutos
 4. Supabase Storage para imágenes de perfil y eventos
@@ -121,7 +121,7 @@ En Fase 2: migrar a RAG con pgvector + embeddings de referenciales.cl y normativ
 | Capa | Tecnología | Por qué |
 |------|-----------|---------|
 | **Hosting web** | Vercel | Deploy automático desde Git, CDN global, gratis hasta escala real |
-| **Dominio** | `degux.cl` | Ya registrado por Gabriel, vence oct 2026 |
+| **Dominio** | `inmogrid.cl` | Ya registrado por Gabriel, vence oct 2026 |
 | **VPS** | Oracle Cloud ARM (159.112.138.229) | Scrapers, n8n, servicios sin costo variable |
 | **Orquestación** | n8n (VPS) | Scheduling, webhooks, automatizaciones |
 | **Storage** | Supabase Storage | Imágenes de perfil, eventos, documentos |
@@ -130,9 +130,9 @@ En Fase 2: migrar a RAG con pgvector + embeddings de referenciales.cl y normativ
 
 ---
 
-## Schema de base de datos — DEGUX
+## Schema de base de datos — INMOGRID
 
-### Modelos existentes que se CONSERVAN (del repo degux.cl)
+### Modelos existentes que se CONSERVAN (del repo inmogrid.cl)
 
 ```prisma
 User        // Perfil profesional — actualizar ProfessionType para sector inmobiliario
@@ -147,7 +147,7 @@ AuditLog    // Log de acciones — REUTILIZAR tal cual
 ### Modelos que se ELIMINAN
 
 ```prisma
-Plant       // Vivero — irrelevante para DEGUX inmobiliario
+Plant       // Vivero — irrelevante para INMOGRID inmobiliario
 Collection  // Colecciones abstractas — reemplazar por algo más específico si se necesita
 ```
 
@@ -227,12 +227,12 @@ enum ProfessionType {
 
 ---
 
-## Rutas del App Router — DEGUX
+## Rutas del App Router — INMOGRID
 
 ### Rutas que se CONSERVAN (del repo)
 
 ```
-/                          → Landing DEGUX (reescribir contenido)
+/                          → Landing INMOGRID (reescribir contenido)
 /auth/signin               → Login Google OAuth ✅
 /[username]                → Perfil público de profesional ✅
 /[username]/notas          → Posts del profesional ✅
@@ -276,7 +276,7 @@ enum ProfessionType {
 ```
 gabrielpantoja.cl (blog personal Gabriel)
     ↓ enlaza a
-DEGUX (degux.cl) — plataforma de comunidad
+INMOGRID (inmogrid.cl) — plataforma de comunidad
     ↓ consume vía API pública
 referenciales.cl — base de datos de transacciones
     ↑ alimentada por
@@ -285,7 +285,7 @@ scraper-chile-dashboard (Oracle VPS) — ingesta CBR/Descubro
 
 | Proyecto | URL | Stack | Repositorio | Rol en el ecosistema |
 |---------|-----|-------|------------|---------------------|
-| **DEGUX** | degux.cl | **Next.js 15 + Prisma + Supabase** | `proptech/degux.cl` | Plataforma de comunidad — **el nuevo proyecto** |
+| **INMOGRID** | inmogrid.cl | **Next.js 15 + Prisma + Supabase** | `proptech/inmogrid.cl` | Plataforma de comunidad — **el nuevo proyecto** |
 | **referenciales.cl** | referenciales.cl | Next.js 15 + Prisma + Neon | `proptech/referenciales.cl` | Datos abiertos de transacciones — proyecto hermano autónomo |
 | **gabrielpantoja.cl** | gabrielpantoja.cl | React+Vite + Supabase | `proptech/gabrielpantoja.cl` | Blog/marca personal Gabriel |
 | **scraper** | (VPS interno) | Python + FastAPI + Docker | `proptech/scraper-chile-dashboard` | Pipeline ingesta CBR → Neon |
@@ -295,7 +295,7 @@ scraper-chile-dashboard (Oracle VPS) — ingesta CBR/Descubro
 
 | Proyecto | DB | ORM | Auth | Por qué es diferente |
 |---------|-----|-----|------|---------------------|
-| DEGUX | Supabase (PostgreSQL) | Prisma | NextAuth + Google | Comunidad multi-actor, Storage para imágenes |
+| INMOGRID | Supabase (PostgreSQL) | Prisma | NextAuth + Google | Comunidad multi-actor, Storage para imágenes |
 | referenciales.cl | Neon (PostgreSQL) | Prisma | NextAuth + Google | El scraper ya escribe directo a Neon — no mover |
 | gabrielpantoja.cl | Supabase | Supabase client | Supabase Auth | Blog simple, sin necesidad de Prisma |
 
@@ -303,7 +303,7 @@ scraper-chile-dashboard (Oracle VPS) — ingesta CBR/Descubro
 
 ## Infraestructura cloud — triada $0/mes
 
-DEGUX opera sobre tres servicios gratuitos complementarios:
+INMOGRID opera sobre tres servicios gratuitos complementarios:
 
 ```
 Vercel (Hobby)       Supabase (Free)      Oracle VPS (Free Tier)
@@ -315,11 +315,11 @@ CDN global           Auth 50k MAU         n8n workflows
 $0/mes               $0/mes               $0/mes permanente
 ```
 
-### Vercel Hobby — límites relevantes para DEGUX
+### Vercel Hobby — límites relevantes para INMOGRID
 
 | Límite | Valor | Estado |
 |--------|-------|--------|
-| Proyectos | 200 | ✅ Actualmente 3, DEGUX será el 4° |
+| Proyectos | 200 | ✅ Actualmente 3, INMOGRID será el 4° |
 | Build minutes/mes | 6.000 | ✅ ~1.200 builds de Next.js |
 | Bandwidth/mes | 100 GB | ✅ Suficiente al inicio |
 | Funciones serverless | 60s máx | ⚠️ Chatbot streaming: usar Edge Runtime |
@@ -332,15 +332,15 @@ $0/mes               $0/mes               $0/mes permanente
 | Proyecto | Estado | Decisión |
 |---------|--------|----------|
 | `gabrielpantoja.cl` | Activo | Mantener — blog personal |
-| `pantojapropiedades.cl` | Activo → **reutilizar** | **Convertir en DEGUX** |
+| `pantojapropiedades.cl` | Activo → **reutilizar** | **Convertir en INMOGRID** |
 
 **El free tier permite solo 2 proyectos activos** — no es posible crear un tercero sin pagar o pausar uno existente.
 
-**Decisión: reutilizar el proyecto Supabase de `pantojapropiedades.cl` para DEGUX.**
+**Decisión: reutilizar el proyecto Supabase de `pantojapropiedades.cl` para INMOGRID.**
 
 Razones:
 - `pantojapropiedades.cl` deja de existir el 16 de abril de 2026 (vence el dominio)
-- DEGUX es su sucesor directo — mismo propósito, misma audiencia, mismo equipo
+- INMOGRID es su sucesor directo — mismo propósito, misma audiencia, mismo equipo
 - No se pierde ningún proyecto free: simplemente se repropone el slot
 - La infraestructura PostgreSQL ya está creada y funcionando
 - Las variables de entorno de pantojapropiedades.cl en Vercel se actualizan al nuevo proyecto
@@ -351,7 +351,7 @@ Razones:
 
 ```
 Supabase Dashboard → Settings → General → Project name
-→ Cambiar "pantojapropiedades.cl" por "DEGUX"
+→ Cambiar "pantojapropiedades.cl" por "INMOGRID"
 ```
 
 **Lo que cambia:** solo el nombre visible en el dashboard de Supabase.
@@ -367,18 +367,18 @@ Esto significa que si `pantojapropiedades.cl` en Vercel apunta al mismo proyecto
 
 ### ¿Cuándo renombrar el proyecto Supabase?
 
-**Momento correcto: inmediatamente antes del deploy de DEGUX en Vercel.**
+**Momento correcto: inmediatamente antes del deploy de INMOGRID en Vercel.**
 
 Secuencia exacta:
 ```
 1. Limpiar schema pantojapropiedades: DROP tablas irrelevantes
-2. Ejecutar: npx prisma db push (schema DEGUX sobre Supabase PostgreSQL)
+2. Ejecutar: npx prisma db push (schema INMOGRID sobre Supabase PostgreSQL)
 3. Verificar que los datos críticos de pantojapropiedades están migrados o respaldados
-4. Renombrar en Supabase dashboard: "pantojapropiedades.cl" → "DEGUX"
-5. Crear proyecto Vercel apuntando a proptech/degux.cl
+4. Renombrar en Supabase dashboard: "pantojapropiedades.cl" → "INMOGRID"
+5. Crear proyecto Vercel apuntando a proptech/inmogrid.cl
 6. Configurar variables de entorno con las keys del mismo proyecto Supabase
-7. Deploy → degux.cl en línea
-8. Configurar redirect 301 pantojapropiedades.cl → degux.cl en Vercel
+7. Deploy → inmogrid.cl en línea
+8. Configurar redirect 301 pantojapropiedades.cl → inmogrid.cl en Vercel
 ```
 
 **No renombrar antes** — mientras pantojapropiedades.cl sigue activo, mantener el nombre para no confundir el historial.
@@ -387,7 +387,7 @@ Secuencia exacta:
 
 El VPS Oracle Free Tier (IP: 159.112.138.229) es permanentemente gratuito y maneja lo que Vercel + Supabase no pueden hacer sin costo:
 
-| Servicio en VPS | Propósito para DEGUX |
+| Servicio en VPS | Propósito para INMOGRID |
 |-----------------|---------------------|
 | **n8n** | Ping keep-alive a Supabase cada 5 días (evita pausing) |
 | **n8n** | Scrapers CBR → Neon (referenciales.cl) |
@@ -402,7 +402,7 @@ Los proyectos free se pausan tras **7 días sin actividad**. Solución con n8n:
 ```
 n8n workflow (ya instalado en VPS):
   Cron: cada 5 días a las 10:00
-  → GET https://degux.cl/api/public/health
+  → GET https://inmogrid.cl/api/public/health
   → Supabase recibe la request → no se pausa
   Costo: $0
 ```
@@ -415,7 +415,7 @@ n8n workflow (ya instalado en VPS):
 | Bandwidth Vercel > 100GB/mes | Vercel Pro | $20/mes |
 | Chatbot con alto volumen | Ollama en VPS reemplaza OpenAI | $0 |
 
-Con 2-3 eventos comerciales al mes a precio razonable, Supabase Pro se paga solo con los ingresos de DEGUX.
+Con 2-3 eventos comerciales al mes a precio razonable, Supabase Pro se paga solo con los ingresos de INMOGRID.
 
 ---
 
@@ -425,12 +425,12 @@ Con 2-3 eventos comerciales al mes a precio razonable, Supabase Pro se paga solo
 
 ```
 SEMANA 1 (6-10 abril)
-├── Conectar POSTGRES_PRISMA_URL → Supabase nuevo proyecto DEGUX
+├── Conectar POSTGRES_PRISMA_URL → Supabase nuevo proyecto INMOGRID
 ├── Eliminar modelos Plant y Collection del schema
 ├── Agregar modelo Event al schema
 ├── Actualizar enum ProfessionType para sector inmobiliario
 ├── npx prisma db push → schema en Supabase
-├── Reescribir landing page (/) con identidad DEGUX
+├── Reescribir landing page (/) con identidad INMOGRID
 └── Eliminar rutas /[username]/plantas y /dashboard/plantas
 
 SEMANA 2 (11-16 abril)
@@ -438,8 +438,8 @@ SEMANA 2 (11-16 abril)
 ├── UI de /eventos/[id] — detalle del evento
 ├── UI de /eventos/nuevo — formulario publicar evento
 ├── Integrar lógica de cobro (evento comercial → pago requerido)
-├── Redirección 301 pantojapropiedades.cl → degux.cl (configurar en Vercel)
-└── Deploy en Vercel desde repositorio proptech/degux.cl
+├── Redirección 301 pantojapropiedades.cl → inmogrid.cl (configurar en Vercel)
+└── Deploy en Vercel desde repositorio proptech/inmogrid.cl
 ```
 
 ### Fase 1 — Comunidad profesional (post 16 abril)
@@ -475,7 +475,7 @@ DATABASE_URL="postgresql://postgres.[project-ref]:[password]@aws-0-[region].pool
 
 # NextAuth
 NEXTAUTH_SECRET="openssl rand -base64 32"
-NEXTAUTH_URL="https://degux.cl"
+NEXTAUTH_URL="https://inmogrid.cl"
 GOOGLE_CLIENT_ID="...apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="GOCSPX-..."
 
@@ -493,7 +493,7 @@ RESEND_API_KEY="re_..."
 NEXT_PUBLIC_GA4_ID="G-..."
 
 # Públicas
-NEXT_PUBLIC_BASE_URL="https://degux.cl"
+NEXT_PUBLIC_BASE_URL="https://inmogrid.cl"
 NEXT_PUBLIC_REFERENCIALES_API="https://referenciales.cl/api/public"
 ```
 
@@ -517,19 +517,19 @@ NEXT_PUBLIC_REFERENCIALES_API="https://referenciales.cl/api/public"
 ```
 INMEDIATO (esta semana)
 ├── 1. Crear proyecto en Supabase → obtener connection strings
-├── 2. Clonar/abrir proptech/degux.cl → cambiar DATABASE_URL
+├── 2. Clonar/abrir proptech/inmogrid.cl → cambiar DATABASE_URL
 ├── 3. Editar schema.prisma → eliminar Plant/Collection, agregar Event
 ├── 4. Actualizar ProfessionType enum
 ├── 5. npx prisma db push
 ├── 6. Verificar que login y perfiles funcionan con nueva BD
-└── 7. Reescribir src/app/page.tsx con landing DEGUX
+└── 7. Reescribir src/app/page.tsx con landing INMOGRID
 
 DÍAS 3-7
 ├── 8. Implementar /eventos con CRUD completo
 ├── 9. Integrar lógica free/pagado en formulario de eventos
 ├── 10. Eliminar código de plantas
-└── 11. Deploy en Vercel → degux.cl
+└── 11. Deploy en Vercel → inmogrid.cl
 
 DÍA 10 (16 abril)
-└── 12. Configurar redirect 301 pantojapropiedades.cl → degux.cl
+└── 12. Configurar redirect 301 pantojapropiedades.cl → inmogrid.cl
 ```

@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**degux.cl** somos un lienzo digital para tu marca personal. Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir tus ideas y conectar con una comunidad de creadadores y profesionales.
+**inmogrid.cl** somos un lienzo digital para tu marca personal. Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir tus ideas y conectar con una comunidad de creadadores y profesionales.
 
 Imagina una mezcla entre **Substack**, **Behance** y **Linktree**, con un fuerte sentido de comunidad local.
 
-**degux - Ecosistema Digital Colaborativo** is a comprehensive Next.js 15 platform for the Chilean real estate ecosystem. It features:
+**inmogrid - Ecosistema Digital Colaborativo** is a comprehensive Next.js 15 platform for the Chilean real estate ecosystem. It features:
 
 - **Public API**: Unauthenticated endpoints for external integrations (geospatial data, market statistics)
 - **User Profiles**: Professional profiles with bio, profession, company, networking capabilities
@@ -132,8 +132,8 @@ nginx-proxy (Docker) :80, :443 ← Reverse proxy + SSL
 ┌─────────────────────────────────────────────┐
 │      Docker Containers (vps_network)        │
 ├─────────────────────────────────────────────┤
-│  degux-web (Port 3000)   ← degux.cl App     │
-│  degux-db (Port 5433)    ← degux.cl DB      │
+│  inmogrid-web (Port 3000)   ← inmogrid.cl App     │
+│  inmogrid-db (Port 5433)    ← inmogrid.cl DB      │
 │  n8n (Port 5678)         ← N8N UI           │
 │  n8n-db (Port 5432)      ← N8N DB           │
 │  n8n-redis (Port 6379)   ← N8N Cache        │
@@ -142,15 +142,15 @@ nginx-proxy (Docker) :80, :443 ← Reverse proxy + SSL
 ```
 
 **Database Architecture (Production):**
-- **degux-db (Port 5433)**: PostgreSQL database for the main `degux.cl` application.
+- **inmogrid-db (Port 5433)**: PostgreSQL database for the main `inmogrid.cl` application.
 - **n8n-db (Port 5432)**: Separate PostgreSQL database exclusively for `n8n` workflow data.
 - Databases are isolated in separate containers for security and failure containment.
 
 #### Local Development Architecture
 
 For local development, a simplified setup is defined in `docker/docker-compose.local.yml`:
-- **degux-postgres-local**: A self-contained PostgreSQL container for the application database. It maps port `5432` on the host to the container's port `5432`.
-- **degux-adminer-local**: An optional Adminer container for database management, accessible on host port `8080`.
+- **inmogrid-postgres-local**: A self-contained PostgreSQL container for the application database. It maps port `5432` on the host to the container's port `5432`.
+- **inmogrid-adminer-local**: An optional Adminer container for database management, accessible on host port `8080`.
 
 **Deployment Method:**
 - Use `scripts/deploy-to-vps.sh` (automated Docker deployment)
@@ -245,12 +245,12 @@ import { authOptions } from '../../../lib/auth.config'
 
 **Database Connection Examples:**
 ```env
-# Local Development (connects to 'degux-postgres-local' container)
+# Local Development (connects to 'inmogrid-postgres-local' container)
 # Credentials from docker/docker-compose.local.yml
-POSTGRES_PRISMA_URL="postgresql://degux_user:degux_local_password@localhost:5432/degux_dev?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev?schema=public"
 
 # VPS PostgreSQL dedicated (production/staging)
-POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5433/degux_core?schema=public&sslmode=require"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:PASSWORD@VPS_IP_REDACTED:5433/inmogrid_core?schema=public&sslmode=require"
 ```
 
 **Migration Guidelines:**
@@ -369,12 +369,12 @@ For detailed documentation, see `docs/ADVANCED_STATISTICS_MODULE_GUIDE.md`
 ### Required Variables
 ```env
 # Database (VPS PostgreSQL dedicated)
-POSTGRES_PRISMA_URL=postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5433/degux_core?schema=public&sslmode=require
+POSTGRES_PRISMA_URL=postgresql://inmogrid_user:PASSWORD@VPS_IP_REDACTED:5433/inmogrid_core?schema=public&sslmode=require
 
 # NextAuth.js (Google OAuth)
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
-NEXTAUTH_URL=https://degux.cl
+NEXTAUTH_URL=https://inmogrid.cl
 NEXTAUTH_SECRET=your_secure_random_secret  # min 32 chars
 
 # Google Maps API (Geocoding)
@@ -387,11 +387,11 @@ N8N_WEBHOOK_SECRET=your_webhook_secret
 
 ### Google OAuth Setup
 - Authorized redirect URIs must include:
-  - `https://degux.cl/api/auth/callback/google`
+  - `https://inmogrid.cl/api/auth/callback/google`
   - `http://localhost:3000/api/auth/callback/google`
 
 ### Google Maps API Restrictions
-- Restrict to specific domains: `degux.cl`, `localhost`
+- Restrict to specific domains: `inmogrid.cl`, `localhost`
 - Restrict to Geocoding API only
 - Set daily quota limits
 
@@ -399,7 +399,7 @@ N8N_WEBHOOK_SECRET=your_webhook_secret
 
 This project uses 7 specialized Claude Code agents for development:
 
-1. **degux-orchestrator**: Master coordinator for multi-agent workflows
+1. **inmogrid-orchestrator**: Master coordinator for multi-agent workflows
 2. **api-developer-agent**: RESTful API design and implementation
 3. **database-manager-agent**: PostgreSQL dedicated management, RLS policies
 4. **data-ingestion-agent**: N8N workflows and Chilean data validation
@@ -423,16 +423,16 @@ This project uses 7 specialized Claude Code agents for development:
 npx prisma studio
 
 # Check Local Docker DB Status (if running from docker/docker-compose.local.yml)
-docker ps | grep degux-postgres-local
+docker ps | grep inmogrid-postgres-local
 
 # Connect to Local Docker DB
-docker exec -it degux-postgres-local psql -U degux_user -d degux_dev
+docker exec -it inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev
 
 # Check VPS Production DB Status (via SSH)
-ssh gabriel@VPS_IP_REDACTED "docker ps | grep degux-db"
+ssh gabriel@VPS_IP_REDACTED "docker ps | grep inmogrid-db"
 
 # Connect to VPS Production DB (via SSH)
-ssh gabriel@VPS_IP_REDACTED "docker exec -it degux-db psql -U degux_user -d degux_core"
+ssh gabriel@VPS_IP_REDACTED "docker exec -it inmogrid-db psql -U inmogrid_user -d inmogrid_core"
 ```
 
 ### Build/Type Errors
@@ -481,8 +481,8 @@ npm run dev
 # Check all Docker containers on VPS
 ssh gabriel@VPS_IP_REDACTED "docker ps"
 
-# Check degux database container on VPS
-ssh gabriel@VPS_IP_REDACTED "docker logs degux-db"
+# Check inmogrid database container on VPS
+ssh gabriel@VPS_IP_REDACTED "docker logs inmogrid-db"
 
 # Check N8N container on VPS
 ssh gabriel@VPS_IP_REDACTED "docker logs n8n"
@@ -492,9 +492,9 @@ ssh gabriel@VPS_IP_REDACTED "docker ps | grep nginx-proxy"
 ```
 
 ### Backup Strategy
-- **PostgreSQL degux**: Automated daily backups at 3 AM
+- **PostgreSQL inmogrid**: Automated daily backups at 3 AM
 - **Retention**: 7 daily, 4 weekly, 6 monthly
-- **Location**: `/home/gabriel/vps-do/degux/backups/`
+- **Location**: `/home/gabriel/vps-do/inmogrid/backups/`
 - **Restore**: See `InfrastructureAgent.md` for procedures
 
 **Infrastructure Agent**: Use `infrastructure-agent` for VPS management tasks
@@ -532,7 +532,7 @@ ssh gabriel@VPS_IP_REDACTED "docker ps | grep nginx-proxy"
 - **Database Schema**: `docs/DATABASE_SCHEMA_GUIDE.md` - Schema structure
 
 ### Specialized Agents
-- **Orchestrator**: `.claude/agents/degux-orchestrator.md`
+- **Orchestrator**: `.claude/agents/inmogrid-orchestrator.md`
 - **API Development**: `.claude/agents/APIDeveloperAgent.md`
 - **Database Management**: `.claude/agents/DatabaseManagerAgent.md`
 - **Data Ingestion**: `.claude/agents/DataIngestionAgent.md`

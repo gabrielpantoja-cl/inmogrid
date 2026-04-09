@@ -5,7 +5,7 @@
  * LEGACY CODE REMOVED (2026-01-02)
  *
  * Este archivo contenía funciones para gestionar Referenciales y Conservadores,
- * que eran parte de la plataforma inmobiliaria anterior de degux.cl.
+ * que eran parte de la plataforma inmobiliaria anterior de inmogrid.cl.
  *
  * Funciones removidas:
  * - createReferencial()
@@ -18,7 +18,7 @@
  * - Referenciales
  * - Conservadores
  *
- * La nueva versión de degux.cl es un ecosistema digital colaborativo para
+ * La nueva versión de inmogrid.cl es un ecosistema digital colaborativo para
  * creadores de contenido, diseñadores, desarrolladores y profesionales.
  *
  * Para nuevas server actions, crear funciones específicas según la feature:

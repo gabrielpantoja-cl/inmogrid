@@ -1,10 +1,10 @@
-# Introducción - degux.cl
+# Introducción - inmogrid.cl
 
-Este documento proporciona una visión general de **degux.cl - Ecosistema Digital Colaborativo**, una iniciativa de datos abiertos diseñada para democratizar el acceso a información inmobiliaria en Chile.
+Este documento proporciona una visión general de **inmogrid.cl - Ecosistema Digital Colaborativo**, una iniciativa de datos abiertos diseñada para democratizar el acceso a información inmobiliaria en Chile.
 
 ## Propósito
 
-**degux.cl** es un ecosistema digital colaborativo y de código abierto donde profesionales del sector inmobiliario chileno pueden conectarse, compartir conocimiento, gestionar propiedades y acceder a datos transparentes del mercado. La plataforma integra múltiples herramientas profesionales en un solo lugar, fomentando la colaboración y el desarrollo informado del sector.
+**inmogrid.cl** es un ecosistema digital colaborativo y de código abierto donde profesionales del sector inmobiliario chileno pueden conectarse, compartir conocimiento, gestionar propiedades y acceder a datos transparentes del mercado. La plataforma integra múltiples herramientas profesionales en un solo lugar, fomentando la colaboración y el desarrollo informado del sector.
 
 ### Nuestra Filosofía
 
@@ -19,7 +19,7 @@ Creemos que los datos sobre transacciones de propiedades, siendo de origen públ
 
 ## Componentes del Ecosistema
 
-degux.cl se desarrolla en **5 fases** progresivas:
+inmogrid.cl se desarrolla en **5 fases** progresivas:
 
 ### ✅ Fase 0: Infraestructura (COMPLETADA - Ago 2025)
 - VPS Digital Ocean con 7+ servicios activos
@@ -115,8 +115,8 @@ degux.cl se desarrolla en **5 fases** progresivas:
 VPS Digital Ocean ([IP_VPS])
 ├─ Nginx (80/443) - Reverse proxy + SSL
 ├─ N8N Stack (port 5432 - Aislado)
-├─ degux DB (port 5433 - Dedicado)
-├─ degux App (port 3000 - Por desplegar)
+├─ inmogrid DB (port 5433 - Dedicado)
+├─ inmogrid App (port 3000 - Por desplegar)
 └─ Portainer (9443) - Docker management
 ```
 
@@ -126,7 +126,7 @@ Para entender el proyecto completo, **consulta el documento fundamental**:
 
 ### 📋 [Plan de Trabajo V3.0](./Plan_Trabajo_Ecosistema_Digital_V3.md)
 **Documento maestro del proyecto** que incluye:
-- Visión y evolución del ecosistema degux.cl
+- Visión y evolución del ecosistema inmogrid.cl
 - Detalle completo de las 6 fases de desarrollo (0-5)
 - Arquitectura de infraestructura (VPS, Docker, N8N)
 - Decisiones técnicas clave (PostgreSQL dedicado, NextAuth, etc.)
@@ -156,7 +156,7 @@ Para entender el proyecto completo, **consulta el documento fundamental**:
 
 El proyecto utiliza **7 agentes especializados** para desarrollo:
 
-1. **degux-orchestrator** - Coordinador maestro
+1. **inmogrid-orchestrator** - Coordinador maestro
 2. **api-developer-agent** - Diseño de APIs REST
 3. **database-manager-agent** - PostgreSQL + PostGIS
 4. **data-ingestion-agent** - N8N workflows + validación de datos chilenos
@@ -176,9 +176,9 @@ El proyecto utiliza **7 agentes especializados** para desarrollo:
 3. Desarrollar interfaces de Property Management
 4. Lanzar directorio profesional público
 
-**Repositorio:** [gabrielpantoja-cl/degux.cl](https://github.com/gabrielpantoja-cl/degux.cl)
+**Repositorio:** [gabrielpantoja-cl/inmogrid.cl](https://github.com/gabrielpantoja-cl/inmogrid.cl)
 
 ---
 
 **Fecha de última actualización:** Octubre 2025
-**Versión del documento:** 2.0 - Actualizado para degux.cl Ecosystem
+**Versión del documento:** 2.0 - Actualizado para inmogrid.cl Ecosystem

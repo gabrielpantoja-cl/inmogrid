@@ -1,7 +1,7 @@
-# 🧹 Análisis de Limpieza de Scripts - degux.cl
+# 🧹 Análisis de Limpieza de Scripts - inmogrid.cl
 
 **Fecha:** 2026-01-02
-**Contexto:** Migración de referenciales.cl (plataforma inmobiliaria) → degux.cl (plataforma colaborativa para marca personal con enfoque en plantas)
+**Contexto:** Migración de referenciales.cl (plataforma inmobiliaria) → inmogrid.cl (plataforma colaborativa para marca personal con enfoque en plantas)
 
 ## 📋 Resumen Ejecutivo
 
@@ -15,7 +15,7 @@
 
 ### 1. **scrape-portal-inmobiliario.ts** 🗑️
 - **Razón:** Genera datos falsos de propiedades inmobiliarias
-- **Modelo:** Usa `PropertyListing` que NO existe en degux.cl
+- **Modelo:** Usa `PropertyListing` que NO existe en inmogrid.cl
 - **Irrelevante para:** Plataforma de plantas y marca personal
 
 ### 2. **scrape-real-portal.ts** 🗑️
@@ -26,7 +26,7 @@
 ### 3. **debug-portal.ts** 🗑️
 - **Razón:** Debug de selectores de Portal Inmobiliario
 - **Función:** Toma screenshots y analiza HTML de portales inmobiliarios
-- **Irrelevante para:** degux.cl
+- **Irrelevante para:** inmogrid.cl
 
 ### 4. **generate-realistic-data.ts** 🗑️
 - **Razón:** Genera datos de propiedades inmobiliarias con precios UF, m², etc.
@@ -36,7 +36,7 @@
 ### 5. **test-api-public.sh** 🗑️
 - **Razón:** Tests específicos para API de referenciales.cl
 - **Menciones:** "referenciales.cl", "pantojapropiedades.cl"
-- **Endpoints:** `/map-data`, `/map-config` que NO existen en degux.cl
+- **Endpoints:** `/map-data`, `/map-config` que NO existen en inmogrid.cl
 - **Comentario línea 37:** "API Pública de referenciales.cl"
 
 ### 6. **test-api-public.ps1** 🗑️
@@ -96,8 +96,8 @@
 - **Función:** Sincroniza DB desde producción
 - **Utilidad:** Útil para debugging con datos reales
 
-#### 5. **test-degux-db.sh** ✅
-- **Función:** Tests específicos de degux.cl
+#### 5. **test-inmogrid-db.sh** ✅
+- **Función:** Tests específicos de inmogrid.cl
 - **Utilidad:** Verifica integridad de DB actual
 
 ### **Autenticación**
@@ -128,8 +128,8 @@
 - **Función:** Recovery de emergencia del VPS
 - **Utilidad:** Crítico para disaster recovery
 
-#### 12. **setup-nginx-degux.sh** ✅
-- **Función:** Configura Nginx para degux.cl
+#### 12. **setup-nginx-inmogrid.sh** ✅
+- **Función:** Configura Nginx para inmogrid.cl
 - **Utilidad:** Setup de infraestructura
 
 #### 13. **setup-swap-vps.sh** ✅
@@ -178,7 +178,7 @@ Leer contenido completo de:
 
 **Espacio liberado:** ~100KB de código legacy
 **Reducción de confusión:** Eliminación de referencias a referenciales.cl
-**Mejora de mantenibilidad:** Solo scripts relevantes para degux.cl
+**Mejora de mantenibilidad:** Solo scripts relevantes para inmogrid.cl
 **Claridad:** Scripts conservados son 100% aplicables al proyecto actual
 
 ---

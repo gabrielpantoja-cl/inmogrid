@@ -1,14 +1,14 @@
 # Terminos de Uso
 
-## 1. Sobre degux.cl
+## 1. Sobre inmogrid.cl
 
-**degux.cl** es un ecosistema digital enfocado en marca personal, tecnologia y comunidad. Ofrecemos herramientas para que profesionales y creativos construyan su presencia digital, compartan su trabajo y se conecten con otros.
+**inmogrid.cl** es un ecosistema digital enfocado en marca personal, tecnologia y comunidad. Ofrecemos herramientas para que profesionales y creativos construyan su presencia digital, compartan su trabajo y se conecten con otros.
 
 Este proyecto es experimental y se encuentra en desarrollo activo. Las funcionalidades pueden cambiar, ampliarse o descontinuarse sin previo aviso.
 
 ## 2. Uso aceptable
 
-Al usar degux.cl, te comprometes a:
+Al usar inmogrid.cl, te comprometes a:
 
 - Utilizar la plataforma de forma etica y legal.
 - Respetar a otros usuarios y sus contenidos.
@@ -19,11 +19,11 @@ Nos reservamos el derecho de suspender cuentas que incumplan estas condiciones.
 
 ## 3. Contenido y responsabilidad
 
-Los usuarios son responsables del contenido que publican. degux.cl no garantiza la exactitud de la informacion proporcionada por los usuarios ni se hace responsable por el uso que terceros hagan de ella.
+Los usuarios son responsables del contenido que publican. inmogrid.cl no garantiza la exactitud de la informacion proporcionada por los usuarios ni se hace responsable por el uso que terceros hagan de ella.
 
 ## 4. Propiedad intelectual
 
-El contenido que publicas en degux.cl sigue siendo tuyo. Al publicarlo, nos otorgas una licencia limitada para mostrarlo dentro de la plataforma.
+El contenido que publicas en inmogrid.cl sigue siendo tuyo. Al publicarlo, nos otorgas una licencia limitada para mostrarlo dentro de la plataforma.
 
 ## 5. Cuentas y eliminacion
 
@@ -33,7 +33,7 @@ El contenido que publicas en degux.cl sigue siendo tuyo. Al publicarlo, nos otor
 
 ## 6. Disponibilidad
 
-degux.cl se ofrece "tal cual". No garantizamos disponibilidad ininterrumpida ni ausencia de errores. Haremos nuestro mejor esfuerzo por mantener el servicio estable.
+inmogrid.cl se ofrece "tal cual". No garantizamos disponibilidad ininterrumpida ni ausencia de errores. Haremos nuestro mejor esfuerzo por mantener el servicio estable.
 
 ## 7. Modificaciones
 

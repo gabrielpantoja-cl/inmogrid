@@ -9,7 +9,7 @@ disable-model-invocation: false
 
 # Security Scan
 
-Perform a comprehensive security audit of the degux.cl codebase, database configurations, and API endpoints.
+Perform a comprehensive security audit of the inmogrid.cl codebase, database configurations, and API endpoints.
 
 ## Audit Scope
 

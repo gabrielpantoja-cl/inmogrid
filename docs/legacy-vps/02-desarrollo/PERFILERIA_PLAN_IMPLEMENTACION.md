@@ -1,7 +1,7 @@
-# Plan de Implementación: Perfilería Humana en degux.cl
+# Plan de Implementación: Perfilería Humana en inmogrid.cl
 
 **Fecha**: 2025-11-16
-**Proyecto**: degux.cl - Perfiles Personales
+**Proyecto**: inmogrid.cl - Perfiles Personales
 **Versión**: 1.0
 **Estado**: Diseño Aprobado
 
@@ -9,7 +9,7 @@
 
 ## 🎯 Objetivo
 
-Implementar sistema de perfiles personales en degux.cl, comenzando con **Vivero Mapu (Mona)** como proyecto piloto y luego escalando a otros usuarios.
+Implementar sistema de perfiles personales en inmogrid.cl, comenzando con **Vivero Mapu (Mona)** como proyecto piloto y luego escalando a otros usuarios.
 
 ---
 
@@ -150,7 +150,7 @@ npx prisma generate
 DO_SPACES_KEY=your_spaces_key
 DO_SPACES_SECRET=your_spaces_secret
 DO_SPACES_ENDPOINT=https://sfo3.digitaloceanspaces.com
-DO_SPACES_BUCKET=degux-media
+DO_SPACES_BUCKET=inmogrid-media
 DO_SPACES_REGION=sfo3
 ```
 
@@ -287,7 +287,7 @@ npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
 **Prioridad**: MEDIA
 
 #### 5.1 Perfil Profesional
-**URL**: `degux.cl/gabrielpantoja`
+**URL**: `inmogrid.cl/gabrielpantoja`
 
 **Secciones**:
 - Perito Tasador (portfolio sin datos sensibles)
@@ -353,8 +353,8 @@ npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
 - [ ] Utility functions para upload de imágenes
 
 ### Fase 2 (MVP Vivero Mapu)
-- [ ] Perfil público `degux.cl/mona` funcional
-- [ ] Catálogo de plantas `degux.cl/mona/vivero`
+- [ ] Perfil público `inmogrid.cl/mona` funcional
+- [ ] Catálogo de plantas `inmogrid.cl/mona/vivero`
 - [ ] Dashboard de gestión para Mona
 - [ ] Primera planta real subida
 - [ ] Demo en vivo para Mona
@@ -369,7 +369,7 @@ npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
 - [ ] "Plantas Favoritas" de Mona creada
 
 ### Fase 5
-- [ ] Perfil `degux.cl/gabrielpantoja` lanzado
+- [ ] Perfil `inmogrid.cl/gabrielpantoja` lanzado
 - [ ] Portfolio de peritajes integrado
 
 ### Fase 6
@@ -425,7 +425,7 @@ npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
 - [x] Mona puede ver su perfil público
 - [ ] Mona puede agregar/editar/eliminar plantas
 - [ ] Al menos 5 plantas reales en catálogo
-- [ ] Primera consulta real vía WhatsApp desde degux.cl/mona
+- [ ] Primera consulta real vía WhatsApp desde inmogrid.cl/mona
 
 ### Fase 3
 - [ ] Al menos 1 post publicado
@@ -435,7 +435,7 @@ npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
 - [ ] 2 perfiles completos (Mona + Gabriel)
 - [ ] Al menos 10 plantas en Vivero Mapu
 - [ ] Al menos 3 posts entre ambos perfiles
-- [ ] Primera venta generada desde degux.cl/mona
+- [ ] Primera venta generada desde inmogrid.cl/mona
 
 ---
 
@@ -467,7 +467,7 @@ npm install @aws-sdk/client-s3 @aws-sdk/lib-storage
 - `PERFILERIA_HUMANA_VISION.md` - Visión completa del proyecto
 - `PERFILERIA_PROTOTIPO_MONA.html` - Prototipo visual
 - `PERFILERIA_PITCH_MONA.md` - Pitch no-técnico
-- `CLAUDE.md` - Documentación general de degux.cl
+- `CLAUDE.md` - Documentación general de inmogrid.cl
 - `prisma/schema.prisma` - Schema actual de base de datos
 
 ---

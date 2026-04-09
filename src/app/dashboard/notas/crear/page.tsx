@@ -2,7 +2,7 @@ import { requireAuth } from '@/shared/lib/supabase/auth';
 import CrearNotaForm from './CrearNotaForm';
 
 export const metadata = {
-  title: 'Nueva Publicación - degux.cl',
+  title: 'Nueva Publicación - inmogrid.cl',
   description: 'Crea una nueva publicación',
 };
 

@@ -5,12 +5,18 @@
 
 ---
 
-## Los que van ganando
+## ✅ Decisión tomada — abril 2026
 
-| Dominio | Estado | Concepto | Por qué destaca |
-|---------|--------|----------|----------------|
-| **`degux.cl`** | ✅ **PROPIO** (Gabriel, vence oct 2026) | Degú (animal social chileno) / backronym de Gabriel UX | Ya registrado sin costo adicional; animal nativo, colaborativo; no suena a corredora. Ver tensión en sección DEGUX más abajo. |
-| **`inmogrid.cl`** | ✅ **DISPONIBLE** | Red inmobiliaria — evoca infraestructura y conexión | Técnico, moderno, "grid" es directo sin sonar a empresa familiar ni corredora |
+> **El nombre es `inmogrid.cl`.**
+>
+> "grid" tiene peso semántico que "red" no tiene: evoca infraestructura, plano urbano, la manzana como unidad de ciudad, datos organizados. Es la palabra que usan urbanistas y arquitectos para describir cómo se estructura el territorio — transparente, ordenado, sin jerarquías ocultas. Fonéticamente limpio: in-mo-grid. Sin origen personal, sin backronym.
+>
+> `degux.cl` (propio, vence oct 2026) quedó descartado — ver tensión documentada más abajo.
+
+| Dominio | Estado | Decisión |
+|---------|--------|----------|
+| **`inmogrid.cl`** | ✅ **GANADOR** — disponible en NIC.cl | Registrar cuanto antes en clientes.nic.cl |
+| `degux.cl` | propio (vence oct 2026) | No renovar — descartado por origen personal |
 
 ---
 

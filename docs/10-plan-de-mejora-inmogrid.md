@@ -1,7 +1,7 @@
-# Plan de Mejora: degux.cl → DEGUX
+# Plan de Mejora: inmogrid.cl → INMOGRID
 ### Hoja de ruta técnica concreta para transformar el repo actual en la plataforma del ecosistema
 
-**Repo base:** `C:\Users\gabri\Developer\personal\degux.cl`
+**Repo base:** `C:\Users\gabri\Developer\personal\inmogrid.cl`
 **Deadline crítico:** 16 de abril de 2026 (vencimiento pantojapropiedades.cl)
 **Última actualización:** abril 2026
 
@@ -12,7 +12,7 @@
 ```
 ✅ Funciona hoy                          ❌ No existe aún
 ─────────────────────────────────────    ─────────────────────────────────────
-Next.js 15.5 App Router                  Identidad DEGUX (landing, branding)
+Next.js 15.5 App Router                  Identidad INMOGRID (landing, branding)
 Perfiles públicos /{username}            Modelo Event (agenda)
 Blog/notas por usuario                   Directorio de tasadores/corredores
 Google OAuth (NextAuth)                  Profesiones del sector inmobiliario
@@ -28,7 +28,7 @@ API pública con CORS
 
 ## FASE 0 — MVP (antes del 16 de abril 2026)
 
-> Objetivo: tener degux.cl publicado y pantojapropiedades.cl redirigiendo antes de que venza el dominio.
+> Objetivo: tener inmogrid.cl publicado y pantojapropiedades.cl redirigiendo antes de que venza el dominio.
 
 ---
 
@@ -40,9 +40,9 @@ API pública con CORS
 
 El free tier de Supabase permite **máximo 2 proyectos activos**. La cuenta ya tiene los 2 ocupados:
 - `gabrielpantoja.cl` → mantener
-- `pantojapropiedades.cl` → **reproponer para DEGUX**
+- `pantojapropiedades.cl` → **reproponer para INMOGRID**
 
-No se puede crear un tercero sin pagar. Y no hace falta: `pantojapropiedades.cl` es exactamente el proyecto que DEGUX reemplaza.
+No se puede crear un tercero sin pagar. Y no hace falta: `pantojapropiedades.cl` es exactamente el proyecto que INMOGRID reemplaza.
 
 #### Plan paso a paso
 
@@ -63,19 +63,19 @@ Supabase Dashboard → pantojapropiedades.cl → Settings → Database
 → Connection string → URI mode (Pooler): para POSTGRES_PRISMA_URL
 ```
 
-**Paso 3 — Actualizar `.env.local` del repo degux.cl**
+**Paso 3 — Actualizar `.env.local` del repo inmogrid.cl**
 ```bash
 # Reemplazar el PostgreSQL viejo del VPS Digital Ocean:
-# POSTGRES_PRISMA_URL="postgresql://degux_user:...@VPS_IP_REDACTED:5432/degux"
+# POSTGRES_PRISMA_URL="postgresql://inmogrid_user:...@VPS_IP_REDACTED:5432/inmogrid"
 
-# Por el Supabase de pantojapropiedades (que pasará a ser DEGUX):
+# Por el Supabase de pantojapropiedades (que pasará a ser INMOGRID):
 POSTGRES_PRISMA_URL="postgresql://postgres.[ref]:[pass]@aws-0-[region].pooler.supabase.com:6543/postgres?pgbouncer=true"
 DATABASE_URL="postgresql://postgres.[ref]:[pass]@db.[ref].supabase.co:5432/postgres"
 ```
 
 **Paso 4 — Limpiar schema antiguo de pantojapropiedades**
 
-Las tablas de pantojapropiedades no son compatibles con el schema de DEGUX (Prisma). Opciones:
+Las tablas de pantojapropiedades no son compatibles con el schema de INMOGRID (Prisma). Opciones:
 
 - **Opción A (recomendada):** hacer un reset completo del schema público y empezar limpio
   ```sql
@@ -87,16 +87,16 @@ Las tablas de pantojapropiedades no son compatibles con el schema de DEGUX (Pris
   ```
 - **Opción B:** dejar las tablas viejas y solo agregar las nuevas (más seguro si hay datos a conservar)
 
-**Paso 5 — Aplicar schema DEGUX**
+**Paso 5 — Aplicar schema INMOGRID**
 ```bash
-cd C:/Users/gabri/Developer/proptech/degux.cl
-npx prisma db push        # crea todas las tablas del schema DEGUX
+cd C:/Users/gabri/Developer/proptech/inmogrid.cl
+npx prisma db push        # crea todas las tablas del schema INMOGRID
 npx prisma generate       # regenera el cliente TypeScript
 ```
 
 **Paso 6 — Verificar conexión**
 ```bash
-npx prisma studio         # debe abrir con las tablas DEGUX vacías y limpias
+npx prisma studio         # debe abrir con las tablas INMOGRID vacías y limpias
 ```
 
 **Paso 7 — Renombrar el proyecto en Supabase**
@@ -104,7 +104,7 @@ npx prisma studio         # debe abrir con las tablas DEGUX vacías y limpias
 > **¿Se puede renombrar un proyecto Supabase? Sí.**
 >
 > `Supabase Dashboard → pantojapropiedades.cl → Settings → General → Project name`
-> → Cambiar a **"DEGUX"**
+> → Cambiar a **"INMOGRID"**
 >
 > **Lo que NO cambia al renombrar:**
 > - El `project_ref` (ID único) — permanece igual
@@ -112,10 +112,10 @@ npx prisma studio         # debe abrir con las tablas DEGUX vacías y limpias
 > - Las API keys — no cambian
 > - Los datos — no se tocan
 >
-> **Cuándo hacerlo:** justo antes del deploy de DEGUX en Vercel. No antes, para no confundir mientras pantojapropiedades.cl sigue activo.
+> **Cuándo hacerlo:** justo antes del deploy de INMOGRID en Vercel. No antes, para no confundir mientras pantojapropiedades.cl sigue activo.
 
 **Archivos afectados:**
-- `.env.local` del repo `proptech/degux.cl` (nunca commitear)
+- `.env.local` del repo `proptech/inmogrid.cl` (nunca commitear)
 - `.env.example` → actualizar comentarios con nombres de keys correctos
 
 ---
@@ -270,7 +270,7 @@ npx prisma generate
 **Qué reescribir:**
 - Eliminar framing de "marca personal" / "creadores digitales"
 - Eliminar el checkbox de términos y el flujo de login en la landing
-- Nueva sección hero: qué es DEGUX, a quién sirve
+- Nueva sección hero: qué es INMOGRID, a quién sirve
 - Sección de módulos: Agenda de Eventos / Directorio de Profesionales / Conocimiento abierto
 - CTA claro: "Ver eventos" → `/eventos` | "Unirte" → `/auth/signin`
 - Mantener el login Google OAuth pero como botón secundario en navbar
@@ -370,14 +370,14 @@ const isCommercialEvent =
 ```typescript
 // Cambiar metadata global:
 export const metadata: Metadata = {
-  title: 'DEGUX — Ecosistema Abierto de Conocimiento Inmobiliario',
+  title: 'INMOGRID — Ecosistema Abierto de Conocimiento Inmobiliario',
   description: 'Plataforma de comunidad para tasadores, peritos y corredores de propiedades en Chile.',
   // ...
 }
 ```
 
 `src/components/ui/common/AcmeLogo.tsx`:
-- Reemplazar logo genérico por "DEGUX" en tipografía correcta
+- Reemplazar logo genérico por "INMOGRID" en tipografía correcta
 
 `src/components/ui/dashboard/nav-links.tsx`:
 - Cambiar links: Inicio / Eventos / Directorio / Explorar / Mis Notas / Perfil
@@ -390,10 +390,10 @@ export const metadata: Metadata = {
 **Esfuerzo:** 2 horas | **Prioridad:** BLOQUEANTE para el 16/abril
 
 **Pasos:**
-1. Crear proyecto en Vercel apuntando a `gabrielpantoja-cl/degux.cl`
-2. Configurar dominio `degux.cl` en Vercel (cambiar DNS en NIC.cl)
+1. Crear proyecto en Vercel apuntando a `gabrielpantoja-cl/inmogrid.cl`
+2. Configurar dominio `inmogrid.cl` en Vercel (cambiar DNS en NIC.cl)
 3. Agregar todas las variables de entorno en Vercel Dashboard
-4. Verificar deploy funciona en `degux.cl`
+4. Verificar deploy funciona en `inmogrid.cl`
 5. En proyecto Vercel de `pantojapropiedades.cl`: agregar redirect 301
 
 ```json
@@ -402,7 +402,7 @@ export const metadata: Metadata = {
   "redirects": [
     {
       "source": "/(.*)",
-      "destination": "https://degux.cl/$1",
+      "destination": "https://inmogrid.cl/$1",
       "statusCode": 301
     }
   ]
@@ -503,7 +503,7 @@ src/app/api/public/directorio/
 
 ---
 
-### TAREA 1.4 — Actualizar chatbot al contexto DEGUX
+### TAREA 1.4 — Actualizar chatbot al contexto INMOGRID
 
 **Esfuerzo:** 2-3 horas
 
@@ -512,10 +512,10 @@ src/app/api/public/directorio/
 **Cambiar el system prompt:**
 ```typescript
 // ANTES:
-"Eres un asistente virtual para degux.cl, plataforma de marca personal..."
+"Eres un asistente virtual para inmogrid.cl, plataforma de marca personal..."
 
 // DESPUÉS:
-`Eres el asistente de DEGUX, la plataforma de conocimiento inmobiliario abierto para Chile.
+`Eres el asistente de INMOGRID, la plataforma de conocimiento inmobiliario abierto para Chile.
 Ayudas a tasadores, peritos, corredores y ciudadanos con:
 - Cómo publicar eventos en la agenda
 - Cómo completar el perfil profesional
@@ -527,7 +527,7 @@ Responde en español, con lenguaje claro y profesional.`
 
 **Actualizar FAQs hardcoded:**
 ```typescript
-"¿Qué es DEGUX?" → descripción ecosistema abierto
+"¿Qué es INMOGRID?" → descripción ecosistema abierto
 "¿Cómo publico un evento?" → explicar ruta /eventos/nuevo
 "¿Qué es un referencial?" → definición + link referenciales.cl
 "¿Cómo verifico mi perfil?" → proceso de verificación profesional
@@ -542,11 +542,11 @@ Responde en español, con lenguaje claro y profesional.`
 **Todas las rutas principales deben tener `generateMetadata()`:**
 
 ```
-/eventos          → "Agenda de Eventos Inmobiliarios Chile | DEGUX"
+/eventos          → "Agenda de Eventos Inmobiliarios Chile | INMOGRID"
 /eventos/[id]     → título del evento dinámico
-/directorio       → "Directorio de Tasadores y Corredores Chile | DEGUX"
+/directorio       → "Directorio de Tasadores y Corredores Chile | INMOGRID"
 /[username]       → nombre + profesión del usuario
-/[username]/notas → "Artículos de {nombre} | DEGUX"
+/[username]/notas → "Artículos de {nombre} | INMOGRID"
 ```
 
 **Agregar `robots.txt` y `sitemap.xml` dinámico:**
@@ -623,7 +623,7 @@ Pregunta usuario → embed → pgvector similarity search → top 5 chunks → G
 | Estadísticas de mercado | pantojapropiedades.cl/src/features/analytics | Media | 2 días |
 | CRM básico de contactos | pantojapropiedades.cl/src/features/crm | Baja | 1 semana |
 
-**Estrategia de migración:** copiar `src/features/[feature]/` completo, actualizar imports, adaptar al schema de Prisma de DEGUX.
+**Estrategia de migración:** copiar `src/features/[feature]/` completo, actualizar imports, adaptar al schema de Prisma de INMOGRID.
 
 ---
 
@@ -644,7 +644,7 @@ GET /api/public/health              # Health check (ya existe ✅)
 **Agregar:**
 - Rate limiting: 100 req/min por IP
 - Documentación en `/api/public/docs` (ya existe estructura)
-- Headers: `X-DEGUX-Version: 1.0`
+- Headers: `X-INMOGRID-Version: 1.0`
 
 ---
 
@@ -695,7 +695,7 @@ npm uninstall csv-parse exceljs
 | 1.1 | Completar networking (API + UI) | 4 días |
 | 1.2 | Perfil profesional extendido | 2 días |
 | 1.3 | Directorio público | 2 días |
-| 1.4 | Chatbot → contexto DEGUX | 3h |
+| 1.4 | Chatbot → contexto INMOGRID | 3h |
 | 1.5 | SEO por ruta + sitemap | 1 día |
 
 **Total estimado Fase 1:** ~10 días

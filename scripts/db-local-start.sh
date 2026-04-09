@@ -24,7 +24,7 @@ echo "⏳ Esperando a que PostgreSQL esté listo..."
 sleep 5
 
 # Verificar que el contenedor esté corriendo
-if docker ps | grep -q "degux-postgres-local"; then
+if docker ps | grep -q "inmogrid-postgres-local"; then
     echo "✅ PostgreSQL local está corriendo"
 else
     echo "❌ Error: PostgreSQL no se inició correctamente"
@@ -46,9 +46,9 @@ echo ""
 echo "📋 Información de conexión:"
 echo "   Host: localhost"
 echo "   Puerto: 5432"
-echo "   Usuario: degux_user"
-echo "   Base de datos: degux_dev"
-echo "   Password: degux_local_password"
+echo "   Usuario: inmogrid_user"
+echo "   Base de datos: inmogrid_dev"
+echo "   Password: inmogrid_local_password"
 echo ""
 echo "🌐 Adminer (GUI): http://localhost:8080"
 echo ""

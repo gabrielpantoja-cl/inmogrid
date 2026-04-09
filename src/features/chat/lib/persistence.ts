@@ -1,5 +1,5 @@
 /**
- * Persistencia de mensajes del chat (tabla `degux_chat_messages`).
+ * Persistencia de mensajes del chat (tabla `inmogrid_chat_messages`).
  * Las escrituras son best-effort: si fallan, el chat sigue funcionando
  * y solo se loggea el error.
  */

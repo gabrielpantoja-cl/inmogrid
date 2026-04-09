@@ -1,4 +1,4 @@
-# 🛠️ Mantenimiento y Limpieza - degux.cl
+# 🛠️ Mantenimiento y Limpieza - inmogrid.cl
 
 Documentación de tareas de mantenimiento, limpieza de código y resolución de incidentes.
 
@@ -113,4 +113,4 @@ Documentación de tareas de mantenimiento, limpieza de código y resolución de 
 ---
 
 **Última actualización**: 2026-01-03
-**Mantenedor**: Gabriel (gabriel@degux.cl)
+**Mantenedor**: Gabriel (gabriel@inmogrid.cl)

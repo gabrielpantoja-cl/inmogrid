@@ -1,4 +1,4 @@
-# ✅ Resumen de Tests de Autenticación - degux.cl
+# ✅ Resumen de Tests de Autenticación - inmogrid.cl
 
 **Fecha**: 2025-10-06
 **Estado**: ✅ COMPLETADO
@@ -7,7 +7,7 @@
 
 ## 🎯 Objetivo
 
-Testear el sistema de autenticación de degux.cl después de migrar la base de datos a PostgreSQL en VPS (n8n-db:5432).
+Testear el sistema de autenticación de inmogrid.cl después de migrar la base de datos a PostgreSQL en VPS (n8n-db:5432).
 
 ---
 
@@ -256,7 +256,7 @@ Seguir la guía en `docs/03-arquitectura/TEST_AUTENTICACION_MANUAL.md`:
 
 Después de pruebas exitosas:
 
-1. Actualizar `NEXTAUTH_URL` a `https://degux.cl`
+1. Actualizar `NEXTAUTH_URL` a `https://inmogrid.cl`
 2. Actualizar redirect URIs en Google Cloud Console
 3. Deploy a VPS con `scripts/deploy-to-vps.sh`
 4. Probar login en producción
@@ -296,7 +296,7 @@ Una vez autenticación en producción:
 2. **Base de Datos**:
    - PostgreSQL en VPS accesible
    - Tablas de NextAuth completas
-   - Usuario `degux_user` con permisos correctos
+   - Usuario `inmogrid_user` con permisos correctos
    - Schema sincronizado con Prisma
 
 3. **Seguridad**:
@@ -346,8 +346,8 @@ Una vez autenticación en producción:
 ### Base de Datos
 - Servidor: `n8n-db` (Docker container)
 - Puerto: 5432 (interno), 5432 (externo)
-- Database: `degux`
-- Usuario: `degux_user`
+- Database: `inmogrid`
+- Usuario: `inmogrid_user`
 - Host VPS: VPS_IP_REDACTED
 
 ---
@@ -389,7 +389,7 @@ Una vez autenticación en producción:
 
 ## 🎉 Conclusión
 
-**El sistema de autenticación de degux.cl está completamente configurado y listo para pruebas**.
+**El sistema de autenticación de inmogrid.cl está completamente configurado y listo para pruebas**.
 
 Todos los componentes están en su lugar:
 - ✅ Base de datos PostgreSQL en VPS
@@ -404,5 +404,5 @@ Todos los componentes están en su lugar:
 
 **Realizado por**: Claude Code
 **Fecha**: 2025-10-06
-**Proyecto**: degux.cl
+**Proyecto**: inmogrid.cl
 **Estado**: ✅ LISTO PARA PRUEBAS

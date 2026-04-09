@@ -3,8 +3,8 @@
 **Fecha:** 07 de Octubre, 2025
 **Autores:** Gabriel & Mona
 **Versión:** 5.0 - Re-posicionamiento Estratégico como Plataforma de Investigación
-**Proyecto:** degux.cl (P&P Technologies / Pantoja & Partners)
-**Repositorio:** https://github.com/gabrielpantoja-cl/degux.cl
+**Proyecto:** inmogrid.cl (P&P Technologies / Pantoja & Partners)
+**Repositorio:** https://github.com/gabrielpantoja-cl/inmogrid.cl
 
 **Changelog V5.0 (RE-POSICIONAMIENTO ESTRATÉGICO):**
 - 🎯 **CAMBIO FUNDAMENTAL**: De "MLS Colaborativo" a "Infraestructura de Investigación y Datos"
@@ -24,7 +24,7 @@ Transformar de **PropTech regional** a **Infraestructura Nacional de Inteligenci
 
 ### Concepto Clave: **"Infraestructura Nacional de Datos Inmobiliarios para la Investigación"**
 
-> **degux.cl** es la **infraestructura pública de datos inmobiliarios** para la investigación económica, validación estadística e inteligencia de mercado en Chile. Transformamos datos fragmentados del Conservador de Bienes Raíces (CBR) en conocimiento geoespacial estructurado y auditable, mitigando la asimetría de información que afecta a académicos, instituciones financieras, organismos gubernamentales y ciudadanos.
+> **inmogrid.cl** es la **infraestructura pública de datos inmobiliarios** para la investigación económica, validación estadística e inteligencia de mercado en Chile. Transformamos datos fragmentados del Conservador de Bienes Raíces (CBR) en conocimiento geoespacial estructurado y auditable, mitigando la asimetría de información que afecta a académicos, instituciones financieras, organismos gubernamentales y ciudadanos.
 
 Basados en investigación profunda del mercado (Gemini Deep Research - Oct 2025) y análisis estratégico, validamos que el mercado chileno requiere:
 
@@ -73,7 +73,7 @@ Basados en investigación profunda del mercado (Gemini Deep Research - Oct 2025)
    - Gestión de contenedores, volúmenes, redes
 
 3. **N8N (Automatización de Workflows)** ✅
-   - URL: `http://n8n.degux.cl`
+   - URL: `http://n8n.inmogrid.cl`
    - PostgreSQL + Redis incluidos
    - **Casos de uso actuales:**
      - Scraping de Portal Inmobiliario
@@ -345,7 +345,7 @@ Usuario busca propiedad en Valdivia
 1. **Maximizar uso del VPS** - Ya pagado, capacidad disponible
 2. **Aislamiento total** - Separado de N8N (seguridad y estabilidad)
 3. **Costo cero adicional** - Solo ~300MB RAM extra
-4. **Control total** - Optimización específica para degux
+4. **Control total** - Optimización específica para inmogrid
 5. **Filosofía open source** - 100% auto-gestionado
 6. **Compliance directo** - Datos en infraestructura propia
 7. **Escalabilidad futura** - Fácil agregar replicas cuando sea necesario
@@ -355,23 +355,23 @@ Usuario busca propiedad en Valdivia
 ```yaml
 # Docker Compose en VPS
 services:
-  degux-db:
+  inmogrid-db:
     image: postgis/postgis:15-3.4
-    container_name: degux-db
+    container_name: inmogrid-db
     ports:
       - "5433:5432"  # Puerto independiente
     volumes:
-      - degux_db_data:/var/lib/postgresql/data
+      - inmogrid_db_data:/var/lib/postgresql/data
       - ./backups:/backups
     environment:
-      POSTGRES_DB: degux
-      POSTGRES_USER: degux_user
-      POSTGRES_PASSWORD: ${DEGUX_DB_PASSWORD}
+      POSTGRES_DB: inmogrid
+      POSTGRES_USER: inmogrid_user
+      POSTGRES_PASSWORD: ${INMOGRID_DB_PASSWORD}
     networks:
-      - degux-network
+      - inmogrid-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U degux_user"]
+      test: ["CMD-SHELL", "pg_isready -U inmogrid_user"]
       interval: 10s
 ```
 
@@ -393,16 +393,16 @@ VPS Digital Ocean (VPS_IP_REDACTED)
   │  ├─ n8n (workflow engine)
   │  └─ n8n-redis
   │
-  └─ degux Stack (puerto 5433)
-     ├─ degux-db (PostgreSQL + PostGIS) ← NUEVO
-     └─ degux-app (Next.js) ← Por desplegar
+  └─ inmogrid Stack (puerto 5433)
+     ├─ inmogrid-db (PostgreSQL + PostGIS) ← NUEVO
+     └─ inmogrid-app (Next.js) ← Por desplegar
 ```
 
 #### **Recursos Utilizados:**
 
 | Recurso | Uso Adicional | Total Estimado |
 |---------|---------------|----------------|
-| RAM | ~300MB | N8N: 500MB + degux DB: 300MB = 800MB |
+| RAM | ~300MB | N8N: 500MB + inmogrid DB: 300MB = 800MB |
 | Disco | ~2GB inicial | Crece con datos |
 | CPU | Mínima en idle | Picos en queries |
 
@@ -428,20 +428,20 @@ VPS Digital Ocean (VPS_IP_REDACTED)
 
 ```bash
 # Script ejecutado diariamente (3 AM)
-/home/gabriel/vps-do/degux/backup.sh
+/home/gabriel/vps-do/inmogrid/backup.sh
 
 # Retiene últimos 7 días
-/backups/degux_backup_YYYYMMDD_HHMMSS.sql.gz
+/backups/inmogrid_backup_YYYYMMDD_HHMMSS.sql.gz
 ```
 
 #### **Connection String:**
 
 ```env
 # Local development (desde tu máquina)
-POSTGRES_PRISMA_URL="postgresql://degux_user:[PASSWORD]@[IP_VPS]:5433/degux?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:[PASSWORD]@[IP_VPS]:5433/inmogrid?schema=public"
 
 # Production (dentro del VPS)
-POSTGRES_PRISMA_URL="postgresql://degux_user:[PASSWORD]@degux-db:5432/degux?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:[PASSWORD]@inmogrid-db:5432/inmogrid?schema=public"
 ```
 
 ---
@@ -550,7 +550,7 @@ POSTGRES_PRISMA_URL="postgresql://degux_user:[PASSWORD]@degux-db:5432/degux?sche
 - [x] Enums para ProfessionType, PropertyType, PropertyStatus
 - [x] Schema validado y generado con Prisma
 - [x] **Decisión de Base de Datos** → PostgreSQL Dedicado en VPS
-- [x] Diseño de arquitectura Docker para degux-db
+- [x] Diseño de arquitectura Docker para inmogrid-db
 - [x] Diseño de script de backups automáticos
 
 #### 🔄 Tareas en Progreso:
@@ -1088,7 +1088,7 @@ POSTGRES_PRISMA_URL="postgresql://degux_user:[PASSWORD]@degux-db:5432/degux?sche
 
 ## 🎯 Estrategia de Crecimiento de Datos
 
-### Fuentes Principales para `degux-cl`:
+### Fuentes Principales para `inmogrid-cl`:
 
 #### ✅ Ya Implementadas:
 1. **Portal Inmobiliario** - Scraping vía N8N
@@ -1118,7 +1118,7 @@ Trigger (diario) →
 
 ### GitHub Organization Setup
 - **Nombre organización:** `pp-technologies` o `pantoja-partners`
-- **Repositorio actual:** `degux.cl` (main branch configurada)
+- **Repositorio actual:** `inmogrid.cl` (main branch configurada)
 - **Repositorio infra:** `vps-do` (VPS management)
 - **Repositorio docs:** `vps-do-docs` (documentación viviente)
 - **Colaboradores:** Gabriel (Owner/Tech Lead) + Mona (Owner/Product Lead)
@@ -1190,8 +1190,8 @@ Trigger (diario) →
 
 #### 1. **Setup PostgreSQL Dedicado en VPS** (DÍA 1)
 - [x] ✅ Decisión tomada: PostgreSQL Dedicado en VPS
-- [ ] Crear directorio `~/vps-do/degux` en VPS
-- [ ] Crear `docker-compose.yml` con servicio degux-db
+- [ ] Crear directorio `~/vps-do/inmogrid` en VPS
+- [ ] Crear `docker-compose.yml` con servicio inmogrid-db
 - [ ] Crear `.env` con password seguro
 - [ ] Levantar contenedor `docker-compose up -d`
 - [ ] Verificar health check y conectividad
@@ -1336,7 +1336,7 @@ Trigger (diario) →
 
 ### 🔴 Prioridad ALTA (Decidir esta semana):
 4. **Nombre definitivo de la plataforma:**
-   - Decisión: degux.cl
+   - Decisión: inmogrid.cl
    - Consideración: ¿Enfatizar "MLS" en el nombre para claridad de propuesta?
 
 5. **Licencia Open Source:**
@@ -1391,7 +1391,7 @@ Trigger (diario) →
 ## 🔗 Links de Referencia
 
 ### Repositorios:
-- **degux.cl:** https://github.com/gabrielpantoja-cl/degux.cl
+- **inmogrid.cl:** https://github.com/gabrielpantoja-cl/inmogrid.cl
 - **VPS Management:** (privado - compartir acceso)
 - **VPS Docs:** Local en `/vps-do-docs/`
 
@@ -1413,7 +1413,7 @@ Trigger (diario) →
 - ✅ Infraestructura VPS completamente operativa
 - ✅ N8N + scraping de 2 portales funcionando
 - ✅ Schema Prisma Fase 1 diseñado y validado
-- ✅ Repositorio degux.cl creado y configurado
+- ✅ Repositorio inmogrid.cl creado y configurado
 - ✅ Plan de Trabajo V3 con progreso real documentado
 - ✅ Decisión arquitectónica de base de datos evaluada
 
@@ -1537,7 +1537,7 @@ Trigger (diario) →
 
 ✅ **Diferenciación Clara vs. Competencia**
 - KiteProp/Wasi: suscripciones obligatorias
-- degux.cl: pago por uso real, sin lock-in
+- inmogrid.cl: pago por uso real, sin lock-in
 
 ✅ **Sostenibilidad de Infraestructura**
 - Costos fijos: ~$135K CLP/mes

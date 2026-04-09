@@ -1,4 +1,4 @@
-# 🌱 Perfiles Públicos en degux.cl
+# 🌱 Perfiles Públicos en inmogrid.cl
 
 **Última actualización**: 2025-11-16
 
@@ -99,7 +99,7 @@ npm run dev:full
 
 **Importante**: Verifica que tu archivo `.env` tenga la variable correcta:
 ```env
-POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5433/degux?schema=public&sslmode=require"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:PASSWORD@VPS_IP_REDACTED:5433/inmogrid?schema=public&sslmode=require"
 ```
 
 ---
@@ -107,7 +107,7 @@ POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5433/degux
 ## 📂 Estructura de Archivos Creados
 
 ```
-degux.cl/
+inmogrid.cl/
 ├── prisma/
 │   ├── schema.prisma                        # ✅ Actualizado con Post, Plant, Collection
 │   └── seed-profiles.ts                     # ✅ Nuevo - Seed de datos de ejemplo
@@ -233,7 +233,7 @@ ssh -N -L 15432:localhost:5433 gabriel@VPS_IP_REDACTED
 **Solución**: El seed usa `upsert`, así que esto no debería pasar. Si ocurre, limpia los datos:
 ```bash
 npx prisma studio
-# Eliminar manualmente los usuarios mona@degux.cl y gabriel@degux.cl
+# Eliminar manualmente los usuarios mona@inmogrid.cl y gabriel@inmogrid.cl
 ```
 
 ### Perfil no se muestra (404)

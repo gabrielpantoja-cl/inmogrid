@@ -17,7 +17,7 @@
 # En PowerShell (ejecutar como usuario normal)
 
 # Navegar al directorio del proyecto
-cd c:\Users\gabri\Developer\degux.cl
+cd c:\Users\gabri\Developer\inmogrid.cl
 
 # Crear archivo de configuración local
 Copy-Item .env.local.example .env.local
@@ -51,7 +51,7 @@ npm run prisma:generate
 docker compose -f docker/docker-compose.local.yml up -d
 
 # Verificar que está corriendo
-docker ps | findstr degux
+docker ps | findstr inmogrid
 
 # Esperar 10 segundos para que inicialice
 Start-Sleep -Seconds 10
@@ -225,7 +225,7 @@ npm run test
 #!/bin/bash
 
 # Navegar al directorio del proyecto
-cd ~/Developer/degux.cl
+cd ~/Developer/inmogrid.cl
 # o donde esté el proyecto
 
 # Crear archivo de configuración local
@@ -267,7 +267,7 @@ sudo systemctl start docker
 docker compose -f docker/docker-compose.local.yml up -d
 
 # Verificar que los servicios están corriendo
-docker ps | grep degux
+docker ps | grep inmogrid
 
 # Esperar a que PostgreSQL esté listo
 echo "Esperando que PostgreSQL esté listo..."
@@ -291,14 +291,14 @@ sudo apt-get install -y postgresql postgresql-contrib postgis
 sudo systemctl start postgresql
 
 # Crear usuario y base de datos
-sudo -u postgres createuser -P degux_user
-sudo -u postgres createdb -O degux_user degux_dev
+sudo -u postgres createuser -P inmogrid_user
+sudo -u postgres createdb -O inmogrid_user inmogrid_dev
 
 # Habilitar PostGIS
-sudo -u postgres psql -d degux_dev -c "CREATE EXTENSION postgis;"
+sudo -u postgres psql -d inmogrid_dev -c "CREATE EXTENSION postgis;"
 
 # Actualizar .env.local
-# POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@localhost:5432/degux_dev?schema=public"
+# POSTGRES_PRISMA_URL="postgresql://inmogrid_user:PASSWORD@localhost:5432/inmogrid_dev?schema=public"
 ```
 
 ### Paso 4: Verificar Instalación
@@ -439,7 +439,7 @@ docker compose -f docker/docker-compose.local.yml restart postgres-local
 sleep 10
 
 # Verificar conexión
-psql postgresql://degux_user:degux_local_password@localhost:5432/degux_dev
+psql postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev
 ```
 
 #### ❌ "Module not found" en tests
@@ -475,24 +475,24 @@ docker compose -f docker/docker-compose.local.yml up -d
 1. **Crear script de inicio rápido**
    ```bash
    #!/bin/bash
-   # File: ~/start-degux.sh
+   # File: ~/start-inmogrid.sh
    
-   cd ~/Developer/degux.cl
+   cd ~/Developer/inmogrid.cl
    docker compose -f docker/docker-compose.local.yml up -d
    npm run dev
    ```
 
 2. **Alias útiles en ~/.bashrc**
    ```bash
-   alias degux="cd ~/Developer/degux.cl"
-   alias degux:dev="cd ~/Developer/degux.cl && npm run dev"
-   alias degux:test="cd ~/Developer/degux.cl && npm run test:watch"
-   alias degux:db="docker compose -f docker/docker-compose.local.yml up -d"
+   alias inmogrid="cd ~/Developer/inmogrid.cl"
+   alias inmogrid:dev="cd ~/Developer/inmogrid.cl && npm run dev"
+   alias inmogrid:test="cd ~/Developer/inmogrid.cl && npm run test:watch"
+   alias inmogrid:db="docker compose -f docker/docker-compose.local.yml up -d"
    ```
 
 3. **Usar tmux para múltiples terminales**
    ```bash
-   tmux new-session -d -s degux \
+   tmux new-session -d -s inmogrid \
      "npm run dev" \; \
      split-window -h "npm run test:watch" \; \
      split-window -v "npm run api:health-stats"
@@ -605,8 +605,8 @@ npm run dev
    - URIs autorizados:
      - `http://localhost:3000/api/auth/callback/google`
      - `http://localhost:3001/api/auth/callback/google`
-     - `https://degux.cl/api/auth/callback/google`
-     - `https://www.degux.cl/api/auth/callback/google`
+     - `https://inmogrid.cl/api/auth/callback/google`
+     - `https://www.inmogrid.cl/api/auth/callback/google`
 
 5. **Copiar credenciales:**
    ```
@@ -657,4 +657,4 @@ npm run dev
 
 Ahora puedes comenzar a programar en ambas plataformas sin problemas de compatibilidad.
 
-**¡Bienvenido a degux.cl! 🚀**
+**¡Bienvenido a inmogrid.cl! 🚀**

@@ -30,7 +30,7 @@ Swap Usado:   279Mi / 2.0Gi
 
 # Servicios Docker (8 contenedores activos)
 ✅ n8n-db           Up 17 minutes (healthy)
-✅ degux-web        Up 11 hours (healthy)
+✅ inmogrid-web        Up 11 hours (healthy)
 ✅ n8n              Up 12 hours (healthy)
 ✅ n8n-redis        Up 14 hours (healthy)
 ✅ nginx-proxy      Up 5 days
@@ -43,7 +43,7 @@ Swap Usado:   279Mi / 2.0Gi
 
 ## Resumen Ejecutivo
 
-El VPS de producción (VPS_IP_REDACTED) alcanzó el 100% de capacidad de disco, causando que PostgreSQL (n8n-db) crasheara con error `could not write init file: No space left on device`. La base de datos entró en modo recovery automático, dejando inaccesibles los servicios de degux.cl y N8N.
+El VPS de producción (VPS_IP_REDACTED) alcanzó el 100% de capacidad de disco, causando que PostgreSQL (n8n-db) crasheara con error `could not write init file: No space left on device`. La base de datos entró en modo recovery automático, dejando inaccesibles los servicios de inmogrid.cl y N8N.
 
 **Espacio Liberado Total:** 17.29 GB
 **Estado Final:** 74% de uso (42GB/58GB)
@@ -57,7 +57,7 @@ El VPS de producción (VPS_IP_REDACTED) alcanzó el 100% de capacidad de disco, 
 | 14:29:42 | Primeros errores PostgreSQL: `FATAL: could not write init file` |
 | 14:34:01 | PostgreSQL PANIC: `could not write to file "pg_logical/replorigin_checkpoint.tmp": No space left on device` |
 | 14:34:02 | PostgreSQL entra en recovery mode |
-| 14:34:02 | Todos los servicios que dependen de BD (degux.cl, N8N) se vuelven inaccesibles |
+| 14:34:02 | Todos los servicios que dependen de BD (inmogrid.cl, N8N) se vuelven inaccesibles |
 | 15:00:00 | Usuario reporta errores `PrismaClientInitializationError: Server has closed the connection` |
 | 15:05:00 | Inicio del diagnóstico |
 | 15:08:00 | Confirmación: disco al 100% (`/dev/vda1: 58G used, 0G available`) |
@@ -118,10 +118,10 @@ Volumes:        575.3MB (478.9MB reclaimables - 83%)
 
 | Servicio | Espacio | Estado |
 |----------|---------|--------|
-| **degux.cl** | 1.6GB | Normal (código + node_modules) |
-| **Docker degux-web** | 1.94GB | Normal (imagen Next.js) |
+| **inmogrid.cl** | 1.6GB | Normal (código + node_modules) |
+| **Docker inmogrid-web** | 1.94GB | Normal (imagen Next.js) |
 | **N8N** | 1.03GB | Normal (imagen base) |
-| **N8N Database** | 17MB | Excelente (degux + n8n en mismo container) |
+| **N8N Database** | 17MB | Excelente (inmogrid + n8n en mismo container) |
 | **PostgreSQL Container** | 603MB | Normal (PostGIS + PostgreSQL 15) |
 | **Luanti Landing Page** | 11MB | Normal |
 | **Portainer** | 268MB | Normal |
@@ -151,7 +151,7 @@ Total liberado: 16.29GB
 4. **Redes sin uso:** red docker antigua
 
 **Qué NO se eliminó:**
-- ✅ Imágenes de servicios activos (degux-web, n8n, n8n-db, nginx-proxy, luanti, portainer)
+- ✅ Imágenes de servicios activos (inmogrid-web, n8n, n8n-db, nginx-proxy, luanti, portainer)
 - ✅ Volúmenes activos (n8n_db_data, n8n_files, nginx_logs, portainer_data)
 - ✅ Datos de aplicaciones
 
@@ -178,7 +178,7 @@ PostgreSQL Container: n8n-db (postgis/postgis:15-3.4)
 ├── Puerto: 5432 (interno Docker)
 ├── Usuario: n8n
 └── Bases de Datos:
-    ├── degux       17MB (aplicación degux.cl)
+    ├── inmogrid       17MB (aplicación inmogrid.cl)
     ├── n8n         13MB (workflows N8N)
     ├── postgres    7.3MB (BD administrativa)
     ├── template0   7.3MB (template)
@@ -187,7 +187,7 @@ PostgreSQL Container: n8n-db (postgis/postgis:15-3.4)
 Total Disk Usage: 603MB (imagen base) + 52MB (datos)
 ```
 
-**Importante:** La BD de degux.cl y N8N comparten el mismo contenedor PostgreSQL, pero están aisladas en bases de datos separadas. Esto es eficiente en recursos y simplifica backups.
+**Importante:** La BD de inmogrid.cl y N8N comparten el mismo contenedor PostgreSQL, pero están aisladas en bases de datos separadas. Esto es eficiente en recursos y simplifica backups.
 
 ---
 
@@ -231,7 +231,7 @@ El servidor Luanti tiene un sistema de backup automático que NO implementa rota
 
 | Servicio | Estado Durante Incidente | Impacto |
 |----------|-------------------------|---------|
-| **degux.cl** | ❌ Offline | No se podía acceder a la aplicación Next.js (errors PrismaClientInitializationError) |
+| **inmogrid.cl** | ❌ Offline | No se podía acceder a la aplicación Next.js (errors PrismaClientInitializationError) |
 | **N8N** | ❌ Degradado | Workflows detenidos, UI inaccesible |
 | **PostgreSQL** | ❌ Recovery Mode | Base de datos en recovery, conexiones rechazadas |
 | **Luanti Server** | ✅ Sin impacto | Servidor de juego continuó funcionando (no depende de PostgreSQL) |
@@ -362,7 +362,7 @@ Esto eliminará:
 |---------------------|--------|-------------|--------|
 | **Vegan-Wetlands (Luanti)** | 24GB | 57% | ⚠️ Requiere rotación backups |
 | **Docker Images** | 2.51GB | 6% | ✅ Normal (limpiado) |
-| **degux.cl** | 1.6GB | 4% | ✅ Normal |
+| **inmogrid.cl** | 1.6GB | 4% | ✅ Normal |
 | **System (/var)** | 3.8GB | 9% | ✅ Normal |
 | **Logs (/var/log)** | 2.8GB | 7% | ✅ Normal |
 | **Temp files (/tmp)** | 837MB | 2% | ✅ Limpiado |
@@ -433,7 +433,7 @@ rm -rf /tmp/world /tmp/backup_extract /tmp/backup_*
 find /home/gabriel/Vegan-Wetlands/server/backups -name "*.tar.gz" -mtime +30 -delete
 
 # 8. Regenerar cliente Prisma (si está en desarrollo local)
-cd /home/gabriel/Documentos/degux.cl
+cd /home/gabriel/Documentos/inmogrid.cl
 npx prisma generate
 ```
 
@@ -451,7 +451,7 @@ npx prisma generate
 - **Logs PostgreSQL:** `docker logs n8n-db`
 - **Monitoreo Docker:** https://VPS_IP_REDACTED:9443 (Portainer)
 - **Digital Ocean Panel:** https://cloud.digitalocean.com/
-- **Repositorio degux.cl:** https://github.com/gabrielpantoja-cl/degux.cl
+- **Repositorio inmogrid.cl:** https://github.com/gabrielpantoja-cl/inmogrid.cl
 - **Repositorio Luanti:** https://github.com/gabrielpantoja-cl/Vegan-Wetlands
 
 ---

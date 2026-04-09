@@ -2,7 +2,7 @@
 
 ## 🎯 Resumen
 
-La nueva implementación de la API de GitHub Stars para **degux.cl** incluye todas las mejores prácticas recomendadas por GitHub, manejo completo de rate limiting, caching inteligente con ETags, y una arquitectura robusta para uso en producción.
+La nueva implementación de la API de GitHub Stars para **inmogrid.cl** incluye todas las mejores prácticas recomendadas por GitHub, manejo completo de rate limiting, caching inteligente con ETags, y una arquitectura robusta para uso en producción.
 
 ## 🆕 Mejoras Implementadas
 
@@ -35,7 +35,7 @@ console.log(`Estrellas: ${stars}`);
 ```typescript
 import { fetchGithubStarsEnhanced } from '@/lib/githubStars.enhanced';
 
-const result = await fetchGithubStarsEnhanced('gabrielpantoja-cl/degux.cl', {
+const result = await fetchGithubStarsEnhanced('gabrielpantoja-cl/inmogrid.cl', {
   token: process.env.GITHUB_TOKEN, // Opcional pero recomendado
   useCache: true,
   timeout: 5000
@@ -81,7 +81,7 @@ function Footer() {
     <div>
       Dale una estrella a nuestro proyecto: 
       <GitHubStarsSimple 
-        repo="gabrielpantoja-cl/degux.cl"
+        repo="gabrielpantoja-cl/inmogrid.cl"
         token={process.env.GITHUB_TOKEN}
         className="ml-2"
       />
@@ -277,11 +277,11 @@ export function Footer() {
   return (
     <footer className="border-t p-4">
       <div className="flex justify-between items-center">
-        <span>© 2025 degux.cl</span>
+        <span>© 2025 inmogrid.cl</span>
         <div className="flex items-center gap-2">
           <span>Star us on GitHub:</span>
           <GitHubStarsSimple 
-            repo="gabrielpantoja-cl/degux.cl"
+            repo="gabrielpantoja-cl/inmogrid.cl"
             token={process.env.GITHUB_TOKEN}
           />
         </div>
@@ -297,7 +297,7 @@ export function Footer() {
 import { GitHubStarsDisplay } from '@/components/features/github';
 
 const projects = [
-  'gabrielpantoja-cl/degux.cl',
+  'gabrielpantoja-cl/inmogrid.cl',
   'vercel/next.js',
   'facebook/react'
 ];

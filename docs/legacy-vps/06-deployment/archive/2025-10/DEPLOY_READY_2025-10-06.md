@@ -1,4 +1,4 @@
-# ✅ degux.cl - Listo para Deployment
+# ✅ inmogrid.cl - Listo para Deployment
 
 **Estado**: Todos los archivos corregidos y listos
 **Fecha**: 6 de Octubre, 2025
@@ -15,7 +15,7 @@ Scripts anteriores asumieron arquitectura **INCORRECTA**:
 
 ### ✅ Arquitectura Real
 ```
-Internet → Cloudflare → nginx-proxy (Docker) → degux-web (Docker)
+Internet → Cloudflare → nginx-proxy (Docker) → inmogrid-web (Docker)
 ```
 **Todo corre en Docker Compose**
 
@@ -47,7 +47,7 @@ chmod +x scripts/deploy-to-vps.sh
 1. Limpia PM2 (instalado por error)
 2. Pull código actualizado
 3. Rebuild contenedor Docker
-4. Reinicia degux-web
+4. Reinicia inmogrid-web
 5. Verifica health check
 6. Valida acceso público
 
@@ -89,7 +89,7 @@ chmod +x scripts/deploy-to-vps.sh
 ### Opción A: Push a GitHub (Automático)
 
 ```bash
-cd ~/Documentos/degux.cl
+cd ~/Documentos/inmogrid.cl
 
 # Commit todos los cambios
 git add .
@@ -97,7 +97,7 @@ git commit -m "Fix: Deployment Docker + endpoint /api/health"
 git push origin main
 
 # GitHub Actions se ejecuta automáticamente
-# Ver progreso en: https://github.com/gabrielpantoja-cl/degux.cl/actions
+# Ver progreso en: https://github.com/gabrielpantoja-cl/inmogrid.cl/actions
 ```
 
 **Tiempo**: 5-7 minutos (incluye build y verificaciones)
@@ -107,7 +107,7 @@ git push origin main
 ### Opción B: Script Local
 
 ```bash
-cd ~/Documentos/degux.cl
+cd ~/Documentos/inmogrid.cl
 
 # Primero hacer commit y push
 git add .
@@ -135,20 +135,20 @@ git push origin main
 ssh gabriel@VPS_IP_REDACTED
 
 # 3. Limpiar PM2
-pm2 delete degux-app 2>/dev/null || true
+pm2 delete inmogrid-app 2>/dev/null || true
 pm2 kill 2>/dev/null || true
 
 # 4. Actualizar código
-cd ~/degux.cl
+cd ~/inmogrid.cl
 git pull origin main
 
 # 5. Rebuild Docker
 cd ~/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build degux-web
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build inmogrid-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # 6. Verificar
-docker logs degux-web -f
+docker logs inmogrid-web -f
 ```
 
 ---
@@ -157,19 +157,19 @@ docker logs degux-web -f
 
 ### 1. Contenedor Healthy
 ```bash
-docker ps | grep degux-web
-# degux-web    Up X minutes (healthy)  ← NO "unhealthy"
+docker ps | grep inmogrid-web
+# inmogrid-web    Up X minutes (healthy)  ← NO "unhealthy"
 ```
 
 ### 2. Health Check OK
 ```bash
-curl https://degux.cl/api/health
+curl https://inmogrid.cl/api/health
 # {"status":"ok","database":"connected",...}
 ```
 
 ### 3. Sitio Accesible
 ```bash
-curl -I https://degux.cl/
+curl -I https://inmogrid.cl/
 # HTTP/2 200
 ```
 
@@ -197,7 +197,7 @@ curl -I https://degux.cl/
 ### Problema: GitHub Actions falla
 
 **Ver logs**:
-1. Ve a https://github.com/gabrielpantoja-cl/degux.cl/actions
+1. Ve a https://github.com/gabrielpantoja-cl/inmogrid.cl/actions
 2. Click en el workflow que falló
 3. Revisa los logs de cada step
 
@@ -219,15 +219,15 @@ curl -I https://degux.cl/
 ssh gabriel@VPS_IP_REDACTED
 
 # Ver logs
-docker logs degux-web --tail 50
+docker logs inmogrid-web --tail 50
 
 # Test manual health check
-docker exec degux-web wget -q -O- http://localhost:3000/api/health
+docker exec inmogrid-web wget -q -O- http://localhost:3000/api/health
 
 # Si falla, rebuild
 cd ~/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build --no-cache inmogrid-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 ```
 
 ---
@@ -236,12 +236,12 @@ docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 
 ```bash
 # Purgar cache Next.js en contenedor
-docker exec degux-web rm -rf /app/.next/cache
+docker exec inmogrid-web rm -rf /app/.next/cache
 
 # Rebuild completo
 cd ~/vps-do
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build --no-cache inmogrid-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # Purgar cache Cloudflare
 # Dashboard → Caching → Purge Everything
@@ -265,7 +265,7 @@ docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
 
 ### 1. Commit y Push (REQUERIDO)
 ```bash
-cd ~/Documentos/degux.cl
+cd ~/Documentos/inmogrid.cl
 git add .
 git commit -m "Fix: Deployment Docker + endpoint /api/health
 
@@ -275,18 +275,18 @@ git commit -m "Fix: Deployment Docker + endpoint /api/health
 - Actualizar documentación deployment
 - Corregir CLAUDE.md con arquitectura Docker
 
-Resuelve: Contenedor degux-web unhealthy"
+Resuelve: Contenedor inmogrid-web unhealthy"
 git push origin main
 ```
 
 ### 2. Monitorear Deployment
-- GitHub Actions: https://github.com/gabrielpantoja-cl/degux.cl/actions
-- Logs VPS: `docker logs degux-web -f`
+- GitHub Actions: https://github.com/gabrielpantoja-cl/inmogrid.cl/actions
+- Logs VPS: `docker logs inmogrid-web -f`
 
 ### 3. Verificar Producción
-- https://degux.cl/
-- https://degux.cl/api/health
-- https://api.degux.cl/
+- https://inmogrid.cl/
+- https://inmogrid.cl/api/health
+- https://api.inmogrid.cl/
 
 ---
 
@@ -301,11 +301,11 @@ git push origin main
 
 ## ✨ Estado Final Esperado
 
-- ✅ Contenedor `degux-web` healthy
+- ✅ Contenedor `inmogrid-web` healthy
 - ✅ PM2 eliminado (no se necesita)
 - ✅ Health check funcionando
 - ✅ GitHub Actions con Docker
-- ✅ https://degux.cl/ accesible
+- ✅ https://inmogrid.cl/ accesible
 - ✅ Deployment automático en cada push
 
 ---

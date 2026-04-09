@@ -81,9 +81,9 @@
 
 ### 🔄 MOVER - Archivos Mal Ubicados (4 archivos/carpetas)
 
-#### 5. nginx-degux.conf (976 bytes)
+#### 5. nginx-inmogrid.conf (976 bytes)
 **Ubicación actual**: Raíz
-**Acción**: 🔄 MOVER a `docs/06-deployment/configs/nginx-degux.conf`
+**Acción**: 🔄 MOVER a `docs/06-deployment/configs/nginx-inmogrid.conf`
 **Razón**: Es configuración de deployment, no debe estar en raíz
 
 #### 6. prisma-studio-production.sh (1.4K)
@@ -146,7 +146,7 @@ mkdir -p docs/06-deployment/configs
 mkdir -p docs/03-arquitectura/diagrams
 
 # Mover nginx config
-mv nginx-degux.conf docs/06-deployment/configs/
+mv nginx-inmogrid.conf docs/06-deployment/configs/
 
 # Mover script de prisma
 mv prisma-studio-production.sh scripts/
@@ -164,8 +164,8 @@ mv ERD docs/03-arquitectura/diagrams/
 # Buscar referencias a prisma-studio-production.sh
 grep -r "prisma-studio-production" .
 
-# Buscar referencias a nginx-degux.conf
-grep -r "nginx-degux.conf" .
+# Buscar referencias a nginx-inmogrid.conf
+grep -r "nginx-inmogrid.conf" .
 ```
 
 ---
@@ -229,7 +229,7 @@ Pero es más convencional dejarlo en raíz.
 ## 🎨 Estructura Final Propuesta
 
 ```
-degux.cl/
+inmogrid.cl/
 ├── 📄 Archivos de configuración (16 archivos)
 │   ├── package.json, package-lock.json
 │   ├── next.config.js, next-env.d.ts
@@ -254,7 +254,7 @@ degux.cl/
 │   │   │   └── diagrams/  ← ERD MOVIDO AQUÍ
 │   │   ├── 06-deployment/
 │   │   │   └── configs/
-│   │   │       └── nginx-degux.conf  ← MOVIDO
+│   │   │       └── nginx-inmogrid.conf  ← MOVIDO
 │   │   └── 07-maintenance/
 │   │       └── archive/  ← ARCHIVE MOVIDO AQUÍ
 │   ├── __tests__/

@@ -3,7 +3,7 @@
 # ==========================================
 # 🧪 Script de Test de Autenticación
 # ==========================================
-# Proyecto: degux.cl
+# Proyecto: inmogrid.cl
 # Descripción: Prueba endpoints de autenticación en producción
 # Uso: ./scripts/test-auth.sh [local|vps]
 # ==========================================
@@ -20,13 +20,13 @@ NC='\033[0m' # No Color
 # Determinar modo
 MODE="${1:-vps}"
 
-echo "🧪 Test de Autenticación - degux.cl"
+echo "🧪 Test de Autenticación - inmogrid.cl"
 echo "===================================="
 echo ""
 
 if [ "$MODE" = "vps" ]; then
   echo "📍 Modo: VPS (Producción)"
-  BASE_URL="https://degux.cl"
+  BASE_URL="https://inmogrid.cl"
 else
   echo "📍 Modo: Local (Desarrollo)"
   BASE_URL="http://localhost:3000"
@@ -141,7 +141,7 @@ if [ "$MODE" = "vps" ]; then
   echo "🔒 Test 7: Verificando certificado SSL..."
   echo "------------------------------------------"
 
-  SSL_INFO=$(curl -vI https://degux.cl 2>&1 | grep -E "SSL|TLS|subject:" | head -5)
+  SSL_INFO=$(curl -vI https://inmogrid.cl 2>&1 | grep -E "SSL|TLS|subject:" | head -5)
 
   if echo "$SSL_INFO" | grep -q "TLS"; then
     echo -e "${GREEN}✅ Certificado SSL válido${NC}"
@@ -158,7 +158,7 @@ if [ "$MODE" = "vps" ]; then
   echo "📜 Test 8: Últimos logs de autenticación..."
   echo "--------------------------------------------"
 
-  echo "Ejecutando en VPS: ssh gabriel@VPS_IP_REDACTED 'docker logs degux-web --tail 50 2>&1 | grep AUTH'"
+  echo "Ejecutando en VPS: ssh gabriel@VPS_IP_REDACTED 'docker logs inmogrid-web --tail 50 2>&1 | grep AUTH'"
   echo ""
   echo "Nota: Debes tener acceso SSH al VPS para ver logs"
   echo ""

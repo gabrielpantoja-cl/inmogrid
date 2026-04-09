@@ -160,7 +160,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           <p className="text-sm">
             Perfil en{' '}
             <Link href="/" className="font-semibold text-green-700 hover:underline">
-              degux.cl
+              inmogrid.cl
             </Link>
             {' '} - Ecosistema digital colaborativo
           </p>
@@ -191,12 +191,12 @@ export async function generateMetadata({ params }: ProfilePageProps) {
   });
 
   if (!profile) {
-    return { title: 'Perfil no encontrado | degux.cl' };
+    return { title: 'Perfil no encontrado | inmogrid.cl' };
   }
 
   return {
-    title: `${profile.fullName || profile.username} | degux.cl`,
-    description: profile.tagline || profile.bio?.substring(0, 160) || `Perfil de ${profile.fullName} en degux.cl`,
+    title: `${profile.fullName || profile.username} | inmogrid.cl`,
+    description: profile.tagline || profile.bio?.substring(0, 160) || `Perfil de ${profile.fullName} en inmogrid.cl`,
     openGraph: {
       title: profile.fullName || profile.username,
       description: profile.tagline || profile.bio?.substring(0, 160),

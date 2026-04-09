@@ -45,7 +45,7 @@ model Profile {
   Connection_receiverIdToProfile  Connection[] @relation("Connection_receiverIdToProfile")
   Connection_requesterIdToProfile Connection[] @relation("Connection_requesterIdToProfile")
 
-  @@map("degux_profiles")
+  @@map("inmogrid_profiles")
 }
 
 // ============================================================
@@ -66,7 +66,7 @@ model Connection {
   @@unique([requesterId, receiverId])
   @@index([receiverId, status])
   @@index([requesterId, status])
-  @@map("degux_connections")
+  @@map("inmogrid_connections")
 }
 
 // ============================================================
@@ -128,7 +128,7 @@ model Event {
   @@index([status, startDate])
   @@index([region, status])
   @@index([isCommercial, status])
-  @@map("degux_events")
+  @@map("inmogrid_events")
 }
 
 // ============================================================
@@ -148,7 +148,7 @@ model ProfessionalProfile {
   updatedAt       DateTime  @updatedAt @map("updated_at")
   profile         Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("degux_professional_profiles")
+  @@map("inmogrid_professional_profiles")
 }
 
 // ============================================================
@@ -163,7 +163,7 @@ model AuditLog {
   createdAt DateTime @default(now()) @map("created_at")
   profile   Profile  @relation(fields: [userId], references: [id])
 
-  @@map("degux_audit_logs")
+  @@map("inmogrid_audit_logs")
 }
 
 model ChatMessage {
@@ -175,7 +175,7 @@ model ChatMessage {
   profile   Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
-  @@map("degux_chat_messages")
+  @@map("inmogrid_chat_messages")
 }
 
 // ============================================================

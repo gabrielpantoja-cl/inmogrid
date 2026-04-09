@@ -1,4 +1,4 @@
-# 📑 ÍNDICE DE DOCUMENTACIÓN - degux.cl
+# 📑 ÍNDICE DE DOCUMENTACIÓN - inmogrid.cl
 
 **Fecha:** 2 de enero de 2026  
 **Estado:** ✅ VERIFICACIÓN COMPLETADA
@@ -281,7 +281,7 @@ docs/
 ## 💾 ESTRUCTURA DE CARPETAS PRINCIPAL
 
 ```
-degux.cl/
+inmogrid.cl/
 ├── 📁 docs/                           # 📚 DOCUMENTACIÓN COMPLETA
 │   ├── 00-setup/                      # ⭐ Setup inicial
 │   ├── 01-introduccion/               # Conceptual

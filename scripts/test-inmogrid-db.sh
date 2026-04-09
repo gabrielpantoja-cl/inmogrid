@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test Suite para degux-db (PostgreSQL dedicado)
+# Test Suite para inmogrid-db (PostgreSQL dedicado)
 # Verifica la integridad y funcionalidad de la base de datos migrada
 
 set -e
@@ -12,12 +12,12 @@ YELLOW="\033[0;33m"
 BLUE="\033[0;34m"
 RESET="\033[0m"
 
-API_URL="https://degux.cl/api/public"
+API_URL="https://inmogrid.cl/api/public"
 TEST_RESULTS=()
 
 echo -e "${BOLD}${BLUE}"
 echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║         Test Suite degux-db (PostgreSQL Dedicado)        ║"
+echo "║         Test Suite inmogrid-db (PostgreSQL Dedicado)        ║"
 echo "╚═══════════════════════════════════════════════════════════╝"
 echo -e "${RESET}"
 
@@ -194,7 +194,7 @@ echo
 
 if [ "$FAILED" -eq 0 ]; then
     echo -e "${GREEN}${BOLD}🎉 ¡TODOS LOS TESTS PASARON!${RESET}"
-    echo -e "La base de datos degux-db está funcionando correctamente."
+    echo -e "La base de datos inmogrid-db está funcionando correctamente."
     exit 0
 else
     echo -e "${YELLOW}${BOLD}⚠️  ALGUNOS TESTS FALLARON${RESET}"

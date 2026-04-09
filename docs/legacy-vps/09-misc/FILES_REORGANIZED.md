@@ -1,4 +1,4 @@
-# ✅ Archivos Reorganizados - degux.cl
+# ✅ Archivos Reorganizados - inmogrid.cl
 
 **Fecha:** 2 de enero de 2026  
 **Acción:** Movimiento de 8 documentos de verificación a estructura de docs/

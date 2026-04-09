@@ -9,7 +9,7 @@
 
 ## Contexto
 
-degux.cl es un ecosistema digital colaborativo para el sector inmobiliario chileno (perfiles + posts + networking + referenciales + chat Sofia + eventos + plantas + tasaciones futuras). En Fase 1 el proyecto creció a:
+inmogrid.cl es un ecosistema digital colaborativo para el sector inmobiliario chileno (perfiles + posts + networking + referenciales + chat Sofia + eventos + plantas + tasaciones futuras). En Fase 1 el proyecto creció a:
 
 - 128 componentes en `src/components/` (mezcla `ui/`, `features/`, `forms/`, `networking/`, `referenciales/`)
 - 22 API routes en `src/app/api/`

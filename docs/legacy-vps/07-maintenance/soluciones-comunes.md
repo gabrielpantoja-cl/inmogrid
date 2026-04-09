@@ -1,8 +1,8 @@
-# 🚨 Soluciones Comunes - degux.cl
+# 🚨 Soluciones Comunes - inmogrid.cl
 
 ## 📋 Guía de Troubleshooting
 
-Documentación consolidada de errores comunes y sus soluciones para el proyecto degux.cl.
+Documentación consolidada de errores comunes y sus soluciones para el proyecto inmogrid.cl.
 
 ---
 
@@ -22,21 +22,21 @@ Documentación consolidada de errores comunes y sus soluciones para el proyecto 
 ssh gabriel@VPS_IP_REDACTED
 
 # 1. Actualizar código
-cd ~/degux.cl
+cd ~/inmogrid.cl
 git pull origin main
 
 # 2. Rebuild imagen Docker (incluye todos compose files)
 cd ~/vps-do
 docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
-  -f docker-compose.degux.yml build degux-web
+  -f docker-compose.inmogrid.yml build inmogrid-web
 
 # 3. Recrear contenedor
 docker compose -f docker-compose.yml -f docker-compose.n8n.yml \
-  -f docker-compose.degux.yml up -d degux-web
+  -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # 4. Verificar deployment
-docker ps | grep degux-web  # Debe mostrar (healthy)
-curl -I https://degux.cl/api/health  # Debe responder 200
+docker ps | grep inmogrid-web  # Debe mostrar (healthy)
+curl -I https://inmogrid.cl/api/health  # Debe responder 200
 ```
 
 **Prevención:**

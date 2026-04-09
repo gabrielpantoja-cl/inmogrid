@@ -76,7 +76,7 @@
 
 ### 📄 MANTENER (1 archivo de configuración)
 
-14. **dns-degux.cl.txt**
+14. **dns-inmogrid.cl.txt**
     - Configuración DNS de producción
     - Referencia crítica
 
@@ -107,7 +107,7 @@ docs/06-deployment/
 ├── SISTEMA_ACTUAL_2025-10-11.md
 ├── RECOVERY_INSTRUCTIONS.md
 ├── RESILIENCIA_Y_ERROR_HANDLING.md
-├── dns-degux.cl.txt
+├── dns-inmogrid.cl.txt
 ├── postmortems/                       ← NUEVO: Organizar postmortems
 │   ├── README.md
 │   ├── 2025-10-07_DISK_FULL.md

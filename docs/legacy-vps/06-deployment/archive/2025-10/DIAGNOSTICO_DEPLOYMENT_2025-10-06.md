@@ -1,4 +1,4 @@
-# Diagnóstico y Solución - degux.cl Deployment
+# Diagnóstico y Solución - inmogrid.cl Deployment
 **Fecha**: 6 de Octubre, 2025
 **Estado Inicial**: Aplicación mostrando contenido incorrecto
 **Estado Final**: Script de deployment automatizado creado
@@ -8,20 +8,20 @@
 ## 🔍 Diagnóstico Realizado
 
 ### Problema Reportado
-degux.cl mostraba contenido antiguo/incorrecto. Se sospechaba cache de Cloudflare pero el problema era más profundo.
+inmogrid.cl mostraba contenido antiguo/incorrecto. Se sospechaba cache de Cloudflare pero el problema era más profundo.
 
 ### Hallazgos del Diagnóstico
 
 #### ❌ Problemas Críticos Identificados
 
-1. **NO existe configuración Nginx para degux.cl**
+1. **NO existe configuración Nginx para inmogrid.cl**
    ```bash
    $ ls /etc/nginx/sites-available/
    default  pitutito.cl
-   # ← degux.cl NO EXISTE
+   # ← inmogrid.cl NO EXISTE
    ```
    - Solo existe configuración para `pitutito.cl`
-   - Nginx no sabe cómo enrutar tráfico a degux.cl
+   - Nginx no sabe cómo enrutar tráfico a inmogrid.cl
 
 2. **PM2 NO está instalado**
    ```bash
@@ -42,7 +42,7 @@ degux.cl mostraba contenido antiguo/incorrecto. Se sospechaba cache de Cloudflar
 
 4. **DNS apunta a Cloudflare proxy**
    ```bash
-   $ dig +short degux.cl
+   $ dig +short inmogrid.cl
    104.21.4.42      # Cloudflare
    172.67.131.164   # Cloudflare
    # VPS real: VPS_IP_REDACTED
@@ -52,12 +52,12 @@ degux.cl mostraba contenido antiguo/incorrecto. Se sospechaba cache de Cloudflar
 
 5. **Inconsistencia en documentación**
    - `DEPLOYMENT_PRODUCTION_GUIDE.md` dice: Puerto 3000
-   - `degux.cl.conf.example` dice: Puerto 3001
+   - `inmogrid.cl.conf.example` dice: Puerto 3001
    - Proceso real: Puerto 3000 (sin PM2)
 
 #### ✅ Estado Positivo
 
-- ✅ Repositorio clonado: `/home/gabriel/degux.cl`
+- ✅ Repositorio clonado: `/home/gabriel/inmogrid.cl`
 - ✅ Build existe: `.next/BUILD_ID = TJy8ysiKCts3TJtKc7OuW`
 - ✅ Aplicación funcional en puerto 3000
 - ✅ Nginx funcionando (sirve pitutito.cl correctamente)
@@ -75,7 +75,7 @@ Cloudflare (104.21.4.42)
     ↓
 VPS Nginx (VPS_IP_REDACTED)
     ↓
-??? (sin configuración para degux.cl)
+??? (sin configuración para inmogrid.cl)
     ❌ NO HAY RUTA CONFIGURADA
 
 Proceso manual: next-server en :3000 (sin PM2)
@@ -91,7 +91,7 @@ VPS Nginx (VPS_IP_REDACTED:443)
     ↓
 Nginx reverse proxy (SSL con certbot)
     ↓
-PM2 → degux-app → Next.js (:3000)
+PM2 → inmogrid-app → Next.js (:3000)
 ```
 
 ---
@@ -100,12 +100,12 @@ PM2 → degux-app → Next.js (:3000)
 
 He creado **3 scripts** para resolver el problema:
 
-### 1. `deploy-degux-simple.sh` ⭐ RECOMENDADO
+### 1. `deploy-inmogrid-simple.sh` ⭐ RECOMENDADO
 
-**Script todo-en-uno** que configura completamente degux.cl:
+**Script todo-en-uno** que configura completamente inmogrid.cl:
 
 ```bash
-sudo bash /home/gabriel/vps-do/scripts/deploy-degux-simple.sh
+sudo bash /home/gabriel/vps-do/scripts/deploy-inmogrid-simple.sh
 ```
 
 **Qué hace:**
@@ -113,7 +113,7 @@ sudo bash /home/gabriel/vps-do/scripts/deploy-degux-simple.sh
 2. ✅ Verifica build de Next.js (o lo ejecuta)
 3. ✅ Detiene proceso manual en puerto 3000
 4. ✅ Inicia aplicación con PM2 (autostart configurado)
-5. ✅ Crea configuración Nginx para degux.cl
+5. ✅ Crea configuración Nginx para inmogrid.cl
 6. ✅ Configura SSL con `certbot --nginx` (automático)
 7. ✅ Habilita redirect HTTP → HTTPS
 
@@ -125,30 +125,30 @@ sudo bash /home/gabriel/vps-do/scripts/deploy-degux-simple.sh
 
 ---
 
-### 2. `setup-degux-production.sh`
+### 2. `setup-inmogrid-production.sh`
 
 Script alternativo si prefieres control manual del SSL:
 
 ```bash
-sudo bash /home/gabriel/vps-do/scripts/setup-degux-production.sh
+sudo bash /home/gabriel/vps-do/scripts/setup-inmogrid-production.sh
 ```
 
 **Diferencia:** Crea config Nginx HTTP y deja SSL para después.
 
 ---
 
-### 3. `enable-ssl-degux.sh`
+### 3. `enable-ssl-inmogrid.sh`
 
 Complemento del script #2 para habilitar SSL manualmente:
 
 ```bash
 # Primero generar certificados
 sudo certbot certonly --webroot -w /var/www/letsencrypt \
-  -d degux.cl -d www.degux.cl \
-  --email admin@degux.cl --agree-tos
+  -d inmogrid.cl -d www.inmogrid.cl \
+  --email admin@inmogrid.cl --agree-tos
 
 # Luego habilitar HTTPS
-sudo bash /home/gabriel/vps-do/scripts/enable-ssl-degux.sh
+sudo bash /home/gabriel/vps-do/scripts/enable-ssl-inmogrid.sh
 ```
 
 ---
@@ -168,7 +168,7 @@ cd /home/gabriel/vps-do
 git pull origin main
 
 # 4. Ejecutar script automatizado
-sudo bash scripts/deploy-degux-simple.sh
+sudo bash scripts/deploy-inmogrid-simple.sh
 ```
 
 **Tiempo estimado:** 5-10 minutos (incluye SSL)
@@ -187,22 +187,22 @@ sudo npm install -g pm2
 kill $(lsof -ti:3000)
 
 # 3. Iniciar con PM2
-cd /home/gabriel/degux.cl
-PORT=3000 pm2 start npm --name "degux-app" -- start
+cd /home/gabriel/inmogrid.cl
+PORT=3000 pm2 start npm --name "inmogrid-app" -- start
 pm2 save
 pm2 startup
 
 # 4. Crear config Nginx
-sudo nano /etc/nginx/sites-available/degux.cl
+sudo nano /etc/nginx/sites-available/inmogrid.cl
 # (copiar contenido del script)
 
 # 5. Habilitar sitio
-sudo ln -sf /etc/nginx/sites-available/degux.cl /etc/nginx/sites-enabled/
+sudo ln -sf /etc/nginx/sites-available/inmogrid.cl /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 
 # 6. Configurar SSL
-sudo certbot --nginx -d degux.cl -d www.degux.cl
+sudo certbot --nginx -d inmogrid.cl -d www.inmogrid.cl
 ```
 
 ---
@@ -216,7 +216,7 @@ sudo certbot --nginx -d degux.cl -d www.degux.cl
 ```
 Cloudflare Dashboard:
 - Tipo: A
-- Nombre: degux.cl
+- Nombre: inmogrid.cl
 - Contenido: VPS_IP_REDACTED
 - Proxy: ⚪ DNS only (GRIS) ← IMPORTANTE
 - TTL: Auto
@@ -241,9 +241,9 @@ Puedes habilitar Cloudflare CDN:
 ### 1. Verificar PM2
 ```bash
 pm2 list
-# Debe mostrar "degux-app" en estado "online"
+# Debe mostrar "inmogrid-app" en estado "online"
 
-pm2 logs degux-app --lines 20
+pm2 logs inmogrid-app --lines 20
 # Debe mostrar logs sin errores
 ```
 
@@ -258,7 +258,7 @@ curl -I http://127.0.0.1:3000/
 
 ### 3. Verificar SSL
 ```bash
-curl -I https://degux.cl/
+curl -I https://inmogrid.cl/
 # Debe mostrar:
 # HTTP/2 200
 # x-nextjs-cache: ...
@@ -267,10 +267,10 @@ curl -I https://degux.cl/
 
 ### 4. Verificar Redirect HTTP → HTTPS
 ```bash
-curl -I http://degux.cl/
+curl -I http://inmogrid.cl/
 # Debe mostrar:
 # HTTP/1.1 301 Moved Permanently
-# Location: https://degux.cl/
+# Location: https://inmogrid.cl/
 ```
 
 ---
@@ -294,7 +294,7 @@ sudo kill <PID>
 ### Problema: SSL falla con certbot
 ```bash
 # Verificar DNS apunta al VPS
-dig +short degux.cl
+dig +short inmogrid.cl
 # Debe mostrar: VPS_IP_REDACTED
 
 # Verificar Cloudflare en modo "DNS only" (gris)
@@ -304,14 +304,14 @@ dig +short degux.cl
 ### Problema: Cambios no se reflejan
 ```bash
 # 1. Limpiar cache de Next.js
-cd /home/gabriel/degux.cl
+cd /home/gabriel/inmogrid.cl
 rm -rf .next/cache
 
 # 2. Rebuild
 npm run build
 
 # 3. Reiniciar PM2
-pm2 restart degux-app
+pm2 restart inmogrid-app
 
 # 4. Purgar cache Cloudflare (si está en modo proxy)
 # Dashboard → Caching → Purge Everything
@@ -323,26 +323,26 @@ pm2 restart degux-app
 
 ```bash
 # Ver logs en tiempo real
-pm2 logs degux-app
+pm2 logs inmogrid-app
 
 # Ver solo errores
-pm2 logs degux-app --err
+pm2 logs inmogrid-app --err
 
 # Ver métricas (CPU, RAM)
 pm2 monit
 
 # Reiniciar app
-pm2 restart degux-app
+pm2 restart inmogrid-app
 
 # Reiniciar con nuevas variables de entorno
-pm2 restart degux-app --update-env
+pm2 restart inmogrid-app --update-env
 
 # Ver info del proceso
-pm2 info degux-app
+pm2 info inmogrid-app
 
 # Ver logs de Nginx
-sudo tail -f /var/log/nginx/degux_access.log
-sudo tail -f /var/log/nginx/degux_error.log
+sudo tail -f /var/log/nginx/inmogrid_access.log
+sudo tail -f /var/log/nginx/inmogrid_error.log
 ```
 
 ---
@@ -353,10 +353,10 @@ sudo tail -f /var/log/nginx/degux_error.log
 ```
 vps-do/
 ├── scripts/
-│   ├── deploy-degux-simple.sh       ← Script principal (todo-en-uno)
-│   ├── setup-degux-production.sh    ← Setup sin SSL automático
-│   └── enable-ssl-degux.sh          ← Habilitar SSL manualmente
-├── docs/services/degux/
+│   ├── deploy-inmogrid-simple.sh       ← Script principal (todo-en-uno)
+│   ├── setup-inmogrid-production.sh    ← Setup sin SSL automático
+│   └── enable-ssl-inmogrid.sh          ← Habilitar SSL manualmente
+├── docs/services/inmogrid/
 │   └── DIAGNOSTICO_DEPLOYMENT_2025-10-06.md  ← Este archivo
 ```
 
@@ -364,34 +364,34 @@ vps-do/
 ```
 VPS (VPS_IP_REDACTED):
 ├── PM2 instalado globalmente
-├── /etc/nginx/sites-available/degux.cl  ← Nueva config
-├── /etc/nginx/sites-enabled/degux.cl    ← Symlink habilitado
-├── /etc/letsencrypt/live/degux.cl/      ← Certificados SSL
-└── /home/gabriel/degux.cl/              ← App corriendo con PM2
+├── /etc/nginx/sites-available/inmogrid.cl  ← Nueva config
+├── /etc/nginx/sites-enabled/inmogrid.cl    ← Symlink habilitado
+├── /etc/letsencrypt/live/inmogrid.cl/      ← Certificados SSL
+└── /home/gabriel/inmogrid.cl/              ← App corriendo con PM2
 ```
 
 ---
 
 ## ✅ Estado Final Esperado
 
-Después de ejecutar `deploy-degux-simple.sh`:
+Después de ejecutar `deploy-inmogrid-simple.sh`:
 
 - ✅ PM2 instalado y configurado
-- ✅ degux-app corriendo en puerto 3000 (PM2)
+- ✅ inmogrid-app corriendo en puerto 3000 (PM2)
 - ✅ Nginx configurado como reverse proxy
 - ✅ SSL/TLS configurado (Let's Encrypt)
 - ✅ HTTP → HTTPS redirect activo
 - ✅ PM2 autostart habilitado (reboot safe)
 - ✅ Logs persistentes con PM2
-- ✅ https://degux.cl accesible y funcional
+- ✅ https://inmogrid.cl accesible y funcional
 
 ---
 
 ## 🔗 Referencias
 
-- **Repo App**: https://github.com/gabrielpantoja-cl/degux.cl
+- **Repo App**: https://github.com/gabrielpantoja-cl/inmogrid.cl
 - **Repo VPS**: https://github.com/gabrielpantoja-cl/vps-do
-- **Guía Deployment**: `docs/services/degux/DEPLOYMENT_PRODUCTION_GUIDE.md`
+- **Guía Deployment**: `docs/services/inmogrid/DEPLOYMENT_PRODUCTION_GUIDE.md`
 - **PM2 Docs**: https://pm2.keymetrics.io/
 - **Certbot Docs**: https://certbot.eff.org/
 

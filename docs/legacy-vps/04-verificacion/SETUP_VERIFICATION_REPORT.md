@@ -1,4 +1,4 @@
-# 📋 Reporte de Verificación de Configuración - degux.cl
+# 📋 Reporte de Verificación de Configuración - inmogrid.cl
 
 **Fecha de verificación:** 2 de enero de 2026  
 **Estado:** ✅ **TODO ESTÁ CORRECTAMENTE CONFIGURADO**
@@ -7,7 +7,7 @@
 
 ## 🎯 Resumen General
 
-El repositorio `degux.cl` está completamente configurado y listo para desarrollo tanto en **Linux (principal)** como en **Windows (secundario)**. Se han detectado todas las configuraciones necesarias para ambas plataformas.
+El repositorio `inmogrid.cl` está completamente configurado y listo para desarrollo tanto en **Linux (principal)** como en **Windows (secundario)**. Se han detectado todas las configuraciones necesarias para ambas plataformas.
 
 ---
 
@@ -15,7 +15,7 @@ El repositorio `degux.cl` está completamente configurado y listo para desarroll
 
 | Aspecto | Valor |
 |--------|-------|
-| **Nombre** | degux-cl |
+| **Nombre** | inmogrid-cl |
 | **Versión** | 0.1.0 |
 | **Estado Git** | ✅ Limpio (sin cambios pendientes) |
 | **Rama** | main (sincronizado con origen) |
@@ -70,7 +70,7 @@ El repositorio `degux.cl` está completamente configurado y listo para desarroll
 ### 🐧 En Linux (Recomendado)
 ```bash
 # Variables de entorno configuradas en .env.local
-POSTGRES_PRISMA_URL="postgresql://degux_user:degux_local_password@localhost:5432/degux_dev?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev?schema=public"
 NEXTAUTH_SECRET="IfBvEpoXetsQVqiCAwOTxkdJNSlzYcgm"
 NEXTAUTH_URL="http://localhost:3000"
 
@@ -112,7 +112,7 @@ npm run test:e2e              # E2E tests
 ## 4️⃣ Estructura de Directorios ✅
 
 ```
-degux.cl/
+inmogrid.cl/
 ├── src/                          # Código fuente principal
 │   ├── app/                      # Rutas y layouts de Next.js
 │   ├── components/               # Componentes React reutilizables
@@ -221,7 +221,7 @@ cp .env.local.example .env.local
 - ✅ Adminer para gestión de BD (puerto 8080)
 - ✅ Health checks configurados
 - ✅ Volúmenes para persistencia
-- ✅ Red personalizada `degux-local-network`
+- ✅ Red personalizada `inmogrid-local-network`
 - ✅ Variables de entorno correctas
 
 **Para usar:**
@@ -434,11 +434,11 @@ npm run prisma:generate
 
 ## 🎉 Conclusión
 
-**El repositorio degux.cl está 100% listo para desarrollo en ambas plataformas.**
+**El repositorio inmogrid.cl está 100% listo para desarrollo en ambas plataformas.**
 
 Puedes comenzar a programar inmediatamente en Windows y sincronizar cambios a Linux sin problemas de compatibilidad. Todos los scripts, configuraciones y dependencias están correctamente configurados.
 
-**¡Bienvenido a degux.cl! 🚀**
+**¡Bienvenido a inmogrid.cl! 🚀**
 
 ---
 

@@ -2,7 +2,7 @@
  * 🧪 Test E2E - Google OAuth 2.0 Authentication on VPS
  *
  * Este test verifica el flujo completo de autenticación OAuth de Google
- * desplegado en el VPS de producción (https://degux.cl).
+ * desplegado en el VPS de producción (https://inmogrid.cl).
  *
  * IMPORTANTE:
  * - Usa el estado de autenticación guardado por auth.setup.ts

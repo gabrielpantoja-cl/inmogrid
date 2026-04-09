@@ -9,7 +9,7 @@
 
 ## 🎯 Resumen en 30 Segundos
 
-El sitio degux.cl estuvo inaccesible durante ~5 horas debido a un contenedor Docker en estado "unhealthy". Se recuperó en 5 minutos con un simple reinicio. Como resultado, se implementaron **error boundaries globales** y se mejoró significativamente la **documentación de resiliencia**.
+El sitio inmogrid.cl estuvo inaccesible durante ~5 horas debido a un contenedor Docker en estado "unhealthy". Se recuperó en 5 minutos con un simple reinicio. Como resultado, se implementaron **error boundaries globales** y se mejoró significativamente la **documentación de resiliencia**.
 
 ---
 
@@ -17,7 +17,7 @@ El sitio degux.cl estuvo inaccesible durante ~5 horas debido a un contenedor Doc
 
 | Hora | Evento |
 |------|--------|
-| ~16:00 | Contenedor degux-web entra en estado "unhealthy" |
+| ~16:00 | Contenedor inmogrid-web entra en estado "unhealthy" |
 | 21:35 | Usuario detecta que el sitio está caído |
 | 21:36 | Diagnóstico: logs revelan `TypeError: reading 'aa'` |
 | 21:37 | Acción: Reinicio de contenedor |
@@ -86,7 +86,7 @@ Se crearon y mejoraron 3 documentos clave:
 
 **Antes**:
 ```
-degux.cl/
+inmogrid.cl/
 ├── RECOVERY_INSTRUCTIONS.md (raíz del proyecto)
 └── docs/
     └── 06-deployment/
@@ -96,7 +96,7 @@ degux.cl/
 
 **Después**:
 ```
-degux.cl/
+inmogrid.cl/
 ├── INCIDENT_SUMMARY_2026-01-01.md (este archivo)
 └── docs/
     └── 06-deployment/
@@ -192,7 +192,7 @@ Usuario puede reintentar
 ### Inmediato (Esta Semana)
 - [ ] **Deploy de error boundaries a producción**
   ```bash
-  cd /home/gabriel/Documentos/degux.cl
+  cd /home/gabriel/Documentos/inmogrid.cl
   git add src/app/error.tsx src/app/global-error.tsx
   git commit -m "feat: Add global error boundaries for resilience"
   git push origin main

@@ -1,6 +1,6 @@
 ---
 name: generate-api-docs
-description: Generate OpenAPI 3.0 documentation for degux.cl API endpoints. Use when creating API docs, updating endpoint documentation, or generating Swagger specs for public and private APIs.
+description: Generate OpenAPI 3.0 documentation for inmogrid.cl API endpoints. Use when creating API docs, updating endpoint documentation, or generating Swagger specs for public and private APIs.
 context: fork
 agent: api-developer-agent
 allowed-tools: Read, Grep, Glob, Write, Edit
@@ -9,7 +9,7 @@ disable-model-invocation: false
 
 # Generate API Documentation
 
-Generate up-to-date OpenAPI 3.0 documentation for all existing API endpoints in degux.cl.
+Generate up-to-date OpenAPI 3.0 documentation for all existing API endpoints in inmogrid.cl.
 
 ## Scope
 

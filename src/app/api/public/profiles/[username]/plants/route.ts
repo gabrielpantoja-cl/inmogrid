@@ -1,4 +1,4 @@
-// Esta feature no está disponible en degux.cl
+// Esta feature no está disponible en inmogrid.cl
 import { NextResponse } from 'next/server';
 
 export async function GET() {

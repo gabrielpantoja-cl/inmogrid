@@ -1,4 +1,4 @@
-# Tests de Red Social - degux.cl
+# Tests de Red Social - inmogrid.cl
 
 ## 📋 Resumen Ejecutivo
 
@@ -329,4 +329,4 @@ Total: 6/18 tests pasando (33%)
 
 **Última actualización**: 2025-11-23
 **Autor**: Claude Code + Gabriel Pantoja
-**Proyecto**: degux.cl - Ecosistema Digital Colaborativo
+**Proyecto**: inmogrid.cl - Ecosistema Digital Colaborativo

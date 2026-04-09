@@ -26,25 +26,25 @@ export const viewport: Viewport = {
 // Configuración de Metadatos (SEO, Social Sharing, etc.)
 export const metadata: Metadata = {
   title: {
-    template: '%s | degux.cl',
-    default: 'degux.cl - Tu lienzo digital para crear y conectar',
+    template: '%s | inmogrid.cl',
+    default: 'inmogrid.cl - Tu lienzo digital para crear y conectar',
   },
   description: 'Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir ideas y conectar con una comunidad de creadores y profesionales.',
-  metadataBase: new URL('https://degux.cl'),
-  applicationName: 'degux.cl',
+  metadataBase: new URL('https://inmogrid.cl'),
+  applicationName: 'inmogrid.cl',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'degux.cl',
+    title: 'inmogrid.cl',
   },
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  authors: [{ name: 'degux.cl', url: 'https://degux.cl' }], 
-  creator: 'degux.cl',
-  publisher: 'degux.cl',
+  authors: [{ name: 'inmogrid.cl', url: 'https://inmogrid.cl' }], 
+  creator: 'inmogrid.cl',
+  publisher: 'inmogrid.cl',
   keywords: ['marca personal', 'portafolio digital', 'creadores de contenido', 'networking', 'comunidad profesional', 'blog personal', 'Substack', 'Behance', 'Linktree'],
   icons: {
     icon: [
@@ -66,10 +66,10 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   openGraph: {
-    title: 'degux.cl - Tu lienzo digital para crear y conectar',
+    title: 'inmogrid.cl - Tu lienzo digital para crear y conectar',
     description: 'Construye tu perfil, publica tu trabajo y conecta con una comunidad de creadores y profesionales.',
-    url: 'https://degux.cl',
-    siteName: 'degux.cl',
+    url: 'https://inmogrid.cl',
+    siteName: 'inmogrid.cl',
     locale: 'es_CL',
     type: 'website',
     images: [
@@ -77,13 +77,13 @@ export const metadata: Metadata = {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'degux.cl - Tu lienzo digital para crear y conectar',
+        alt: 'inmogrid.cl - Tu lienzo digital para crear y conectar',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'degux.cl - Tu lienzo digital para crear y conectar',
+    title: 'inmogrid.cl - Tu lienzo digital para crear y conectar',
     description: 'Construye tu perfil, publica tu trabajo y conecta con una comunidad de creadores y profesionales.',
     images: ['/images/og-image.jpg'],
   },
@@ -99,7 +99,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://degux.cl',
+    canonical: 'https://inmogrid.cl',
   },
 };
 

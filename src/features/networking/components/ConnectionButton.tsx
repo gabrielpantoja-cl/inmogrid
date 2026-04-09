@@ -2,7 +2,7 @@
 
 /**
  * ========================================
- * DEGUX.CL - CONNECTION BUTTON (React 19)
+ * INMOGRID.CL - CONNECTION BUTTON (React 19)
  * ========================================
  * Componente moderno con:
  * - useOptimistic para UI instant updates
@@ -53,7 +53,7 @@ export function ConnectionButton({
       // Create FormData
       const formData = new FormData()
       formData.append('receiverId', userId)
-      formData.append('message', `¡Hola! Me gustaría conectar contigo en degux.`)
+      formData.append('message', `¡Hola! Me gustaría conectar contigo en inmogrid.`)
 
       // Execute Server Action
       const result = await sendConnectionRequest(formData)

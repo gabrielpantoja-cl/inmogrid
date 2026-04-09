@@ -1,31 +1,31 @@
 # ========================================
 # Docker Compose para Desarrollo Local
 # ========================================
-# Base de datos PostgreSQL local para degux.cl
+# Base de datos PostgreSQL local para inmogrid.cl
 # Sincronizable con producción mediante dumps SQL
 
 version: '3.8'
 
 services:
-  # PostgreSQL Local para degux.cl
+  # PostgreSQL Local para inmogrid.cl
   postgres-local:
     image: postgis/postgis:15-3.4
-    container_name: degux-postgres-local
+    container_name: inmogrid-postgres-local
     restart: unless-stopped
     environment:
-      POSTGRES_USER: degux_user
-      POSTGRES_PASSWORD: degux_local_password  # Cambiar por seguridad
-      POSTGRES_DB: degux_dev
+      POSTGRES_USER: inmogrid_user
+      POSTGRES_PASSWORD: inmogrid_local_password  # Cambiar por seguridad
+      POSTGRES_DB: inmogrid_dev
       POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=es_CL.UTF-8"
     ports:
       - "15432:5432" # Puerto local para tests, evita conflictos con el 5432 estándar
     volumes:
-      - degux_postgres_data:/var/lib/postgresql/data
+      - inmogrid_postgres_data:/var/lib/postgresql/data
       - ./docker/init-scripts:/docker-entrypoint-initdb.d  # Scripts de inicialización
     networks:
-      - degux-local-network
+      - inmogrid-local-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U degux_user -d degux_dev"]
+      test: ["CMD-SHELL", "pg_isready -U inmogrid_user -d inmogrid_dev"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -33,22 +33,22 @@ services:
   # Adminer - Interfaz web para gestión de BD (opcional)
   adminer:
     image: adminer:latest
-    container_name: degux-adminer-local
+    container_name: inmogrid-adminer-local
     restart: unless-stopped
     ports:
       - "8080:8080"  # Acceder en http://localhost:8080
     networks:
-      - degux-local-network
+      - inmogrid-local-network
     depends_on:
       - postgres-local
     environment:
       ADMINER_DEFAULT_SERVER: postgres-local
 
 volumes:
-  degux_postgres_data:
-    name: degux_postgres_local_data
+  inmogrid_postgres_data:
+    name: inmogrid_postgres_local_data
 
 networks:
-  degux-local-network:
-    name: degux_local_network
+  inmogrid-local-network:
+    name: inmogrid_local_network
     driver: bridge

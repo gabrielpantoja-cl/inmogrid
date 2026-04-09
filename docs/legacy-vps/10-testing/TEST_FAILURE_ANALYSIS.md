@@ -1,4 +1,4 @@
-# Análisis de Tests Fallidos - degux.cl
+# Análisis de Tests Fallidos - inmogrid.cl
 
 **Fecha**: 2025-11-22
 **Autor**: Análisis automático post-limpieza de dependencias
@@ -85,7 +85,7 @@ render(<DashboardContent
 
 **Error**:
 ```
-Expected: "oauth-test@degux.cl"
+Expected: "oauth-test@inmogrid.cl"
 Received: undefined
 ```
 
@@ -212,7 +212,7 @@ const mockPrisma = {
   user: {
     findUnique: jest.fn().mockResolvedValue({
       id: 'test-id',
-      email: 'test@degux.cl',
+      email: 'test@inmogrid.cl',
       role: 'user',
       name: 'Test User'
     }),
@@ -400,7 +400,7 @@ test('Usuario puede hacer login con Google', async ({ page }) => {
 const mockPrismaUser = {
   findUnique: jest.fn().mockResolvedValue({
     id: 'test-id',
-    email: 'test@degux.cl',
+    email: 'test@inmogrid.cl',
     role: 'user',
     name: 'Test User',
     createdAt: new Date(),

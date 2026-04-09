@@ -1,6 +1,6 @@
-# Degux - Decisiones de Arquitectura (ADRs)
+# Inmogrid - Decisiones de Arquitectura (ADRs)
 
-**Architecture Decision Records para el proyecto Degux**
+**Architecture Decision Records para el proyecto Inmogrid**
 
 ---
 
@@ -8,7 +8,7 @@
 
 **Fecha**: 01 de Octubre, 2025
 **Estado**: ✅ Aceptado e Implementado
-**Contexto**: Degux necesita una base de datos PostgreSQL con soporte PostGIS
+**Contexto**: Inmogrid necesita una base de datos PostgreSQL con soporte PostGIS
 
 ### Decisión
 
@@ -45,7 +45,7 @@ Usar el contenedor PostgreSQL existente de N8N (`n8n-db`) creando una base de da
 - Actualización de imagen beneficia ambos servicios
 
 **Negativas:**
-- N8N y Degux comparten el mismo servidor PostgreSQL (mitigado con usuarios/permisos separados)
+- N8N y Inmogrid comparten el mismo servidor PostgreSQL (mitigado con usuarios/permisos separados)
 - Reinicio de n8n-db afecta ambos servicios (mitigado con restart: unless-stopped)
 
 **Mitigaciones:**
@@ -59,7 +59,7 @@ Usar el contenedor PostgreSQL existente de N8N (`n8n-db`) creando una base de da
 
 **Fecha**: 01 de Octubre, 2025
 **Estado**: ✅ Aceptado e Implementado
-**Contexto**: Degux requiere funciones geoespaciales (mapas, ubicaciones, áreas)
+**Contexto**: Inmogrid requiere funciones geoespaciales (mapas, ubicaciones, áreas)
 
 ### Decisión
 
@@ -81,7 +81,7 @@ Actualizar la imagen Docker de n8n-db de `postgres:15-alpine` a `postgis/postgis
 
 ### Justificación
 
-- PostGIS es un requisito core para Degux (funciones de geolocalización)
+- PostGIS es un requisito core para Inmogrid (funciones de geolocalización)
 - Imagen oficial `postgis/postgis` es mantenida y confiable
 - PostgreSQL 15 + PostGIS 3.4 es una combinación estable y probada
 - No afecta a N8N (PostgreSQL sigue siendo 100% compatible)
@@ -90,7 +90,7 @@ Actualizar la imagen Docker de n8n-db de `postgres:15-alpine` a `postgis/postgis
 
 **Positivas:**
 - PostGIS 3.4 disponible out-of-the-box
-- Degux puede usar funciones geoespaciales nativas
+- Inmogrid puede usar funciones geoespaciales nativas
 - N8N también puede usar PostGIS si lo necesita en el futuro
 - Mantenimiento simplificado (actualizaciones de imagen)
 
@@ -104,7 +104,7 @@ Actualizar la imagen Docker de n8n-db de `postgres:15-alpine` a `postgis/postgis
 
 **Fecha**: 01 de Octubre, 2025
 **Estado**: 🔄 Propuesto (pendiente de implementación)
-**Contexto**: Decidir dónde hostear la aplicación Next.js de Degux
+**Contexto**: Decidir dónde hostear la aplicación Next.js de Inmogrid
 
 ### Decisión (Propuesta)
 
@@ -159,16 +159,16 @@ Desplegar la aplicación Next.js en **Cloud Hosting** (frontend + API Routes) co
 
 ### Decisión
 
-Implementar backups automáticos diarios de la base de datos `degux` usando `pg_dump`, con retención de 7 días y almacenamiento local en el VPS.
+Implementar backups automáticos diarios de la base de datos `inmogrid` usando `pg_dump`, con retención de 7 días y almacenamiento local en el VPS.
 
 ### Estrategia de Backup
 
 ```bash
 # Backup automático diario (cron 3 AM)
-0 3 * * * /home/gabriel/vps-do/scripts/backup-degux.sh
+0 3 * * * /home/gabriel/vps-do/scripts/backup-inmogrid.sh
 
-# Almacenamiento: /home/gabriel/vps-do/degux/backups/
-# Formato: degux_backup_YYYYMMDD_HHMMSS.sql.gz
+# Almacenamiento: /home/gabriel/vps-do/inmogrid/backups/
+# Formato: inmogrid_backup_YYYYMMDD_HHMMSS.sql.gz
 # Retención: 7 días (elimina automáticamente backups >7 días)
 ```
 

@@ -1,4 +1,4 @@
-# 🗄️ Resumen de Configuración - Base de Datos degux.cl
+# 🗄️ Resumen de Configuración - Base de Datos inmogrid.cl
 
 **Fecha de Configuración**: 2025-10-06
 **Estado**: ✅ Configurado y Listo para Migración
@@ -9,21 +9,21 @@
 
 ### Conexión
 - **Contenedor**: `n8n-db` (compartido con N8N)
-- **Base de Datos**: `degux`
-- **Usuario**: `degux_user`
+- **Base de Datos**: `inmogrid`
+- **Usuario**: `inmogrid_user`
 - **Puerto**: `5432` (interno), `5432` (externo - compartido)
-- **Password**: Ver `.env.local` → `DEGUX_DB_PASSWORD`
+- **Password**: Ver `.env.local` → `INMOGRID_DB_PASSWORD`
 
 ### Connection Strings
 
 **Desarrollo (desde máquina local)**:
 ```
-postgresql://degux_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@VPS_IP_REDACTED:5432/degux?schema=public
+postgresql://inmogrid_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@VPS_IP_REDACTED:5432/inmogrid?schema=public
 ```
 
 **Producción (dentro VPS)**:
 ```
-postgresql://degux_user:PASSWORD@n8n-db:5432/degux?schema=public
+postgresql://inmogrid_user:PASSWORD@n8n-db:5432/inmogrid?schema=public
 ```
 
 ---
@@ -132,7 +132,7 @@ Función que actualiza automáticamente el campo `updatedAt` cuando se modifica 
 
 ### Test de Conexión
 ```bash
-docker exec -it n8n-db psql -U degux_user -d degux
+docker exec -it n8n-db psql -U inmogrid_user -d inmogrid
 ```
 
 ### Listar Tablas
@@ -142,10 +142,10 @@ docker exec -it n8n-db psql -U degux_user -d degux
 
 **Resultado esperado**:
 ```
- public | Account           | table | degux_user
- public | Session           | table | degux_user
- public | User              | table | degux_user
- public | VerificationToken | table | degux_user
+ public | Account           | table | inmogrid_user
+ public | Session           | table | inmogrid_user
+ public | User              | table | inmogrid_user
+ public | VerificationToken | table | inmogrid_user
 ```
 
 ### Ver Estructura de User
@@ -164,16 +164,16 @@ SELECT COUNT(*) FROM "User";
 
 ## 🚀 Próximos Pasos para Migración
 
-### 1. Conectar Frontend de degux.cl
+### 1. Conectar Frontend de inmogrid.cl
 El backend debe configurar el archivo `.env` con:
 
 ```env
 # Base de Datos PostgreSQL
-POSTGRES_PRISMA_URL="postgresql://degux_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@VPS_IP_REDACTED:5432/degux?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:bbsOwxrhG6oQeCnRHzWYh/Bd4Mrb4ZomPwSeO/uHJ/o=@VPS_IP_REDACTED:5432/inmogrid?schema=public"
 
 # NextAuth
 NEXTAUTH_SECRET="<generar_con_openssl_rand_-base64_32>"
-NEXTAUTH_URL="https://degux.cl"
+NEXTAUTH_URL="https://inmogrid.cl"
 
 # Google OAuth
 GOOGLE_CLIENT_ID="<tu_client_id>.apps.googleusercontent.com"
@@ -186,7 +186,7 @@ NODE_ENV="production"
 ### 2. Probar Autenticación
 Usar el script de diagnóstico:
 ```bash
-cd /home/gabriel/Documentos/vps-do/degux/temp-back-end-copy
+cd /home/gabriel/Documentos/vps-do/inmogrid/temp-back-end-copy
 ./check-db.sh vps
 ./test-auth.sh vps
 ```
@@ -196,7 +196,7 @@ Si necesitas crear un usuario admin manualmente:
 
 ```sql
 -- Conectar a la base de datos
-docker exec -it n8n-db psql -U degux_user -d degux
+docker exec -it n8n-db psql -U inmogrid_user -d inmogrid
 
 -- Crear usuario (se creará automáticamente al hacer login con Google)
 -- Luego actualizar rol:
@@ -220,7 +220,7 @@ WHERE email = 'tu_email@gmail.com';
 
 ## 🔒 Seguridad
 
-- ✅ Usuario `degux_user` con permisos restringidos
+- ✅ Usuario `inmogrid_user` con permisos restringidos
 - ✅ Base de datos aislada de N8N
 - ✅ Password seguro de 32+ caracteres
 - ✅ Foreign keys con CASCADE para integridad referencial
@@ -230,15 +230,15 @@ WHERE email = 'tu_email@gmail.com';
 
 ## 📝 Notas Importantes
 
-1. **Compartición de Contenedor**: La base de datos `degux` comparte el contenedor PostgreSQL `n8n-db` con N8N, pero están completamente aisladas.
+1. **Compartición de Contenedor**: La base de datos `inmogrid` comparte el contenedor PostgreSQL `n8n-db` con N8N, pero están completamente aisladas.
 
 2. **PostGIS**: No está instalado en el contenedor actual. Si se necesita funcionalidad geoespacial, será necesario:
    - Cambiar imagen base a `postgres:15-alpine` con PostGIS
    - O instalar PostGIS manualmente en el contenedor
 
-3. **Backups**: Configurar backups regulares de la base de datos `degux`:
+3. **Backups**: Configurar backups regulares de la base de datos `inmogrid`:
    ```bash
-   ./scripts/backup-degux.sh
+   ./scripts/backup-inmogrid.sh
    ```
 
 4. **Prisma**: Si el proyecto usa Prisma, el schema de Prisma debe sincronizarse con estas tablas usando:
@@ -250,8 +250,8 @@ WHERE email = 'tu_email@gmail.com';
 
 ## ✅ Checklist de Migración
 
-- [x] Base de datos `degux` creada
-- [x] Usuario `degux_user` configurado
+- [x] Base de datos `inmogrid` creada
+- [x] Usuario `inmogrid_user` configurado
 - [x] Tabla `User` creada con estructura correcta
 - [x] Tabla `Account` creada (OAuth)
 - [x] Tabla `Session` creada
@@ -266,4 +266,4 @@ WHERE email = 'tu_email@gmail.com';
 ---
 
 **Configurado por**: Claude Code
-**Documentación**: Ver `/degux/temp-back-end-copy/BACKEND_README.md`
+**Documentación**: Ver `/inmogrid/temp-back-end-copy/BACKEND_README.md`

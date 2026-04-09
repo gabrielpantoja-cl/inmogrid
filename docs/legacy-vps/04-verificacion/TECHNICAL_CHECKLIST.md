@@ -1,4 +1,4 @@
-# ✅ Checklist Técnico de Configuración - degux.cl
+# ✅ Checklist Técnico de Configuración - inmogrid.cl
 
 **Última actualización:** 2 de enero de 2026  
 **Estado:** VERIFICADO Y COMPLETO ✅
@@ -145,8 +145,8 @@ npx tsc --noEmit
 - [x] Image optimization habilitada
 - [x] Dominios permitidos:
   - `localhost`
-  - `degux.cl`
-  - `www.degux.cl`
+  - `inmogrid.cl`
+  - `www.inmogrid.cl`
   - `lh3.googleusercontent.com`
   - `avatars.githubusercontent.com`
 - [x] Remote patterns para:
@@ -198,10 +198,10 @@ generator client {
 ### ✅ Variables de Entorno
 ```env
 # Desarrollo local (en .env.local)
-POSTGRES_PRISMA_URL="postgresql://degux_user:degux_local_password@localhost:5432/degux_dev?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev?schema=public"
 
 # Producción (en .env o variables de entorno del servidor)
-POSTGRES_PRISMA_URL="postgresql://degux_user:PASSWORD@degux-db:5432/degux_core?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:PASSWORD@inmogrid-db:5432/inmogrid_core?schema=public"
 ```
 
 ### ✅ Extensiones PostgreSQL Habilitadas
@@ -332,17 +332,17 @@ version: '3.8'
 services:
   postgres-local:
     image: postgis/postgis:15-3.4    # ✅ PostGIS habilitado
-    container_name: degux-postgres-local
+    container_name: inmogrid-postgres-local
     environment:
-      POSTGRES_USER: degux_user
-      POSTGRES_PASSWORD: degux_local_password
-      POSTGRES_DB: degux_dev
+      POSTGRES_USER: inmogrid_user
+      POSTGRES_PASSWORD: inmogrid_local_password
+      POSTGRES_DB: inmogrid_dev
     ports:
       - "15432:5432"                 # ✅ Puerto evita conflictos
     volumes:
-      - degux_postgres_data:/var/lib/postgresql/data
+      - inmogrid_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U degux_user -d degux_dev"]
+      test: ["CMD-SHELL", "pg_isready -U inmogrid_user -d inmogrid_dev"]
       interval: 10s
 ```
 
@@ -358,11 +358,11 @@ docker compose -f docker/docker-compose.local.yml down
 docker compose -f docker/docker-compose.local.yml logs -f postgres-local
 
 # Ejecutar comandos en contenedor
-docker compose -f docker/docker-compose.local.yml exec postgres-local psql -U degux_user -d degux_dev
+docker compose -f docker/docker-compose.local.yml exec postgres-local psql -U inmogrid_user -d inmogrid_dev
 ```
 
 ### ✅ Volúmenes
-- [x] `degux_postgres_data` - Persistencia de datos de PostgreSQL
+- [x] `inmogrid_postgres_data` - Persistencia de datos de PostgreSQL
 
 ---
 
@@ -544,7 +544,7 @@ npm run build  # ✅ Exitoso
 npx prisma validate  # ✅ Válido
 
 # 6. Docker Build
-docker build -t degux-cl .  # ✅ Exitoso
+docker build -t inmogrid-cl .  # ✅ Exitoso
 ```
 
 ---
@@ -582,7 +582,7 @@ docker build -t degux-cl .  # ✅ Exitoso
 
 **ESTADO: 100% FUNCIONAL Y LISTO PARA DESARROLLO**
 
-El repositorio `degux.cl` ha sido verificado completamente y cumple con todos los requisitos técnicos para:
+El repositorio `inmogrid.cl` ha sido verificado completamente y cumple con todos los requisitos técnicos para:
 
 ✅ Desarrollo en Linux (máquina principal)  
 ✅ Desarrollo en Windows (máquina secundaria)  

@@ -8,7 +8,7 @@ Visualización pública de datos abiertos de transacciones inmobiliarias chilena
 - Panel de estadísticas agregadas por comuna/año (ReferencialesStats)
 - Cliente HTTP para la API pública de referenciales.cl (lib/api.ts)
 
-**NO incluye**: ingesta/edición de datos. degux.cl solo **consume** la API de referenciales.cl — es un escaparate público.
+**NO incluye**: ingesta/edición de datos. inmogrid.cl solo **consume** la API de referenciales.cl — es un escaparate público.
 
 ## Estructura
 

@@ -38,7 +38,7 @@ async function getPost(slug: string): Promise<PostRow | null> {
       dp.username       AS "authorUsername",
       dp.avatar_url     AS "authorAvatarUrl"
     FROM posts p
-    LEFT JOIN degux_profiles dp ON dp.id = p.author_id
+    LEFT JOIN inmogrid_profiles dp ON dp.id = p.author_id
     WHERE p.slug = ${slug}
       AND p.status = 'published'
     LIMIT 1

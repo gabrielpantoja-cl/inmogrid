@@ -24,7 +24,7 @@ remediation measures. Below is our detailed response.
 ## Investigation Findings
 
 The compromise was traced to a Docker container running a Next.js web
-application (degux-web). The attack exploited a Server-Side code execution
+application (inmogrid-web). The attack exploited a Server-Side code execution
 vulnerability triggered by specially crafted POST requests to the root
 endpoint, allowing the attacker to download and execute DDoS malware.
 

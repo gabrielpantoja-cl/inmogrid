@@ -16,9 +16,9 @@ Carpeta de trabajo estratégico para el nuevo proyecto que reemplazará a pantoj
 | `05-modelo-de-negocio.md` | Cómo se financia sin vender propiedades |
 | `06-nombre-y-marca.md` | Exploración de nombre, dominio y identidad |
 | `07-arquitectura-tecnica.md` | Repositorio GitHub, stack tecnológico, Oracle VPS, hoja de ruta técnica |
-| `08-nombre-y-dominio.md` | Candidatos de nombre, disponibilidad verificada en NIC.cl, recomendación degux.cl |
+| `08-nombre-y-dominio.md` | Candidatos de nombre, disponibilidad verificada en NIC.cl, recomendación inmogrid.cl |
 | `09-manifiesto.md` | Manifiesto público del proyecto — el texto fundacional |
-| `10-plan-de-mejora-degux.md` | Hoja de ruta técnica concreta: tareas, archivos, esfuerzo, deadlines |
+| `10-plan-de-mejora-inmogrid.md` | Hoja de ruta técnica concreta: tareas, archivos, esfuerzo, deadlines |
 
 ---
 
@@ -27,13 +27,13 @@ Carpeta de trabajo estratégico para el nuevo proyecto que reemplazará a pantoj
 | Decisión | Respuesta |
 |----------|-----------|
 | Comunidad inicial | **Tasadores y corredores primero** — Fase 2: ciudadanos y propietarios |
-| Relación con gabrielpantoja.cl | **Plataformas separadas** — DEGUX es proyecto aparte |
+| Relación con gabrielpantoja.cl | **Plataformas separadas** — INMOGRID es proyecto aparte |
 | Marcas personales | **Separadas** — Gabriel mantiene gabrielpantoja.cl; Mona desarrolla su propia marca |
-| Rol de Mona en DEGUX | **Marca y validación** |
-| referenciales.cl | **Separado y autónomo** — DEGUX lo consume vía API pública |
+| Rol de Mona en INMOGRID | **Marca y validación** |
+| referenciales.cl | **Separado y autónomo** — INMOGRID lo consume vía API pública |
 | Deadline de lanzamiento | **16 de abril de 2026** — vencimiento de pantojapropiedades.cl |
 | Stack tecnológico | **Next.js 15 + Prisma + Supabase PostgreSQL + Vercel** |
-| Escritura del nombre | **DEGUX** (todo mayúsculas) |
+| Escritura del nombre | **INMOGRID** (todo mayúsculas) |
 | Cobro de eventos comerciales | **Desde el día 1** |
 | Competidores de referencia | **Descubro Data y HousePricing** |
 
@@ -48,11 +48,11 @@ Carpeta de trabajo estratégico para el nuevo proyecto que reemplazará a pantoj
 
 ## Base de código y backend
 
-**Repositorio:** `C:\Users\gabri\Developer\proptech\degux.cl`
-**Backend Supabase:** proyecto `pantojapropiedades.cl` → renombrar a `DEGUX` (mismo ref, mismas keys)
+**Repositorio:** `C:\Users\gabri\Developer\proptech\inmogrid.cl`
+**Backend Supabase:** proyecto `pantojapropiedades.cl` → renombrar a `INMOGRID` (mismo ref, mismas keys)
 **Deploy:** Vercel Hobby (4° proyecto, límite es 200)
 
-El free tier de Supabase permite solo 2 proyectos activos. Como `pantojapropiedades.cl` deja de existir el 16 de abril, su slot Supabase se repropone directamente para DEGUX — sin crear proyecto nuevo, sin pagar. El project ref y las API keys no cambian al renombrar. Ver estrategia completa en `07-arquitectura-tecnica.md` y `10-plan-de-mejora-degux.md`.
+El free tier de Supabase permite solo 2 proyectos activos. Como `pantojapropiedades.cl` deja de existir el 16 de abril, su slot Supabase se repropone directamente para INMOGRID — sin crear proyecto nuevo, sin pagar. El project ref y las API keys no cambian al renombrar. Ver estrategia completa en `07-arquitectura-tecnica.md` y `10-plan-de-mejora-inmogrid.md`.
 
 ---
 

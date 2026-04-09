@@ -1,4 +1,4 @@
-# PERFILERÍA HUMANA - Visión de degux.cl
+# PERFILERÍA HUMANA - Visión de inmogrid.cl
 
 **Fecha**: 2025-11-16
 **Autor**: Gabriel Pantoja
@@ -8,13 +8,13 @@
 
 ## 🌱 La Idea Central
 
-degux.cl evoluciona de ser "una plataforma de datos inmobiliarios" a convertirse en **un ecosistema de perfiles humanos auténticos**, donde cada persona tiene su espacio digital minimalista, profesional y libre del ruido de las redes sociales tradicionales.
+inmogrid.cl evoluciona de ser "una plataforma de datos inmobiliarios" a convertirse en **un ecosistema de perfiles humanos auténticos**, donde cada persona tiene su espacio digital minimalista, profesional y libre del ruido de las redes sociales tradicionales.
 
 ### URLs Personales
 Cada usuario tendría su propia URL amigable:
-- `degux.cl/gabrielpantoja`
-- `degux.cl/mona`
-- `degux.cl/nombre-de-usuario`
+- `inmogrid.cl/gabrielpantoja`
+- `inmogrid.cl/mona`
+- `inmogrid.cl/nombre-de-usuario`
 
 ### Contenido Multimodal
 Dentro de cada perfil:
@@ -32,7 +32,7 @@ Dentro de cada perfil:
 ## 🌿 Casos de Uso Reales
 
 ### Mona - Vivero Mapu
-**URL**: `degux.cl/mona`
+**URL**: `inmogrid.cl/mona`
 
 **Perfil Principal**:
 ```
@@ -51,7 +51,7 @@ Emprendo con cariño desde el sur de Chile."
 - 💬 **Contacto**: WhatsApp directo
 
 ### Gabriel - Perito Tasador & Developer
-**URL**: `degux.cl/gabrielpantoja`
+**URL**: `inmogrid.cl/gabrielpantoja`
 
 **Secciones**:
 - 🏢 **Mi trabajo como perito**: Portfolio de peritajes (sin datos sensibles)
@@ -74,7 +74,7 @@ Emprendo con cariño desde el sur de Chile."
 - Ella queda fascinada y empoderada
 
 ### ✅ Escalable
-El backend de degux ya tiene arquitectura seria:
+El backend de inmogrid ya tiene arquitectura seria:
 - Next.js 15 + Prisma + PostgreSQL + PostGIS
 - Multiusuario desde el diseño
 - Infraestructura VPS robusta
@@ -113,7 +113,7 @@ model User {
   // ... campos existentes ...
 
   // 🆕 NUEVOS CAMPOS PARA PERFILERÍA
-  username         String?  @unique  // URL amigable: degux.cl/username
+  username         String?  @unique  // URL amigable: inmogrid.cl/username
   bio              String?           // Descripción personal
   coverImageUrl    String?           // Portada del perfil
   tagline          String?           // Frase corta (ej: "Amante de las plantas")
@@ -280,7 +280,7 @@ app/
 - **Secundario**: Terracota suave (tierra, raíces, autenticidad)
 
 ### Tipografía
-- **Headings**: Lusitana (actual de degux) - Elegante y profesional
+- **Headings**: Lusitana (actual de inmogrid) - Elegante y profesional
 - **Body**: Inter o System UI - Legible y moderna
 - **Mono**: JetBrains Mono - Para código o datos técnicos
 
@@ -297,14 +297,14 @@ app/
 ## 📊 Comparación: Antes vs Después
 
 ### ANTES (Estado Actual)
-- degux.cl como "plataforma de datos CBR"
+- inmogrid.cl como "plataforma de datos CBR"
 - Enfoque técnico en referenciales inmobiliarios
 - Usuario anónimo o profesional genérico
 - Sin identidad personal visible
 - Proyectos fragmentados (PantojaPropiedades, Vivero, Blog separados)
 
 ### DESPUÉS (Visión Perfilería Humana)
-- degux.cl como "ecosistema de personas auténticas"
+- inmogrid.cl como "ecosistema de personas auténticas"
 - Datos CBR **al servicio de perfiles humanos**
 - Cada persona con URL propia y presencia digital
 - Identidad rica y multidimensional
@@ -331,7 +331,7 @@ app/
 > Solo personas reales, con historias reales,
 > compartiendo lo que aman de forma auténtica."
 
-**degux.cl** se convierte en un refugio digital donde:
+**inmogrid.cl** se convierte en un refugio digital donde:
 - La autenticidad prevalece sobre la viralidad
 - El propósito supera a la vanidad métrica
 - La comunidad se construye desde la confianza

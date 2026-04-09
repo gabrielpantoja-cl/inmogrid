@@ -1,6 +1,6 @@
 # Feature: `posts`
 
-Gestión de publicaciones (notas/artículos) del ecosistema degux.cl.
+Gestión de publicaciones (notas/artículos) del ecosistema inmogrid.cl.
 
 ## ⚠️ Tabla compartida con pantojapropiedades.cl
 

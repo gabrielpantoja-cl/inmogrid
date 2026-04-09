@@ -1,4 +1,4 @@
-# Degux - Documentación del Proyecto
+# Inmogrid - Documentación del Proyecto
 
 **Ecosistema Digital Colaborativo del Sector Inmobiliario Chileno**
 
@@ -8,12 +8,12 @@
 
 | Item | Estado |
 |------|--------|
-| Dominio | ✅ degux.cl (activo) |
+| Dominio | ✅ inmogrid.cl (activo) |
 | Infraestructura VPS | ✅ Completada |
 | Base de Datos | ✅ PostgreSQL + PostGIS (n8n-db compartido) |
 | SSL/HTTPS | ✅ Configurado |
 | Aplicación Web | 🔄 En desarrollo |
-| Repositorio Web | https://github.com/gabrielpantoja-cl/degux.cl.git |
+| Repositorio Web | https://github.com/gabrielpantoja-cl/inmogrid.cl.git |
 
 **Última actualización**: 01 de Octubre, 2025
 
@@ -43,7 +43,7 @@
 
 ### 🏗️ Guías de Infraestructura
 
-- **[Guía Completa de Infraestructura](./degux-infrastructure-guide.md)** ⭐ PRINCIPAL
+- **[Guía Completa de Infraestructura](./inmogrid-infrastructure-guide.md)** ⭐ PRINCIPAL
   - Arquitectura del sistema
   - Base de datos compartida con N8N
   - Configuración de dominios y SSL
@@ -61,17 +61,17 @@
 
 **En el repositorio vps-do:**
 
-- `/docs/DEPLOYMENT_DEGUX.md` - Guía paso a paso de deployment
-- `/degux/README.md` - Documentación de base de datos
+- `/docs/DEPLOYMENT_INMOGRID.md` - Guía paso a paso de deployment
+- `/inmogrid/README.md` - Documentación de base de datos
 - `/docs/projects/Plan_Trabajo_Ecosistema_Digital_V4.md` - Plan maestro del proyecto
-- `/nginx/conf.d/degux.cl.conf` - Configuración Nginx
-- `/scripts/setup-degux-db.sh` - Script de setup de BD
-- `/scripts/backup-degux.sh` - Script de backups
-- `/scripts/restore-degux.sh` - Script de restore
+- `/nginx/conf.d/inmogrid.cl.conf` - Configuración Nginx
+- `/scripts/setup-inmogrid-db.sh` - Script de setup de BD
+- `/scripts/backup-inmogrid.sh` - Script de backups
+- `/scripts/restore-inmogrid.sh` - Script de restore
 
 **En el repositorio web:**
 
-- https://github.com/gabrielpantoja-cl/degux.cl.git - Código de la aplicación
+- https://github.com/gabrielpantoja-cl/inmogrid.cl.git - Código de la aplicación
 
 ---
 
@@ -86,21 +86,21 @@ ssh gabriel@[IP_VPS]
 # Ver contenedores activos
 docker ps | grep -E "n8n-db|nginx"
 
-# Verificar base de datos degux
-docker exec -it n8n-db psql -U degux_user -d degux -c "SELECT PostGIS_Version();"
+# Verificar base de datos inmogrid
+docker exec -it n8n-db psql -U inmogrid_user -d inmogrid -c "SELECT PostGIS_Version();"
 
 # Ver sitio web
-curl https://degux.cl
+curl https://inmogrid.cl
 ```
 
 ### Acceso Rápido
 
 | Servicio | URL |
 |----------|-----|
-| Sitio Principal | https://degux.cl |
-| API | https://api.degux.cl |
+| Sitio Principal | https://inmogrid.cl |
+| API | https://api.inmogrid.cl |
 | Portainer (gestión) | https://[URL_PORTAINER] |
-| N8N (workflows) | http://n8n.degux.cl |
+| N8N (workflows) | http://n8n.inmogrid.cl |
 
 ---
 
@@ -108,7 +108,7 @@ curl https://degux.cl
 
 ### Arquitectura
 
-**⚠️ IMPORTANTE**: Degux **NO tiene su propio contenedor PostgreSQL**.
+**⚠️ IMPORTANTE**: Inmogrid **NO tiene su propio contenedor PostgreSQL**.
 
 En su lugar, aprovecha el contenedor `n8n-db` existente, creando una base de datos independiente dentro del mismo servidor. Esta decisión:
 
@@ -122,17 +122,17 @@ En su lugar, aprovecha el contenedor `n8n-db` existente, creando una base de dat
 ```
 n8n-db (container)
   ├── BD: n8n      (para N8N workflows)
-  └── BD: degux    (para Degux app) ← Completamente aislada
+  └── BD: inmogrid    (para Inmogrid app) ← Completamente aislada
 ```
 
 ### Connection Strings
 
 ```env
 # Desarrollo (desde tu máquina)
-DATABASE_URL="postgresql://degux_user:PASSWORD@[IP_VPS]:5432/degux?schema=public"
+DATABASE_URL="postgresql://inmogrid_user:PASSWORD@[IP_VPS]:5432/inmogrid?schema=public"
 
 # Producción (dentro del VPS)
-DATABASE_URL="postgresql://degux_user:PASSWORD@n8n-db:5432/degux?schema=public"
+DATABASE_URL="postgresql://inmogrid_user:PASSWORD@n8n-db:5432/inmogrid?schema=public"
 ```
 
 **Nota**: El password se encuentra en `.env.local` (respaldado localmente, NO en GitHub)
@@ -144,17 +144,17 @@ DATABASE_URL="postgresql://degux_user:PASSWORD@n8n-db:5432/degux?schema=public"
 ### Base de Datos
 
 ```bash
-# Conectarse a la BD degux
-docker exec -it n8n-db psql -U degux_user -d degux
+# Conectarse a la BD inmogrid
+docker exec -it n8n-db psql -U inmogrid_user -d inmogrid
 
 # Ver bases de datos en n8n-db
 docker exec -it n8n-db psql -U n8n -d postgres -c "\l"
 
 # Backup manual
-./scripts/backup-degux.sh
+./scripts/backup-inmogrid.sh
 
 # Restore desde backup
-./scripts/restore-degux.sh degux_backup_YYYYMMDD_HHMMSS.sql.gz
+./scripts/restore-inmogrid.sh inmogrid_backup_YYYYMMDD_HHMMSS.sql.gz
 ```
 
 ### Nginx
@@ -177,7 +177,7 @@ docker exec nginx-proxy nginx -t
 docker compose --profile ssl-setup run --rm certbot
 
 # Verificar certificados
-docker exec nginx-proxy ls -la /etc/nginx/ssl/live/degux.cl/
+docker exec nginx-proxy ls -la /etc/nginx/ssl/live/inmogrid.cl/
 ```
 
 ---
@@ -186,7 +186,7 @@ docker exec nginx-proxy ls -la /etc/nginx/ssl/live/degux.cl/
 
 Si encuentras problemas, consulta:
 
-1. **[Guía de Infraestructura](./degux-infrastructure-guide.md#troubleshooting)** - Sección de troubleshooting completa
+1. **[Guía de Infraestructura](./inmogrid-infrastructure-guide.md#troubleshooting)** - Sección de troubleshooting completa
 2. **Logs del sistema**:
    ```bash
    docker logs n8n-db --tail 100
@@ -203,7 +203,7 @@ Si encuentras problemas, consulta:
 
 ### Para Desarrollo Local
 
-1. Clonar repo web: `git clone https://github.com/gabrielpantoja-cl/degux.cl.git`
+1. Clonar repo web: `git clone https://github.com/gabrielpantoja-cl/inmogrid.cl.git`
 2. Configurar `.env.local` con connection string de desarrollo
 3. Instalar dependencias: `npm install`
 4. Ejecutar migrations: `npx prisma migrate dev`
@@ -211,17 +211,17 @@ Si encuentras problemas, consulta:
 
 ### Para Production Deployment
 
-Ver guía completa: `/docs/DEPLOYMENT_DEGUX.md`
+Ver guía completa: `/docs/DEPLOYMENT_INMOGRID.md`
 
 ---
 
 ## 📧 Contacto
 
 - **Repositorio VPS**: https://github.com/gabrielpantoja-cl/vps-do.git
-- **Repositorio Web**: https://github.com/gabrielpantoja-cl/degux.cl.git
+- **Repositorio Web**: https://github.com/gabrielpantoja-cl/inmogrid.cl.git
 - **VPS IP**: VPS_IP_REDACTED
-- **Dominio**: degux.cl
+- **Dominio**: inmogrid.cl
 
 ---
 
-**¿Primera vez aquí?** → Lee la **[Guía Completa de Infraestructura](./degux-infrastructure-guide.md)**
+**¿Primera vez aquí?** → Lee la **[Guía Completa de Infraestructura](./inmogrid-infrastructure-guide.md)**

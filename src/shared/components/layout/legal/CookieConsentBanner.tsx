@@ -51,7 +51,7 @@ export default function CookieConsentBanner() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <Shield className="h-5 w-5 text-blue-600" />
-              <h3 className="font-semibold text-gray-900">degux.cl usa cookies</h3>
+              <h3 className="font-semibold text-gray-900">inmogrid.cl usa cookies</h3>
             </div>
             <p className="text-sm text-gray-600 mb-4">
               Utilizamos cookies esenciales para el funcionamiento del sitio y cookies

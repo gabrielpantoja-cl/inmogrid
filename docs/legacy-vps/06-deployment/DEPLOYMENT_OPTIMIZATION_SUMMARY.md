@@ -1,4 +1,4 @@
-# ✅ Resumen de Optimización - Deployment degux.cl
+# ✅ Resumen de Optimización - Deployment inmogrid.cl
 
 **Fecha**: 2026-01-03
 **Estado**: Completado exitosamente
@@ -34,7 +34,7 @@ docs/06-deployment/
 ├── RESILIENCIA_Y_ERROR_HANDLING.md
 ├── BACKEND_AUTH_DEPLOYMENT_GUIDE.md
 ├── BACKEND_TROUBLESHOOTING.md
-├── dns-degux.cl.txt
+├── dns-inmogrid.cl.txt
 ├── CLEANUP_ANALYSIS.md ⭐ NUEVO
 ├── OPTIMIZATION_REPORT.md ⭐ NUEVO
 ├── postmortems/ ⭐ NUEVA CARPETA
@@ -173,7 +173,7 @@ git commit -m "feat: Optimize deployment pipeline (50-60% faster)"
 git push origin main
 
 # Monitorear en GitHub Actions
-# URL: https://github.com/[usuario]/degux.cl/actions
+# URL: https://github.com/[usuario]/inmogrid.cl/actions
 ```
 
 ### 2. Verificar Resultados en VPS
@@ -181,13 +181,13 @@ git push origin main
 ssh gabriel@VPS_IP_REDACTED
 
 # Ver tamaño de imagen
-docker images | grep degux-web
+docker images | grep inmogrid-web
 
 # Ver health check
-docker inspect degux-web --format '{{.State.Health.Status}}'
+docker inspect inmogrid-web --format '{{.State.Health.Status}}'
 
 # Ver logs
-docker logs degux-web --tail 50
+docker logs inmogrid-web --tail 50
 ```
 
 ### 3. Si Todo Funciona Bien

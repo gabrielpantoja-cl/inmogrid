@@ -63,7 +63,7 @@ export default function AcmeLogo() {
         p-1
       `}
       role="banner"
-      aria-label="Logo de degux.cl"
+      aria-label="Logo de inmogrid.cl"
     >
       {/* Circular globe container */}
       <div
@@ -81,7 +81,7 @@ export default function AcmeLogo() {
 
       <div className="flex flex-col items-start leading-tight">
         <h1 className="text-base font-bold tracking-tight text-white whitespace-nowrap">
-          degux<span className="text-white/90">.cl</span>
+          inmogrid<span className="text-white/90">.cl</span>
         </h1>
       </div>
     </div>

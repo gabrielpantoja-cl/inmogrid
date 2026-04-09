@@ -1,4 +1,4 @@
-# 🧪 Prueba Manual de Autenticación - degux.cl
+# 🧪 Prueba Manual de Autenticación - inmogrid.cl
 
 **Fecha**: 2025-10-06
 **Estado**: ✅ Configuración completa y lista para pruebas
@@ -15,8 +15,8 @@
 - [x] `GOOGLE_CLIENT_SECRET` - Credenciales de Google OAuth
 
 ### ✅ Base de Datos
-- [x] Base de datos `degux` creada en VPS
-- [x] Usuario `degux_user` configurado
+- [x] Base de datos `inmogrid` creada en VPS
+- [x] Usuario `inmogrid_user` configurado
 - [x] Tablas de NextAuth creadas:
   - `User` (18 columnas incluyendo perfil profesional)
   - `Account` (OAuth providers)
@@ -37,7 +37,7 @@
 
 ```bash
 # Asegúrate de estar en el directorio del proyecto
-cd /home/gabriel/Documentos/degux.cl
+cd /home/gabriel/Documentos/inmogrid.cl
 
 # Iniciar servidor
 npm run dev
@@ -96,7 +96,7 @@ http://localhost:3000/auth/signin
 ssh gabriel@VPS_IP_REDACTED
 
 # Conectar a PostgreSQL
-docker exec -it n8n-db psql -U degux_user -d degux
+docker exec -it n8n-db psql -U inmogrid_user -d inmogrid
 
 # Ver usuario creado
 SELECT id, email, name, role, "createdAt", "updatedAt"
@@ -205,7 +205,7 @@ npm test -- __tests__/auth/oauth-flow.test.ts
    ```
 3. Probar conexión directa:
    ```bash
-   psql "postgresql://degux_user:PASSWORD@VPS_IP_REDACTED:5432/degux"
+   psql "postgresql://inmogrid_user:PASSWORD@VPS_IP_REDACTED:5432/inmogrid"
    ```
 
 ### Error: "redirect_uri_mismatch"
@@ -229,7 +229,7 @@ npm test -- __tests__/auth/oauth-flow.test.ts
 2. Verificar que `NEXTAUTH_SECRET` no haya cambiado
 3. Revisar logs del servidor:
    ```bash
-   tail -f /tmp/degux-dev.log
+   tail -f /tmp/inmogrid-dev.log
    ```
 
 ### Usuario no se crea en BD
@@ -276,7 +276,7 @@ npm test -- __tests__/auth/oauth-flow.test.ts
 
 2. **Consola del Servidor**:
    ```bash
-   tail -f /tmp/degux-dev.log | grep ERROR
+   tail -f /tmp/inmogrid-dev.log | grep ERROR
    ```
 
 3. **Base de Datos**:
@@ -285,7 +285,7 @@ npm test -- __tests__/auth/oauth-flow.test.ts
    \dt
 
    -- Verificar permisos del usuario
-   \du degux_user
+   \du inmogrid_user
    ```
 
 ---
@@ -312,7 +312,7 @@ Una vez que las pruebas manuales sean exitosas:
    - `/networking` - Directorio de profesionales
 
 4. **Deploy a producción**:
-   - Actualizar `NEXTAUTH_URL` a `https://degux.cl`
+   - Actualizar `NEXTAUTH_URL` a `https://inmogrid.cl`
    - Actualizar redirect URIs en Google Console
    - Deploy con `scripts/deploy-to-vps.sh`
 
@@ -356,6 +356,6 @@ Una vez que las pruebas manuales sean exitosas:
 ---
 
 **Autor**: Claude Code
-**Proyecto**: degux.cl
+**Proyecto**: inmogrid.cl
 **Versión**: 1.0
 **Estado**: ✅ Listo para pruebas

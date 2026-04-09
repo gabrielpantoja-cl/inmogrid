@@ -37,9 +37,9 @@ Mona y Gabriel. Una pareja con historia en el mercado inmobiliario local, 15 añ
 
 No somos una startup de VC que necesita 10x en 3 años. Somos un negocio de territorio, con reputación construida, con conocimiento técnico real — y con la decisión de hacer las cosas diferente.
 
-**Marcas personales separadas:** DEGUX es el proyecto de plataforma, independiente de las marcas personales de cada uno. Gabriel mantiene `gabrielpantoja.cl` como su marca personal (blog, peritajes, PropTech). Mona desarrollará su propia marca personal en paralelo. DEGUX es el proyecto común — no el apellido de nadie.
+**Marcas personales separadas:** INMOGRID es el proyecto de plataforma, independiente de las marcas personales de cada uno. Gabriel mantiene `gabrielpantoja.cl` como su marca personal (blog, peritajes, PropTech). Mona desarrollará su propia marca personal en paralelo. INMOGRID es el proyecto común — no el apellido de nadie.
 
-**Rol de Mona en DEGUX:** construcción de marca y validación. Mona lidera la identidad visual, la narrativa pública y la validación de decisiones estratégicas. No es un rol operativo de ejecución técnica — es el rol que decide qué cara tiene el proyecto hacia afuera.
+**Rol de Mona en INMOGRID:** construcción de marca y validación. Mona lidera la identidad visual, la narrativa pública y la validación de decisiones estratégicas. No es un rol operativo de ejecución técnica — es el rol que decide qué cara tiene el proyecto hacia afuera.
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 1. Responsable
 
-**degux.cl** es un proyecto desarrollado en Valdivia, Chile. Esta politica describe como recopilamos, usamos y protegemos tus datos personales conforme a la legislacion chilena.
+**inmogrid.cl** es un proyecto desarrollado en Valdivia, Chile. Esta politica describe como recopilamos, usamos y protegemos tus datos personales conforme a la legislacion chilena.
 
 ## 2. Datos que recopilamos
 
@@ -51,7 +51,7 @@ Conforme a la Ley 19.628 y la Ley 21.719 de Proteccion de Datos Personales, tien
 - **Cancelacion**: solicitar la eliminacion de tus datos.
 - **Oposicion**: oponerte al tratamiento de tus datos en casos especificos.
 
-Para ejercer estos derechos, puedes solicitarlo directamente desde tu cuenta en degux.cl. Plazo de respuesta: 30 dias habiles.
+Para ejercer estos derechos, puedes solicitarlo directamente desde tu cuenta en inmogrid.cl. Plazo de respuesta: 30 dias habiles.
 
 ## 6. Seguridad
 
@@ -63,7 +63,7 @@ Utilizamos servicios de Google (autenticacion y analitica) cuyos servidores se e
 
 ## 8. Menores de edad
 
-degux.cl no esta dirigido a menores de 14 anos. No recopilamos datos de menores de forma intencionada.
+inmogrid.cl no esta dirigido a menores de 14 anos. No recopilamos datos de menores de forma intencionada.
 
 ## 9. Cambios en esta politica
 

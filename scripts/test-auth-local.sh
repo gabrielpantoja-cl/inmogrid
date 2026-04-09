@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# 🧪 Test de Autenticación Local - degux.cl
+# 🧪 Test de Autenticación Local - inmogrid.cl
 # Este script prueba la configuración de autenticación localmente
 
 set -e
 
-echo "🔍 Test de Autenticación - degux.cl"
+echo "🔍 Test de Autenticación - inmogrid.cl"
 echo "===================================="
 echo ""
 

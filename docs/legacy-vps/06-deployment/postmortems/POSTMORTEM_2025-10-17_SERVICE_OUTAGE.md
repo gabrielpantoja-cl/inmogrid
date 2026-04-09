@@ -3,7 +3,7 @@
 **Fecha del Incidente:** 2025-10-17
 **Hora de Detección:** ~20:14 UTC (17:14 CLT)
 **Duración del Incidente:** ~15 minutos (diagnóstico y recuperación)
-**Severidad:** Crítica (degux.cl inaccesible - Error 502 Bad Gateway)
+**Severidad:** Crítica (inmogrid.cl inaccesible - Error 502 Bad Gateway)
 **Autor:** Gabriel Pantoja / Claude Code
 **Última Actualización:** 2025-10-17 20:30 UTC
 
@@ -15,7 +15,7 @@
 
 ```bash
 # Servicios Docker (7 contenedores activos)
-✅ degux-web                 Up 3 minutes (healthy)
+✅ inmogrid-web                 Up 3 minutes (healthy)
 ✅ n8n                       Up 5 minutes (healthy)
 ✅ n8n-db                    Up 5 minutes (healthy)
 ✅ n8n-redis                 Up 5 minutes (healthy)
@@ -31,7 +31,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 /dev/vda1        58G   39G   19G  68% /
 
 # Verificación de Servicios Web
-✅ https://degux.cl/                      HTTP 200 OK
+✅ https://inmogrid.cl/                      HTTP 200 OK
 ✅ http://localhost:3000/api/health       HTTP 200 OK
 ✅ https://N8N_HOST_REDACTED          HTTP 200 OK
 ✅ https://luanti.gabrielpantoja.cl       HTTP 200 OK
@@ -41,9 +41,9 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 ## Resumen Ejecutivo
 
-El sitio web **degux.cl** se volvió completamente inaccesible con error **502 Bad Gateway**. El diagnóstico reveló que **todos los contenedores Docker críticos** estaban detenidos:
+El sitio web **inmogrid.cl** se volvió completamente inaccesible con error **502 Bad Gateway**. El diagnóstico reveló que **todos los contenedores Docker críticos** estaban detenidos:
 
-- ❌ **degux-web** - No existía
+- ❌ **inmogrid-web** - No existía
 - ❌ **n8n-db** (PostgreSQL) - Detenido
 - ❌ **n8n** - Detenido
 - ❌ **n8n-redis** - Detenido
@@ -53,7 +53,7 @@ El sitio web **degux.cl** se volvió completamente inaccesible con error **502 B
 
 **Solución:** Levantado manual de todos los servicios Docker en orden de dependencias:
 1. Stack N8N (n8n-db, n8n-redis, n8n)
-2. Aplicación degux-web (depende de n8n-db)
+2. Aplicación inmogrid-web (depende de n8n-db)
 3. Portainer (gestión Docker)
 
 **Tiempo de resolución:** 15 minutos
@@ -66,17 +66,17 @@ El sitio web **degux.cl** se volvió completamente inaccesible con error **502 B
 
 | Hora (UTC) | Evento |
 |------------|--------|
-| ~20:00 | Usuario intenta acceder a https://degux.cl |
-| 20:14 | Error detectado: `502 Bad Gateway` en degux.cl |
+| ~20:00 | Usuario intenta acceder a https://inmogrid.cl |
+| 20:14 | Error detectado: `502 Bad Gateway` en inmogrid.cl |
 | 20:14 | Claude Code inicia diagnóstico remoto vía SSH |
 | 20:15 | Diagnóstico: Contenedores Docker críticos detenidos/inexistentes |
 | 20:16 | Verificación: Nginx nativo funcionando correctamente (puerto 80/443) |
 | 20:17 | Verificación: Espacio en disco OK (68% usado, 19GB libres) |
 | 20:18 | Inicio de recuperación: Levantado stack N8N |
 | 20:19 | Contenedores n8n-db, n8n-redis, n8n levantados correctamente |
-| 20:22 | degux-web construido y levantado (healthy) |
+| 20:22 | inmogrid-web construido y levantado (healthy) |
 | 20:24 | Portainer iniciado |
-| 20:25 | Verificación: https://degux.cl responde HTTP 200 OK |
+| 20:25 | Verificación: https://inmogrid.cl responde HTTP 200 OK |
 | 20:26 | Verificación: API health check responde correctamente |
 | 20:30 | Incidente completamente resuelto ✅ |
 
@@ -90,7 +90,7 @@ El sitio web **degux.cl** se volvió completamente inaccesible con error **502 B
 
 | Contenedor | Estado Esperado | Estado Encontrado |
 |------------|----------------|-------------------|
-| degux-web | Up (healthy) | ❌ **No existe** |
+| inmogrid-web | Up (healthy) | ❌ **No existe** |
 | n8n | Up (healthy) | ❌ **No existe** |
 | n8n-db | Up (healthy) | ❌ **No existe** |
 | n8n-redis | Up (healthy) | ❌ **No existe** |
@@ -107,13 +107,13 @@ Durante el diagnóstico se descubrió la **arquitectura real** del sistema:
 Internet (puerto 80/443)
     ↓
 Nginx NATIVO (Ubuntu systemd) ← Servicio del sistema operativo
-    ├─ degux.cl               → proxy_pass http://127.0.0.1:3000
-    ├─ www.degux.cl           → proxy_pass http://127.0.0.1:3000
+    ├─ inmogrid.cl               → proxy_pass http://127.0.0.1:3000
+    ├─ www.inmogrid.cl           → proxy_pass http://127.0.0.1:3000
     ├─ N8N_HOST_REDACTED  → proxy_pass http://127.0.0.1:5678
     └─ luanti.gabrielpantoja.cl → archivos estáticos
             ↓
     Contenedores Docker (vps_network)
-    ├─ degux-web (puerto 3000) ← Next.js 15
+    ├─ inmogrid-web (puerto 3000) ← Next.js 15
     ├─ n8n (puerto 5678)       ← Automatización
     ├─ n8n-db (puerto 5432)    ← PostgreSQL + PostGIS
     └─ n8n-redis (puerto 6379) ← Cache
@@ -129,7 +129,7 @@ Nginx NATIVO (Ubuntu systemd) ← Servicio del sistema operativo
 - Nginx nativo tiene uptime de 6 días (desde 2025-10-11 05:00:28 UTC)
 - Luanti server tiene uptime de 3-6 días
 - Portainer estaba en estado "Exited (2)" (salida anormal)
-- Todos los servicios degux/n8n inexistentes (no solo detenidos)
+- Todos los servicios inmogrid/n8n inexistentes (no solo detenidos)
 
 **Política de restart configurada:**
 ```yaml
@@ -140,13 +140,13 @@ restart: unless-stopped
 **Problema identificado:** A pesar de tener `restart: unless-stopped`, los servicios **no se levantaron automáticamente**. Esto puede deberse a:
 1. Los contenedores fueron detenidos manualmente (con `docker stop`)
 2. Fallo en el daemon de Docker durante el reinicio
-3. Dependencias entre servicios (degux-web depende de n8n-db) causaron fallo en cadena
+3. Dependencias entre servicios (inmogrid-web depende de n8n-db) causaron fallo en cadena
 
 ### 4. ¿Por Qué el Error 502 y No 404?
 
 **502 Bad Gateway** indica que:
 - ✅ Nginx está funcionando y recibió la solicitud
-- ❌ El backend (degux-web en puerto 3000) no respondió
+- ❌ El backend (inmogrid-web en puerto 3000) no respondió
 
 Si Nginx hubiera estado caído, el error sería "Connection refused" o timeout.
 
@@ -172,7 +172,7 @@ docker ps -a
 - nginx-proxy: Created (no corriendo, pero correcto ya que no se usa)
 - portainer: Exited (2)
 - luanti-*: Up (sin problemas)
-- **degux-web, n8n, n8n-db, n8n-redis:** NO EXISTEN
+- **inmogrid-web, n8n, n8n-db, n8n-redis:** NO EXISTEN
 
 ### Paso 3: Levantado de Stack N8N
 
@@ -190,10 +190,10 @@ Creating n8n ... done
 
 ✅ Stack N8N completamente operativo
 
-### Paso 4: Levantado de degux-web
+### Paso 4: Levantado de inmogrid-web
 
 ```bash
-docker-compose -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
+docker-compose -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 ```
 
 **Resultado:**
@@ -201,7 +201,7 @@ docker-compose -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux
 - Contenedor iniciado correctamente
 - Health check: healthy (puerto 3000 respondiendo)
 
-✅ degux-web operativo
+✅ inmogrid-web operativo
 
 ### Paso 5: Levantado de Portainer
 
@@ -214,12 +214,12 @@ docker start 605f0f38f466_portainer
 ### Paso 6: Verificación Final
 
 ```bash
-# Verificar degux-web internamente
+# Verificar inmogrid-web internamente
 curl http://localhost:3000/api/health
 # HTTP Status: 200
 
-# Verificar degux.cl a través de Nginx
-curl https://degux.cl/
+# Verificar inmogrid.cl a través de Nginx
+curl https://inmogrid.cl/
 # HTTP Status: 200
 ```
 
@@ -233,7 +233,7 @@ curl https://degux.cl/
 
 | Nombre | Estado | Salud | Puertos |
 |--------|--------|-------|---------|
-| degux-web | Up 3 min | Healthy | 0.0.0.0:3000->3000/tcp |
+| inmogrid-web | Up 3 min | Healthy | 0.0.0.0:3000->3000/tcp |
 | n8n | Up 5 min | Healthy | 0.0.0.0:5678->5678/tcp |
 | n8n-db | Up 5 min | Healthy | 5432/tcp (interno) |
 | n8n-redis | Up 5 min | Healthy | 6379/tcp (interno) |
@@ -245,8 +245,8 @@ curl https://degux.cl/
 
 | Dominio | Backend | SSL | Estado |
 |---------|---------|-----|--------|
-| degux.cl | degux-web:3000 | ✅ Valid | 🟢 200 OK |
-| www.degux.cl | degux-web:3000 | ✅ Valid | 🟢 200 OK |
+| inmogrid.cl | inmogrid-web:3000 | ✅ Valid | 🟢 200 OK |
+| www.inmogrid.cl | inmogrid-web:3000 | ✅ Valid | 🟢 200 OK |
 | N8N_HOST_REDACTED | n8n:5678 | ✅ Valid | 🟢 200 OK |
 | luanti.gabrielpantoja.cl | Archivos estáticos | ✅ Valid | 🟢 200 OK |
 
@@ -265,7 +265,7 @@ curl https://degux.cl/
 
 ### Contexto
 
-El sistema degux.cl actualmente usa **Nginx nativo** (instalado vía apt en Ubuntu), mientras que existe un contenedor `nginx-proxy` Docker configurado pero **no utilizado**.
+El sistema inmogrid.cl actualmente usa **Nginx nativo** (instalado vía apt en Ubuntu), mientras que existe un contenedor `nginx-proxy` Docker configurado pero **no utilizado**.
 
 Esta sección analiza las ventajas y desventajas de cada enfoque.
 
@@ -281,14 +281,14 @@ Ubuntu 22.04 LTS (VPS)
 │   ├── Configuración: /etc/nginx/
 │   │   ├── nginx.conf
 │   │   ├── sites-available/
-│   │   │   ├── degux.cl
+│   │   │   ├── inmogrid.cl
 │   │   │   ├── N8N_HOST_REDACTED
 │   │   │   └── luanti.gabrielpantoja.cl
 │   │   └── sites-enabled/ (symlinks)
 │   └── Certificados SSL: /etc/letsencrypt/ (Let's Encrypt)
 │
 └── Contenedores Docker (vps_network)
-    ├── degux-web (127.0.0.1:3000)
+    ├── inmogrid-web (127.0.0.1:3000)
     ├── n8n (127.0.0.1:5678)
     ├── n8n-db (interno:5432)
     └── n8n-redis (interno:6379)
@@ -296,7 +296,7 @@ Ubuntu 22.04 LTS (VPS)
 
 **Flujo de tráfico:**
 1. Request → Nginx nativo (puerto 443)
-2. Nginx → proxy_pass a http://127.0.0.1:3000 (degux-web Docker)
+2. Nginx → proxy_pass a http://127.0.0.1:3000 (inmogrid-web Docker)
 3. Docker responde → Nginx → Cliente
 
 ---
@@ -315,7 +315,7 @@ Ubuntu 22.04 LTS (VPS)
 │   ├── certbot (Docker container, profile: ssl-setup)
 │   │   └── Volumen compartido con nginx-proxy
 │   │
-│   ├── degux-web (red interna Docker)
+│   ├── inmogrid-web (red interna Docker)
 │   ├── n8n (red interna Docker)
 │   ├── n8n-db (red interna Docker)
 │   └── n8n-redis (red interna Docker)
@@ -323,7 +323,7 @@ Ubuntu 22.04 LTS (VPS)
 
 **Flujo de tráfico:**
 1. Request → nginx-proxy Docker (puerto 443)
-2. nginx-proxy → proxy_pass a http://degux-web:3000 (hostname Docker)
+2. nginx-proxy → proxy_pass a http://inmogrid-web:3000 (hostname Docker)
 3. Docker responde → nginx-proxy → Cliente
 
 ---
@@ -358,7 +358,7 @@ Ubuntu 22.04 LTS (VPS)
 | Recovery | 🟢 systemd automático | 🟡 Depende de Docker daemon | ✅ Nativo |
 | **6. INCIDENTE 2025-10-17** | | | |
 | Nginx funcionó | ✅ Sí (6 días uptime) | ❌ nginx-proxy estaba "Created" | ✅ **Nativo** |
-| Backend caído | ❌ degux-web caído → 502 | ❌ degux-web caído → 502 | 🤝 Empate |
+| Backend caído | ❌ inmogrid-web caído → 502 | ❌ inmogrid-web caído → 502 | 🤝 Empate |
 | Facilidad recovery | 🟢 Nginx OK, solo levantar Docker | 🟡 Ambos en Docker, dep compleja | ✅ Nativo |
 | **7. SIMPLICIDAD** | | | |
 | Curva aprendizaje | 🟢 Nginx estándar (docs amplias) | 🟡 Nginx + Docker (dos capas) | ✅ Nativo |
@@ -390,7 +390,7 @@ Ubuntu 22.04 LTS (VPS)
 
 ### 🎯 Recomendación Final
 
-**Para el caso específico de degux.cl: Mantener Nginx Nativo ✅**
+**Para el caso específico de inmogrid.cl: Mantener Nginx Nativo ✅**
 
 #### Justificación:
 
@@ -411,7 +411,7 @@ Ubuntu 22.04 LTS (VPS)
 
 **4. Separación de Responsabilidades**
 - Nginx (edge/proxy) en capa del sistema operativo
-- Aplicaciones (degux-web, n8n) en Docker
+- Aplicaciones (inmogrid-web, n8n) en Docker
 - Fallo en Docker daemon no afecta el proxy reverso
 
 **5. Troubleshooting Más Simple**
@@ -432,7 +432,7 @@ Ubuntu 22.04 LTS (VPS)
 5. **Automatización Completa:** CI/CD que requiere infraestructura como código estricta
 6. **Equipos Sin Acceso Root:** Desarrolladores sin permisos sudo en servidor
 
-**Para degux.cl (proyecto de 1 desarrollador, VPS único):** Nginx nativo es la opción más pragmática.
+**Para inmogrid.cl (proyecto de 1 desarrollador, VPS único):** Nginx nativo es la opción más pragmática.
 
 ---
 
@@ -444,7 +444,7 @@ Capa de Edge (Sistema Operativo)
 │   └── Gestiona SSL, routing, alta disponibilidad
 │
 Capa de Aplicación (Docker)
-├── degux-web (Next.js)
+├── inmogrid-web (Next.js)
 ├── n8n (automatización)
 ├── n8n-db (PostgreSQL)
 └── n8n-redis (cache)
@@ -465,8 +465,8 @@ Capa de Aplicación (Docker)
 
 | Servicio | Estado Durante Incidente | Duración | Impacto |
 |----------|-------------------------|----------|---------|
-| **degux.cl** | ❌ Offline (502) | ~15 min | Usuarios no podían acceder a la aplicación |
-| **www.degux.cl** | ❌ Offline (502) | ~15 min | Alias afectado igual que dominio principal |
+| **inmogrid.cl** | ❌ Offline (502) | ~15 min | Usuarios no podían acceder a la aplicación |
+| **www.inmogrid.cl** | ❌ Offline (502) | ~15 min | Alias afectado igual que dominio principal |
 | **N8N_HOST_REDACTED** | ❌ Offline (502) | ~15 min | Workflows detenidos, UI inaccesible |
 | **Luanti Server** | ✅ Sin impacto | 0 min | Servidor de juego continuó funcionando |
 | **luanti.gabrielpantoja.cl** | ✅ Sin impacto | 0 min | Landing page (archivos estáticos) accesible |
@@ -477,7 +477,7 @@ Capa de Aplicación (Docker)
 
 **Ninguna.** Todos los contenedores se levantaron correctamente con sus volúmenes persistentes intactos:
 - ✅ Base de datos PostgreSQL (n8n-db): datos preservados
-- ✅ Aplicación degux.cl: sin pérdida de estado
+- ✅ Aplicación inmogrid.cl: sin pérdida de estado
 - ✅ N8N workflows: todos preservados
 - ✅ Redis cache: reconstruido automáticamente
 
@@ -506,7 +506,7 @@ grep -r "restart:" docker-compose*.yml
 # Opción 1: Cambiar a 'always' (más agresivo)
 # docker-compose.*.yml
 services:
-  degux-web:
+  inmogrid-web:
     restart: always  # ← Cambio de 'unless-stopped'
 
 # Opción 2: Mantener 'unless-stopped' pero investigar logs Docker
@@ -517,7 +517,7 @@ sudo journalctl -u docker.service | grep -i restart
 
 #### 🟡 ALTA: Configurar Monitoreo Externo
 
-**Acción requerida:** Implementar health checks externos que alerten cuando degux.cl esté caído
+**Acción requerida:** Implementar health checks externos que alerten cuando inmogrid.cl esté caído
 
 **Opciones:**
 
@@ -525,7 +525,7 @@ sudo journalctl -u docker.service | grep -i restart
 ```
 URL: https://uptimerobot.com
 Configuración:
-- Monitor: https://degux.cl
+- Monitor: https://inmogrid.cl
 - Intervalo: 5 minutos
 - Alertas: Email a gabriel@pantoja.cl
 - Costo: $0/mes (plan gratuito)
@@ -535,7 +535,7 @@ Configuración:
 ```
 URL: https://healthchecks.io
 Configuración:
-- Monitor: https://degux.cl/api/health
+- Monitor: https://inmogrid.cl/api/health
 - Intervalo: 5 minutos
 - Alertas: Email + Webhook Discord/Slack
 - Costo: $0/mes (plan gratuito)
@@ -560,7 +560,7 @@ Configuración en panel Digital Ocean:
 #!/bin/bash
 # /home/gabriel/vps-do/scripts/health-check.sh
 
-LOG="/var/log/degux-health-check.log"
+LOG="/var/log/inmogrid-health-check.log"
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
 # Función de log
@@ -568,20 +568,20 @@ log() {
     echo "[$TIMESTAMP] $1" >> "$LOG"
 }
 
-# Verificar degux-web
-if ! docker ps | grep -q "degux-web.*Up.*healthy"; then
-    log "ERROR: degux-web no está healthy. Reiniciando stack..."
+# Verificar inmogrid-web
+if ! docker ps | grep -q "inmogrid-web.*Up.*healthy"; then
+    log "ERROR: inmogrid-web no está healthy. Reiniciando stack..."
     cd /home/gabriel/vps-do
-    docker-compose -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d
+    docker-compose -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml up -d
     log "Stack reiniciado"
 else
     log "OK: Todos los servicios healthy"
 fi
 
 # Verificar endpoint público
-HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://degux.cl/api/health)
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://inmogrid.cl/api/health)
 if [ "$HTTP_STATUS" != "200" ]; then
-    log "ERROR: degux.cl no responde (HTTP $HTTP_STATUS). Reiniciando nginx..."
+    log "ERROR: inmogrid.cl no responde (HTTP $HTTP_STATUS). Reiniciando nginx..."
     sudo systemctl reload nginx
     log "Nginx reloaded"
 fi
@@ -609,7 +609,7 @@ send_alert() {
     MESSAGE="$1"
     curl -H "Content-Type: application/json" \
          -X POST \
-         -d "{\"content\": \"🚨 **ALERTA degux.cl**: $MESSAGE\"}" \
+         -d "{\"content\": \"🚨 **ALERTA inmogrid.cl**: $MESSAGE\"}" \
          "$DISCORD_WEBHOOK"
 }
 
@@ -663,7 +663,7 @@ fi
 
 ## Runbook de Recuperación
 
-### Procedimiento Completo: Si degux.cl Muestra Error 502
+### Procedimiento Completo: Si inmogrid.cl Muestra Error 502
 
 ```bash
 # ============================================
@@ -688,7 +688,7 @@ sudo systemctl status nginx
 docker ps -a
 
 # Esperado:
-# degux-web        Up X minutes (healthy)
+# inmogrid-web        Up X minutes (healthy)
 # n8n              Up X minutes (healthy)
 # n8n-db           Up X minutes (healthy)
 # n8n-redis        Up X minutes (healthy)
@@ -706,15 +706,15 @@ sleep 10
 docker ps | grep -E "n8n|healthy"
 
 # ============================================
-# PASO 5: Levantar degux-web (si caído)
+# PASO 5: Levantar inmogrid-web (si caído)
 # ============================================
-docker-compose -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web
+docker-compose -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # Esperar 20 segundos (build + health check)
 sleep 20
 
 # Verificar salud
-docker ps | grep degux-web
+docker ps | grep inmogrid-web
 
 # ============================================
 # PASO 6: Verificar Endpoint Interno
@@ -725,7 +725,7 @@ curl http://localhost:3000/api/health
 # ============================================
 # PASO 7: Verificar Endpoint Público
 # ============================================
-curl -I https://degux.cl/
+curl -I https://inmogrid.cl/
 # Esperado: HTTP/2 200
 
 # ============================================
@@ -738,8 +738,8 @@ docker start <portainer_container_id>
 # ============================================
 # PASO 9: Verificar Logs (si hay problemas)
 # ============================================
-# Logs degux-web
-docker logs --tail 100 degux-web
+# Logs inmogrid-web
+docker logs --tail 100 inmogrid-web
 
 # Logs Nginx
 sudo tail -50 /var/log/nginx/error.log
@@ -755,7 +755,7 @@ docker logs --tail 50 n8n-db
 # ============================================
 echo "=== VERIFICACIÓN FINAL ==="
 docker ps --format "table {{.Names}}\t{{.Status}}"
-curl -s -o /dev/null -w "degux.cl: %{http_code}\n" https://degux.cl/
+curl -s -o /dev/null -w "inmogrid.cl: %{http_code}\n" https://inmogrid.cl/
 echo "✅ Recuperación completa"
 ```
 
@@ -766,7 +766,7 @@ echo "✅ Recuperación completa"
 | 1-2. SSH + Verificar Nginx | 30 seg |
 | 3. Verificar contenedores | 10 seg |
 | 4. Levantar N8N stack | 15-30 seg |
-| 5. Levantar degux-web | 30-60 seg (build) |
+| 5. Levantar inmogrid-web | 30-60 seg (build) |
 | 6-7. Verificar endpoints | 10 seg |
 | 8. Portainer | 5 seg |
 | **TOTAL** | **~2-3 minutos** |
@@ -819,7 +819,7 @@ echo "✅ Recuperación completa"
 - **VPS IP:** VPS_IP_REDACTED
 - **Usuario SSH:** gabriel
 - **Portainer UI:** https://VPS_IP_REDACTED:9443
-- **Repositorio degux.cl:** https://github.com/usuario/degux.cl
+- **Repositorio inmogrid.cl:** https://github.com/usuario/inmogrid.cl
 - **Repositorio vps-do:** `/home/gabriel/vps-do/`
 - **Documentación sistema:** `docs/SISTEMA_ACTUAL_2025-10-11.md`
 - **Postmortem anterior:** `docs/06-deployment/POSTMORTEM_2025-10-07_DISK_FULL.md`
@@ -837,7 +837,7 @@ ssh gabriel@VPS_IP_REDACTED "docker ps -a"
 # 2. Verificar docker-compose files
 ssh gabriel@VPS_IP_REDACTED "ls -la ~/vps-do/docker-compose*.yml"
 ssh gabriel@VPS_IP_REDACTED "cat ~/vps-do/docker-compose.yml"
-ssh gabriel@VPS_IP_REDACTED "cat ~/vps-do/docker-compose.degux.yml"
+ssh gabriel@VPS_IP_REDACTED "cat ~/vps-do/docker-compose.inmogrid.yml"
 
 # 3. Verificar Nginx nativo
 ssh gabriel@VPS_IP_REDACTED "systemctl status nginx"
@@ -853,15 +853,15 @@ ssh gabriel@VPS_IP_REDACTED "df -h"
 # 1. Levantar N8N stack
 ssh gabriel@VPS_IP_REDACTED "cd ~/vps-do && docker-compose -f docker-compose.n8n.yml up -d"
 
-# 2. Levantar degux-web
-ssh gabriel@VPS_IP_REDACTED "cd ~/vps-do && docker-compose -f docker-compose.n8n.yml -f docker-compose.degux.yml up -d degux-web"
+# 2. Levantar inmogrid-web
+ssh gabriel@VPS_IP_REDACTED "cd ~/vps-do && docker-compose -f docker-compose.n8n.yml -f docker-compose.inmogrid.yml up -d inmogrid-web"
 
 # 3. Levantar Portainer
 ssh gabriel@VPS_IP_REDACTED "docker start 605f0f38f466_portainer"
 
 # 4. Verificaciones
 ssh gabriel@VPS_IP_REDACTED "curl http://localhost:3000/api/health"
-ssh gabriel@VPS_IP_REDACTED "curl -s -o /dev/null -w '%{http_code}' https://degux.cl/"
+ssh gabriel@VPS_IP_REDACTED "curl -s -o /dev/null -w '%{http_code}' https://inmogrid.cl/"
 ssh gabriel@VPS_IP_REDACTED "docker ps --format 'table {{.Names}}\t{{.Status}}'"
 ```
 

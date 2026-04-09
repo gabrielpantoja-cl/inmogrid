@@ -1,6 +1,6 @@
 # Feature: `networking`
 
-Red profesional de degux.cl: solicitudes de conexión, aceptación, listado de conexiones y solicitudes pendientes.
+Red profesional de inmogrid.cl: solicitudes de conexión, aceptación, listado de conexiones y solicitudes pendientes.
 
 ## Scope
 

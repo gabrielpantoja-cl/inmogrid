@@ -31,7 +31,7 @@ export type {
 export type { ValidationResult } from './types';
 
 /**
- * Forma estándar de respuesta para la API pública de degux.cl.
+ * Forma estándar de respuesta para la API pública de inmogrid.cl.
  * Mantenerla consistente facilita el consumo desde clientes externos.
  */
 export interface ApiSuccessResponse<T> {

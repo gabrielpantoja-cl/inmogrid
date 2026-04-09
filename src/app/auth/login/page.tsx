@@ -3,7 +3,7 @@ import { createClient } from '@/shared/lib/supabase/server'
 import { LoginCard } from './LoginCard'
 
 export const metadata = {
-  title: 'Iniciar Sesion | DEGUX',
+  title: 'Iniciar Sesion | INMOGRID',
   description: 'Accede al ecosistema digital colaborativo de profesionales inmobiliarios.',
 }
 

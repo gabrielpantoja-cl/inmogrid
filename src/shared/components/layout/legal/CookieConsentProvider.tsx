@@ -17,8 +17,8 @@ interface CookieConsentContextType {
 
 const CookieConsentContext = createContext<CookieConsentContextType | undefined>(undefined);
 
-const COOKIE_PREFERENCES_KEY = 'degux_cookie_preferences';
-const COOKIE_CONSENT_KEY = 'degux_cookie_consent';
+const COOKIE_PREFERENCES_KEY = 'inmogrid_cookie_preferences';
+const COOKIE_CONSENT_KEY = 'inmogrid_cookie_consent';
 
 export function CookieConsentProvider({ children }: { children: React.ReactNode }) {
   const [preferences, setPreferences] = useState<CookiePreferences | null>(null);

@@ -7,13 +7,13 @@
 
 `pantojapropiedades.cl` vence el **16 de abril de 2026** — quedan ~10 días desde la fecha de esta decisión.
 
-**La decisión:** en lugar de renovar `pantojapropiedades.cl`, lanzar `degux.cl` con un MVP funcional antes de esa fecha. Esto convierte el vencimiento del dominio en un hito de lanzamiento, no en un problema.
+**La decisión:** en lugar de renovar `pantojapropiedades.cl`, lanzar `inmogrid.cl` con un MVP funcional antes de esa fecha. Esto convierte el vencimiento del dominio en un hito de lanzamiento, no en un problema.
 
 **MVP mínimo para el 16 de abril:**
-- Landing pública de DEGUX con identidad y manifiesto
+- Landing pública de INMOGRID con identidad y manifiesto
 - Agenda de eventos funcional (aunque empiece con 0 eventos publicados)
 - Formulario para publicar eventos (free/pagado)
-- Redirección 301 de `pantojapropiedades.cl` → `degux.cl`
+- Redirección 301 de `pantojapropiedades.cl` → `inmogrid.cl`
 
 **Stack del MVP:** Next.js 15 + Supabase + Vercel. Ver `07-arquitectura-tecnica.md`.
 
@@ -134,7 +134,7 @@ Modelo: libre para uso no comercial, pagado para uso comercial a escala.
 
 ```
 FASE 0 — MVP (antes del 16 abril 2026)
-├── Landing DEGUX con identidad y manifiesto
+├── Landing INMOGRID con identidad y manifiesto
 ├── Agenda de eventos (UI funcional, aunque sin eventos aún)
 └── Formulario publicación eventos (cobro desde día 1 para comerciales)
 

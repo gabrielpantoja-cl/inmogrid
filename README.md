@@ -1,12 +1,12 @@
-# degux.cl - Tu Ecosistema Digital para Crear y Conectar
+# inmogrid.cl - Tu Ecosistema Digital para Crear y Conectar
 
-**degux.cl** lienzo digital para tu marca personal. Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir tus ideas y conectar con una comunidad de creadores y profesionales.
+**inmogrid.cl** lienzo digital para tu marca personal. Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir tus ideas y conectar con una comunidad de creadores y profesionales.
 
 Imagina una mezcla entre **Substack**, **Behance** y **Linktree**, con un fuerte sentido de comunidad local.
 
 ## La Visión: Un Ecosistema Colaborativo
 
-En un mundo digital saturado, degux.cl nace como un refugio para la autenticidad. Creemos en un internet donde el control creativo pertenece al usuario. Nuestra misión es ofrecerte las herramientas para que diseñes tu propio espacio, cuentes tu historia sin algoritmos que te limiten y construyas conexiones genuinas.
+En un mundo digital saturado, inmogrid.cl nace como un refugio para la autenticidad. Creemos en un internet donde el control creativo pertenece al usuario. Nuestra misión es ofrecerte las herramientas para que diseñes tu propio espacio, cuentes tu historia sin algoritmos que te limiten y construyas conexiones genuinas.
 
 - **Para el Creador:** Publica artículos, muestra tu portafolio, comparte tus proyectos.
 - **Para el Profesional:** Consolida tu presencia online, desde tu biografía hasta tus enlaces más importantes.
@@ -14,7 +14,7 @@ En un mundo digital saturado, degux.cl nace como un refugio para la autenticidad
 
 ## Características Principales
 
-- **Perfiles Públicos y Configurables:** Tu espacio, tus reglas. Diseña un perfil que realmente te represente (`degux.cl/tu-nombre`).
+- **Perfiles Públicos y Configurables:** Tu espacio, tus reglas. Diseña un perfil que realmente te represente (`inmogrid.cl/tu-nombre`).
 - **Libertad de Publicación:** Comparte lo que quieras, desde un ensayo profundo hasta una galería de imágenes o tu último proyecto de código.
 - **Descubrimiento Orgánico:** Explora una red de perfiles sin la interferencia de algoritmos de recomendación. La curiosidad es tu única guía.
 - **Inicio de Sesión Simple y Seguro:** Crea tu perfil de forma segura utilizando tu cuenta de Google. Solo es necesario para empezar a crear; el resto del ecosistema es abierto para todos.
@@ -36,8 +36,8 @@ En un mundo digital saturado, degux.cl nace como un refugio para la autenticidad
 
 1.  **Clona el repositorio:**
     ```bash
-    git clone https://github.com/tu-usuario/degux.cl.git
-    cd degux.cl
+    git clone https://github.com/tu-usuario/inmogrid.cl.git
+    cd inmogrid.cl
     ```
 
 2.  **Instala las dependencias:**
@@ -67,7 +67,7 @@ En un mundo digital saturado, degux.cl nace como un refugio para la autenticidad
 
 ## Estado del Proyecto
 
-**Fase Actual: Renacimiento.** Estamos en pleno desarrollo del núcleo de la plataforma: los perfiles de usuario y el sistema de publicación. La base tecnológica es sólida, y ahora estamos construyendo la experiencia de usuario que definirá a degux.cl.
+**Fase Actual: Renacimiento.** Estamos en pleno desarrollo del núcleo de la plataforma: los perfiles de usuario y el sistema de publicación. La base tecnológica es sólida, y ahora estamos construyendo la experiencia de usuario que definirá a inmogrid.cl.
 
 ## ¿Cómo Contribuir?
 

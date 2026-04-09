@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ecosistema DEGUX — Cómo funciona</title>
+  <title>Ecosistema INMOGRID — Cómo funciona</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -190,7 +190,7 @@
 </head>
 <body>
 
-  <h1>🏗️ Ecosistema DEGUX</h1>
+  <h1>🏗️ Ecosistema INMOGRID</h1>
   <p class="subtitle">Cómo funcionan todas las piezas juntas — explicado sin tecnicismos</p>
 
   <!-- ══ DIAGRAMA PRINCIPAL ══ -->
@@ -201,7 +201,7 @@
       <div class="icon">👤</div>
       <div class="label">Punto de entrada</div>
       <h2>Tú / La persona usuaria</h2>
-      <p>Abre el navegador, escribe <strong>degux.cl</strong> y ve la página. Desde aquí inicia sesión, publica notas y explora perfiles de otros profesionales.</p>
+      <p>Abre el navegador, escribe <strong>inmogrid.cl</strong> y ve la página. Desde aquí inicia sesión, publica notas y explora perfiles de otros profesionales.</p>
       <span class="tag violet">Navegador web</span>
       <span class="tag violet">Celular / PC</span>
     </div>
@@ -212,7 +212,7 @@
       <div class="label">Frontend — lo que se ve</div>
       <h2>Vercel — La vitrina del negocio</h2>
       <p>
-        Aquí vive el <strong>código de la página web</strong> (Next.js). Vercel es como un dueño de tienda que tiene su local en la nube: cada vez que alguien entra a degux.cl, Vercel le entrega las páginas al instante desde servidores distribuidos por todo el mundo.
+        Aquí vive el <strong>código de la página web</strong> (Next.js). Vercel es como un dueño de tienda que tiene su local en la nube: cada vez que alguien entra a inmogrid.cl, Vercel le entrega las páginas al instante desde servidores distribuidos por todo el mundo.
         <br/><br/>
         Cuando Gabriel sube cambios al código en GitHub, Vercel los detecta y actualiza el sitio <em>automáticamente en segundos</em>, sin apagarlo.
       </p>
@@ -249,11 +249,11 @@
       <div class="label">Automatizaciones — trabajo entre bambalinas</div>
       <h2>VPS Oracle — El asistente nocturno</h2>
       <p>
-        Un servidor propio (siempre encendido) que corre <strong>tareas automáticas</strong> que no necesitan que el usuario las active. Por ejemplo: enviar correos, procesar datos, conectar servicios externos. Vive en <code>api.degux.cl</code> y usa <strong>N8N</strong> como motor de automatizaciones (tipo Zapier pero privado).
+        Un servidor propio (siempre encendido) que corre <strong>tareas automáticas</strong> que no necesitan que el usuario las active. Por ejemplo: enviar correos, procesar datos, conectar servicios externos. Vive en <code>api.inmogrid.cl</code> y usa <strong>N8N</strong> como motor de automatizaciones (tipo Zapier pero privado).
       </p>
       <span class="tag amber">N8N Workflows</span>
       <span class="tag amber">Docker</span>
-      <span class="tag amber">api.degux.cl</span>
+      <span class="tag amber">api.inmogrid.cl</span>
     </div>
 
     <!-- Google OAuth -->
@@ -262,7 +262,7 @@
       <div class="label">Proveedor de identidad</div>
       <h2>Google — El documento de identidad</h2>
       <p>
-        degux.cl no guarda contraseñas. En cambio, cuando inicias sesión, <strong>le pregunta a Google</strong> "¿es realmente esta persona?". Google confirma, y Supabase te deja entrar. Es como mostrar tu carnet en la puerta.
+        inmogrid.cl no guarda contraseñas. En cambio, cuando inicias sesión, <strong>le pregunta a Google</strong> "¿es realmente esta persona?". Google confirma, y Supabase te deja entrar. Es como mostrar tu carnet en la puerta.
       </p>
       <span class="tag purple">OAuth 2.0</span>
       <span class="tag purple">Sin contraseñas</span>
@@ -276,7 +276,7 @@
     <div class="steps">
       <div class="step">
         <div class="dot s1">👤</div>
-        <p>Haces clic en el botón en degux.cl</p>
+        <p>Haces clic en el botón en inmogrid.cl</p>
       </div>
       <div class="arrow-step">→</div>
       <div class="step">
@@ -304,7 +304,7 @@
   <!-- ══ NOTA BASE COMPARTIDA ══ -->
   <div class="shared-note">
     <span class="ico">⚠️</span>
-    <span><strong>Base de datos compartida durante la transición:</strong> Supabase aloja datos tanto de degux.cl como de pantojapropiedades.cl en el mismo lugar. Por eso los cambios en la base de datos deben hacerse con cuidado para no afectar el sitio viejo mientras el nuevo madura.</span>
+    <span><strong>Base de datos compartida durante la transición:</strong> Supabase aloja datos tanto de inmogrid.cl como de pantojapropiedades.cl en el mismo lugar. Por eso los cambios en la base de datos deben hacerse con cuidado para no afectar el sitio viejo mientras el nuevo madura.</span>
   </div>
 
   <!-- ══ ANALOGÍAS ══ -->

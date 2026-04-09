@@ -1,7 +1,7 @@
-# 🚀 INICIO RÁPIDO - degux.cl
+# 🚀 INICIO RÁPIDO - inmogrid.cl
 
 **⏱️ Tiempo de lectura: 3 minutos**  
-**📍 Estás en:** Windows (c:\\Users\\gabri\\Developer\\degux.cl)
+**📍 Estás en:** Windows (c:\\Users\\gabri\\Developer\\inmogrid.cl)
 
 ---
 

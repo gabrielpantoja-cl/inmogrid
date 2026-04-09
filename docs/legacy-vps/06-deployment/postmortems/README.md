@@ -1,4 +1,4 @@
-# 📋 Postmortems - degux.cl
+# 📋 Postmortems - inmogrid.cl
 
 Documentación de incidentes y lecciones aprendidas.
 

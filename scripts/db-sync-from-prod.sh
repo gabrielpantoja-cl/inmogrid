@@ -19,10 +19,10 @@ echo ""
 # Variables de configuración
 VPS_HOST="VPS_IP_REDACTED"
 VPS_USER="root"
-VPS_CONTAINER="degux-db"  # Ajustar al nombre real del contenedor
-VPS_DB_NAME="degux"       # Ajustar al nombre real de la DB
-VPS_DB_USER="degux_user"  # Ajustar al usuario real
-DUMP_FILE="degux_dump_$(date +%Y%m%d_%H%M%S).sql"
+VPS_CONTAINER="inmogrid-db"  # Ajustar al nombre real del contenedor
+VPS_DB_NAME="inmogrid"       # Ajustar al nombre real de la DB
+VPS_DB_USER="inmogrid_user"  # Ajustar al usuario real
+DUMP_FILE="inmogrid_dump_$(date +%Y%m%d_%H%M%S).sql"
 BACKUP_DIR="./backups"
 
 # Crear directorio de backups si no existe
@@ -54,14 +54,14 @@ echo ""
 echo "📊 Paso 2: Importando dump en base de datos local..."
 
 # Verificar que el contenedor local esté corriendo
-if ! docker ps | grep -q "degux-postgres-local"; then
+if ! docker ps | grep -q "inmogrid-postgres-local"; then
     echo -e "${RED}❌ Error: PostgreSQL local no está corriendo${NC}"
     echo "   Ejecuta: ./scripts/db-local-start.sh"
     exit 1
 fi
 
 # Importar dump
-docker exec -i degux-postgres-local psql -U degux_user -d degux_dev < "$BACKUP_DIR/$DUMP_FILE"
+docker exec -i inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev < "$BACKUP_DIR/$DUMP_FILE"
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✅ Importación completada${NC}"

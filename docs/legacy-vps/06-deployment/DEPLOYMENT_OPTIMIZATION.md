@@ -26,7 +26,7 @@ Previously, Docker image caching caused deployments to show stale code even afte
    - Builds the application
    - Deploys to VPS with `--no-cache` flag
    - Verifies deployment health
-4. Check deployment status at: https://github.com/yourusername/degux.cl/actions
+4. Check deployment status at: https://github.com/yourusername/inmogrid.cl/actions
 
 **Deployment time**: ~5-7 minutes
 
@@ -35,7 +35,7 @@ Previously, Docker image caching caused deployments to show stale code even afte
 
 Run the quick deploy script:
 ```bash
-cd /home/gabriel/Documentos/degux.cl
+cd /home/gabriel/Documentos/inmogrid.cl
 ./scripts/quick-deploy.sh
 ```
 
@@ -56,28 +56,28 @@ The script will:
 ssh gabriel@VPS_IP_REDACTED
 
 # Pull latest code
-cd ~/degux.cl
+cd ~/inmogrid.cl
 git pull origin main
 
 # Navigate to Docker directory
 cd ~/vps-do
 
 # Stop and remove old container
-docker stop degux-web
-docker rm degux-web
+docker stop inmogrid-web
+docker rm inmogrid-web
 
 # Rebuild without cache
-docker compose -f docker-compose.yml -f docker-compose.degux.yml build --no-cache degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml build --no-cache inmogrid-web
 
 # Start new container
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # Verify
-docker ps | grep degux-web
-docker logs degux-web --tail 30
+docker ps | grep inmogrid-web
+docker logs inmogrid-web --tail 30
 
 # Test health
-curl -s https://degux.cl/api/health
+curl -s https://inmogrid.cl/api/health
 ```
 
 ## Key Improvements
@@ -85,14 +85,14 @@ curl -s https://degux.cl/api/health
 ### 1. No-Cache Builds
 The `--no-cache` flag ensures Docker rebuilds all layers from scratch, preventing stale code issues:
 ```bash
-docker compose build --no-cache degux-web
+docker compose build --no-cache inmogrid-web
 ```
 
 ### 2. Proper Container Cleanup
 Before starting new containers, we now:
 ```bash
-docker stop degux-web 2>/dev/null || true
-docker rm degux-web 2>/dev/null || true
+docker stop inmogrid-web 2>/dev/null || true
+docker rm inmogrid-web 2>/dev/null || true
 ```
 
 This prevents "container name in use" errors.
@@ -108,7 +108,7 @@ This frees disk space and removes dangling images.
 ### 4. Health Verification
 All deployment methods verify the deployment:
 ```bash
-curl -s https://degux.cl/api/health | grep '"status":"ok"'
+curl -s https://inmogrid.cl/api/health | grep '"status":"ok"'
 ```
 
 ## Troubleshooting
@@ -122,7 +122,7 @@ curl -s https://degux.cl/api/health | grep '"status":"ok"'
 ### Issue: Container name conflict
 **Solution**: Remove old container first:
 ```bash
-ssh gabriel@VPS_IP_REDACTED "docker stop degux-web && docker rm degux-web"
+ssh gabriel@VPS_IP_REDACTED "docker stop inmogrid-web && docker rm inmogrid-web"
 ```
 
 ### Issue: Out of disk space
@@ -134,7 +134,7 @@ ssh gabriel@VPS_IP_REDACTED "docker system prune -a -f"
 ### Issue: Build failures
 **Solution**: Check logs and rebuild:
 ```bash
-ssh gabriel@VPS_IP_REDACTED "cd ~/vps-do && docker compose logs degux-web --tail 100"
+ssh gabriel@VPS_IP_REDACTED "cd ~/vps-do && docker compose logs inmogrid-web --tail 100"
 ```
 
 ## Performance Comparison

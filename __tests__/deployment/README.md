@@ -130,7 +130,7 @@ Vercel:
 ├── Deploy: 1-2 min
 └── Total: 3-6 min
 
-degux.cl (optimizado):
+inmogrid.cl (optimizado):
 ├── Tests: 45s
 ├── Build (Docker): 90s
 ├── Deploy: 30s
@@ -239,4 +239,4 @@ echo "✅ Listo para deployment"
 ---
 
 **Última actualización**: 2026-01-03
-**Mantenedor**: Gabriel (gabriel@degux.cl)
+**Mantenedor**: Gabriel (gabriel@inmogrid.cl)

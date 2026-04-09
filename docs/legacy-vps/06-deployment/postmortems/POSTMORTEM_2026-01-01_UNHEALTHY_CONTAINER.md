@@ -1,4 +1,4 @@
-# Postmortem: Contenedor degux-web "Unhealthy" - 01 de Enero 2026
+# Postmortem: Contenedor inmogrid-web "Unhealthy" - 01 de Enero 2026
 
 **Fecha del incidente**: 2026-01-01
 **Duración**: ~5 horas (contenedor unhealthy)
@@ -10,25 +10,25 @@
 
 ## 📋 Resumen Ejecutivo
 
-El 01 de enero de 2026, el sitio web degux.cl quedó completamente inaccesible para los usuarios. El contenedor Docker `degux-web` se encontraba en estado "unhealthy" a pesar de estar corriendo, causando que todas las peticiones HTTP fallaran. La recuperación exitosa se logró en ~5 minutos mediante un simple reinicio del contenedor, revelando deficiencias críticas en el manejo de errores de la aplicación Next.js 15.
+El 01 de enero de 2026, el sitio web inmogrid.cl quedó completamente inaccesible para los usuarios. El contenedor Docker `inmogrid-web` se encontraba en estado "unhealthy" a pesar de estar corriendo, causando que todas las peticiones HTTP fallaran. La recuperación exitosa se logró en ~5 minutos mediante un simple reinicio del contenedor, revelando deficiencias críticas en el manejo de errores de la aplicación Next.js 15.
 
 ---
 
 ## 🔍 Detección del Problema
 
 ### Método de detección
-- Usuario intentó acceder a https://degux.cl
+- Usuario intentó acceder a https://inmogrid.cl
 - El navegador mostró error `ERR_NETWORK_CHANGED`
 - Confirmación mediante MCP Playwright: sitio completamente inaccesible
 
 ### Evidencia inicial
 ```bash
 # Estado de contenedores
-docker ps -a | grep degux
+docker ps -a | grep inmogrid
 
 # Salida observada:
-degux-web    Up 5 hours (unhealthy)   0.0.0.0:3000->3000/tcp
-degux-db     Up 5 weeks (healthy)      0.0.0.0:5433->5432/tcp
+inmogrid-web    Up 5 hours (unhealthy)   0.0.0.0:3000->3000/tcp
+inmogrid-db     Up 5 weeks (healthy)      0.0.0.0:5433->5432/tcp
 ```
 
 **Hallazgo clave**: El contenedor estaba "Up" pero marcado como "(unhealthy)", indicando que el health check interno estaba fallando.
@@ -39,7 +39,7 @@ degux-db     Up 5 weeks (healthy)      0.0.0.0:5433->5432/tcp
 
 ### Análisis de logs
 ```bash
-docker logs degux-web --tail 50
+docker logs inmogrid-web --tail 50
 ```
 
 **Error crítico identificado:**
@@ -72,7 +72,7 @@ El error `Cannot read properties of undefined (reading 'aa')` indica:
 ```
 [Desconocido] → Error de JavaScript lanzado (propiedad 'aa' undefined)
                 ↓
-[~16:00]      → Contenedor degux-web entra en estado "unhealthy"
+[~16:00]      → Contenedor inmogrid-web entra en estado "unhealthy"
                 ↓
 [~21:30]      → Usuario intenta acceder al sitio
                 ↓
@@ -101,16 +101,16 @@ ssh gabriel@VPS_IP_REDACTED
 cd /home/gabriel/vps-do
 
 # Paso 3: Detener contenedor problemático
-docker compose -f docker-compose.yml -f docker-compose.degux.yml stop degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml stop inmogrid-web
 
 # Paso 4: Reiniciar contenedor
-docker compose -f docker-compose.yml -f docker-compose.degux.yml up -d degux-web
+docker compose -f docker-compose.yml -f docker-compose.inmogrid.yml up -d inmogrid-web
 
 # Paso 5: Esperar estabilización (15 segundos)
 sleep 15
 
 # Paso 6: Verificar estado
-docker ps | grep degux-web
+docker ps | grep inmogrid-web
 # Resultado: Up 15 seconds (healthy) ✅
 ```
 
@@ -118,15 +118,15 @@ docker ps | grep degux-web
 
 ```bash
 # Health check API
-curl https://degux.cl/api/health
+curl https://inmogrid.cl/api/health
 # Respuesta: {"status":"ok","database":"connected"} ✅
 
 # HTTP status
-curl -I https://degux.cl
+curl -I https://inmogrid.cl
 # Respuesta: HTTP/2 200 ✅
 
 # Verificación visual con navegador
-# Screenshot guardado: .playwright-mcp/degux-recovery-success.png ✅
+# Screenshot guardado: .playwright-mcp/inmogrid-recovery-success.png ✅
 ```
 
 **Tiempo total de recuperación**: ~5 minutos
@@ -244,7 +244,7 @@ Se actualizó y reorganizó `RECOVERY_INSTRUCTIONS.md` con:
 | **MTTR (Mean Time To Recovery)** | 8 minutos (desde detección) |
 | **Usuarios afectados** | 100% (sitio completamente inaccesible) |
 | **Pérdida de datos** | Ninguna ✅ |
-| **Impacto en base de datos** | Ninguno (degux-db permaneció healthy) |
+| **Impacto en base de datos** | Ninguno (inmogrid-db permaneció healthy) |
 
 ---
 
@@ -276,7 +276,7 @@ Se actualizó y reorganizó `RECOVERY_INSTRUCTIONS.md` con:
 - **React Error Boundaries**: https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
 - **Consulta a Context7**: Library ID `/vercel/next.js/v15.1.8`, Topic: "error handling, error boundaries"
 - **RECOVERY_INSTRUCTIONS.md**: `docs/06-deployment/RECOVERY_INSTRUCTIONS.md`
-- **Screenshot de recuperación**: `.playwright-mcp/degux-recovery-success.png`
+- **Screenshot de recuperación**: `.playwright-mcp/inmogrid-recovery-success.png`
 
 ---
 
@@ -296,7 +296,7 @@ Se actualizó y reorganizó `RECOVERY_INSTRUCTIONS.md` con:
 
 Durante la recuperación se detectaron dos variables de entorno sin configurar:
 ```
-DEGUX_GOOGLE_MAPS_API_KEY=""
+INMOGRID_GOOGLE_MAPS_API_KEY=""
 N8N_WEBHOOK_SECRET=""
 ```
 

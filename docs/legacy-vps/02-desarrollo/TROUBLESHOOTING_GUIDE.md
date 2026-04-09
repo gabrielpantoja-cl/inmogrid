@@ -1,4 +1,4 @@
-# 🆘 Guía de Troubleshooting - degux.cl
+# 🆘 Guía de Troubleshooting - inmogrid.cl
 
 **Última actualización:** 2 de enero de 2026
 
@@ -125,7 +125,7 @@ docker compose -f docker/docker-compose.local.yml up -d
 docker compose -f docker/docker-compose.local.yml up -d
 
 # Verificar que esté corriendo
-docker ps | grep degux
+docker ps | grep inmogrid
 
 # Si no aparece, ver logs
 docker compose -f docker/docker-compose.local.yml logs postgres-local
@@ -163,7 +163,7 @@ dir .env.local     # Windows
 cp .env.local.example .env.local
 
 # 3. Editar .env.local y actualizar:
-# POSTGRES_PRISMA_URL="postgresql://degux_user:degux_local_password@localhost:5432/degux_dev?schema=public"
+# POSTGRES_PRISMA_URL="postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev?schema=public"
 
 # 4. Verificar que el archivo contiene la variable
 grep POSTGRES_PRISMA_URL .env.local  # Linux
@@ -174,20 +174,20 @@ findstr POSTGRES_PRISMA_URL .env.local  # Windows
 
 ---
 
-### ❌ "role \"degux_user\" does not exist"
+### ❌ "role \"inmogrid_user\" does not exist"
 
 ```bash
 # 1. Conectar a PostgreSQL
 docker compose -f docker/docker-compose.local.yml exec postgres-local psql -U postgres -d postgres
 
 # 2. Crear usuario (dentro de psql)
-CREATE USER degux_user WITH PASSWORD 'degux_local_password';
+CREATE USER inmogrid_user WITH PASSWORD 'inmogrid_local_password';
 
 # 3. Crear base de datos
-CREATE DATABASE degux_dev OWNER degux_user;
+CREATE DATABASE inmogrid_dev OWNER inmogrid_user;
 
 # 4. Habilitar PostGIS
-\\c degux_dev
+\\c inmogrid_dev
 CREATE EXTENSION postgis;
 CREATE EXTENSION \"uuid-ossp\";
 
@@ -223,10 +223,10 @@ npx prisma migrate reset
 ```bash
 # Verificar conexión
 # Linux
-psql "postgresql://degux_user:degux_local_password@localhost:5432/degux_dev"
+psql "postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev"
 
 # Windows (con psql instalado)
-psql -h localhost -U degux_user -d degux_dev -W
+psql -h localhost -U inmogrid_user -d inmogrid_dev -W
 
 # Si no tienes psql, usar Prisma Studio
 npm run prisma:studio
@@ -252,8 +252,8 @@ npm run prisma:studio
 # 4. Agregar URIs autorizados:
 # http://localhost:3000/api/auth/callback/google
 # http://localhost:3001/api/auth/callback/google
-# https://degux.cl/api/auth/callback/google
-# https://www.degux.cl/api/auth/callback/google
+# https://inmogrid.cl/api/auth/callback/google
+# https://www.inmogrid.cl/api/auth/callback/google
 
 # 5. Guardar cambios
 
@@ -587,7 +587,7 @@ npm run test:watch
 # En localhost:5555, filtrar datos
 
 # 2. O conectar directamente a psql
-psql "postgresql://degux_user:degux_local_password@localhost:5432/degux_dev"
+psql "postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev"
 
 # 3. Ver tablas grandes
 SELECT schemaname, tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size
@@ -617,7 +617,7 @@ git config --global core.autocrlf true
 # Si la ruta tiene espacios, quoted
 npm run dev
 # Debería funcionar, pero si no:
-cd "c:\ruta con espacios\degux.cl"
+cd "c:\ruta con espacios\inmogrid.cl"
 npm run dev
 ```
 
@@ -794,7 +794,7 @@ Write-Host "✅ Recuperación completada"
    
    # Volver a clonar
    git clone <repository-url>
-   cd degux.cl
+   cd inmogrid.cl
    npm install
    npm run prisma:generate
    ```

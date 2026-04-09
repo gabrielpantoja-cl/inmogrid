@@ -1,4 +1,4 @@
-# Tu Propio Espacio Digital: degux.cl/mona
+# Tu Propio Espacio Digital: inmogrid.cl/mona
 
 **Para**: Mona
 **De**: Gabriel
@@ -8,7 +8,7 @@
 
 ## 💌 Mona, quiero mostrarte algo especial
 
-Tengo una idea que llevo tiempo pensando, y creo que te va a gustar mucho. Quiero que **degux.cl/mona** sea tu página web personal. No como las redes sociales llenas de ruido y algoritmos que deciden qué ves. Algo diferente: **minimalista, auténtico y tuyo**.
+Tengo una idea que llevo tiempo pensando, y creo que te va a gustar mucho. Quiero que **inmogrid.cl/mona** sea tu página web personal. No como las redes sociales llenas de ruido y algoritmos que deciden qué ves. Algo diferente: **minimalista, auténtico y tuyo**.
 
 ---
 
@@ -33,7 +33,7 @@ Imagina tener una página web hermosa donde puedas:
 - Todo organizado y profesional
 
 **En vez de mandar fotos sueltas por WhatsApp**, puedes decir:
-> "Mira mi catálogo en degux.cl/mona/vivero"
+> "Mira mi catálogo en inmogrid.cl/mona/vivero"
 
 ### 3. Compartir tus plantas favoritas
 - Una colección especial de las plantas que más amas
@@ -55,13 +55,13 @@ Imagina tener una página web hermosa donde puedas:
 
 ## ✨ ¿Por qué esto es diferente a Instagram o Facebook?
 
-| Instagram/Facebook | degux.cl/mona |
+| Instagram/Facebook | inmogrid.cl/mona |
 |-------------------|---------------|
 | Algoritmos que deciden qué ves | Tú decides todo |
 | Lleno de anuncios y distracciones | Limpio y minimalista |
 | Tus fotos se pierden en el tiempo | Tu catálogo siempre ordenado |
 | No es profesional para un negocio | Se ve profesional y serio |
-| Nadie recuerda tu usuario | degux.cl/mona es fácil de recordar |
+| Nadie recuerda tu usuario | inmogrid.cl/mona es fácil de recordar |
 | Tienes que estar publicando todo el tiempo | Actualizas cuando quieras |
 
 ---
@@ -73,7 +73,7 @@ Esta página **es tuya de verdad**. No es de Facebook ni de Instagram. Es tuya.
 - Nadie te va a cerrar la cuenta
 - Nadie te va a poner publicidad en medio
 - Nadie va a cambiar el algoritmo y hacer que tu contenido no se vea
-- La gente que entre a **degux.cl/mona** va específicamente a verte a **ti**
+- La gente que entre a **inmogrid.cl/mona** va específicamente a verte a **ti**
 
 ---
 
@@ -129,14 +129,14 @@ Porque creo que **tú mereces tener tu espacio propio** en internet, sin depende
 
 Porque esta es una forma de **integrar todos tus proyectos** (Vivero, PantojaPropiedades, tu vida personal) en un solo lugar coherente y hermoso.
 
-Y porque **degux.cl necesita historias humanas reales**. No solo datos de propiedades. Necesita personas como tú, con pasión, con proyectos, con autenticidad.
+Y porque **inmogrid.cl necesita historias humanas reales**. No solo datos de propiedades. Necesita personas como tú, con pasión, con proyectos, con autenticidad.
 
 ---
 
 ## ❓ Preguntas que podrías tener
 
 ### "¿Es gratis?"
-Sí. Es parte de degux.cl, que es un proyecto familiar. No te voy a cobrar nada.
+Sí. Es parte de inmogrid.cl, que es un proyecto familiar. No te voy a cobrar nada.
 
 ### "¿Es difícil de usar?"
 No. Yo me encargo de toda la parte técnica. Tú solo me pasas las fotos y los textos, y yo lo subo. Más adelante puedes aprender a hacerlo tú misma si quieres, pero no es obligatorio.
@@ -145,7 +145,7 @@ No. Yo me encargo de toda la parte técnica. Tú solo me pasas las fotos y los t
 Cambiamos todo lo que quieras hasta que te encante. Es tu página, tiene que representarte bien.
 
 ### "¿Puedo mostrar la página a mis clientes?"
-¡Sí! De hecho, es uno de los objetivos. En vez de mandar mil fotos por WhatsApp, mandas un link: **degux.cl/mona**. Se ve súper profesional.
+¡Sí! De hecho, es uno de los objetivos. En vez de mandar mil fotos por WhatsApp, mandas un link: **inmogrid.cl/mona**. Se ve súper profesional.
 
 ### "¿Y si después no quiero usarla más?"
 No hay problema. La dejamos ahí quieta o la quitamos. No hay contratos ni compromisos eternos.
@@ -169,4 +169,4 @@ Con cariño,
 
 ---
 
-**P.D.**: El nombre "degux" viene de "de-gux" (de Gabriel UX). Es mi proyecto de vida para democratizar datos inmobiliarios en Chile. Pero ahora también quiero que sea un refugio digital para personas auténticas como tú. Un ecosistema donde la humanidad prevalezca sobre los algoritmos.
+**P.D.**: El nombre "inmogrid" viene de "de-gux" (de Gabriel UX). Es mi proyecto de vida para democratizar datos inmobiliarios en Chile. Pero ahora también quiero que sea un refugio digital para personas auténticas como tú. Un ecosistema donde la humanidad prevalezca sobre los algoritmos.

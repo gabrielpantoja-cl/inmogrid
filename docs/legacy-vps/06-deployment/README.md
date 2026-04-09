@@ -1,6 +1,6 @@
-# 🚀 Deployment - degux.cl
+# 🚀 Deployment - inmogrid.cl
 
-Documentación completa de deployment para el ecosistema degux.cl.
+Documentación completa de deployment para el ecosistema inmogrid.cl.
 
 ---
 
@@ -198,11 +198,11 @@ ssh gabriel@VPS_IP_REDACTED
 # Ver estado de contenedores
 docker ps
 
-# Ver logs de degux-web
-docker logs degux-web --tail 50 -f
+# Ver logs de inmogrid-web
+docker logs inmogrid-web --tail 50 -f
 
 # Health check
-curl https://degux.cl/api/health
+curl https://inmogrid.cl/api/health
 ```
 
 ### Recovery de Emergencia
@@ -210,14 +210,14 @@ curl https://degux.cl/api/health
 # Ver RECOVERY_INSTRUCTIONS.md para procedimientos completos
 ssh gabriel@VPS_IP_REDACTED
 cd /home/gabriel/vps-do
-docker compose up -d degux-web
+docker compose up -d inmogrid-web
 ```
 
 ---
 
 ## 📝 Configuración de Archivos
 
-### dns-degux.cl.txt
+### dns-inmogrid.cl.txt
 Configuración DNS de producción (Cloudflare)
 
 ---
@@ -233,7 +233,7 @@ Antes de hacer deployment a producción:
 - [ ] Revisión de cambios en PR
 - [ ] Merge a rama `main`
 - [ ] Ejecutar `./scripts/deploy-to-vps.sh`
-- [ ] Verificar health check: `https://degux.cl/api/health`
+- [ ] Verificar health check: `https://inmogrid.cl/api/health`
 - [ ] Verificar funcionalidad principal
 - [ ] Monitorear logs por 5-10 minutos
 
@@ -242,8 +242,8 @@ Antes de hacer deployment a producción:
 ## 🔗 Enlaces Útiles
 
 - **VPS**: VPS_IP_REDACTED
-- **Producción**: https://degux.cl
-- **Health Check**: https://degux.cl/api/health
+- **Producción**: https://inmogrid.cl
+- **Health Check**: https://inmogrid.cl/api/health
 - **N8N**: http://VPS_IP_REDACTED:5678
 - **Portainer**: https://VPS_IP_REDACTED:9443
 
@@ -253,11 +253,11 @@ Antes de hacer deployment a producción:
 
 Si tienes problemas:
 1. Consulta BACKEND_TROUBLESHOOTING.md
-2. Revisa logs: `docker logs degux-web`
+2. Revisa logs: `docker logs inmogrid-web`
 3. Consulta postmortems para problemas similares
 4. Usa RECOVERY_INSTRUCTIONS.md para emergencias
 
 ---
 
 **Última actualización**: 2026-01-03
-**Mantenedor**: Gabriel (gabriel@degux.cl)
+**Mantenedor**: Gabriel (gabriel@inmogrid.cl)

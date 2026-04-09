@@ -7,8 +7,8 @@ import { prisma } from '@/shared/lib/prisma';
 import { ProfileEditForm } from '@/features/profiles';
 
 export const metadata = {
-  title: 'Editar Perfil | degux.cl',
-  description: 'Edita tu perfil y personaliza tu presencia en degux.cl',
+  title: 'Editar Perfil | inmogrid.cl',
+  description: 'Edita tu perfil y personaliza tu presencia en inmogrid.cl',
 };
 
 export default async function ProfileEditPage() {
@@ -50,7 +50,7 @@ export default async function ProfileEditPage() {
           Editar Mi Perfil
         </h1>
         <p className="mt-2 text-gray-600">
-          Personaliza tu perfil y define cómo te ven los demás en degux.cl
+          Personaliza tu perfil y define cómo te ven los demás en inmogrid.cl
         </p>
       </div>
 

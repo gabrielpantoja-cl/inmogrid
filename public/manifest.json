@@ -1,6 +1,6 @@
 {
-  "name": "degux.cl",
-  "short_name": "degux",
+  "name": "inmogrid.cl",
+  "short_name": "inmogrid",
   "description": "Base de datos colaborativa",
   "start_url": "/",
   "display": "standalone",

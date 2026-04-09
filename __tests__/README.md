@@ -1,6 +1,6 @@
 # 🧪 Tests Automatizados - Formulario de Creación de Referenciales
 
-Este directorio contiene pruebas automatizadas comprehensivas para el formulario de creación individual de referenciales en degux.cl.
+Este directorio contiene pruebas automatizadas comprehensivas para el formulario de creación individual de referenciales en inmogrid.cl.
 
 ## 📋 Tipos de Tests Implementados
 
@@ -160,7 +160,7 @@ Los tests incluyen logging detallado:
 ```bash
 # Los tests muestran información útil durante la ejecución
 🔧 Configurando base de datos de prueba...
-✅ Usuario de prueba creado: test-create-form@degux.test
+✅ Usuario de prueba creado: test-create-form@inmogrid.test
 🧪 Iniciando test de creación exitosa...
 📝 Datos del formulario: { predio: '...', vendedor: '...' }
 📤 Enviando formulario...
@@ -238,4 +238,4 @@ Para agregar nuevos tests:
 **Autor**: Claude Assistant  
 **Fecha**: Mayo 2025  
 **Versión**: 1.0  
-**Proyecto**: degux.cl
+**Proyecto**: inmogrid.cl

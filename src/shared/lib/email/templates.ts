@@ -13,7 +13,7 @@ interface EmailTemplates {
 
 export const emailTemplates: EmailTemplates = {
   welcome: (userName: string) => ({
-    subject: 'Bienvenido a degux.cl',
+    subject: 'Bienvenido a inmogrid.cl',
     html: `
       <div style="
         font-family: Arial, sans-serif;
@@ -29,21 +29,21 @@ export const emailTemplates: EmailTemplates = {
         </div>
 
         <div style="color: #4b5563; line-height: 1.6;">
-          <p>Gracias por unirte a degux.cl.</p>
+          <p>Gracias por unirte a inmogrid.cl.</p>
           <p>Tu cuenta ha sido creada exitosamente y ya puedes comenzar a construir tu marca personal, publicar contenido y conectar con nuestra comunidad.</p>
         </div>
 
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
 
         <div style="color: #6b7280; font-size: 14px;">
-          <p>Saludos,<br>El equipo de degux.cl</p>
+          <p>Saludos,<br>El equipo de inmogrid.cl</p>
         </div>
       </div>
     `
   }),
 
   deleteAccount: (userName: string) => ({
-    subject: 'Cuenta Eliminada - degux.cl',
+    subject: 'Cuenta Eliminada - inmogrid.cl',
     html: `
       <div style="
         font-family: Arial, sans-serif;
@@ -60,14 +60,14 @@ export const emailTemplates: EmailTemplates = {
 
         <div style="color: #4b5563; line-height: 1.6;">
           <p>Hola ${userName},</p>
-          <p>Tu cuenta en degux.cl ha sido eliminada exitosamente.</p>
+          <p>Tu cuenta en inmogrid.cl ha sido eliminada exitosamente.</p>
           <p>Esperamos volver a verte pronto.</p>
         </div>
 
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
 
         <div style="color: #6b7280; font-size: 14px;">
-          <p>Saludos,<br>El equipo de degux.cl</p>
+          <p>Saludos,<br>El equipo de inmogrid.cl</p>
         </div>
       </div>
     `

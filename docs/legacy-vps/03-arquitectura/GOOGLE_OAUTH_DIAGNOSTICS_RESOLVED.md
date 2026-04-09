@@ -1,6 +1,6 @@
-# Diagnóstico Completo: Autenticación con Google OAuth - degux.cl
+# Diagnóstico Completo: Autenticación con Google OAuth - inmogrid.cl
 
-**Proyecto:** degux.cl - Ecosistema Digital Colaborativo
+**Proyecto:** inmogrid.cl - Ecosistema Digital Colaborativo
 **Inicio diagnóstico:** 2025-11-21
 **Resolución final:** 2025-11-22 22:30 CLT
 **Estado:** ✅ RESUELTO - Google OAuth funcionando correctamente
@@ -15,7 +15,7 @@
 |------------|--------|-------|
 | **Infraestructura** | ✅ Operacional | VPS Digital Ocean, Docker Compose |
 | **Base de Datos** | ✅ Limpia | PostgreSQL 15 + PostGIS (puerto 5433) |
-| **Contenedor Web** | ✅ Healthy | degux-web funcionando correctamente |
+| **Contenedor Web** | ✅ Healthy | inmogrid-web funcionando correctamente |
 | **Variables de Entorno** | ✅ Configuradas | Credenciales Google OAuth presentes |
 | **OAuth Producción** | ✅ Funcionando | 2 usuarios autenticados correctamente |
 | **Tabla User** | ✅ Poblada | 2 registros con OAuth vinculado |
@@ -46,7 +46,7 @@ Error: OAuthAccountNotLinked
 - NextAuth rechaza la autenticación OAuth por seguridad
 ```
 
-**Ubicación:** VPS (https://degux.cl)
+**Ubicación:** VPS (https://inmogrid.cl)
 **Timestamp Inicial:** 2025-11-22 20:15 UTC
 **Resolución Final:** 2025-11-22 22:30 CLT
 **Impacto:** Login bloqueado para usuarios existentes sin vinculación OAuth
@@ -56,8 +56,8 @@ Error: OAuthAccountNotLinked
 #### 1. Variables de Entorno ✅
 
 ```bash
-# VPS Container (degux-web)
-NEXTAUTH_URL=https://degux.cl
+# VPS Container (inmogrid-web)
+NEXTAUTH_URL=https://inmogrid.cl
 NEXTAUTH_SECRET=*** (configurado)
 GOOGLE_CLIENT_ID=GCP_PROJECT_NUMBER_REDACTED-b3utu9es3bfpoovilhqdhdtr0hm3378s.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=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
@@ -67,7 +67,7 @@ GOOGLE_CLIENT_SECRET=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
 
 ```bash
 # Contenedor web
-degux-web: Up 26 minutes (healthy)
+inmogrid-web: Up 26 minutes (healthy)
 
 # Base de datos
 PostgreSQL 15 conectada vía Prisma
@@ -129,7 +129,7 @@ Cuando un usuario intenta hacer login con Google OAuth:
 
 ```bash
 ssh gabriel@VPS_IP_REDACTED \
-  "docker exec degux-db pg_dump -U degux_user -d degux_core \
+  "docker exec inmogrid-db pg_dump -U inmogrid_user -d inmogrid_core \
    -t '\"User\"' -t '\"Account\"' -t '\"Session\"' -t '\"VerificationToken\"' \
    > ~/backup-auth-tables-$(date +%Y%m%d-%H%M%S).sql"
 
@@ -150,18 +150,18 @@ DELETE FROM "User";              -- 4 registros eliminados ✅
 
 ```bash
 # Monitoreo en tiempo real
-docker logs degux-web -f --since 30s | grep AUTH
+docker logs inmogrid-web -f --since 30s | grep AUTH
 
 # Logs observados:
 ✅ [AUTH-SIGNIN] { email: 'peritajes@gabrielpantoja.cl', provider: 'google' }
 ✅ [AUTH-SIGNIN] Allowing sign in for: peritajes@gabrielpantoja.cl
 📥 [AUTH-SIGNIN-EVENT] { provider: 'google' }
-🔄 [AUTH-REDIRECT] Same origin allowed: https://degux.cl/dashboard
+🔄 [AUTH-REDIRECT] Same origin allowed: https://inmogrid.cl/dashboard
 
 ✅ [AUTH-SIGNIN] { email: 'gabrielpantojarivera@gmail.com', provider: 'google' }
 ✅ [AUTH-SIGNIN] Allowing sign in for: gabrielpantojarivera@gmail.com
 📥 [AUTH-SIGNIN-EVENT] { provider: 'google' }
-🔄 [AUTH-REDIRECT] Same origin allowed: https://degux.cl/dashboard
+🔄 [AUTH-REDIRECT] Same origin allowed: https://inmogrid.cl/dashboard
 ```
 
 **Paso 4: Verificación de Registros Creados**
@@ -206,7 +206,7 @@ Available options are marked with ?.
 Error [GetUserByAccountError]
 ```
 
-**Ubicación:** VPS (https://degux.cl)
+**Ubicación:** VPS (https://inmogrid.cl)
 **Timestamp:** 2025-11-23 02:00 CLT
 **Impacto:** Login bloqueado para TODOS los usuarios (crítico)
 
@@ -286,7 +286,7 @@ npm run prisma:generate
 npm run prisma:push
 
 # VPS
-ssh gabriel@VPS_IP_REDACTED "cd degux.cl && npm run prisma:generate"
+ssh gabriel@VPS_IP_REDACTED "cd inmogrid.cl && npm run prisma:generate"
 ```
 
 **Paso 3: Mejoras de Robustez**
@@ -370,17 +370,17 @@ Google rechaza el callback si la URI de redirección NO coincide **EXACTAMENTE**
 **URIs que NextAuth usa:**
 
 ```text
-Callback: https://degux.cl/api/auth/callback/google
+Callback: https://inmogrid.cl/api/auth/callback/google
 ```
 
 **Errores comunes que causan el fallo:**
 
 ```text
-✅ CORRECTO:   https://degux.cl/api/auth/callback/google
-❌ INCORRECTO: https://degux.cl/api/auth/callback/google/  (barra final)
-❌ INCORRECTO: http://degux.cl/api/auth/callback/google   (http en vez de https)
-❌ INCORRECTO: https://www.degux.cl/api/auth/callback/google  (www)
-❌ INCORRECTO: https://degux.cl/auth/callback/google  (falta /api)
+✅ CORRECTO:   https://inmogrid.cl/api/auth/callback/google
+❌ INCORRECTO: https://inmogrid.cl/api/auth/callback/google/  (barra final)
+❌ INCORRECTO: http://inmogrid.cl/api/auth/callback/google   (http en vez de https)
+❌ INCORRECTO: https://www.inmogrid.cl/api/auth/callback/google  (www)
+❌ INCORRECTO: https://inmogrid.cl/auth/callback/google  (falta /api)
 ```
 
 ### B. Código de Autorización Expirado/Usado ⚠️
@@ -402,7 +402,7 @@ Callback: https://degux.cl/api/auth/callback/google
 **Acción requerida:** Acceder a Google Cloud Console y verificar URIs
 
 1. Ir a: <https://console.cloud.google.com/>
-2. Seleccionar proyecto: **degux-cl**
+2. Seleccionar proyecto: **inmogrid-cl**
 3. Navegar a: **APIs y servicios > Credenciales**
 4. Buscar cliente OAuth: `GCP_PROJECT_NUMBER_REDACTED-b3utu9es3bfpoovilhqdhdtr0hm3378s`
 5. Hacer clic para editar
@@ -412,14 +412,14 @@ Callback: https://degux.cl/api/auth/callback/google
 #### Orígenes JavaScript autorizados
 
 ```text
-https://degux.cl
+https://inmogrid.cl
 http://localhost:3000
 ```
 
 #### URIs de redireccionamiento autorizados
 
 ```text
-https://degux.cl/api/auth/callback/google
+https://inmogrid.cl/api/auth/callback/google
 http://localhost:3000/api/auth/callback/google
 ```
 
@@ -427,7 +427,7 @@ http://localhost:3000/api/auth/callback/google
 
 - ❌ NO agregar `/` al final
 - ✅ HTTPS en producción, HTTP solo en localhost
-- ✅ NO incluir `www.degux.cl`
+- ✅ NO incluir `www.inmogrid.cl`
 - ✅ Incluir `/api` en la ruta
 
 ### PASO 2: Esperar Propagación
@@ -441,7 +441,7 @@ Después de guardar cambios en Google Cloud Console:
 ### PASO 3: Probar en Modo Incógnito
 
 1. Abrir navegador en modo incógnito
-2. Ir a: <https://degux.cl/auth/signin>
+2. Ir a: <https://inmogrid.cl/auth/signin>
 3. Hacer clic en "Continuar con Google"
 4. Observar resultado
 
@@ -452,7 +452,7 @@ Después de guardar cambios en Google Cloud Console:
 ssh gabriel@VPS_IP_REDACTED
 
 # Ver logs en tiempo real
-docker logs degux-web -f --since 5m
+docker logs inmogrid-web -f --since 5m
 ```
 
 **Logs a buscar:**
@@ -562,7 +562,7 @@ async signIn({ user, account }) {
 ### Arquitectura de Autenticación
 
 ```text
-Usuario → https://degux.cl/auth/signin
+Usuario → https://inmogrid.cl/auth/signin
          ↓
      Click "Google"
          ↓
@@ -570,7 +570,7 @@ NextAuth genera redirect → https://accounts.google.com/...
          ↓
 Usuario selecciona cuenta
          ↓
-Google redirige → https://degux.cl/api/auth/callback/google?code=...
+Google redirige → https://inmogrid.cl/api/auth/callback/google?code=...
          ↓
 NextAuth valida código
          ↓
@@ -578,7 +578,7 @@ PrismaAdapter crea User + Account
          ↓
 Sesión JWT generada
          ↓
-Redirect → https://degux.cl/dashboard
+Redirect → https://inmogrid.cl/dashboard
 ```
 
 ### Cookies OAuth Configuradas
@@ -602,25 +602,25 @@ Redirect → https://degux.cl/dashboard
 
 ### Google Cloud Console
 
-- [ ] URIs de redirección incluyen: `https://degux.cl/api/auth/callback/google`
+- [ ] URIs de redirección incluyen: `https://inmogrid.cl/api/auth/callback/google`
 - [ ] NO hay `/` al final de la URI
 - [ ] Se usa `https://` (NO `http://`)
-- [ ] NO hay `www.degux.cl`
+- [ ] NO hay `www.inmogrid.cl`
 - [ ] Cambios guardados
 - [ ] Esperados 5 minutos de propagación
 
 ### VPS (Producción)
 
-- [x] Contenedor `degux-web` corriendo
+- [x] Contenedor `inmogrid-web` corriendo
 - [x] Estado: healthy
 - [x] Variables de entorno configuradas
-- [x] NEXTAUTH_URL: `https://degux.cl`
+- [x] NEXTAUTH_URL: `https://inmogrid.cl`
 - [x] Credenciales Google OAuth presentes
 - [x] Hora del servidor sincronizada
 
 ### Cliente (Navegador)
 
-- [ ] Cookies eliminadas de degux.cl
+- [ ] Cookies eliminadas de inmogrid.cl
 - [ ] Modo incógnito usado
 - [ ] Intentar login
 - [ ] Observar resultado
@@ -721,8 +721,8 @@ NextAuth requiere **6 cookies diferentes**:
 ### 3. Redirect URIs Deben ser Exactas
 
 ```text
-✅ https://degux.cl/api/auth/callback/google
-❌ https://degux.cl/api/auth/callback/google/
+✅ https://inmogrid.cl/api/auth/callback/google
+❌ https://inmogrid.cl/api/auth/callback/google/
 ```
 
 Una barra extra = Error `invalid_grant`

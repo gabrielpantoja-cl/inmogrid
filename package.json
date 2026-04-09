@@ -1,5 +1,5 @@
 {
-  "name": "degux-cl",
+  "name": "inmogrid-cl",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -46,12 +46,12 @@
     "integration:example": "echo '⚛️  Ver: docs/integration-examples/ReferencialMapComponent.tsx'",
     "docs:api": "echo '📖 API Docs: http://localhost:3000/api/public/docs'",
     "pantoja:setup": "echo '🏠 Copia ReferencialMapComponent.tsx a tu proyecto pantojapropiedades.cl'",
-    "pantoja:test": "echo '🧪 Prueba: fetch(\"https://degux.cl/api/public/map-data?comuna=santiago&limit=10\")'",
+    "pantoja:test": "echo '🧪 Prueba: fetch(\"https://inmogrid.cl/api/public/map-data?comuna=santiago&limit=10\")'",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:report": "playwright show-report",
-    "test:e2e:vps": "PLAYWRIGHT_BASE_URL=https://degux.cl playwright test",
+    "test:e2e:vps": "PLAYWRIGHT_BASE_URL=https://inmogrid.cl playwright test",
     "test:e2e:local": "PLAYWRIGHT_BASE_URL=http://localhost:3000 playwright test",
     "playwright:install": "npx playwright install --with-deps"
   },

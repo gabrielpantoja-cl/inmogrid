@@ -1,6 +1,6 @@
 # 🗄️ Configuración de Base de Datos Local
 
-Guía para configurar y trabajar con PostgreSQL local para desarrollo en degux.cl.
+Guía para configurar y trabajar con PostgreSQL local para desarrollo en inmogrid.cl.
 
 ## 📋 Tabla de Contenidos
 
@@ -31,7 +31,7 @@ cp .env.local.example .env.local
 
 Editar `.env.local` y ajustar si es necesario:
 ```env
-POSTGRES_PRISMA_URL="postgresql://degux_user:degux_local_password@localhost:5432/degux_dev?schema=public"
+POSTGRES_PRISMA_URL="postgresql://inmogrid_user:inmogrid_local_password@localhost:5432/inmogrid_dev?schema=public"
 ```
 
 ### 2. Levantar PostgreSQL Local
@@ -102,16 +102,16 @@ npx prisma migrate status
 
 ```bash
 # Shell de PostgreSQL
-docker exec -it degux-postgres-local psql -U degux_user -d degux_dev
+docker exec -it inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev
 
 # Ejecutar query directa
-docker exec -it degux-postgres-local psql -U degux_user -d degux_dev -c "SELECT * FROM \"User\" LIMIT 5;"
+docker exec -it inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev -c "SELECT * FROM \"User\" LIMIT 5;"
 
 # Listar tablas
-docker exec -it degux-postgres-local psql -U degux_user -d degux_dev -c "\dt"
+docker exec -it inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev -c "\dt"
 
 # Ver estructura de tabla
-docker exec -it degux-postgres-local psql -U degux_user -d degux_dev -c "\d \"User\""
+docker exec -it inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev -c "\d \"User\""
 ```
 
 ---
@@ -138,10 +138,10 @@ Si prefieres más control:
 
 ```bash
 # 1. Crear dump en el VPS
-ssh root@VPS_IP_REDACTED "docker exec degux-db pg_dump -U degux_user -d degux --clean" > backup.sql
+ssh root@VPS_IP_REDACTED "docker exec inmogrid-db pg_dump -U inmogrid_user -d inmogrid --clean" > backup.sql
 
 # 2. Importar en local
-docker exec -i degux-postgres-local psql -U degux_user -d degux_dev < backup.sql
+docker exec -i inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev < backup.sql
 
 # 3. Aplicar schema de Prisma
 npx prisma db push
@@ -206,7 +206,7 @@ docker compose -f docker/docker-compose.local.yml down -v
 
 ```bash
 # Verificar que PostgreSQL esté corriendo
-docker ps | grep degux-postgres-local
+docker ps | grep inmogrid-postgres-local
 
 # Verificar variables de entorno
 cat .env.local | grep POSTGRES_PRISMA_URL
@@ -246,9 +246,9 @@ sudo systemctl stop postgresql
 - **URL**: http://localhost:8080
 - **Sistema**: PostgreSQL
 - **Servidor**: postgres-local
-- **Usuario**: degux_user
-- **Contraseña**: degux_local_password
-- **Base de datos**: degux_dev
+- **Usuario**: inmogrid_user
+- **Contraseña**: inmogrid_local_password
+- **Base de datos**: inmogrid_dev
 
 ### Prisma Studio
 ```bash
@@ -265,17 +265,17 @@ npx prisma studio
 
 ```bash
 # Crear backup de DB local
-docker exec degux-postgres-local pg_dump -U degux_user -d degux_dev > backups/local_backup_$(date +%Y%m%d).sql
+docker exec inmogrid-postgres-local pg_dump -U inmogrid_user -d inmogrid_dev > backups/local_backup_$(date +%Y%m%d).sql
 
 # Restaurar backup
-docker exec -i degux-postgres-local psql -U degux_user -d degux_dev < backups/local_backup_20250108.sql
+docker exec -i inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev < backups/local_backup_20250108.sql
 ```
 
 ### Limpiar Datos de Prueba
 
 ```bash
 # SQL para limpiar tablas manteniendo estructura
-docker exec -it degux-postgres-local psql -U degux_user -d degux_dev -c "
+docker exec -it inmogrid-postgres-local psql -U inmogrid_user -d inmogrid_dev -c "
 TRUNCATE TABLE \"User\", \"Account\", \"Session\", \"Property\", \"Connection\" CASCADE;
 "
 ```

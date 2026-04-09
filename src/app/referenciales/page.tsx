@@ -108,7 +108,7 @@ export default function ReferencialesPage() {
             >
               referenciales.cl
             </a>
-            . En degux.cl los exponemos de forma <strong>abierta y sin autenticación</strong>,
+            . En inmogrid.cl los exponemos de forma <strong>abierta y sin autenticación</strong>,
             como parte de un ecosistema para todos.
           </p>
         </header>
@@ -271,7 +271,7 @@ export default function ReferencialesPage() {
           >
             referenciales.cl
           </a>
-          . Fuente primaria: Conservadores de Bienes Raíces (CBR). Publicado en degux.cl bajo un
+          . Fuente primaria: Conservadores de Bienes Raíces (CBR). Publicado en inmogrid.cl bajo un
           espíritu de datos abiertos — Ley 19.628 y atribución CBR respetadas.
         </footer>
       </main>

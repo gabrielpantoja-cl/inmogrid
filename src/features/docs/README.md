@@ -1,6 +1,6 @@
 # Feature: `docs`
 
-Visor de documentación pública de degux.cl. Renderiza los markdown de `docs/` con sidebar navegable.
+Visor de documentación pública de inmogrid.cl. Renderiza los markdown de `docs/` con sidebar navegable.
 
 ## Estructura
 
