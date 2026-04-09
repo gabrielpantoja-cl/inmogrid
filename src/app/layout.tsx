@@ -1,6 +1,14 @@
 import React from 'react';
 import './globals.css';
+import { Poppins } from 'next/font/google';
 import { Metadata, Viewport } from 'next';
+
+const poppins = Poppins({
+  weight: ['300', '400', '500', '600', '700', '800'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-poppins',
+});
 import { Toaster } from 'react-hot-toast';
 import { CookieConsentProvider } from '@/shared/components/layout/legal/CookieConsentProvider';
 import CookieConsentBanner from '@/shared/components/layout/legal/CookieConsentBanner';
@@ -110,7 +118,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" suppressHydrationWarning={true}>
+    <html lang="es" suppressHydrationWarning={true} className={poppins.variable}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         {/* Google Analytics Consent Mode Script */}
@@ -131,7 +139,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased">
+      <body className={`antialiased ${poppins.className}`}>
         <CookieConsentProvider>
           <>
             {children}
