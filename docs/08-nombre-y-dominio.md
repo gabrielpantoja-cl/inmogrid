@@ -1,11 +1,32 @@
 # Nombre y Dominio
 ### La decisión más visible del proyecto
 
-> **Documento consolidado** — absorbe `06-nombre-y-marca.md` (borrador inicial) y agrega contexto completo sobre el dilema del nombre. Última revisión: abril 2026.
+> **Documento consolidado** — absorbe `06-nombre-y-marca.md` (borrador inicial) y agrega contexto completo sobre el dilema del nombre. Última revisión: abril 2026. Disponibilidad verificada en NIC.cl.
 
 ---
 
-## Por qué pantojapropiedades.cl no puede seguir
+## Los que van ganando
+
+| Dominio | Estado | Concepto | Por qué destaca |
+|---------|--------|----------|----------------|
+| **`degux.cl`** | ✅ **PROPIO** (Gabriel, vence oct 2026) | Degú (animal social chileno) / backronym de Gabriel UX | Ya registrado sin costo adicional; animal nativo, colaborativo; no suena a corredora. Ver tensión en sección DEGUX. |
+| **`inmogrid.cl`** | ✅ **DISPONIBLE** | Red inmobiliaria — evoca infraestructura y conexión | Técnico, moderno, "grid" es directo sin sonar a empresa familiar ni corredora |
+
+---
+
+## Alternativas viables disponibles
+
+| Dominio | Estado | Concepto | Por qué |
+|---------|--------|----------|---------|
+| `openinmo.cl` | ✅ Disponible | Apertura + inmobiliario | Equilibrado: corto, claro, "open" señala filosofía, "inmo" ancla al sector |
+| `propcomun.cl` | ✅ Disponible | Propiedad + bien común | El más honesto conceptualmente — dice exactamente lo que es. Riesgo: lectura activista |
+| `opensuelo.cl` | ✅ Disponible | Apertura + suelo (jerga técnica chilena) | "Suelo" es del sector, muy local y preciso |
+| `openpredio.cl` | ✅ Disponible | Apertura + predio (término legal chileno) | Correcto pero frío — "predio" es técnico, no coloquial |
+| `openterritorio.cl` | ✅ Disponible | Apertura + territorio | Conceptual, evoca geografía. Largo para un dominio |
+
+---
+
+## Contexto: por qué pantojapropiedades.cl no puede seguir
 
 El dominio actual comunica exactamente lo que el proyecto ya decidió no ser:
 
@@ -51,61 +72,6 @@ La decisión final de mantener o cambiar DEGUX debería hacerse con esta tensió
 
 ---
 
-## Todos los candidatos explorados
-
-| Nombre | Concepto central | Fortaleza | Riesgo | Dom. .cl |
-|--------|----------------|-----------|--------|----------|
-| **degux** | Degú (animal social chileno) / backronym de Gabriel UX | Animal nativo, ya registrado, no suena a corredora | Origen personal disfrazado, Mona no convencida | ✅ propio |
-| **openinmo** | Apertura + inmobiliario, directo | Corto, descriptivo, profesional | "Inmo" puede sonar genérico | ✅ disponible |
-| **inmogrid** | Red inmobiliaria, evoca infraestructura | Técnico, moderno | Anglicismo parcial | ✅ disponible |
-| **opensuelo** | Apertura + suelo (término técnico chileno) | "Suelo" es del sector, muy local | Puede sonar crudo fuera del sector | ✅ disponible |
-| **propcomun** | Propiedad + bien común | Propósito explícito, honesto | Puede sonar activista o político | ✅ disponible |
-| **openpredio** | Apertura + predio (término legal chileno) | Técnico, preciso | "Predio" es menos conocido por el ciudadano | ✅ disponible |
-| **openterritorio** | Apertura + territorio | Conceptual, evoca geografía | Largo para un dominio | ✅ disponible |
-| **plano** | Plano arquitectónico = base, blueprint, transparencia | Técnico y limpio, doble sentido | Abstracto para no técnicos | ❌ tomado |
-| **territorio** | Lo inmobiliario como territorio, no commodity | Contundente, identitario | — | ❌ tomado |
-| **barrio** | Lo humano, lo cotidiano, lo cercano | Cálido, muy chileno | Confusión con Nextdoor/redes sociales | ❌ tomado |
-| **agora** | Plaza pública griega | Comunidad, apertura, historia | Puede sonar pretencioso | ❌ tomado |
-| **propcomún** | Propiedad + bien común | Directo, político | — | ✅ disponible |
-| **ingrid** | — | — | — | ❌ tomado (Juan Molina Parada, hasta 2027) |
-
----
-
-## Estado de dominios (verificado en NIC.cl — abril 2026)
-
-| Dominio | Estado | Detalle |
-|---------|--------|---------|
-| `pantojapropiedades.cl` | Activo (actual) | Mantener durante transición |
-| **`degux.cl`** | ✅ **PROPIO** (Gabriel) | Registrado oct 2025, vence oct 2026 |
-| **`openinmo.cl`** | ✅ **DISPONIBLE** | Sin registro — comprable hoy |
-| **`inmogrid.cl`** | ✅ **DISPONIBLE** | Sin registro — comprable hoy |
-| **`opensuelo.cl`** | ✅ **DISPONIBLE** | Sin registro — comprable hoy |
-| **`openpredio.cl`** | ✅ **DISPONIBLE** | Sin registro — comprable hoy |
-| **`openterritorio.cl`** | ✅ **DISPONIBLE** | Sin registro — comprable hoy |
-| **`propcomun.cl`** | ✅ **DISPONIBLE** | Sin registro — comprable hoy |
-| `territorio.cl` | ❌ Tomado hasta dic 2026 | SOC BORQUEZ Y BURR LIMITADA |
-| `plano.cl` | ❌ Tomado hasta sep 2026 | Tool Domains Ltd (parqueado) |
-| `barrio.cl` | ❌ Tomado hasta jun 2027 | Andrés Fernando Garate Díaz |
-| `agora.cl` | ❌ Tomado hasta ago 2027 | Charles Robinson Beecher Rebolledo |
-| `ingrid.cl` | ❌ Tomado hasta 2027 | Juan Molina Parada |
-| `openrealty.cl` | ✅ DISPONIBLE | Anglicismo, baja prioridad |
-
-**Registrar en:** clientes.nic.cl
-
----
-
-## Ranking de alternativas si se descarta DEGUX
-
-| # | Dominio | Por qué destaca |
-|---|---------|----------------|
-| 🥇 | **`openinmo.cl`** | El más equilibrado: corto, claro, "open" señala filosofía, "inmo" ancla al sector sin sonar a corredora |
-| 🥈 | **`propcomun.cl`** | El más honesto conceptualmente — dice exactamente lo que es. Riesgo: lectura activista |
-| 🥉 | **`opensuelo.cl`** | "Suelo" es jerga técnica del sector inmobiliario chileno — muy preciso, muy local |
-| 4 | `inmogrid.cl` | Técnico, evoca red e infraestructura, moderno |
-| 5 | `openpredio.cl` | Correcto pero frío — "predio" es término legal, no coloquial |
-
----
-
 ## Arquitectura de dominios del ecosistema (sin cambiar)
 
 Sea cual sea el nombre elegido, la estructura de dominios es:
@@ -129,3 +95,29 @@ Sea cual sea el nombre elegido, la estructura de dominios es:
 4. **Comunicar el cambio** como evolución de propósito, no abandono de trayectoria
 
 > *"Llevamos un año como Pantoja Propiedades sin vender ninguna propiedad — porque nunca fue ese el propósito. Hoy lo hacemos oficial."*
+
+---
+
+## Dominos tomados
+
+Verificados en NIC.cl — abril 2026.
+
+| Dominio | Registrante | Vence | Nota |
+|---------|------------|-------|------|
+| `trama.cl` | Comercial Trama S.A. | 2026-06-04 | ⚠️ Vence en ~2 meses — a vigilar |
+| `gremio.cl` | Domainer.cl | 2026-07-12 | ⚠️ Parqueado, vence en ~3 meses — a vigilar |
+| `territorio.cl` | SOC BORQUEZ Y BURR LIMITADA | dic 2026 | — |
+| `plano.cl` | Tool Domains Ltd | sep 2026 | Parqueado |
+| `ruka.cl` | Christina Ursula Hoehmann Metzler | may 2027 | Mapudungun: hogar |
+| `raiz.cl` | jose tomas | dic 2027 | — |
+| `barrio.cl` | Andrés Fernando Garate Díaz | jun 2027 | — |
+| `agora.cl` | Charles Robinson Beecher Rebolledo | ago 2027 | — |
+| `ingrid.cl` | Juan Molina Parada | 2027 | — |
+| `catastro.cl` | Ministerio de Bienes Nacionales | oct 2027 | Gobierno — no disponible |
+| `colmena.cl` | Isapre Colmena Golden Cross S.A. | nov 2027 | — |
+| `nodo.cl` | Asesorías Alpa Limitada | ene 2028 | — |
+| `lemu.cl` | Lemu Earth SpA | ene 2028 | Mapudungun: bosque |
+| `malla.cl` | Inversiones Malla S.A. | may 2028 | — |
+| `sitio.cl` | Wikata B.V. | dic 2028 | — |
+| `mapu.cl` | Baron Philippe de Rothschild Maipo Chile SPA | feb 2030 | Mapudungun: tierra |
+| `solar.cl` | Jose Gabriel Solar Pinedo | ene 2035 | — |
