@@ -1,7 +1,7 @@
-# Nombre y Marca
+# Nombre y Marca *(archivado)*
 ### La identidad del nuevo proyecto
 
-> **Supersedido por `08-nombre-y-dominio.md`** — que incluye disponibilidad verificada en NIC.cl y la recomendación definitiva de `degux.cl`. Este archivo se mantiene como borrador inicial.
+> **ARCHIVADO** — Contenido consolidado en `08-nombre-y-dominio.md`. Este archivo se mantiene solo como registro del proceso inicial de exploración de nombres.
 
 ---
 
