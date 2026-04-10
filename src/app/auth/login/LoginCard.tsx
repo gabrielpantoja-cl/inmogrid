@@ -38,7 +38,7 @@ export function LoginCard() {
       {/* Logo */}
       <div className="flex flex-col items-center gap-2">
         <span className="text-3xl font-black tracking-tight text-white">
-          DEG<span className="text-blue-500">UX</span>
+          inmo<span className="text-blue-500">grid</span>
         </span>
         <p className="text-sm text-neutral-400 text-center">
           Ecosistema digital colaborativo

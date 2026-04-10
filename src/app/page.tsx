@@ -49,7 +49,7 @@ export default function Page() {
       <nav className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 md:px-8">
         <div className="max-w-4xl mx-auto h-14 flex items-center justify-between">
           <Link href="/" className="text-xl font-black tracking-tight text-gray-900">
-            DEG<span className="text-yellow-500">UX</span>
+            inmo<span className="text-yellow-500">grid</span>
           </Link>
 
           <div className="flex items-center gap-3">
