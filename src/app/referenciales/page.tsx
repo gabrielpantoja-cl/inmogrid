@@ -64,7 +64,7 @@ export default function ReferencialesPage() {
       setError(
         e instanceof Error
           ? e.message
-          : 'No fue posible cargar datos desde referenciales.cl'
+          : 'No fue posible cargar los datos. Intenta nuevamente en unos segundos.'
       );
       setReferenciales([]);
     } finally {
@@ -98,18 +98,9 @@ export default function ReferencialesPage() {
         <header className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Mapa de Referenciales</h1>
           <p className="mt-2 max-w-3xl text-gray-600">
-            Datos abiertos de transacciones inmobiliarias en Chile, provistos por la comunidad
-            colaborativa de{' '}
-            <a
-              href="https://referenciales.cl"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-yellow-600 hover:text-yellow-700 font-medium"
-            >
-              referenciales.cl
-            </a>
-            . En inmogrid.cl los exponemos de forma <strong>abierta y sin autenticación</strong>,
-            como parte de un ecosistema para todos.
+            Datos abiertos de transacciones inmobiliarias en Chile, recopilados desde
+            Conservadores de Bienes Raíces (CBR). Información pública para profesionales,
+            inversionistas y cualquier persona interesada en el mercado inmobiliario.
           </p>
         </header>
 
@@ -184,7 +175,7 @@ export default function ReferencialesPage() {
 
           <div className="mt-3 text-xs text-gray-500">
             {loading
-              ? 'Cargando datos desde referenciales.cl…'
+              ? 'Cargando datos…'
               : `${referenciales.length.toLocaleString('es-CL')} registros cargados`}
           </div>
 
@@ -262,17 +253,8 @@ export default function ReferencialesPage() {
         </section>
 
         <footer className="mt-10 border-t border-gray-200 pt-6 text-xs text-gray-500">
-          Datos © comunidad{' '}
-          <a
-            href="https://referenciales.cl"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-yellow-600 hover:text-yellow-700"
-          >
-            referenciales.cl
-          </a>
-          . Fuente primaria: Conservadores de Bienes Raíces (CBR). Publicado en inmogrid.cl bajo un
-          espíritu de datos abiertos — Ley 19.628 y atribución CBR respetadas.
+          Fuente: Conservadores de Bienes Raíces (CBR) de Chile.
+          Datos publicados bajo un espíritu de datos abiertos — Ley 19.628 respetada.
         </footer>
       </main>
     </div>
