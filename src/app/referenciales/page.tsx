@@ -98,9 +98,9 @@ export default function ReferencialesPage() {
         <header className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Mapa de Referenciales</h1>
           <p className="mt-2 max-w-3xl text-gray-600">
-            Datos abiertos de transacciones inmobiliarias en Chile, recopilados desde
-            Conservadores de Bienes Raíces (CBR). Información pública para profesionales,
-            inversionistas y cualquier persona interesada en el mercado inmobiliario.
+            La información proviene de fuentes oficiales y públicas como los Conservadores
+            de Bienes Raíces (CBR) y el Servicio de Impuestos Internos (SII). Los datos se
+            procesan y actualizan periódicamente para entregar información confiable y vigente.
           </p>
         </header>
 
@@ -253,8 +253,8 @@ export default function ReferencialesPage() {
         </section>
 
         <footer className="mt-10 border-t border-gray-200 pt-6 text-xs text-gray-500">
-          Fuente: Conservadores de Bienes Raíces (CBR) de Chile.
-          Datos publicados bajo un espíritu de datos abiertos — Ley 19.628 respetada.
+          Fuentes: Conservadores de Bienes Raíces (CBR) y Servicio de Impuestos Internos (SII).
+          Datos procesados y actualizados periódicamente. Cumplimiento Ley 19.628 sobre protección de datos personales.
         </footer>
       </main>
     </div>
