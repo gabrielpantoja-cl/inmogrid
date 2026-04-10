@@ -175,9 +175,9 @@ Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. Missing either cau
 ## Infrastructure
 
 - **Production**: Vercel (auto-deploy on push to `main`)
-- **DNS**: Cloudflare — `inmogrid.cl` A→`76.76.21.21`, `www` CNAME→`cname.vercel-dns.com`, proxy OFF; `api.inmogrid.cl` A→`VPS_IP_REDACTED`
+- **DNS**: Cloudflare — `inmogrid.cl` A→`76.76.21.21`, `www` CNAME→`cname.vercel-dns.com`, proxy OFF
 - **Supabase project**: `SUPABASE_PROJECT_REF` (shared with pantojapropiedades.cl)
-- **VPS** (VPS_IP_REDACTED): runs N8N workflows, accessible at `api.inmogrid.cl` — separate from Vercel web app
+- **N8N**: accessible at `N8N_HOST_REDACTED` (VPS DigitalOcean) — separate from Vercel web app
 
 ## Specialized Agents (`.claude/agents/`)
 
