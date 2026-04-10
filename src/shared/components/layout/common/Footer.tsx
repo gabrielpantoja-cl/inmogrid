@@ -16,11 +16,14 @@ const Footer: React.FC = () => {
       {/* Contenedor principal con padding horizontal y más gap vertical en móvil (gap-y-8) */}
       {/* Nuevo layout: grid para mejor control de columnas en desktop */}
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 items-center gap-y-8 md:gap-x-8">
-        {/* Columna 1: Botón/Enlace a inicio */}
-        <div className="flex justify-center md:justify-start">
+        {/* Columna 1: Botón/Enlace a inicio + copyright */}
+        <div className="flex flex-col items-center md:items-start gap-1">
           <Link href="/" className="text-lg font-semibold text-blue-700 hover:text-blue-900 transition-colors">
             inmogrid.cl
           </Link>
+          <span className="text-xs text-gray-400">
+            © 2011–{new Date().getFullYear()} inmogrid. Todos los derechos reservados.
+          </span>
         </div>
 
         {/* Columna 2: Enlaces de Contacto/Comunidad */}
