@@ -1,15 +1,16 @@
 /**
- * Cliente para la API pública de referenciales.cl
+ * Cliente para la API pública de referenciales.cl (v1)
  *
  * referenciales.cl expone datos abiertos de transacciones inmobiliarias
- * (CBR, fojas, ROL, monto, superficie, coordenadas) bajo `/api/public/*`.
+ * (CBR, fojas, ROL, monto, superficie, coordenadas) bajo `/api/v1/*`.
  * Todos los endpoints son GET, sin autenticación y con CORS `*`.
+ * Rate limit: 60 req/min (anónimo), 600 req/min (con X-API-Key).
  *
- * Docs: https://referenciales.cl/api/public/docs
+ * Docs: https://referenciales.cl/api/v1/docs
  */
 
 export const REFERENCIALES_API_BASE =
-  process.env.NEXT_PUBLIC_REFERENCIALES_API_BASE ?? 'https://referenciales.cl/api/public';
+  process.env.NEXT_PUBLIC_REFERENCIALES_API_BASE ?? 'https://referenciales.cl/api/v1';
 
 export interface Referencial {
   id: string;
@@ -67,24 +68,41 @@ function buildUrl(
   return url.toString();
 }
 
+async function fetchWithRetry(url: string, init?: RequestInit): Promise<Response> {
+  const res = await fetch(url, {
+    ...init,
+    headers: { Accept: 'application/json', ...(init?.headers ?? {}) },
+  });
+  if (res.status === 429) {
+    const retryAfter = Number(res.headers.get('Retry-After') || '5');
+    const wait = Math.min(retryAfter, 30) * 1000;
+    await new Promise((r) => setTimeout(r, wait));
+    return fetch(url, {
+      ...init,
+      headers: { Accept: 'application/json', ...(init?.headers ?? {}) },
+    });
+  }
+  return res;
+}
+
 export async function fetchReferenciales(
   filters: MapDataFilters = {},
   init?: RequestInit
 ): Promise<MapDataResponse> {
-  const res = await fetch(buildUrl('/map-data', filters), {
-    ...init,
-    headers: { Accept: 'application/json', ...(init?.headers ?? {}) },
-  });
-  if (!res.ok) throw new Error(`referenciales.cl /map-data respondió ${res.status}`);
+  const res = await fetchWithRetry(buildUrl('/map-data', filters), init);
+  if (!res.ok) {
+    if (res.status === 429) throw new Error('Demasiadas solicitudes a referenciales.cl. Intenta en unos segundos.');
+    throw new Error(`referenciales.cl /map-data respondió ${res.status}`);
+  }
   return (await res.json()) as MapDataResponse;
 }
 
 export async function fetchComunas(init?: RequestInit): Promise<ComunasResponse> {
-  const res = await fetch(buildUrl('/map-data/comunas'), {
-    ...init,
-    headers: { Accept: 'application/json', ...(init?.headers ?? {}) },
-  });
-  if (!res.ok) throw new Error(`referenciales.cl /map-data/comunas respondió ${res.status}`);
+  const res = await fetchWithRetry(buildUrl('/map-data/comunas'), init);
+  if (!res.ok) {
+    if (res.status === 429) throw new Error('Demasiadas solicitudes a referenciales.cl. Intenta en unos segundos.');
+    throw new Error(`referenciales.cl /map-data/comunas respondió ${res.status}`);
+  }
   return (await res.json()) as ComunasResponse;
 }
 

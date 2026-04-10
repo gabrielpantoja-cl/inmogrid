@@ -1,6 +1,6 @@
 # Feature: `referenciales`
 
-Visualización pública de datos abiertos de transacciones inmobiliarias chilenas, consumidos desde la API pública de [referenciales.cl](https://referenciales.cl/api/public/docs).
+Visualización pública de datos abiertos de transacciones inmobiliarias chilenas, consumidos desde la API pública de [referenciales.cl](https://referenciales.cl/api/v1/docs).
 
 ## Scope
 
@@ -48,7 +48,7 @@ import {
 
 ## Variables de entorno
 
-- `NEXT_PUBLIC_REFERENCIALES_API_BASE` (opcional) — override del base URL. Default: `https://referenciales.cl/api/public`.
+- `NEXT_PUBLIC_REFERENCIALES_API_BASE` (opcional) — override del base URL. Default: `https://referenciales.cl/api/v1`.
 
 ## CSP
 

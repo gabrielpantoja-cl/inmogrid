@@ -82,7 +82,7 @@ export default function ReferencialesPage() {
       <nav className="sticky top-0 z-20 bg-white border-b border-gray-200 px-4 md:px-8">
         <div className="max-w-7xl mx-auto h-14 flex items-center justify-between">
           <Link href="/" className="text-xl font-black tracking-tight text-gray-900">
-            DEG<span className="text-yellow-500">UX</span>
+            inmo<span className="text-yellow-500">grid</span>
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <Link href="/" className="text-gray-600 hover:text-gray-900">
