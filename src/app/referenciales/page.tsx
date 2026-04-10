@@ -99,8 +99,9 @@ export default function ReferencialesPage() {
           <h1 className="text-3xl font-bold text-gray-900">Mapa de Referenciales</h1>
           <p className="mt-2 max-w-3xl text-gray-600">
             La información proviene de fuentes oficiales y públicas como los Conservadores
-            de Bienes Raíces (CBR) y el Servicio de Impuestos Internos (SII). Los datos se
-            procesan y actualizan periódicamente para entregar información confiable y vigente.
+            de Bienes Raíces (CBR). Los datos se procesan y actualizan periódicamente para
+            entregar información confiable y vigente. Esta información es de carácter
+            referencial y no constituye tasación ni asesoría profesional.
           </p>
         </header>
 
@@ -253,8 +254,10 @@ export default function ReferencialesPage() {
         </section>
 
         <footer className="mt-10 border-t border-gray-200 pt-6 text-xs text-gray-500">
-          Fuentes: Conservadores de Bienes Raíces (CBR) y Servicio de Impuestos Internos (SII).
-          Datos procesados y actualizados periódicamente. Cumplimiento Ley 19.628 sobre protección de datos personales.
+          Fuentes: Conservadores de Bienes Raíces (CBR) de Chile.
+          Datos procesados y actualizados periódicamente. La información es referencial
+          y no garantiza exactitud — consulte a un profesional para decisiones de inversión.
+          Cumplimiento Ley 19.628 sobre protección de datos personales.
         </footer>
       </main>
     </div>
