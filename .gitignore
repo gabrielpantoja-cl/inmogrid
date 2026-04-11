@@ -64,9 +64,12 @@ next-env.d.ts
 *.drawio          
 *.drawio.bkp      
 
-# Database backups
+# Database backups & one-off migration scripts
+# NUNCA commitear pg_dump ni scripts con data real / UUIDs de usuarios,
+# este repo es opensource.
 *.dump
 backup_produccion.sql
+scripts/migrations/
 !scripts/sql/*.sql
 
 # MCP configuration
