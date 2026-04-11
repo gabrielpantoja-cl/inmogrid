@@ -50,7 +50,7 @@ export default function CookieConsentBanner() {
         <Card className="max-w-6xl mx-auto p-6">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <Shield className="h-5 w-5 text-blue-600" />
+              <Shield className="h-5 w-5 text-yellow-600" />
               <h3 className="font-semibold text-gray-900">inmogrid.cl usa cookies</h3>
             </div>
             <p className="text-sm text-gray-600 mb-4">
@@ -61,7 +61,7 @@ export default function CookieConsentBanner() {
             <div className="flex flex-wrap gap-3">
               <Button
                 onClick={handleAcceptAll}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+                className="bg-yellow-500 hover:bg-yellow-400 text-white px-6"
               >
                 Aceptar todas
               </Button>
@@ -79,7 +79,7 @@ export default function CookieConsentBanner() {
             </div>
             <p className="text-xs text-gray-500 mt-3">
               Al usar este sitio, acepta nuestras{' '}
-              <Link href="/privacy" className="text-blue-600 hover:underline">
+              <Link href="/privacy" className="text-yellow-600 hover:underline">
                 Políticas de Privacidad
               </Link>{' '}
               conforme a la Ley 21.719 de Chile.
@@ -98,7 +98,7 @@ export default function CookieConsentBanner() {
               <div className="flex gap-3">
                 <Button
                   onClick={handleSavePreferences}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 font-semibold"
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-white py-3 font-semibold"
                 >
                   Guardar Preferencias
                 </Button>

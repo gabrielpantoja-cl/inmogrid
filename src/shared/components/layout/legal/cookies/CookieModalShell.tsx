@@ -30,13 +30,13 @@ export function CookieModalShell({
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black bg-opacity-60">
       <Card className={`w-full ${maxWidth} max-h-[90vh] overflow-y-auto bg-white shadow-2xl`}>
         <div className="relative">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 rounded-t-lg">
+          <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-6 rounded-t-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Shield className="h-6 w-6" />
                 <div>
                   <h2 className="text-2xl font-bold">{title}</h2>
-                  {subtitle && <p className="text-blue-100 text-sm">{subtitle}</p>}
+                  {subtitle && <p className="text-yellow-50 text-sm">{subtitle}</p>}
                 </div>
               </div>
               <Button

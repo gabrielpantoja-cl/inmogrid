@@ -53,7 +53,7 @@ export default function CookiePreferencesModal({ isOpen, onClose }: CookiePrefer
           <div className="flex gap-3">
             <Button
               onClick={handleSave}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 font-semibold"
+              className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-white py-3 font-semibold"
             >
               Guardar Preferencias
             </Button>
@@ -73,8 +73,8 @@ export default function CookiePreferencesModal({ isOpen, onClose }: CookiePrefer
       }
     >
       {/* Resumen de estado actual */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <h3 className="font-medium text-blue-900 mb-2">Estado Actual de Cookies</h3>
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+        <h3 className="font-medium text-gray-900 mb-2">Estado Actual de Cookies</h3>
         <div className="flex flex-wrap gap-2">
           {Object.entries(preferences).map(([key, enabled]) => (
             <span
