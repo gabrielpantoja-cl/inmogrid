@@ -162,22 +162,26 @@ options: { redirectTo: `${window.location.origin}/auth/callback` }
 
 Si alguien lo hardcodea a `https://pantojapropiedades.cl` o similar, rechazar el PR.
 
-## Sign-out — por qué usamos `scope: 'local'` + hard reload
+## Sign-out — diseño defensivo
 
-El hook `useAuth.signOut` (en `src/shared/hooks/useAuth.ts`) está deliberadamente implementado así:
+El hook `useAuth.signOut` (en `src/shared/hooks/useAuth.ts`) está deliberadamente implementado con **cuatro decisiones defensivas**, cada una respuesta a un bug que ya nos pasó:
 
 ```ts
 const signOut = async () => {
+  const SIGNOUT_TIMEOUT_MS = 500
+
   try {
-    await supabase.auth.signOut({ scope: 'local' })
+    await Promise.race([
+      supabase.auth.signOut({ scope: 'local' }),
+      new Promise<void>((resolve) => setTimeout(resolve, SIGNOUT_TIMEOUT_MS)),
+    ])
   } catch (error) {
     console.error('[useAuth.signOut] Error signing out:', error)
   }
-  window.location.href = '/auth/login'
+
+  window.location.href = '/'
 }
 ```
-
-Dos decisiones importantes que no son obvias:
 
 ### 1. `scope: 'local'` (no el default `'global'`)
 
@@ -186,35 +190,75 @@ Supabase `signOut()` acepta tres scopes:
 | Scope | Comportamiento |
 |---|---|
 | `global` *(default)* | Revoca **todas** las sesiones del usuario en todos sus dispositivos vía una request HTTP a `/auth/v1/logout`. Bloqueante. |
-| `local` | Solo limpia las cookies del browser actual. No hace request HTTP. Instantáneo. |
+| `local` | Solo limpia las cookies del browser actual. No hace request HTTP explícito. |
 | `others` | Revoca todas menos la actual. |
 
-Usamos `local` porque el `global` **puede colgarse indefinidamente** si:
+Usamos `local` porque `global` **puede colgarse indefinidamente** si la API de Supabase está lenta, la sesión ya es inválida (retry loop de 401), o hay problemas de red. Bug histórico: con scope global, el `finally` del handler nunca se ejecutaba y el botón quedaba atascado en `"Cerrando..."` para siempre.
 
-- La API de Supabase está lenta o con timeout.
-- La sesión ya está inválida (retry loop de 401).
-- Hay problemas de red del lado del cliente.
+### 2. `Promise.race` contra un timeout de 500 ms
 
-Bug histórico (2026-04-11): con scope global, cuando la request se colgaba, el `finally` del handler de signout del Navbar nunca se ejecutaba, y el botón quedaba atascado en `"Cerrando..."` para siempre. Con `scope: 'local'` la limpieza de cookies es sincrónica y garantizada.
+Aún con `scope: 'local'`, el SDK de Supabase hace flushing interno de localStorage + cookies + refresh token cleanup. En edge cases (sesiones stale, storage corrupto, SDK versions anteriores) ese flushing puede tardar **varios segundos o quedar colgado**. El `Promise.race` garantiza que después de 500 ms navegamos igual, ocurra lo que ocurra.
 
-### 2. `window.location.href` (no `router.push`)
+No hay riesgo de dejar al cliente con sesión fantasma: cualquier cookie que haya quedado stale la limpia el middleware al siguiente request — ver [sección siguiente sobre cleanup de cookies huérfanas](#middleware-auto-limpieza-de-cookies-huerfanas).
 
-`router.push('/auth/login')` es **soft navigation** de Next.js — no garantiza que los componentes se desmonten ni que el middleware corra con estado limpio. `window.location.href` fuerza un **full page reload**, lo que:
+### 3. Redirect a `/` (no a `/auth/login`)
+
+El patrón del producto es Reddit-style: el feed es visible sin autenticación y el botón "Iniciar sesión con Google" vive en el `PublicHeader` de todas las rutas públicas (ver [ADR-004](adr/ADR-004-public-route-group-and-shared-account-menu.md)). Mandar al usuario a `/auth/login` después de cerrar sesión es un salto innecesario — lo natural es que caiga en el feed público y decida si quiere volver a loguearse.
+
+### 4. `window.location.href` (no `router.push`)
+
+`router.push('/')` es **soft navigation** de Next.js — no garantiza que los componentes se desmonten ni que el middleware corra con estado limpio. `window.location.href` fuerza un **full page reload**, lo que:
 
 - Descarta todo el árbol React y re-renderiza desde cero.
 - Corre el middleware con las cookies ya limpias.
 - Garantiza que ningún componente del dashboard quede montado con sesión stale.
 
-El try/catch envuelve `signOut` para que, incluso si la llamada de Supabase rompe por alguna razón, el redirect siempre se ejecute.
+---
 
-### Relación con `robustSignOut`
+## Middleware — auto-limpieza de cookies huérfanas
 
-En `src/shared/lib/auth-utils.ts` existe `robustSignOut()` con la misma filosofía — es el que usa el componente `sidenav.tsx`. Ambas implementaciones coexisten por ahora:
+`src/shared/lib/supabase/middleware.ts` corre en cada request y refresca la sesión vía `updateSession()`. Adicionalmente detecta **JWTs huérfanos** — el caso donde el browser tiene una cookie `sb-*-auth-token` firmada válida pero el `sub` claim apunta a un `auth.users.id` que ya no existe (típicamente porque el usuario fue eliminado desde el dashboard de Supabase o por una operación destructiva de mantenimiento):
 
-- `useAuth.signOut` → usado por el navbar desktop/mobile
-- `robustSignOut` → usado por el sidenav
+```ts
+const { data: { user }, error } = await supabase.auth.getUser()
 
-Idealmente convergerían en uno solo. Queda como TODO de refactor futuro.
+const hasSupabaseAuthCookie = request.cookies
+  .getAll()
+  .some((c) => c.name.startsWith('sb-') && c.name.endsWith('-auth-token'))
+
+if (!user && error && hasSupabaseAuthCookie) {
+  await supabase.auth.signOut({ scope: 'local' })
+}
+```
+
+Sin este branch, un cliente con sesión stale verá **UI desincronizada**: el navbar (client-side `useAuth()` + `onAuthStateChange`) muestra "Hola, {email}" porque el JWT se decodifica, mientras el server component muestra "Inicia sesión…" porque `supabase.auth.getUser()` hace HTTP a Supabase Auth y obtiene `null`.
+
+El branch captura ese desfase y limpia las cookies en el mismo request. Al siguiente navigate, las dos capas coinciden.
+
+---
+
+## Triggers de `auth.users` — creación de perfiles en signup
+
+Cada vez que Supabase inserta una fila en `auth.users` (primer login de un usuario), dos triggers `AFTER INSERT` corren **en el mismo statement**:
+
+| Trigger | Función | Tabla destino | Motivo |
+|---|---|---|---|
+| `on_auth_user_created_create_profile` | `handle_new_user_profile` | `public.profiles` | Legacy — usado por pantojapropiedades.cl mientras comparta la base |
+| `on_auth_user_created_inmogrid` | `handle_new_inmogrid_profile` | `public.inmogrid_profiles` | inmogrid.cl necesita la fila de perfil para renderizar dashboard/perfil público |
+
+Ambas funciones corren como `SECURITY DEFINER` (privilegios del owner, no del rol que hace el `INSERT`) y usan `INSERT ... ON CONFLICT DO NOTHING/UPDATE` para ser idempotentes.
+
+**Bug histórico (2026-04-11)**: existía un tercer trigger `trg_on_auth_user_created_degux` que intentaba insertar en `public.degux_profiles` — una tabla de un proyecto hermano discontinuado (`degux.cl`) que **ya no existe en el schema**. Cada `INSERT` nuevo a `auth.users` fallaba con `relation "public.degux_profiles" does not exist`, y Supabase retornaba `server_error: unexpected_failure: Database error saving new user` al callback OAuth, bloqueando cualquier login nuevo en la app. Fix: `DROP TRIGGER` + `DROP FUNCTION` del legacy huérfano, más un trigger nuevo para `inmogrid_profiles` (que antes no existía — los perfiles de inmogrid.cl se creaban vía hook del callback OAuth de forma no confiable).
+
+Regla operativa: **antes de correr operaciones destructivas sobre `auth.users`** (delete masivo, merge de usuarios, rotación de projects), auditar siempre los triggers con:
+
+```sql
+SELECT tgname, tgtype, pg_get_triggerdef(oid)
+FROM pg_trigger
+WHERE tgrelid = 'auth.users'::regclass AND NOT tgisinternal;
+```
+
+Si aparece un trigger que referencia una tabla o schema que no pertenece a este proyecto, es candidato a DROP.
 
 ---
 

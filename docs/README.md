@@ -25,6 +25,7 @@ Esta carpeta contiene la documentación pública del proyecto. Si vas a contribu
 | [adr/ADR-001-feature-first-architecture.md](adr/ADR-001-feature-first-architecture.md) | Decisión de arquitectura feature-first |
 | [adr/ADR-002-google-oauth-dedicated-gcp-project.md](adr/ADR-002-google-oauth-dedicated-gcp-project.md) | Decisión de usar un proyecto GCP dedicado para OAuth |
 | [adr/ADR-003-design-tokens-two-layer-system.md](adr/ADR-003-design-tokens-two-layer-system.md) | Decisión del sistema de design tokens en dos capas |
+| [adr/ADR-004-public-route-group-and-shared-account-menu.md](adr/ADR-004-public-route-group-and-shared-account-menu.md) | Route group `(public)` + primitivo compartido `AccountMenu` para navegación consistente entre layouts |
 | [arquitectura/patrones.md](arquitectura/patrones.md) | Patrones de código — forms, data fetching, auth, errores |
 | [arquitectura/ROADMAP-refactor.md](arquitectura/ROADMAP-refactor.md) | Roadmap de refactor hacia la estructura actual |
 | [sql-migrations/001_inmogrid_schema.sql](sql-migrations/001_inmogrid_schema.sql) | Schema SQL inicial para Supabase |
