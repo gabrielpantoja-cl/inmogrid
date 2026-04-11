@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useProfileForm } from '../hooks/useProfileForm';
+import { AvatarUpload } from './AvatarUpload';
 import { BasicInfoSection } from './sections/BasicInfoSection';
 import { ProfessionalSection } from './sections/ProfessionalSection';
 import { SocialPrivacySection } from './sections/SocialPrivacySection';
@@ -14,6 +15,11 @@ interface ProfileEditFormProps {
 /**
  * Orquestador del formulario de edición de perfil.
  * La lógica vive en `useProfileForm`; cada sección es un componente presentacional.
+ *
+ * Nota: `AvatarUpload` queda renderizado ARRIBA del `<form>` porque el avatar
+ * se sube de forma inmediata y asíncrona (no espera al submit del resto del
+ * form) — así el usuario ve el cambio al toque y no tiene que acordarse de
+ * apretar "Guardar".
  */
 export default function ProfileEditForm({ user }: ProfileEditFormProps) {
   const router = useRouter();
@@ -21,7 +27,14 @@ export default function ProfileEditForm({ user }: ProfileEditFormProps) {
     useProfileForm(user);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <div className="space-y-8">
+      <AvatarUpload
+        userId={user.id}
+        currentAvatarUrl={user.avatarUrl}
+        fullName={formData.fullName || user.fullName || ''}
+      />
+
+      <form onSubmit={handleSubmit} className="space-y-8">
       {error && (
         <div className="rounded-lg bg-red-50 border border-red-200 p-4">
           <p className="text-sm text-red-700">❌ {error}</p>
@@ -71,5 +84,6 @@ export default function ProfileEditForm({ user }: ProfileEditFormProps) {
         </p>
       </div>
     </form>
+    </div>
   );
 }

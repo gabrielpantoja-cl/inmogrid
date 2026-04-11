@@ -12,6 +12,9 @@ const profileUpdateSchema = z.object({
   fullName: z.string().min(1, 'El nombre es requerido').max(100).optional(),
   bio: z.string().max(500, 'La biografía no puede exceder 500 caracteres').nullable().optional(),
   tagline: z.string().max(100, 'El tagline no puede exceder 100 caracteres').nullable().optional(),
+  // avatarUrl lo persiste el componente `AvatarUpload` después de subir la
+  // imagen a Supabase Storage. Aceptamos null para permitir "sacar la foto".
+  avatarUrl: z.string().url('Debe ser una URL válida').max(500).nullable().optional(),
   profession: z.nativeEnum(ProfessionType).nullable().optional(),
   company: z.string().max(100).nullable().optional(),
   phone: z.string().max(20).nullable().optional(),
