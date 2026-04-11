@@ -1,4 +1,4 @@
-// src/app/[username]/notas/page.tsx
+// src/app/(public)/[username]/notas/page.tsx — URL: /[username]/notas
 
 import { notFound } from 'next/navigation';
 import { prisma } from '@/shared/lib/prisma';

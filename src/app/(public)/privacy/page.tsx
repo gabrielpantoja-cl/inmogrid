@@ -1,4 +1,4 @@
-/* app/privacy/page.tsx */
+/* app/(public)/privacy/page.tsx */
 import TimeStamp from '@/shared/components/layout/common/TimeStamp';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -9,8 +9,14 @@ import remarkHtml from 'remark-html';
 export default async function PrivacyPolicyPage() {
   const currentDate = new Date().toLocaleDateString('es-CL');
 
-  // Leer archivo markdown
-  const contentPath = path.join(process.cwd(), 'src/app/privacy/content.md');
+  // Leer archivo markdown colocado junto a la página dentro del route
+  // group `(public)`. Next.js ejecuta `process.cwd()` desde la raíz del
+  // proyecto en build y en runtime serverless, así que la ruta es literal
+  // con paréntesis incluidos.
+  const contentPath = path.join(
+    process.cwd(),
+    'src/app/(public)/privacy/content.md'
+  );
   const content = await fs.readFile(contentPath, 'utf8');
 
   // Convertir markdown a HTML
