@@ -148,7 +148,7 @@ export default function RootLayout({
             {children}
             <Footer
               githubStarsSlot={
-                <GitHubStarsSimple repo="inmogrid/inmogrid" className="text-xs" />
+                <GitHubStarsSimple repo="gabrielpantoja-cl/inmogrid" className="text-xs" />
               }
             />
           </>

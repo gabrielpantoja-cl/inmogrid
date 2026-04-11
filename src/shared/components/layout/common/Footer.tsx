@@ -13,7 +13,7 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
-  const githubRepoUrl = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/inmogrid/inmogrid';
+  const githubRepoUrl = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/inmogrid';
 
   return (
     // Aumentado margen superior (mt-16) y padding vertical (py-12) para más "aire"
