@@ -54,7 +54,7 @@ export function MobileMenu({
           <button
             onClick={onSignOut}
             disabled={isSigningOut}
-            className={`w-full flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200 ${
+            className={`w-full flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-primary/10 transition-colors duration-200 ${
               isSigningOut ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >

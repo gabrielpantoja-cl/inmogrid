@@ -46,7 +46,7 @@ export default function SocialLinks({ externalLinks, email }: SocialLinksProps) 
           href={links.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-medium text-gray-700 transition-all hover:-translate-y-0.5 hover:border-blue-600 hover:text-blue-600 hover:shadow-md"
+          className="flex items-center gap-2 rounded-lg border-2 border-gray-200 bg-white px-4 py-2 font-medium text-gray-700 transition-all hover:-translate-y-0.5 hover:border-primary hover:text-primary hover:shadow-md"
         >
           <span className="text-xl">💼</span>
           <span>LinkedIn</span>

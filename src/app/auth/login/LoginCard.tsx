@@ -38,7 +38,7 @@ export function LoginCard() {
       {/* Logo */}
       <div className="flex flex-col items-center gap-2">
         <span className="text-3xl font-black tracking-tight text-white">
-          inmo<span className="text-blue-500">grid</span>
+          inmo<span className="text-primary">grid</span>
         </span>
         <p className="text-sm text-neutral-400 text-center">
           Ecosistema digital colaborativo
@@ -68,7 +68,7 @@ export function LoginCard() {
         onClick={handleGoogleSignIn}
         disabled={isLoading}
         aria-label="Continuar con Google"
-        className="w-full flex items-center justify-center gap-3 rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-700 hover:border-neutral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:opacity-50 disabled:pointer-events-none"
+        className="w-full flex items-center justify-center gap-3 rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-700 hover:border-neutral-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900 disabled:opacity-50 disabled:pointer-events-none"
       >
         {isLoading ? (
           <>

@@ -73,7 +73,7 @@ export default function SideNav() {
             disabled={isDeleting || isSigningOut}
             aria-label={isSigningOut ? "Cerrando sesión..." : "Cerrar sesión"}
             className={`flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium 
-              ${(isDeleting || isSigningOut) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-sky-100 hover:text-blue-600'} 
+              ${(isDeleting || isSigningOut) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/10 hover:text-primary'}
               md:flex-none md:justify-start md:p-2 md:px-3`}
           >
             <PowerIcon className={`w-6 ${isSigningOut ? 'animate-spin' : ''}`} />

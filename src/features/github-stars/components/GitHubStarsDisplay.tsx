@@ -76,7 +76,7 @@ export function GitHubStarsDisplay({
         )}
 
         {cached && (
-          <span className="text-xs text-blue-500" title="Dato desde caché">
+          <span className="text-xs text-primary" title="Dato desde caché">
             📦
           </span>
         )}
@@ -119,7 +119,7 @@ export function GitHubStarsDisplay({
             <button
               onClick={refetch}
               disabled={isLoading}
-              className="px-2 py-1 bg-blue-500 text-white text-xs rounded disabled:opacity-50"
+              className="px-2 py-1 bg-primary text-primary-foreground text-xs rounded disabled:opacity-50"
             >
               {isLoading ? 'Cargando...' : 'Refetch'}
             </button>

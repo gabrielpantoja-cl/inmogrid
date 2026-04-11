@@ -82,7 +82,7 @@ function ErrorContent() {
         <div className="flex space-x-4">
           <Link
             href="/auth/signin"
-            className="flex-1 text-center py-2 px-4 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            className="flex-1 text-center py-2 px-4 border border-primary text-sm font-medium rounded-md text-primary bg-white hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
           >
             Intentar de Nuevo
           </Link>
@@ -101,7 +101,7 @@ function ErrorContent() {
             <a href="https://github.com/inmogrid/inmogrid/discussions"
                target="_blank"
                rel="noopener noreferrer"
-               className="text-blue-600 hover:text-blue-500 underline">
+               className="text-primary hover:text-primary/80 underline">
               Contacta al soporte
             </a>
           </p>

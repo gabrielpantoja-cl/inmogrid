@@ -94,7 +94,7 @@ export default function CrearNotaForm() {
 
         <button
           onClick={() => setPreview(!preview)}
-          className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+          className="inline-flex items-center px-4 py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors"
         >
           <EyeIcon className="w-5 h-5 mr-2" />
           {preview ? 'Editar' : 'Vista Previa'}

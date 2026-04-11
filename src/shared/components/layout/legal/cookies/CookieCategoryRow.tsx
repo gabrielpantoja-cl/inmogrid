@@ -25,9 +25,9 @@ const ACCENT_STYLES: Record<
   blue: {
     border: 'border border-gray-200',
     bg: 'bg-white',
-    iconBg: 'bg-blue-50',
-    iconColor: 'text-blue-600',
-    toggle: 'peer-checked:bg-blue-600',
+    iconBg: 'bg-primary/10',
+    iconColor: 'text-primary',
+    toggle: 'peer-checked:bg-primary',
   },
   yellow: {
     border: 'border border-gray-200',

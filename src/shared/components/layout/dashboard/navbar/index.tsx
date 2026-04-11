@@ -35,7 +35,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <Link href="/dashboard" className="flex items-center">
-                  <div className="w-8 h-8 text-blue-600">
+                  <div className="w-8 h-8 text-primary">
                     <AcmeLogo />
                   </div>
                   <span className="ml-2 text-xl font-bold text-gray-900 hidden sm:block">
@@ -78,7 +78,7 @@ export default function Navbar() {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => actions.setIsMobileMenuOpen(!actions.isMobileMenuOpen)}
-                className="p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+                className="p-2 rounded-md text-gray-600 hover:text-primary hover:bg-primary/10 transition-colors duration-200"
                 aria-label="Abrir menú"
               >
                 {actions.isMobileMenuOpen ? (

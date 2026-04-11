@@ -87,14 +87,14 @@ export default function DashboardContent({
 
         <Link
           href="/dashboard/notas"
-          className="group p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all"
+          className="group p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-primary/50 transition-all"
         >
           <div className="flex items-center space-x-4">
-            <div className="p-3 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition-colors">
-              <DocumentTextIcon className="w-6 h-6 text-blue-700" />
+            <div className="p-3 bg-primary/20 rounded-lg group-hover:bg-primary/30 transition-colors">
+              <DocumentTextIcon className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+              <h3 className="font-semibold text-gray-800 group-hover:text-primary transition-colors">
                 Mis Notas
               </h3>
               <p className="text-sm text-gray-500">
@@ -135,7 +135,7 @@ export default function DashboardContent({
             latestPosts.map((post) => (
               <div key={post.id} className="border-b border-gray-100 pb-4 last:border-b-0">
                 <Link href={`/${post.author?.username}/notas/${post.slug}`} className="block group">
-                  <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors">
                     {post.title}
                   </h3>
                   {post.excerpt && (

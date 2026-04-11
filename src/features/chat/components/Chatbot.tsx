@@ -21,11 +21,11 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
   return (
     <div className="w-full h-full bg-white flex flex-col">
       {/* Header */}
-      <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
+      <div className="bg-primary text-primary-foreground p-4 flex justify-between items-center">
         <h3 className="font-semibold">Asistente Virtual</h3>
         <button
           onClick={onClose}
-          className="p-1 hover:bg-blue-700 rounded-full transition-colors"
+          className="p-1 hover:bg-primary/80 rounded-full transition-colors"
           aria-label="Cerrar chat"
         >
           <XMarkIcon className="w-6 h-6" />
@@ -44,7 +44,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
             key={msg.id}
             className={`max-w-[80%] p-3 rounded-lg ${
               msg.role === 'user'
-                ? 'ml-auto bg-blue-100 text-blue-900'
+                ? 'ml-auto bg-accent text-accent-foreground'
                 : 'bg-gray-100 text-gray-900'
             }`}
           >
@@ -73,7 +73,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
             value={input}
             onChange={handleInputChange}
             placeholder="Escribe tu mensaje..."
-            className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             disabled={isLoading}
           />
           <button
@@ -82,8 +82,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
             className={`p-2 rounded-lg ${
               isLoading || !input.trim()
                 ? 'bg-gray-300 cursor-not-allowed'
-                : 'bg-blue-500 hover:bg-blue-600 active:bg-blue-700'
-            } text-white transition-colors`}
+                : 'bg-primary hover:bg-primary/90 active:bg-primary/80'
+            } text-primary-foreground transition-colors`}
             aria-label="Enviar mensaje"
           >
             <PaperAirplaneIcon className="w-5 h-5" />

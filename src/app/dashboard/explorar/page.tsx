@@ -63,7 +63,7 @@ export default async function ExplorarPage() {
               <Link
                 key={post.id}
                 href={post.authorUsername ? `/${post.authorUsername}/notas/${post.slug}` : `/notas/${post.slug}`}
-                className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-blue-300 hover:shadow-sm transition-all"
+                className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-primary/50 hover:shadow-sm transition-all"
               >
                 <h3 className="font-medium text-gray-900">{post.title}</h3>
                 {post.excerpt && (
@@ -90,7 +90,7 @@ export default async function ExplorarPage() {
               <Link
                 key={profile.id}
                 href={`/${profile.username}`}
-                className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 hover:border-blue-300 hover:shadow-sm transition-all"
+                className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 hover:border-primary/50 hover:shadow-sm transition-all"
               >
                 {profile.avatarUrl ? (
                   <img

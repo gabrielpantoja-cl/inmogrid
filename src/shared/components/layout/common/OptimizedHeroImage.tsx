@@ -107,9 +107,9 @@ const OptimizedHeroImage: React.FC<OptimizedHeroImageProps> = ({
 
   // Fallback cuando todas las imágenes fallan
   const ImageFallback = () => (
-    <div className={`relative ${aspectRatio} bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-dashed border-blue-200 flex items-center justify-center shadow-lg`}>
+    <div className={`relative ${aspectRatio} bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg border-2 border-dashed border-primary/30 flex items-center justify-center shadow-lg`}>
       <div className="text-center p-8">
-        <div className="text-blue-400 mb-4">
+        <div className="text-primary/60 mb-4">
           <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
           </svg>
@@ -129,7 +129,7 @@ const OptimizedHeroImage: React.FC<OptimizedHeroImageProps> = ({
             setImageError(false);
             setImageLoading(true);
           }}
-          className="mt-4 px-4 py-2 text-xs bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
+          className="mt-4 px-4 py-2 text-xs bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors"
         >
           Reintentar carga
         </button>

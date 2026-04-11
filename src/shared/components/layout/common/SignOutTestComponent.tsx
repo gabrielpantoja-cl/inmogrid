@@ -82,7 +82,7 @@ export default function SignOutTestComponent() {
         <button
           onClick={() => handleTestSignOut('normal')}
           disabled={isSigningOut}
-          className="w-full px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 disabled:opacity-50"
+          className="w-full px-3 py-1 bg-primary text-primary-foreground rounded text-xs hover:bg-primary/90 disabled:opacity-50"
         >
           {isSigningOut ? 'Testing...' : 'Test Normal SignOut'}
         </button>

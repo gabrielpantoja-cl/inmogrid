@@ -236,7 +236,7 @@ export default function NotasContent({
                     {post.published && username && (
                       <Link
                         href={`/${username}/notas/${post.slug}`}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
                         title="Ver publicación"
                       >
                         <EyeIcon className="w-5 h-5" />

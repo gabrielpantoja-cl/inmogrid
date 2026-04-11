@@ -53,7 +53,7 @@ export function DocsSidebar({ structure, selectedDoc, onDocSelect }: DocsSidebar
                     onClick={() => onDocSelect(doc.id)}
                     className={`block w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
                       selectedDoc === doc.id
-                        ? 'bg-blue-100 text-blue-900 font-medium'
+                        ? 'bg-primary/20 text-primary font-medium'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     }`}
                   >

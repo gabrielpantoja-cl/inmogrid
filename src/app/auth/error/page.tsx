@@ -58,7 +58,7 @@ const errorMap = {
         Este error generalmente se debe a una configuración incorrecta en Google Console.
         El problema ha sido identificado y corregido.
       </p>
-      <div className="bg-blue-50 p-4 rounded-md mb-4">
+      <div className="bg-primary/10 p-4 rounded-md mb-4">
         <p className="text-sm"><strong>Posibles causas resueltas:</strong></p>
         <ul className="text-xs mt-2 list-disc list-inside space-y-1">
           <li>URLs de callback corregidas en la configuración</li>
@@ -155,7 +155,7 @@ function AuthErrorContent() {
           {/* Botón principal */}
           <Link
             href="/auth/login"
-            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
           >
             Intentar Nuevamente
           </Link>
@@ -163,7 +163,7 @@ function AuthErrorContent() {
           {/* Botón secundario */}
           <Link 
             href="/"
-            className="group relative w-full flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            className="group relative w-full flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
           >
             Volver al Inicio
           </Link>
@@ -172,7 +172,7 @@ function AuthErrorContent() {
         {/* Información de ayuda mejorada */}
         <div className="mt-6 text-center">
           <details className="group">
-            <summary className="cursor-pointer text-sm text-blue-600 hover:text-blue-500">
+            <summary className="cursor-pointer text-sm text-primary hover:text-primary/80">
               ¿Necesitas ayuda? Ver soluciones actualizadas
             </summary>
             <div className="mt-4 text-left text-xs text-gray-600 space-y-2">
@@ -189,7 +189,7 @@ function AuthErrorContent() {
                   </p>
                 </div>
               ) : (
-                <div className="p-3 bg-blue-50 rounded">
+                <div className="p-3 bg-primary/10 rounded">
                   <strong>Posibles soluciones:</strong>
                   <ul className="mt-2 list-disc list-inside space-y-1">
                     <li>Verifica que tengas una cuenta de Google activa</li>
@@ -221,7 +221,7 @@ export default function AuthErrorPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     }>
       <AuthErrorContent />

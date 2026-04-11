@@ -141,8 +141,8 @@ export default function ComunaAutocomplete({
                 role="option"
                 aria-selected={index === highlightedIndex}
                 onClick={() => handleSuggestionClick(comuna)}
-                className={`w-full text-left px-3 py-2 cursor-pointer hover:bg-blue-50 border-b border-gray-100 last:border-b-0 ${
-                  index === highlightedIndex ? 'bg-blue-100' : ''
+                className={`w-full text-left px-3 py-2 cursor-pointer hover:bg-primary/10 border-b border-gray-100 last:border-b-0 ${
+                  index === highlightedIndex ? 'bg-primary/20' : ''
                 }`}
               >
                 <div className="flex justify-between items-center">

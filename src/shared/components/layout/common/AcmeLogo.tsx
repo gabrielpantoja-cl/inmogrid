@@ -74,7 +74,7 @@ export default function AcmeLogo() {
         }}
       >
         <GlobeAltIcon
-          className="w-full h-full text-blue-800"
+          className="w-full h-full text-primary-foreground"
           aria-hidden="true"
         />
       </div>

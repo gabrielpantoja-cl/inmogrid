@@ -74,11 +74,11 @@ export default async function NotePage({ params }: NotePageProps) {
       <div className="mx-auto max-w-4xl px-4 md:px-8">
 
         <nav className="mb-8 text-sm text-gray-600">
-          <Link href={`/${username}`} className="hover:text-blue-700 hover:underline">
+          <Link href={`/${username}`} className="hover:text-primary hover:underline">
             {profile.fullName || username}
           </Link>
           <span className="mx-2">/</span>
-          <Link href={`/${username}/notas`} className="hover:text-blue-700 hover:underline">
+          <Link href={`/${username}/notas`} className="hover:text-primary hover:underline">
             Notas
           </Link>
         </nav>

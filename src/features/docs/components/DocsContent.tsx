@@ -133,7 +133,7 @@ export function DocsContent({ selectedDoc }: DocsContentProps) {
                 </h3>
               ),
               blockquote: ({ children }) => (
-                <blockquote className="border-l-4 border-blue-500 bg-blue-50 p-4 my-4 italic">
+                <blockquote className="border-l-4 border-primary bg-primary/10 p-4 my-4 italic">
                   {children}
                 </blockquote>
               ),

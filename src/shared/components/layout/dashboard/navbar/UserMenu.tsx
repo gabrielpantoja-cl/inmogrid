@@ -37,7 +37,7 @@ export function UserMenu({
     <div className="relative">
       <button
         onClick={onToggle}
-        className="flex items-center p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+        className="flex items-center p-2 rounded-full text-gray-600 hover:text-primary hover:bg-primary/10 transition-colors duration-200"
         aria-label="Menú de usuario"
       >
         {avatarUrl ? (
