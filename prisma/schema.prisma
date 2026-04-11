@@ -1,5 +1,14 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // Incluimos `rhel-openssl-3.0.x` además de `native` porque desde que movimos
+  // el build a GitHub Actions (runner `ubuntu-latest` = Debian/Ubuntu), el
+  // `prisma generate` ya no corre en la misma plataforma que el runtime
+  // serverless de Vercel (Amazon Linux 2023 = RHEL con OpenSSL 3.0). Sin este
+  // binaryTarget, el Prisma Client se genera solo con el engine de Debian y
+  // Lambda tira `PrismaClientInitializationError` al instanciar el cliente,
+  // lo que rompe cualquier ruta que toque la DB — incluido `/api/public/posts`
+  // y hasta archivos estáticos como `/ads.txt` que pasan por el middleware.
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
