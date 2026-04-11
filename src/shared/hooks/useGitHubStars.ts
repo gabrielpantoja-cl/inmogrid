@@ -1,7 +1,7 @@
 // src/hooks/useGitHubStars.ts
 // Custom hook para usar la API de GitHub Stars con React
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { fetchGithubStarsEnhanced, type FetchStarsResult } from '@/shared/lib/githubStars';
 
 interface UseGitHubStarsOptions {
@@ -36,15 +36,26 @@ export function useGitHubStars(
     lastUpdated: null
   });
 
+  // Guardamos onError en un ref para NO incluirlo en las dependencias de
+  // useCallback. Si lo incluyéramos, cualquier consumidor que pase un
+  // callback inline (función nueva en cada render) causaría que `fetchStars`
+  // se re-crease en cada render → el useEffect de abajo dispararía fetch en
+  // cada render → loop infinito de peticiones a api.github.com hasta que
+  // Chrome devuelve ERR_INSUFFICIENT_RESOURCES.
+  const onErrorRef = useRef(onError);
+  useEffect(() => {
+    onErrorRef.current = onError;
+  }, [onError]);
+
   const fetchStars = useCallback(async () => {
     if (!enabled || !repo) return;
 
     setState(prev => ({ ...prev, isLoading: true }));
 
     try {
-      const result = await fetchGithubStarsEnhanced(repo, { 
+      const result = await fetchGithubStarsEnhanced(repo, {
         token,
-        useCache: true 
+        useCache: true
       });
 
       setState({
@@ -53,8 +64,8 @@ export function useGitHubStars(
         lastUpdated: new Date()
       });
 
-      if (result.error && onError) {
-        onError(result.error);
+      if (result.error) {
+        onErrorRef.current?.(result.error);
       }
 
     } catch (error) {
@@ -65,11 +76,9 @@ export function useGitHubStars(
         lastUpdated: new Date()
       });
 
-      if (onError) {
-        onError(errorMessage);
-      }
+      onErrorRef.current?.(errorMessage);
     }
-  }, [repo, token, enabled, onError]);
+  }, [repo, token, enabled]);
 
   // Fetch inicial
   useEffect(() => {
