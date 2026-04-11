@@ -32,6 +32,9 @@ test-results/
 !public/**/*.png
 !public/**/*.jpeg
 !docs/**/*.png
+# Next.js file-based metadata icons (favicon, apple-icon, opengraph-image, etc.)
+!src/app/**/*.png
+!src/app/**/*.jpeg
 
 # debug
 npm-debug.log*

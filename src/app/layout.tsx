@@ -55,16 +55,18 @@ export const metadata: Metadata = {
   creator: 'inmogrid.cl',
   publisher: 'inmogrid.cl',
   keywords: ['comunidad inmobiliaria', 'sector inmobiliario chile', 'tasadores', 'peritos judiciales', 'corredores de propiedades', 'abogados inmobiliarios', 'arquitectos', 'administradores de propiedad', 'datos abiertos', 'código abierto', 'open source', 'referenciales', 'CBR', 'conservador de bienes raíces'],
+  // Nota: el favicon principal vive en `src/app/icon.png` y Next.js 15 lo
+  // inyecta automaticamente vía file-based metadata conventions. Las entries
+  // de abajo son solo para los tamaños mayores (PWA launcher icons) y Apple
+  // touch icon, que no siguen la convención de ruta.
   icons: {
     icon: [
       { url: '/images/android/android-launchericon-512-512.png', sizes: '512x512', type: 'image/png' },
       { url: '/images/android/android-launchericon-192-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/favicon.ico', sizes: 'any', type: 'image/x-icon' }
     ],
     apple: [
       { url: '/images/ios/180.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
     other: [
       {
         rel: 'mask-icon',
