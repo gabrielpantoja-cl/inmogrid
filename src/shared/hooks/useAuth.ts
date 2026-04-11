@@ -2,7 +2,6 @@
 
 import { createClient } from '@/shared/lib/supabase/client'
 import { type User } from '@supabase/supabase-js'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 interface Profile {
@@ -26,7 +25,6 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
@@ -58,8 +56,22 @@ export function useAuth() {
   }, [])
 
   const signOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/auth/login')
+    // `scope: 'local'` limpia las cookies de sesión del browser sin hacer
+    // una request HTTP bloqueante a /auth/v1/logout — crítico porque el
+    // scope 'global' (default) puede colgar indefinidamente si la API de
+    // Supabase está lenta o si la sesión ya está inválida, dejando al
+    // usuario atascado en "Cerrando..." para siempre.
+    //
+    // `window.location.href` fuerza un full page reload — a diferencia
+    // de router.push (soft nav), garantiza que el middleware corre con
+    // el estado de cookies limpio y que ningún componente del dashboard
+    // queda montado con sesión stale.
+    try {
+      await supabase.auth.signOut({ scope: 'local' })
+    } catch (error) {
+      console.error('[useAuth.signOut] Error signing out:', error)
+    }
+    window.location.href = '/auth/login'
   }
 
   // Derived permission helpers based on the profile role
