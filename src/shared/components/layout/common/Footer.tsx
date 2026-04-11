@@ -1,8 +1,6 @@
 // Ubicación: components/ui/common/Footer.tsx
 import React from 'react';
 import Link from 'next/link';
-import { version as nextVersion } from 'next/package.json';
-import { version as reactVersion } from 'react/package.json';
 
 interface FooterProps {
   /**
@@ -29,7 +27,7 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
             inmogrid.cl
           </Link>
           <span className="text-xs text-gray-400">
-            © 2011–{new Date().getFullYear()} inmogrid. Todos los derechos reservados.
+            © 2011–{new Date().getFullYear()} inmogrid &middot; Powered by coffee ⚡
           </span>
         </div>
 
@@ -57,7 +55,7 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
           <span className="text-xs text-gray-400">Proyecto open source &middot; MIT</span>
         </div>
 
-        {/* Columna 3: Enlaces Legales + version */}
+        {/* Columna 3: Enlaces Legales */}
         <div className="flex flex-col items-center md:items-end justify-center gap-y-1 text-center md:text-right">
           <Link href="/terms" className="text-sm text-gray-600 hover:text-gray-900">
             Términos
@@ -65,9 +63,6 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
           <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900">
             Privacidad
           </Link>
-          <span className="text-xs text-gray-400 mt-1 font-mono tracking-tight">
-            Next.js {nextVersion} &middot; React {reactVersion}
-          </span>
         </div>
       </div>
     </footer>
