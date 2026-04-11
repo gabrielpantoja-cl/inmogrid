@@ -5,6 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { createClient } from '@/shared/lib/supabase/client';
+import { useNavbarActions } from '@/shared/components/layout/dashboard/navbar/useNavbarActions';
+import { UserMenu } from '@/shared/components/layout/dashboard/navbar/UserMenu';
+import { DeleteAccountDialog } from '@/shared/components/layout/dashboard/navbar/DeleteAccountDialog';
 
 interface Post {
   id: string;
