@@ -179,13 +179,68 @@ export async function GET(request: NextRequest) {
 
 ## Protección de rutas
 
-`src/middleware.ts` corre en todas las requests y aplica tres categorías:
+`src/middleware.ts` corre en todas las requests y aplica dos categorías:
 
 ```ts
-PUBLIC_PATHS    = ['/auth/', '/api/auth/', '/api/public/', '/_next/', ...]
-PROTECTED_PATHS = ['/dashboard']
+PUBLIC_PATHS          = ['/auth/', '/api/auth/', '/api/public/', '/_next/', ...]
+PROTECTED_PATHS: [] = []   // vacío — ver nota abajo
 // cualquier otra ruta: pasa, pero la sesión se refresca en background
 ```
+
+**La protección de rutas vive ahora en cada server component**, no en el middleware. El path-matching en middleware era demasiado coarse-grained para distinguir entre subrutas del dashboard que requieren auth (`/dashboard/perfil`, `/dashboard/notas/crear`) y las que son informativas (`/dashboard` overview, que muestra el feed público incluso a usuarios no autenticados, estilo Reddit).
+
+El patrón ahora es:
+
+```ts
+// src/app/dashboard/notas/page.tsx — requiere sesión
+const user = await requireAuth()          // redirige a /auth/login si falta
+
+// src/app/dashboard/(overview)/page.tsx — soft, renderiza igual sin sesión
+const user = await getUser()              // null si no hay sesión, el componente lo maneja
+```
+
+El middleware sigue corriendo `updateSession()` en cada request para refrescar los cookies de Supabase. Adicionalmente, detecta y auto-limpia **cookies huérfanas** (JWTs de `auth.users.id` que ya no existen — típico después de operaciones destructivas en la base):
+
+```ts
+// src/shared/lib/supabase/middleware.ts
+const { data: { user }, error } = await supabase.auth.getUser()
+if (!user && error && hasSupabaseAuthCookie) {
+  await supabase.auth.signOut({ scope: 'local' })
+}
+```
+
+Sin este branch, un cliente con sesión stale vería el navbar diciendo "Hola, {email}" (JWT cacheado) mientras el server component devolvía `null` ("Inicia sesión…") — UI desincronizada. Ver [ADR-004](adr/ADR-004-public-route-group-and-shared-account-menu.md#capa-5--sesiones-stale-auto-limpiadas-en-middleware).
+
+---
+
+## Layouts y chrome de navegación
+
+La app tiene **dos layouts** separados por contexto, cada uno con su propio header, pero ambos consumen el **mismo primitivo de menú de cuenta** (`common/account-menu`) para garantizar consistencia cross-layout:
+
+```
+src/app/
+├── (public)/          ← route group — no afecta URLs
+│   └── layout.tsx     ← monta <PublicHeader /> + children
+│       • /                       (landing con feed)
+│       • /notas/[slug]
+│       • /[username], /[username]/notas, /[username]/notas/[slug]
+│       • /referenciales
+│       • /privacy, /terms
+│
+├── dashboard/
+│   └── layout.tsx     ← monta <Navbar /> del dashboard + children
+│       • /dashboard, /dashboard/notas, /dashboard/perfil, etc.
+│
+└── layout.tsx         ← root (fonts, providers, Footer global, Analytics condicional)
+```
+
+**Route group `(public)`**: los paréntesis son sintaxis del router que sirve para compartir un layout entre rutas sin alterar sus URLs. `src/app/(public)/notas/[slug]/page.tsx` sigue respondiendo en `/notas/[slug]`.
+
+**Primitivo compartido**: `src/shared/components/layout/common/account-menu/` exporta `AccountMenu` (dropdown presentacional), `DeleteAccountDialog` (modal), y `useAccountActions` (hook de sesión + delete). Tanto `PublicHeader` como el navbar del dashboard lo consumen — un cambio en `useAccountActions` se refleja automáticamente en ambos lados.
+
+**Rutas sin chrome** (no pertenecen a `(public)/` ni a `dashboard/`): `/auth/*` (flujo de OAuth), `/chatbot` (embed), `/login` (redirect server-side a `/auth/login`).
+
+Diseño completo y razones en [ADR-004](adr/ADR-004-public-route-group-and-shared-account-menu.md).
 
 ---
 
@@ -215,6 +270,8 @@ Tanto `DATABASE_URL` como `DIRECT_URL` son obligatorias para Prisma — si falta
 Antes de abrir un PR, revisá:
 
 - [ADR-001 — Feature-first architecture](adr/ADR-001-feature-first-architecture.md)
+- [ADR-003 — Design tokens two-layer system](adr/ADR-003-design-tokens-two-layer-system.md)
+- [ADR-004 — Route group `(public)` + shared `AccountMenu`](adr/ADR-004-public-route-group-and-shared-account-menu.md)
 - [Patrones de código](arquitectura/patrones.md)
 - [Roadmap de refactor](arquitectura/ROADMAP-refactor.md)
 
