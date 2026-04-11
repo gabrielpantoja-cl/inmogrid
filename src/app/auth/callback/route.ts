@@ -33,6 +33,27 @@ export async function GET(request: Request) {
         }
       }
 
+      // Notify login via n8n webhook (fire-and-forget — must not block the redirect).
+      // The callback only runs on real OAuth exchanges, so this fires once per login,
+      // not on cookie-based session rehydration.
+      const webhookUrl = process.env.N8N_LOGIN_WEBHOOK_URL
+      if (webhookUrl) {
+        fetch(webhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userName: data.user.user_metadata?.full_name ?? data.user.email,
+            userEmail: data.user.email,
+            userImage: data.user.user_metadata?.avatar_url ?? '',
+            userId: data.user.id,
+            provider: data.user.app_metadata?.provider ?? 'unknown',
+            timestamp: new Date().toISOString(),
+          }),
+        }).catch((err) => {
+          console.error('[AUTH-CALLBACK] n8n login webhook failed:', err)
+        })
+      }
+
       return NextResponse.redirect(`${origin}${next}`)
     }
   }
