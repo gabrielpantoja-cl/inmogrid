@@ -18,6 +18,7 @@ import {
   ConditionalSpeedInsights
 } from '@/shared/components/layout/legal/ConditionalAnalytics';
 import Footer from '@/shared/components/layout/common/Footer';
+import { GitHubStarsSimple } from '@/features/github-stars/components';
 
 // Configuración del Viewport
 export const viewport: Viewport = {
@@ -143,7 +144,11 @@ export default function RootLayout({
         <CookieConsentProvider>
           <>
             {children}
-            <Footer />
+            <Footer
+              githubStarsSlot={
+                <GitHubStarsSimple repo="inmogrid/inmogrid" className="text-xs" />
+              }
+            />
           </>
 
           {/* Componente para mostrar notificaciones (react-hot-toast) */}
