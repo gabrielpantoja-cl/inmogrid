@@ -67,17 +67,17 @@ export default async function NotaPage({ params }: Props) {
   const authorHref = post.authorUsername ? `/${post.authorUsername}` : '#';
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Nav */}
-      <nav className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 md:px-8">
-        <div className="max-w-3xl mx-auto h-14 flex items-center gap-2 text-sm text-gray-500">
-          <Link href="/" className="font-black text-gray-900 text-base">
-            inmo<span className="text-yellow-500">grid</span>
+    <div className="bg-white">
+      {/* Breadcrumb contextual debajo del PublicHeader global */}
+      <div className="border-b border-gray-100 px-4 md:px-8">
+        <div className="max-w-3xl mx-auto h-10 flex items-center gap-2 text-sm text-gray-500">
+          <Link href="/" className="hover:text-gray-900">
+            Publicaciones
           </Link>
           <span>/</span>
-          <Link href="/" className="hover:text-gray-900">Publicaciones</Link>
+          <span className="text-gray-700 truncate">{post.title}</span>
         </div>
-      </nav>
+      </div>
 
       <main className="max-w-3xl mx-auto px-4 md:px-8 py-10">
         {/* Header */}

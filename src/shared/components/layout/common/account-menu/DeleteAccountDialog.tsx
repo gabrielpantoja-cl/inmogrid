@@ -11,7 +11,7 @@ interface DeleteAccountDialogProps {
 
 /**
  * Modal de confirmación para eliminar cuenta. Reutilizable desde cualquier
- * punto del layout que necesite disparar `useDeleteAccount`.
+ * layout (dashboard, rutas públicas, etc.) que consuma `useAccountActions`.
  */
 export function DeleteAccountDialog({
   open,

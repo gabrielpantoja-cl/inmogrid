@@ -77,23 +77,7 @@ export default function ReferencialesPage() {
   }, [load]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Nav */}
-      <nav className="sticky top-0 z-20 bg-white border-b border-gray-200 px-4 md:px-8">
-        <div className="max-w-7xl mx-auto h-14 flex items-center justify-between">
-          <Link href="/" className="text-xl font-black tracking-tight text-gray-900">
-            inmo<span className="text-yellow-500">grid</span>
-          </Link>
-          <div className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-gray-600 hover:text-gray-900">
-              Inicio
-            </Link>
-            <span className="font-medium text-gray-900">Referenciales</span>
-          </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+    <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
         {/* Header */}
         <header className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Mapa de Referenciales</h1>
@@ -253,13 +237,12 @@ export default function ReferencialesPage() {
           )}
         </section>
 
-        <footer className="mt-10 border-t border-gray-200 pt-6 text-xs text-gray-500">
-          Fuentes: Conservadores de Bienes Raíces (CBR) de Chile.
-          Datos procesados y actualizados periódicamente. La información es referencial
-          y no garantiza exactitud — consulte a un profesional para decisiones de inversión.
-          Cumplimiento Ley 19.628 sobre protección de datos personales.
-        </footer>
-      </main>
-    </div>
+      <footer className="mt-10 border-t border-gray-200 pt-6 text-xs text-gray-500">
+        Fuentes: Conservadores de Bienes Raíces (CBR) de Chile.
+        Datos procesados y actualizados periódicamente. La información es referencial
+        y no garantiza exactitud — consulte a un profesional para decisiones de inversión.
+        Cumplimiento Ley 19.628 sobre protección de datos personales.
+      </footer>
+    </main>
   );
 }

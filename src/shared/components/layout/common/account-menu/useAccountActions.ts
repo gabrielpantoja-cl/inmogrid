@@ -5,11 +5,17 @@ import { useAuth } from '@/shared/hooks/useAuth';
 import { useDeleteAccount } from '@/shared/hooks/useDeleteAccount';
 
 /**
- * Combina signOut + deleteAccount + estado de menús.
- * Centraliza toda la lógica de acciones del Navbar para que el componente
- * orquestador sea mayormente presentacional.
+ * Hook que combina `useAuth` + `useDeleteAccount` y expone el estado
+ * presentacional necesario para renderizar `AccountMenu` y
+ * `DeleteAccountDialog`.
+ *
+ * Diseñado para ser el **único** punto de acoplamiento entre la lógica de
+ * sesión/cuenta y los componentes presentacionales del menú de cuenta. Se
+ * consume desde el navbar del dashboard y desde el `PublicHeader` de las
+ * rutas públicas — garantiza que ambos lados compartan exactamente el mismo
+ * comportamiento (mismas transiciones de estado, mismo signOut, mismo delete).
  */
-export function useNavbarActions() {
+export function useAccountActions() {
   const { user, profile, signOut } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -30,7 +36,7 @@ export function useNavbarActions() {
     try {
       await signOut();
     } catch (error) {
-      console.error('SignOut failed in navbar:', error);
+      console.error('[useAccountActions] SignOut failed:', error);
     } finally {
       setIsSigningOut(false);
     }
@@ -51,6 +57,7 @@ export function useNavbarActions() {
 
   return {
     user,
+    profile,
     displayName,
     avatarUrl,
     isMobileMenuOpen,

@@ -4,28 +4,30 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import AcmeLogo from '@/shared/components/layout/common/AcmeLogo';
-import { useNavbarActions } from './useNavbarActions';
+import {
+  AccountMenu,
+  DeleteAccountDialog,
+  useAccountActions,
+} from '@/shared/components/layout/common/account-menu';
 import { navigationLinks } from './constants';
 import { NavbarLink } from './NavbarLink';
-import { UserMenu } from './UserMenu';
 import { MobileMenu } from './MobileMenu';
-import { DeleteAccountDialog } from './DeleteAccountDialog';
 
 /**
  * Navbar principal del dashboard. Orquesta los subcomponentes y delega
- * toda la lógica a `useNavbarActions`.
+ * toda la lógica de cuenta a `useAccountActions`.
  *
- * Descomposición (post Sprint 4):
- * - constants.ts         — definiciones de links
- * - useNavbarActions.ts  — estado + signOut + delete
+ * Descomposición:
+ * - constants.ts         — links de navegación del dashboard
  * - NavbarLink.tsx       — link individual (desktop/mobile)
- * - UserMenu.tsx         — dropdown desktop
- * - MobileMenu.tsx       — drawer móvil
- * - DeleteAccountDialog  — modal confirmación
+ * - MobileMenu.tsx       — drawer móvil (dashboard-specific)
+ * - AccountMenu          — dropdown compartido con rutas públicas (common/)
+ * - DeleteAccountDialog  — modal compartido (common/)
+ * - useAccountActions    — hook compartido de estado de cuenta (common/)
  */
 export default function Navbar() {
   const pathname = usePathname();
-  const actions = useNavbarActions();
+  const actions = useAccountActions();
 
   return (
     <>
@@ -63,7 +65,7 @@ export default function Navbar() {
                 </div>
               )}
 
-              <UserMenu
+              <AccountMenu
                 avatarUrl={actions.avatarUrl}
                 isOpen={actions.isUserMenuOpen}
                 isSigningOut={actions.isSigningOut}
