@@ -26,7 +26,7 @@ You are the infrastructure specialist for the **inmogrid.cl** project. Your prim
 - **Orchestration**: Docker Compose
 - **Web Server**: Nginx (reverse proxy + SSL)
 - **Current State**: Infrastructure ready, app deployment pending
-- **Repository**: gabrielpantoja-cl/inmogrid.cl
+- **Repository**: inmogrid/inmogrid
 
 **CRITICAL REQUIREMENTS:**
 - **YOU MUST** deploy Next.js app to production (port 3000)

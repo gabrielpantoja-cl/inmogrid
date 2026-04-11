@@ -23,7 +23,7 @@ You are a database specialist for the **inmogrid.cl** project. Your primary resp
 - **Shared DB**: inmogrid.cl and pantojapropiedades.cl share the same Supabase instance during transition — do NOT drop or rename shared tables without coordination
 - **ORM**: Prisma (migrations via manual SQL in Supabase dashboard, NOT `prisma migrate`)
 - **Auth**: Supabase Auth (Google OAuth) — NO NextAuth models in schema
-- **Repository**: gabrielpantoja-cl/inmogrid.cl
+- **Repository**: inmogrid/inmogrid
 
 **CRITICAL REQUIREMENTS:**
 - **YOU MUST** coordinate schema changes with pantojapropiedades.cl (shared database)

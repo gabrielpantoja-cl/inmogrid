@@ -54,7 +54,7 @@ Detalles completos en [docs/architecture.md](docs/architecture.md).
 ### Instalación
 
 ```bash
-git clone https://github.com/gabrielpantoja-cl/inmogrid.cl.git
+git clone https://github.com/inmogrid/inmogrid.git
 cd inmogrid.cl
 npm install
 ```
