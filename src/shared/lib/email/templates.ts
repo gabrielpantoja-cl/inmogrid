@@ -30,7 +30,7 @@ export const emailTemplates: EmailTemplates = {
 
         <div style="color: #4b5563; line-height: 1.6;">
           <p>Gracias por unirte a inmogrid.cl.</p>
-          <p>Tu cuenta ha sido creada exitosamente y ya puedes comenzar a construir tu marca personal, publicar contenido y conectar con nuestra comunidad.</p>
+          <p>Tu cuenta ha sido creada exitosamente. Ya puedes publicar tu trabajo, compartir conocimiento y conectar con la comunidad inmobiliaria abierta de Chile.</p>
         </div>
 
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">

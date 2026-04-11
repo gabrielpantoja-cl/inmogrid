@@ -1,46 +1,89 @@
-# Terminos de Uso
+# Términos de Uso
+
+**Versión:** 1.0
 
 ## 1. Sobre inmogrid.cl
 
-**inmogrid.cl** es un ecosistema digital enfocado en marca personal, tecnologia y comunidad. Ofrecemos herramientas para que profesionales y creativos construyan su presencia digital, compartan su trabajo y se conecten con otros.
+**inmogrid.cl** es un ecosistema digital abierto y colaborativo para la comunidad inmobiliaria chilena. Es un espacio libre donde tasadores, peritos judiciales, corredores de propiedades, abogados inmobiliarios, arquitectos, administradores de propiedad y otros profesionales del rubro pueden publicar su trabajo, compartir conocimiento y conectar entre sí.
 
-Este proyecto es experimental y se encuentra en desarrollo activo. Las funcionalidades pueden cambiar, ampliarse o descontinuarse sin previo aviso.
+El proyecto es **código abierto bajo licencia MIT** y su código fuente está disponible en [github.com/inmogrid/inmogrid](https://github.com/inmogrid/inmogrid). Cualquier persona puede auditar el código, reportar problemas o contribuir con mejoras.
 
-## 2. Uso aceptable
+inmogrid.cl se encuentra en fase de desarrollo activo. Las funcionalidades pueden cambiar, ampliarse o descontinuarse a medida que madure el proyecto.
 
-Al usar inmogrid.cl, te comprometes a:
+## 2. Aceptación de los términos
 
-- Utilizar la plataforma de forma etica y legal.
-- Respetar a otros usuarios y sus contenidos.
-- No realizar recoleccion masiva de datos (scraping).
-- No utilizar la plataforma para actividades fraudulentas, acoso o spam.
+Al crear una cuenta o usar inmogrid.cl, aceptas estos términos. Si no estás de acuerdo con alguno de ellos, no utilices el servicio.
 
-Nos reservamos el derecho de suspender cuentas que incumplan estas condiciones.
+Para crear una cuenta debes tener al menos 14 años y capacidad legal suficiente conforme a la legislación chilena.
 
-## 3. Contenido y responsabilidad
+## 3. Uso aceptable
 
-Los usuarios son responsables del contenido que publican. inmogrid.cl no garantiza la exactitud de la informacion proporcionada por los usuarios ni se hace responsable por el uso que terceros hagan de ella.
+Al usar inmogrid.cl te comprometes a:
 
-## 4. Propiedad intelectual
+- Utilizar la plataforma de forma ética y conforme a la legislación vigente en Chile.
+- Proporcionar información veraz en tu perfil profesional.
+- Respetar a otros usuarios, sus contenidos y su propiedad intelectual.
+- No realizar scraping, extracción masiva de datos ni uso automatizado no autorizado.
+- No publicar contenido que incite al odio, la discriminación, el acoso o actividades ilícitas.
+- No suplantar la identidad de otras personas, empresas o instituciones.
+- No utilizar la plataforma para spam comercial no solicitado.
 
-El contenido que publicas en inmogrid.cl sigue siendo tuyo. Al publicarlo, nos otorgas una licencia limitada para mostrarlo dentro de la plataforma.
+Nos reservamos el derecho de suspender o eliminar cuentas que incumplan estas condiciones, con o sin notificación previa según la gravedad del incumplimiento.
 
-## 5. Cuentas y eliminacion
+## 4. Tu contenido
 
-- Puedes solicitar la eliminacion de tu cuenta en cualquier momento.
-- Al eliminar tu cuenta, tus datos personales seran removidos conforme a la legislacion vigente.
-- Cierta informacion anonimizada podra conservarse con fines estadisticos.
+Los usuarios son propietarios del contenido que publican en inmogrid.cl (publicaciones, imágenes, datos de perfil, comentarios, referencias profesionales, etc.).
 
-## 6. Disponibilidad
+Al publicar contenido en la plataforma, nos otorgas una licencia **no exclusiva, mundial, libre de regalías y limitada al funcionamiento del servicio**, para almacenar, mostrar, distribuir y procesar ese contenido dentro de inmogrid.cl y en los canales públicos del proyecto (feed público, perfiles públicos si los activas voluntariamente).
 
-inmogrid.cl se ofrece "tal cual". No garantizamos disponibilidad ininterrumpida ni ausencia de errores. Haremos nuestro mejor esfuerzo por mantener el servicio estable.
+Eres responsable del contenido que publicas. inmogrid.cl no revisa previamente el contenido de los usuarios ni garantiza su exactitud.
 
-## 7. Modificaciones
+## 5. Propiedad intelectual del proyecto
 
-Estos terminos pueden actualizarse. El uso continuado de la plataforma tras una modificacion implica su aceptacion.
+El **código fuente** de inmogrid.cl está licenciado bajo [MIT License](https://github.com/inmogrid/inmogrid/blob/main/LICENSE) y puede reutilizarse conforme a los términos de esa licencia.
 
-## 8. Legislacion aplicable
+El **nombre, marca, logotipo e identidad visual** de inmogrid.cl están reservados y no forman parte de la licencia MIT del código.
 
-Estos terminos se rigen por las leyes de la Republica de Chile. Cualquier controversia sera sometida a los tribunales competentes de Chile.
+## 6. Cuentas y eliminación
+
+- Puedes solicitar la eliminación de tu cuenta en cualquier momento desde la configuración de tu perfil.
+- Al eliminar tu cuenta, tus datos personales serán removidos conforme a lo descrito en la [Política de Privacidad](/privacy).
+- Cierta información agregada y anonimizada podrá conservarse con fines estadísticos y para el funcionamiento del servicio.
+- inmogrid.cl podrá cerrar cuentas inactivas tras periodos prolongados (más de 24 meses sin actividad) previo aviso al correo registrado.
+
+## 7. Disponibilidad del servicio
+
+inmogrid.cl se ofrece "tal cual" y "según disponibilidad". Como proyecto en desarrollo y código abierto:
+
+- No garantizamos disponibilidad ininterrumpida ni ausencia de errores.
+- Pueden producirse cortes programados por mantenimiento o despliegues.
+- Nos esforzamos por mantener el servicio estable, pero no ofrecemos SLA contractual.
+
+## 8. Limitación de responsabilidad
+
+inmogrid.cl no se hace responsable por:
+
+- Pérdidas derivadas del uso del contenido publicado por otros usuarios.
+- Decisiones profesionales, comerciales o personales tomadas a partir de información obtenida en la plataforma.
+- Interrupciones del servicio, pérdida de datos o fallos técnicos, salvo casos de dolo o negligencia grave conforme a la legislación chilena.
+
+Los usuarios profesionales son responsables de verificar la información y de seguir sus propios estándares éticos y legales en el ejercicio de sus profesiones (tasaciones, peritajes, corretaje, asesoría legal, etc.).
+
+## 9. Modificaciones a estos términos
+
+Estos términos pueden actualizarse para reflejar cambios en el servicio, en la legislación o por otras razones operativas. Las modificaciones se publicarán en esta misma página con su fecha de actualización. El uso continuado tras una modificación implica su aceptación.
+
+Los cambios significativos serán anunciados adicionalmente a través del correo registrado o un aviso destacado en la plataforma.
+
+## 10. Legislación aplicable y jurisdicción
+
+Estos términos se rigen por las leyes de la República de Chile. Cualquier controversia será sometida a los tribunales ordinarios competentes de la ciudad de Valdivia, Región de Los Ríos.
+
+## 11. Contacto
+
+Para consultas sobre estos términos, reportes de incidentes o solicitudes formales, puedes:
+
+- Abrir un issue público en [github.com/inmogrid/inmogrid/issues](https://github.com/inmogrid/inmogrid/issues)
+- Contactar al mantenedor del proyecto en GitHub: [@gabrielpantoja-cl](https://github.com/gabrielpantoja-cl)
 
 ---

@@ -18,8 +18,9 @@
  * - Referenciales
  * - Conservadores
  *
- * La nueva versión de inmogrid.cl es un ecosistema digital colaborativo para
- * creadores de contenido, diseñadores, desarrolladores y profesionales.
+ * La nueva versión de inmogrid.cl es un ecosistema digital abierto y colaborativo
+ * para la comunidad inmobiliaria chilena: tasadores, peritos, corredores,
+ * abogados inmobiliarios, arquitectos, administradores y otros profesionales del rubro.
  *
  * Para nuevas server actions, crear funciones específicas según la feature:
  * - app/dashboard/perfil/actions.ts

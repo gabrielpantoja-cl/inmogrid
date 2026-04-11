@@ -35,9 +35,9 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: {
     template: '%s | inmogrid.cl',
-    default: 'inmogrid.cl - Tu lienzo digital para crear y conectar',
+    default: 'inmogrid.cl — Conocimiento abierto para la comunidad inmobiliaria chilena',
   },
-  description: 'Un espacio libre y abierto donde puedes construir tu perfil, publicar tu trabajo, compartir ideas y conectar con una comunidad de creadores y profesionales.',
+  description: 'Ecosistema digital abierto y colaborativo para la comunidad inmobiliaria chilena. Un espacio libre para tasadores, peritos, corredores de propiedades, abogados inmobiliarios, arquitectos y administradores donde publicar, compartir conocimiento y conectar.',
   metadataBase: new URL('https://inmogrid.cl'),
   applicationName: 'inmogrid.cl',
   appleWebApp: {
@@ -50,10 +50,10 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  authors: [{ name: 'inmogrid.cl', url: 'https://inmogrid.cl' }], 
+  authors: [{ name: 'inmogrid.cl', url: 'https://inmogrid.cl' }],
   creator: 'inmogrid.cl',
   publisher: 'inmogrid.cl',
-  keywords: ['marca personal', 'portafolio digital', 'creadores de contenido', 'networking', 'comunidad profesional', 'blog personal', 'Substack', 'Behance', 'Linktree'],
+  keywords: ['comunidad inmobiliaria', 'sector inmobiliario chile', 'tasadores', 'peritos judiciales', 'corredores de propiedades', 'abogados inmobiliarios', 'arquitectos', 'administradores de propiedad', 'datos abiertos', 'código abierto', 'open source', 'referenciales', 'CBR', 'conservador de bienes raíces'],
   icons: {
     icon: [
       { url: '/images/android/android-launchericon-512-512.png', sizes: '512x512', type: 'image/png' },
@@ -74,8 +74,8 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   openGraph: {
-    title: 'inmogrid.cl - Tu lienzo digital para crear y conectar',
-    description: 'Construye tu perfil, publica tu trabajo y conecta con una comunidad de creadores y profesionales.',
+    title: 'inmogrid.cl — Conocimiento abierto para la comunidad inmobiliaria chilena',
+    description: 'Ecosistema digital abierto y colaborativo para tasadores, peritos, corredores, abogados inmobiliarios, arquitectos y otros profesionales del rubro inmobiliario en Chile.',
     url: 'https://inmogrid.cl',
     siteName: 'inmogrid.cl',
     locale: 'es_CL',
@@ -85,14 +85,14 @@ export const metadata: Metadata = {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'inmogrid.cl - Tu lienzo digital para crear y conectar',
+        alt: 'inmogrid.cl — Comunidad inmobiliaria abierta de Chile',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'inmogrid.cl - Tu lienzo digital para crear y conectar',
-    description: 'Construye tu perfil, publica tu trabajo y conecta con una comunidad de creadores y profesionales.',
+    title: 'inmogrid.cl — Conocimiento abierto para la comunidad inmobiliaria chilena',
+    description: 'Ecosistema digital abierto y colaborativo para tasadores, peritos, corredores, abogados inmobiliarios, arquitectos y otros profesionales del rubro inmobiliario en Chile.',
     images: ['/images/og-image.jpg'],
   },
   robots: {
