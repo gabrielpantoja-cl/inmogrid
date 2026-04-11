@@ -23,7 +23,7 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 items-center gap-y-8 md:gap-x-8">
         {/* Columna 1: Botón/Enlace a inicio + copyright */}
         <div className="flex flex-col items-center md:items-start gap-1">
-          <Link href="/" className="text-lg font-semibold text-brand-text hover:text-brand-primary transition-colors">
+          <Link href="/" className="text-lg font-semibold text-foreground hover:text-primary transition-colors">
             inmogrid.cl
           </Link>
           <span className="text-xs text-gray-400">
@@ -38,7 +38,7 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
             target="_blank"
             rel="noopener noreferrer"
             title="Ver el código fuente en GitHub"
-            className="inline-flex items-center gap-2 text-sm font-medium text-brand-text hover:text-brand-primary transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

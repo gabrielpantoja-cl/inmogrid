@@ -3,28 +3,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Variables CSS — Marca inmogrid.cl (igual a pantojapropiedades.cl) */
+/* ─────────────────────────────────────────────────────────────────────────
+ * Design tokens — inmogrid.cl
+ *
+ * Formato: RGB triples sin comas (ej. "239 184 16" para #EFB810).
+ * Razón: Tailwind los consume como `rgb(var(--X) / <alpha-value>)`, lo que
+ * permite usar alpha modifiers estándar como `bg-primary/20`.
+ *
+ * ÚNICA fuente de verdad. `tailwind.config.ts` solo referencia estas vars —
+ * no redefine valores. Cambiar un color aquí propaga a TODO el sistema.
+ * ───────────────────────────────────────────────────────────────────────── */
 :root {
-  /* Colores de marca */
-  --primary: #EFB810;
-  --primary-foreground: #000000;
-  --secondary: #FFCB2B;
-  --secondary-foreground: #000000;
-  --background: #F8F2E8;
-  --foreground: #424242;
-  --card: #ffffff;
-  --card-foreground: #424242;
-  --popover: #ffffff;
-  --popover-foreground: #424242;
-  --muted: #FFE5AD;
-  --muted-foreground: #737373;
-  --accent: #FFE5AD;
-  --accent-foreground: #424242;
-  --destructive: #ef4444;
-  --destructive-foreground: #fef2f2;
-  --border: #FFE5AD;
-  --input: #FFE5AD;
-  --ring: #EFB810;
+  /* Marca */
+  --primary:              239 184 16;   /* #EFB810 — amarillo mostaza */
+  --primary-foreground:   0 0 0;        /* #000000 — texto sobre primary */
+  --secondary:            255 203 43;   /* #FFCB2B — amarillo brillante */
+  --secondary-foreground: 0 0 0;
+
+  /* Superficies */
+  --background:           248 242 232;  /* #F8F2E8 — off-white cálido */
+  --foreground:           66 66 66;     /* #424242 — texto base */
+  --card:                 255 255 255;  /* #FFFFFF */
+  --card-foreground:      66 66 66;
+  --popover:              255 255 255;
+  --popover-foreground:   66 66 66;
+
+  /* Tokens auxiliares */
+  --muted:                255 229 173;  /* #FFE5AD — beige claro */
+  --muted-foreground:     115 115 115;  /* #737373 */
+  --accent:               255 229 173;
+  --accent-foreground:    66 66 66;
+  --destructive:          239 68 68;    /* #EF4444 */
+  --destructive-foreground: 254 242 242; /* #FEF2F2 */
+  --border:               255 229 173;
+  --input:                255 229 173;
+  --ring:                 239 184 16;
+
   --radius: 0.5rem;
 
   /* Espaciado navbar */
@@ -269,13 +283,15 @@ img {
   @apply outline-2 outline-primary outline-offset-2;
 }
 
-/* Modo oscuro */
+/* Modo oscuro — override de CSS vars. Tailwind las consume automáticamente
+ * vía `rgb(var(--X))`, así que cualquier clase como `bg-background` o
+ * `text-foreground` cambia sin tocar código del componente. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1a1610;
-    --foreground: #f5f0e8;
-    --card: #2a2318;
-    --card-foreground: #f5f0e8;
+    --background:       26 22 16;    /* #1A1610 */
+    --foreground:       245 240 232; /* #F5F0E8 */
+    --card:             42 35 24;    /* #2A2318 */
+    --card-foreground:  245 240 232;
   }
 }
 
@@ -295,17 +311,17 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  background: #F8F2E8;
+  background: rgb(var(--background));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #FFCB2B;
+  background: rgb(var(--secondary));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #EFB810;
+  background: rgb(var(--primary));
 }
 
 /* Mejoras para la accesibilidad */
@@ -336,9 +352,9 @@ img {
 }
 
 .gradient-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, #b4820b 100%);
+  background: linear-gradient(135deg, rgb(var(--primary)) 0%, rgb(var(--primary) / 0.7) 100%);
 }
 
 .shadow-primary {
-  box-shadow: 0 4px 20px rgba(239, 184, 16, 0.15);
+  box-shadow: 0 4px 20px rgb(var(--primary) / 0.15);
 }

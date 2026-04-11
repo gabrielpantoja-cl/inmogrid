@@ -18,59 +18,54 @@ const config = {
       screens: { '2xl': '1400px' },
     },
     extend: {
+      // ───────────────────────────────────────────────────────────────────
+      // Colors — NO hardcodear valores acá. Tailwind solo REFERENCIA las
+      // CSS custom properties definidas en src/app/globals.css.
+      //
+      // Esto permite:
+      //   - Una sola fuente de verdad (el bloque :root en globals.css).
+      //   - Alpha modifiers (ej. `bg-primary/20`) vía el token
+      //     <alpha-value> que Tailwind reemplaza en tiempo de build.
+      //   - Dark mode sin tocar código — solo overrides de las CSS vars.
+      //   - Tematización dinámica en runtime si alguna vez se necesita.
+      //
+      // Para agregar un color nuevo: definir la var en globals.css y
+      // agregar una entrada acá que la referencie. Nunca poner un hex.
+      // ───────────────────────────────────────────────────────────────────
       colors: {
-        // Colores de marca (alias semánticos directos)
-        'brand-primary':          '#EFB810',
-        'brand-secondary':        '#FFCB2B',
-        'brand-accent':           '#FFE5AD',
-        'brand-background-light': '#F8F2E8',
-        'brand-text':             '#424242',
-        'brand-black':            '#000000',
-        // Escala de primary para utilitarios
         primary: {
-          DEFAULT: '#EFB810',
-          foreground: '#000000',
-          50:  '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#EFB810',
-          600: '#d99e0d',
-          700: '#b4820b',
-          800: '#926809',
-          900: '#785207',
-          950: '#452f04',
+          DEFAULT:    'rgb(var(--primary) / <alpha-value>)',
+          foreground: 'rgb(var(--primary-foreground) / <alpha-value>)',
         },
         secondary: {
-          DEFAULT: '#FFCB2B',
-          foreground: '#000000',
+          DEFAULT:    'rgb(var(--secondary) / <alpha-value>)',
+          foreground: 'rgb(var(--secondary-foreground) / <alpha-value>)',
         },
-        background: '#F8F2E8',
-        foreground: '#424242',
+        background: 'rgb(var(--background) / <alpha-value>)',
+        foreground: 'rgb(var(--foreground) / <alpha-value>)',
         card: {
-          DEFAULT: '#ffffff',
-          foreground: '#424242',
+          DEFAULT:    'rgb(var(--card) / <alpha-value>)',
+          foreground: 'rgb(var(--card-foreground) / <alpha-value>)',
         },
         popover: {
-          DEFAULT: '#ffffff',
-          foreground: '#424242',
+          DEFAULT:    'rgb(var(--popover) / <alpha-value>)',
+          foreground: 'rgb(var(--popover-foreground) / <alpha-value>)',
         },
         muted: {
-          DEFAULT: '#FFE5AD',
-          foreground: '#737373',
+          DEFAULT:    'rgb(var(--muted) / <alpha-value>)',
+          foreground: 'rgb(var(--muted-foreground) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: '#FFE5AD',
-          foreground: '#424242',
+          DEFAULT:    'rgb(var(--accent) / <alpha-value>)',
+          foreground: 'rgb(var(--accent-foreground) / <alpha-value>)',
         },
         destructive: {
-          DEFAULT: '#ef4444',
-          foreground: '#fef2f2',
+          DEFAULT:    'rgb(var(--destructive) / <alpha-value>)',
+          foreground: 'rgb(var(--destructive-foreground) / <alpha-value>)',
         },
-        border: '#FFE5AD',
-        input:  '#FFE5AD',
-        ring:   '#EFB810',
+        border: 'rgb(var(--border) / <alpha-value>)',
+        input:  'rgb(var(--input) / <alpha-value>)',
+        ring:   'rgb(var(--ring) / <alpha-value>)',
       },
       fontFamily: {
         sans:    ['var(--font-poppins)', 'Poppins', 'system-ui', 'sans-serif'],
