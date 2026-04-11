@@ -26,7 +26,8 @@ interface Post {
 }
 
 export default function Page() {
-  const { isAuthenticated, isLoading: authLoading, profile } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const navActions = useNavbarActions();
   const [posts, setPosts] = useState<Post[]>([]);
   const [postsLoading, setPostsLoading] = useState(true);
 
@@ -62,7 +63,12 @@ export default function Page() {
             >
               Referenciales
             </Link>
-            {authLoading ? null : isAuthenticated ? (
+
+            {authLoading ? (
+              // Skeleton mientras resuelve la sesión — evita flash entre
+              // "no logueado" y "logueado" al recargar.
+              <div className="h-8 w-24 rounded-full bg-gray-100 animate-pulse" />
+            ) : isAuthenticated ? (
               <>
                 <Link
                   href="/dashboard"
@@ -70,15 +76,19 @@ export default function Page() {
                 >
                   Dashboard
                 </Link>
-                {profile?.avatar_url && (
-                  <Image
-                    src={profile.avatar_url}
-                    alt={profile.full_name ?? 'Avatar'}
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
-                )}
+                <div className="hidden sm:block text-sm text-gray-600">
+                  Hola, <span className="font-medium text-gray-900">{navActions.displayName}</span>
+                </div>
+                <UserMenu
+                  avatarUrl={navActions.avatarUrl}
+                  isOpen={navActions.isUserMenuOpen}
+                  isSigningOut={navActions.isSigningOut}
+                  isDeleting={navActions.isDeleting}
+                  onToggle={() => navActions.setIsUserMenuOpen(!navActions.isUserMenuOpen)}
+                  onSignOut={navActions.handleSignOut}
+                  onDeleteAccount={navActions.handleDeleteAccount}
+                  onCloseDropdown={() => navActions.setIsUserMenuOpen(false)}
+                />
               </>
             ) : (
               <button
@@ -91,6 +101,26 @@ export default function Page() {
           </div>
         </div>
       </nav>
+
+      {/* Click-outside para cerrar el dropdown del UserMenu */}
+      {navActions.isUserMenuOpen && (
+        <button
+          type="button"
+          className="fixed inset-0 z-0 bg-transparent"
+          onClick={navActions.closeAllMenus}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') navActions.closeAllMenus();
+          }}
+          aria-label="Cerrar menú"
+        />
+      )}
+
+      <DeleteAccountDialog
+        open={navActions.showModal}
+        isDeleting={navActions.isDeleting}
+        onClose={() => navActions.setShowModal(false)}
+        onConfirm={navActions.handleConfirmDelete}
+      />
 
       {/* Feed */}
       <main className="max-w-4xl mx-auto px-4 md:px-8 py-10">
