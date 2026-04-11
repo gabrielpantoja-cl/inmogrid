@@ -11,7 +11,8 @@ Este documento describe el stack y la estructura interna de `inmogrid.cl`. Si va
 | Framework | Next.js 15 (App Router) | SSR, Server Components, API routes |
 | Runtime UI | React 19 | Concurrent features |
 | Lenguaje | TypeScript 5 (strict) | Tipado estricto obligatorio |
-| Estilos | Tailwind CSS + shadcn/ui (Radix) | Sistema de diseño |
+| Estilos | Tailwind CSS + shadcn/ui (Radix) | Sistema de diseño — ver [`design-system.md`](design-system.md) |
+| Design tokens | CSS vars en `globals.css` ↔ Tailwind | Two-layer system — ver [ADR-003](adr/ADR-003-design-tokens-two-layer-system.md) |
 | ORM | Prisma 6 | Modelado, client tipado |
 | Base de datos | PostgreSQL (Supabase) | Datos relacionales |
 | Auth | Supabase Auth (Google OAuth) | Sesiones, tokens, callbacks |
@@ -222,7 +223,7 @@ Antes de abrir un PR, revisá:
 - TypeScript `strict`, sin `any` implícitos
 - Forms con React Hook Form + Zod
 - Import alias: `@/` → `src/`
-- Estilos con Tailwind + tokens de marca definidos en `tailwind.config.ts` (`brand-primary: #EFB810`)
+- Estilos con Tailwind usando **tokens semánticos** (`bg-primary`, `text-foreground`, `bg-accent/20`). **No usar** Tailwind raw como `text-blue-600` — ver [`design-system.md`](design-system.md) y [ADR-003](adr/ADR-003-design-tokens-two-layer-system.md)
 - Nada de secretos en el repo — usar `.env.local`
 
 ---

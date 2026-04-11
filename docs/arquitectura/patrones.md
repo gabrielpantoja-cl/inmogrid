@@ -309,9 +309,49 @@ Ver `CLAUDE.md` raíz para el formato de commits. Reglas cortas:
 
 ---
 
-## 17. Referencias
+## 17. Estilos — solo tokens semánticos
+
+**Regla dura**: en `className`, usá los **tokens semánticos** de Tailwind (`primary`, `foreground`, `background`, `card`, `muted`, `accent`, `destructive`, `border`, `ring`). **No uses** clases raw de la paleta de Tailwind como `text-blue-600`, `bg-sky-100`, `border-indigo-500`.
+
+```tsx
+// ❌ MAL — clases raw del template original
+<button className="bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500">
+
+// ✅ BIEN — tokens semánticos
+<button className="bg-primary text-primary-foreground hover:bg-primary/90 focus:ring-primary">
+```
+
+**Por qué**: los tokens semánticos viven en `globals.css` como CSS vars. Cambiar el color primary de amarillo a rojo es editar 1 archivo. Usar `bg-blue-600` hardcodeado rompe el sistema — cuando hagamos rebranding o agreguemos dark mode, esos usos quedan fuera.
+
+**Tokens disponibles** (los 12 de shadcn/ui): `primary`, `primary-foreground`, `secondary`, `secondary-foreground`, `background`, `foreground`, `card`, `card-foreground`, `popover`, `popover-foreground`, `muted`, `muted-foreground`, `accent`, `accent-foreground`, `destructive`, `destructive-foreground`, `border`, `input`, `ring`.
+
+**Variantes con opacidad**: en vez de tener escalas fijas (`primary-50`, `primary-100`, ..., `primary-950`), usá el modifier `/NN`:
+
+```tsx
+<div className="bg-primary/10">   {/* 10% opacity — background subtle */}
+<div className="bg-primary/20">   {/* 20% — chip background */}
+<div className="bg-primary/90">   {/* 90% — hover state */}
+```
+
+Escala práctica: `/5` (casi invisible), `/10` (subtle bg), `/20` (chip), `/30` (border), `/50` (disabled), `/80` (hover), `/90` (active).
+
+**Grises neutros y rojos de error** son válidos con clases raw porque no forman parte del branding:
+
+```tsx
+<p className="text-gray-600">Texto secundario OK</p>
+<div className="bg-red-50 text-red-700">Error banner OK</div>
+```
+
+Para más detalles, cómo agregar un token nuevo, y troubleshooting: [`docs/design-system.md`](../design-system.md).
+
+---
+
+## 18. Referencias
 
 - [`docs/arquitectura/ROADMAP-refactor.md`](./ROADMAP-refactor.md) — historia y métricas del refactor
 - [`docs/adr/ADR-001-feature-first-architecture.md`](../adr/ADR-001-feature-first-architecture.md) — decisión formal
+- [`docs/adr/ADR-003-design-tokens-two-layer-system.md`](../adr/ADR-003-design-tokens-two-layer-system.md) — design tokens
+- [`docs/design-system.md`](../design-system.md) — guía operativa del color system
+- [`docs/authentication.md`](../authentication.md) — flujo OAuth
 - [`CLAUDE.md`](../../CLAUDE.md) — estándares globales del proyecto
 - Cada feature tiene su propio `README.md` con detalles específicos

@@ -21,8 +21,10 @@ Esta carpeta contiene la documentación pública del proyecto. Si vas a contribu
 |---|---|
 | [architecture.md](architecture.md) | Stack, estructura del repo, modelo de datos, auth y API |
 | [authentication.md](authentication.md) | Flujo OAuth Google + Supabase, troubleshooting y rotación de secretos |
+| [design-system.md](design-system.md) | Tokens semánticos, alpha modifiers, cómo agregar un color nuevo |
 | [adr/ADR-001-feature-first-architecture.md](adr/ADR-001-feature-first-architecture.md) | Decisión de arquitectura feature-first |
 | [adr/ADR-002-google-oauth-dedicated-gcp-project.md](adr/ADR-002-google-oauth-dedicated-gcp-project.md) | Decisión de usar un proyecto GCP dedicado para OAuth |
+| [adr/ADR-003-design-tokens-two-layer-system.md](adr/ADR-003-design-tokens-two-layer-system.md) | Decisión del sistema de design tokens en dos capas |
 | [arquitectura/patrones.md](arquitectura/patrones.md) | Patrones de código — forms, data fetching, auth, errores |
 | [arquitectura/ROADMAP-refactor.md](arquitectura/ROADMAP-refactor.md) | Roadmap de refactor hacia la estructura actual |
 | [sql-migrations/001_inmogrid_schema.sql](sql-migrations/001_inmogrid_schema.sql) | Schema SQL inicial para Supabase |

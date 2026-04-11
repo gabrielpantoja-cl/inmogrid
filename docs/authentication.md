@@ -162,6 +162,62 @@ options: { redirectTo: `${window.location.origin}/auth/callback` }
 
 Si alguien lo hardcodea a `https://pantojapropiedades.cl` o similar, rechazar el PR.
 
+## Sign-out — por qué usamos `scope: 'local'` + hard reload
+
+El hook `useAuth.signOut` (en `src/shared/hooks/useAuth.ts`) está deliberadamente implementado así:
+
+```ts
+const signOut = async () => {
+  try {
+    await supabase.auth.signOut({ scope: 'local' })
+  } catch (error) {
+    console.error('[useAuth.signOut] Error signing out:', error)
+  }
+  window.location.href = '/auth/login'
+}
+```
+
+Dos decisiones importantes que no son obvias:
+
+### 1. `scope: 'local'` (no el default `'global'`)
+
+Supabase `signOut()` acepta tres scopes:
+
+| Scope | Comportamiento |
+|---|---|
+| `global` *(default)* | Revoca **todas** las sesiones del usuario en todos sus dispositivos vía una request HTTP a `/auth/v1/logout`. Bloqueante. |
+| `local` | Solo limpia las cookies del browser actual. No hace request HTTP. Instantáneo. |
+| `others` | Revoca todas menos la actual. |
+
+Usamos `local` porque el `global` **puede colgarse indefinidamente** si:
+
+- La API de Supabase está lenta o con timeout.
+- La sesión ya está inválida (retry loop de 401).
+- Hay problemas de red del lado del cliente.
+
+Bug histórico (2026-04-11): con scope global, cuando la request se colgaba, el `finally` del handler de signout del Navbar nunca se ejecutaba, y el botón quedaba atascado en `"Cerrando..."` para siempre. Con `scope: 'local'` la limpieza de cookies es sincrónica y garantizada.
+
+### 2. `window.location.href` (no `router.push`)
+
+`router.push('/auth/login')` es **soft navigation** de Next.js — no garantiza que los componentes se desmonten ni que el middleware corra con estado limpio. `window.location.href` fuerza un **full page reload**, lo que:
+
+- Descarta todo el árbol React y re-renderiza desde cero.
+- Corre el middleware con las cookies ya limpias.
+- Garantiza que ningún componente del dashboard quede montado con sesión stale.
+
+El try/catch envuelve `signOut` para que, incluso si la llamada de Supabase rompe por alguna razón, el redirect siempre se ejecute.
+
+### Relación con `robustSignOut`
+
+En `src/shared/lib/auth-utils.ts` existe `robustSignOut()` con la misma filosofía — es el que usa el componente `sidenav.tsx`. Ambas implementaciones coexisten por ahora:
+
+- `useAuth.signOut` → usado por el navbar desktop/mobile
+- `robustSignOut` → usado por el sidenav
+
+Idealmente convergerían en uno solo. Queda como TODO de refactor futuro.
+
+---
+
 ## Rotación del Client Secret
 
 Si el Client Secret se compromete:
