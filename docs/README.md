@@ -1,60 +1,53 @@
-# Proyecto: Ecosistema Abierto de Conocimiento Inmobiliario
-### Mona & Gabriel — Abril 2026
+# Documentación de `inmogrid.cl`
 
-Carpeta de trabajo estratégico para el nuevo proyecto que reemplazará a pantojapropiedades.cl.
+> Proyecto open source para construir un ecosistema inmobiliario abierto y colaborativo en Chile.
 
----
-
-## Documentos
-
-| Archivo | Contenido |
-|---------|-----------|
-| `01-vision-y-principios.md` | Qué somos, qué no somos, por qué existimos |
-| `02-la-tesis-de-la-confianza.md` | El insight central: por qué ningún portal chileno tiene confianza — y cómo nosotros la construimos |
-| `03-mercado-y-competencia.md` | Mapa del PropTech chileno, brechas y oportunidades |
-| `04-modulos-y-producto.md` | Módulos posibles, quick wins, roadmap de producto |
-| `05-modelo-de-negocio.md` | Cómo se financia sin vender propiedades |
-| `06-nombre-y-marca.md` | Exploración de nombre, dominio y identidad |
-| `07-arquitectura-tecnica.md` | Repositorio GitHub, stack tecnológico, Oracle VPS, hoja de ruta técnica |
-| `08-nombre-y-dominio.md` | Candidatos de nombre, disponibilidad verificada en NIC.cl, recomendación inmogrid.cl |
-| `09-manifiesto.md` | Manifiesto público del proyecto — el texto fundacional |
-| `10-plan-de-mejora-inmogrid.md` | Hoja de ruta técnica concreta: tareas, archivos, esfuerzo, deadlines |
+Esta carpeta contiene la documentación pública del proyecto. Si vas a contribuir, empezá por [architecture.md](architecture.md).
 
 ---
 
-## Decisiones resueltas (abril 2026)
+## Índice
 
-| Decisión | Respuesta |
-|----------|-----------|
-| Comunidad inicial | **Tasadores y corredores primero** — Fase 2: ciudadanos y propietarios |
-| Relación con gabrielpantoja.cl | **Plataformas separadas** — INMOGRID es proyecto aparte |
-| Marcas personales | **Separadas** — Gabriel mantiene gabrielpantoja.cl; Mona desarrolla su propia marca |
-| Rol de Mona en INMOGRID | **Marca y validación** |
-| referenciales.cl | **Separado y autónomo** — INMOGRID lo consume vía API pública |
-| Deadline de lanzamiento | **16 de abril de 2026** — vencimiento de pantojapropiedades.cl |
-| Stack tecnológico | **Next.js 15 + Prisma + Supabase PostgreSQL + Vercel** |
-| Escritura del nombre | **INMOGRID** (todo mayúsculas) |
-| Cobro de eventos comerciales | **Desde el día 1** |
-| Competidores de referencia | **Descubro Data y HousePricing** |
+### Fundacional — por qué existe este proyecto
 
-## Preguntas aún abiertas
+| Documento | Contenido |
+|---|---|
+| [manifesto.md](manifesto.md) | El texto fundacional — qué creemos, qué hacemos y qué no hacemos |
+| [vision.md](vision.md) | Visión, principios y origen del proyecto |
 
-| Pregunta | Estado |
-|----------|--------|
-| ¿Alianzas fundacionales concretas? (colegios profesionales, municipios, universidades) | Abierta — ninguna institución identificada aún |
-| ¿Dominio de marca personal de Mona? | Abierta |
+### Técnica — cómo está construido
+
+| Documento | Contenido |
+|---|---|
+| [architecture.md](architecture.md) | Stack, estructura del repo, modelo de datos, auth y API |
+| [adr/ADR-001-feature-first-architecture.md](adr/ADR-001-feature-first-architecture.md) | Decisión de arquitectura feature-first |
+| [arquitectura/patrones.md](arquitectura/patrones.md) | Patrones de código — forms, data fetching, auth, errores |
+| [arquitectura/ROADMAP-refactor.md](arquitectura/ROADMAP-refactor.md) | Roadmap de refactor hacia la estructura actual |
+| [sql-migrations/001_inmogrid_schema.sql](sql-migrations/001_inmogrid_schema.sql) | Schema SQL inicial para Supabase |
 
 ---
 
-## Base de código y backend
+## Cómo contribuir
 
-**Repositorio:** `C:\Users\gabri\Developer\proptech\inmogrid.cl`
-**Backend Supabase:** proyecto `pantojapropiedades.cl` → renombrar a `INMOGRID` (mismo ref, mismas keys)
-**Deploy:** Vercel Hobby (4° proyecto, límite es 200)
+Ver [`CONTRIBUTING.md`](../CONTRIBUTING.md) en la raíz del repositorio.
 
-El free tier de Supabase permite solo 2 proyectos activos. Como `pantojapropiedades.cl` deja de existir el 16 de abril, su slot Supabase se repropone directamente para INMOGRID — sin crear proyecto nuevo, sin pagar. El project ref y las API keys no cambian al renombrar. Ver estrategia completa en `07-arquitectura-tecnica.md` y `10-plan-de-mejora-inmogrid.md`.
+Reglas rápidas:
+
+- Abrí un issue antes de trabajar en cambios grandes
+- TypeScript strict — sin `any` implícitos
+- Respetá la estructura feature-first descrita en ADR-001
+- Corré `npm run lint` y `npm run test` antes de abrir un PR
 
 ---
 
-*Documento vivo. Actualizar con cada sesión estratégica.*
-*Versión anterior (supersedida): `docs/proyecto-ecosistema/VISION-ECOSISTEMA-ABIERTO2.md`*
+## Glosario
+
+- **CBR** — Conservador de Bienes Raíces. Registro notarial de propiedades en Chile.
+- **ROL** — Identificador único de propiedad asignado por el SII. Formato: `NNNNN-AAAA`.
+- **Referencial** — Transacción comparable usada para valorar una propiedad.
+- **Tasación** — Avalúo de una propiedad. **Peritaje** — Tasación pericial judicial.
+- **SII** — Servicio de Impuestos Internos (autoridad tributaria chilena).
+
+---
+
+*Documento vivo. Los PRs que mejoren la documentación son bienvenidos.*

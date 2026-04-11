@@ -1,5 +1,6 @@
-# Visión y Principios
-### Ecosistema Abierto — Mona & Gabriel
+# Visión y principios
+
+> `inmogrid.cl` es un proyecto open source que construye un ecosistema inmobiliario abierto y colaborativo para Chile.
 
 ---
 
@@ -11,35 +12,26 @@ No somos una corredora. No somos un portal de listings. No somos una startup que
 
 ## La decisión fundacional
 
-**El nuevo sitio NO vende propiedades.**
+**`inmogrid.cl` NO vende propiedades.**
 
 No hay listings. No hay intermediación en compra, venta ni arriendo. No hay comisiones por transacción.
 
 Esta no es una restricción — es la identidad del proyecto. Es la diferencia entre ser un portal inmobiliario más y ser algo que no existe todavía en Chile.
 
-Cuando no vendés propiedades, no tenés conflictos de interés con quien llega a buscar conocimiento. Eso es lo que construye confianza — y la confianza es lo que ningún portal inmobiliario chileno tiene hoy.
+Cuando no se venden propiedades, no hay conflictos de interés con quien llega a buscar conocimiento. Eso es lo que construye confianza — y la confianza es lo que ningún portal inmobiliario chileno tiene hoy.
 
 ## La filosofía detrás
 
-Gabriel se mueve dentro de la filosofía Linux desde hace años: open source, colaboración, compartir, solidaridad, lo humano por sobre el negocio. Mona lo comparte. Esta plataforma es esa filosofía aplicada al mercado inmobiliario chileno.
+Esta plataforma aplica la filosofía del software libre al mercado inmobiliario chileno: open source, colaboración, compartir, lo humano por sobre el negocio.
 
-Linux no cobra por usar el kernel.
-Stack Overflow no cobra por leer las respuestas.
-Wikipedia no vende anuncios de enciclopedias.
+- Linux no cobra por usar el kernel.
+- Stack Overflow no cobra por leer las respuestas.
+- Wikipedia no vende anuncios de enciclopedias.
+- OpenStreetMap no monetiza el mapa base.
 
 El valor viene de la comunidad.
 La comunidad viene de la confianza.
 La confianza viene de no tener conflictos de interés con quien llega a buscar.
-
-## Quiénes somos
-
-Mona y Gabriel. Una pareja con historia en el mercado inmobiliario local, 15 años de ejercicio como perito tasador, y la decisión de construir algo diferente.
-
-No somos una startup de VC que necesita 10x en 3 años. Somos un negocio de territorio, con reputación construida, con conocimiento técnico real — y con la decisión de hacer las cosas diferente.
-
-**Marcas personales separadas:** INMOGRID es el proyecto de plataforma, independiente de las marcas personales de cada uno. Gabriel mantiene `gabrielpantoja.cl` como su marca personal (blog, peritajes, PropTech). Mona desarrollará su propia marca personal en paralelo. INMOGRID es el proyecto común — no el apellido de nadie.
-
-**Rol de Mona en INMOGRID:** construcción de marca y validación. Mona lidera la identidad visual, la narrativa pública y la validación de decisiones estratégicas. No es un rol operativo de ejecución técnica — es el rol que decide qué cara tiene el proyecto hacia afuera.
 
 ---
 
@@ -53,27 +45,13 @@ Esto no es un detalle menor — es la raíz estructural de la desconfianza del s
 
 **El contraste con la tasación:** El perito tasador sí requiere formación técnica acreditada y metodología estandarizada. Esa asimetría regulatoria explica en parte por qué los tasadores tienen más credibilidad técnica que los corredores en el mercado.
 
-### Un año en el mercado sin vender una sola propiedad
+### El conocimiento que se pierde en carpetas privadas
 
-Pantoja Propiedades lleva un año vigente como corredora de propiedades en Chile — y en ese año no ha vendido ni arrendado ninguna propiedad.
+Quince años ejerciendo como perito tasador en Chile significan miles de propiedades valuadas, metodologías refinadas, relaciones con municipios, notarías y Conservadores de Bienes Raíces. Todo ese conocimiento termina, por defecto, en carpetas privadas — archivado, invisible, incapaz de aportarle a nadie más.
 
-Esto se podría leer como fracaso. No lo es.
+`inmogrid.cl` nace de la decisión de liberar ese conocimiento. No para regalar ventaja competitiva, sino para que otros profesionales puedan construir sobre él, y para que los ciudadanos que nunca pudieron pagar una consulta tengan un punto de partida honesto.
 
-Es evidencia de que el modelo transaccional tradicional nunca fue la motivación. Si hubiera querido vender propiedades, podría haberlo hecho. El conocimiento técnico está, la metodología está, los contactos están. Lo que no está es el deseo de ser un corredor más.
-
-Ese año de existencia sin transacciones es la prueba más honesta de que este proyecto no nace del negocio — nace del propósito.
-
-### La base de 15 años como Perito Tasador
-
-Gabriel acumula 15 años de ejercicio profesional como perito tasador. Mona ha acompañado ese recorrido desde el lado humano: la gestión de relaciones, la continuidad operativa, el soporte que hace posible el trabajo de campo.
-
-15 años de tasaciones significa:
-- Miles de propiedades valuadas en distintas regiones
-- Conocimiento metodológico real, no teórico
-- Red de contactos en el sector (municipios, constructoras, notarías, CBR)
-- Credibilidad acumulada que no se compra con inversión
-
-Esa es la base de autoridad sobre la que se construye la plataforma. No es una startup que necesita fingir expertise — es un profesional con trayectoria real que decide abrirla al público.
+Las referencias, los precios, las metodologías, la normativa: son insumos que se vuelven más valiosos cuando circulan. Exactamente el mismo principio que hizo posible Linux, Wikipedia y OpenStreetMap.
 
 ---
 

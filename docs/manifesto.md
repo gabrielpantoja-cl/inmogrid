@@ -1,5 +1,5 @@
 # Manifiesto
-### INMOGRID — Ecosistema Abierto de Conocimiento Inmobiliario
+### inmogrid.cl — Ecosistema abierto de conocimiento inmobiliario
 
 ---
 
@@ -7,9 +7,9 @@ El degú no sabe que es un animal extraordinario.
 
 Solo sabe que no cría solo. Que las crías del grupo son crías de todos. Que la madriguera que construyó hoy la va a usar alguien que todavía no conoce. Que compartir no es generosidad — es simplemente cómo funciona el mundo cuando lo dejas funcionar bien.
 
-Nosotros tampoco sabíamos que estábamos construyendo algo extraordinario.
+Quienes empezamos este proyecto tampoco sabíamos que estábamos construyendo algo extraordinario.
 
-Solo sabíamos que llevábamos quince años tasando propiedades en Chile y que los datos que acumulábamos — referenciales, precios, metodologías, criterios — desaparecían en carpetas privadas en lugar de construir algo útil para todos. Que el ciudadano que quería entender cuánto vale su casa tenía que confiar ciegamente en quien le quería vender algo. Que el tasador que empezaba no tenía comunidad. Que los municipios organizaban talleres que nadie encontraba. Que el conocimiento inmobiliario en Chile era un bien privado cuando debería ser un bien común.
+Solo sabíamos que después de años tasando propiedades en Chile, los datos acumulados — referenciales, precios, metodologías, criterios — desaparecían en carpetas privadas en lugar de construir algo útil para todos. Que el ciudadano que quería entender cuánto vale su casa tenía que confiar ciegamente en quien le quería vender algo. Que el tasador que empezaba no tenía comunidad. Que los municipios organizaban talleres que nadie encontraba. Que el conocimiento inmobiliario en Chile era un bien privado cuando debería ser un bien común.
 
 ---
 
@@ -49,11 +49,9 @@ Un tasador publica sus referenciales. Un municipio publica su taller. Un propiet
 
 ## De dónde venimos
 
-Somos Mona y Gabriel. Una pareja con quince años en el mercado inmobiliario chileno — tasaciones, peritajes, territorio.
+Este proyecto nace de quince años de ejercicio profesional como perito tasador en Chile — tasaciones, peritajes, territorio — y de la decisión de liberar, en código abierto, el conocimiento acumulado en ese trabajo. No es una startup. Es un proyecto open source mantenido desde la comunidad inmobiliaria chilena, para la comunidad inmobiliaria chilena.
 
-Llevamos un año como Pantoja Propiedades sin haber vendido una sola propiedad. Eso podría leerse como fracaso. No lo es. Es la evidencia más honesta de que este proyecto no nació del negocio — nació del propósito.
-
-El nombre que elegimos lo dice todo. El degú (*dewü* en mapudungun) es un roedor nativo de Chile que vive en colonia. Sus hembras crían juntas — amamantan y cuidan las crías de otras sin distinción. No hay "mi cría" y "tu cría". El grupo construye, el grupo comparte, el grupo cría.
+El degú — un roedor nativo de Chile que vive en colonia y cría colectivamente — es la metáfora que le da alma al proyecto: las hembras del grupo amamantan y cuidan las crías de otras sin distinción. No hay "mi cría" y "tu cría". El grupo construye, el grupo comparte, el grupo cría.
 
 Eso es lo que construimos. No una empresa. Una madriguera.
 
@@ -83,5 +81,5 @@ Si algún día hacemos alguna de esas cosas, este manifiesto habrá dejado de se
 
 ---
 
-*Mona y Gabriel — Chile, 2026*
-*INMOGRID — conocimiento inmobiliario abierto*
+*Chile, 2026*
+*inmogrid.cl — conocimiento inmobiliario abierto*
