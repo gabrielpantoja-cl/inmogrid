@@ -132,30 +132,35 @@ export default function DashboardContent({
 
         <div className="space-y-4">
           {latestPosts?.length > 0 ? (
-            latestPosts.map((post) => (
-              <div key={post.id} className="border-b border-gray-100 pb-4 last:border-b-0">
-                <Link href={`/${post.author?.username}/notas/${post.slug}`} className="block group">
-                  <h3 className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors">
-                    {post.title}
-                  </h3>
-                  {post.excerpt && (
-                    <p className="text-gray-600 text-sm mt-1 line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                  )}
-                  <div className="flex items-center text-xs text-gray-500 mt-2">
-                    <NewspaperIcon className="w-4 h-4 mr-1" />
-                    <span>
-                      {post.author?.fullName} &bull;{' '}
-                      {formatDistanceToNowStrict(parseISO(post.createdAt.toISOString()), {
-                        addSuffix: true,
-                        locale: es,
-                      })}
-                    </span>
-                  </div>
-                </Link>
-              </div>
-            ))
+            latestPosts.map((post) => {
+              const href = post.author?.username
+                ? `/${post.author.username}/notas/${post.slug}`
+                : `/notas/${post.slug}`;
+              return (
+                <div key={post.id} className="border-b border-gray-100 pb-4 last:border-b-0">
+                  <Link href={href} className="block group">
+                    <h3 className="text-lg font-semibold text-gray-800 group-hover:text-primary transition-colors">
+                      {post.title}
+                    </h3>
+                    {post.excerpt && (
+                      <p className="text-gray-600 text-sm mt-1 line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                    )}
+                    <div className="flex items-center text-xs text-gray-500 mt-2">
+                      <NewspaperIcon className="w-4 h-4 mr-1" />
+                      <span>
+                        {post.author?.fullName ?? 'Anónimo'} &bull;{' '}
+                        {formatDistanceToNowStrict(parseISO(post.createdAt.toISOString()), {
+                          addSuffix: true,
+                          locale: es,
+                        })}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })
           ) : (
             <div className="text-center py-12 text-gray-500">
               <NewspaperIcon className="w-16 h-16 mx-auto mb-4 text-gray-300" />

@@ -14,10 +14,12 @@ const PUBLIC_PATHS = [
   '/terms',
 ]
 
-// Rutas que requieren sesión activa
-const PROTECTED_PATHS = [
-  '/dashboard',
-]
+// Rutas que requieren sesión activa.
+// Nota: `/dashboard` (overview) es PÚBLICO para que usuarios no autenticados
+// puedan ver el feed de la comunidad (estilo Reddit). Las sub-rutas que
+// necesitan autenticación (ej. /dashboard/notas, /dashboard/perfil) se
+// protegen individualmente en la página con `requireAuth()`.
+const PROTECTED_PATHS: string[] = []
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl

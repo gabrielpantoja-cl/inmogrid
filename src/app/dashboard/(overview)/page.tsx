@@ -4,6 +4,19 @@ import { prisma } from '@/shared/lib/prisma';
 import { Suspense } from 'react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
+// La tabla `posts` es compartida con pantojapropiedades.cl y tiene columnas
+// propias (status, author_id, image, created_at). No coincide con el schema
+// Prisma actual, por eso usamos $queryRaw en lugar de prisma.post.findMany.
+interface LatestPostRow {
+  id: string;
+  title: string;
+  excerpt: string | null;
+  slug: string;
+  createdAt: Date;
+  authorFullName: string | null;
+  authorUsername: string | null;
+}
+
 interface LatestPost {
   id: string;
   title: string;
@@ -11,11 +24,6 @@ interface LatestPost {
   slug: string;
   createdAt: Date;
   author: { fullName: string | null; username: string | null } | null;
-}
-
-interface DashboardError extends Error {
-  code?: string;
-  meta?: Record<string, unknown>;
 }
 
 export const metadata = {
@@ -35,33 +43,48 @@ export default async function DashboardPage() {
   const user: SupabaseUser | null = await getUser();
 
   try {
-    const [latestPosts, totalPosts] = await Promise.all([
-      prisma.post.findMany({
-        take: 5,
-        where: { published: true },
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true,
-          title: true,
-          excerpt: true,
-          slug: true,
-          createdAt: true,
-          author: {
-            select: {
-              fullName: true,
-              username: true,
-            },
-          },
-        },
-      }),
-      prisma.post.count({ where: { published: true } }),
+    const [rows, countResult] = await Promise.all([
+      prisma.$queryRaw<LatestPostRow[]>`
+        SELECT
+          p.id,
+          p.title,
+          p.excerpt,
+          p.slug,
+          p.created_at   AS "createdAt",
+          dp.full_name   AS "authorFullName",
+          dp.username    AS "authorUsername"
+        FROM posts p
+        LEFT JOIN inmogrid_profiles dp ON dp.id = p.author_id
+        WHERE p.status = 'published'
+        ORDER BY p.created_at DESC
+        LIMIT 5
+      `,
+      prisma.$queryRaw<[{ count: bigint }]>`
+        SELECT COUNT(*) AS count
+        FROM posts
+        WHERE status = 'published'
+      `,
     ]);
+
+    const latestPosts: LatestPost[] = rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      excerpt: r.excerpt,
+      slug: r.slug,
+      createdAt: r.createdAt,
+      author: {
+        fullName: r.authorFullName,
+        username: r.authorUsername,
+      },
+    }));
+
+    const totalPosts = Number(countResult[0]?.count ?? 0);
 
     return (
       <Suspense fallback={<div>Cargando panel de control...</div>}>
         <DashboardContent
           user={user}
-          latestPosts={latestPosts as LatestPost[]}
+          latestPosts={latestPosts}
           totalPosts={totalPosts}
         />
       </Suspense>
@@ -69,17 +92,6 @@ export default async function DashboardPage() {
 
   } catch (error) {
     console.error('[Dashboard Error]:', error);
-
-    const dashboardError = error as DashboardError;
-
-    if (dashboardError.code === 'P2002') {
-      return <ErrorMessage message="Error de restricción única en la base de datos." />;
-    }
-
-    if (dashboardError.code === 'P2025') {
-      return <ErrorMessage message="No se encontró el registro solicitado." />;
-    }
-
     return <ErrorMessage message="Error al cargar el dashboard. Por favor, intente nuevamente." />;
   }
 }
