@@ -100,10 +100,13 @@ function Set-VercelProduction {
         return $false
     }
     
-    # Variables críticas específicas para el fix
+    # Variables críticas específicas para el fix.
+    # NOTA: reemplaza los valores placeholder antes de correr el script.
+    # El NEXTAUTH_SECRET debe generarse con: openssl rand -base64 32
+    # Nunca commitees valores reales acá — este archivo está tracked.
     $criticalVars = @{
         "NEXTAUTH_URL" = "https://referenciales.cl"
-        "NEXTAUTH_SECRET" = "IfBvEpoXetsQVqiCAwOTxkdJNSlzYcgm"
+        "NEXTAUTH_SECRET" = "GENERATE_WITH_openssl_rand_base64_32"
     }
     
     foreach ($var in $criticalVars.GetEnumerator()) {
