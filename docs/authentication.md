@@ -220,13 +220,13 @@ El patrón del producto es Reddit-style: el feed es visible sin autenticación y
 `src/shared/lib/supabase/middleware.ts` corre en cada request y refresca la sesión vía `updateSession()`. Adicionalmente detecta **JWTs huérfanos** — el caso donde el browser tiene una cookie `sb-*-auth-token` firmada válida pero el `sub` claim apunta a un `auth.users.id` que ya no existe (típicamente porque el usuario fue eliminado desde el dashboard de Supabase o por una operación destructiva de mantenimiento):
 
 ```ts
-const { data: { user }, error } = await supabase.auth.getUser()
+const { data: { user } } = await supabase.auth.getUser()
 
 const hasSupabaseAuthCookie = request.cookies
   .getAll()
   .some((c) => c.name.startsWith('sb-') && c.name.endsWith('-auth-token'))
 
-if (!user && error && hasSupabaseAuthCookie) {
+if (!user && hasSupabaseAuthCookie) {
   await supabase.auth.signOut({ scope: 'local' })
 }
 ```
@@ -234,6 +234,27 @@ if (!user && error && hasSupabaseAuthCookie) {
 Sin este branch, un cliente con sesión stale verá **UI desincronizada**: el navbar (client-side `useAuth()` + `onAuthStateChange`) muestra "Hola, {email}" porque el JWT se decodifica, mientras el server component muestra "Inicia sesión…" porque `supabase.auth.getUser()` hace HTTP a Supabase Auth y obtiene `null`.
 
 El branch captura ese desfase y limpia las cookies en el mismo request. Al siguiente navigate, las dos capas coinciden.
+
+**Nota sobre la condición**: no chequeamos `error` explícitamente porque en algunos casos el SDK retorna `{user: null, error: null}` cuando el JWT decodifica OK localmente pero la validación contra Supabase falla silenciosamente. La heurística robusta es "hay cookies de Supabase + `getUser()` retornó null → limpiar".
+
+### Página de rescate `/auth/force-signout`
+
+Para los casos donde el middleware no alcance (ej. el usuario ya tiene un tab abierto y no navega, así que el middleware no se vuelve a ejecutar), existe la ruta **`/auth/force-signout`** como recovery path manual. Es una página client-side que:
+
+1. Elimina todas las cookies `sb-*` del dominio **directamente vía `document.cookie`**, sin pasar por el SDK ni el server.
+2. Limpia `localStorage` y `sessionStorage` de cualquier clave `sb-*` (el SDK persiste los tokens ahí).
+3. Llama `supabase.auth.signOut({scope:'local'})` como best-effort extra.
+4. Hace hard redirect a `/`.
+
+Es **idempotente y determinístico**: funciona aunque el user no haya estado autenticado nunca, y funciona aunque el user haya sido borrado manualmente desde Supabase Dashboard. No depende de validación contra la DB ni del estado de `auth.users`.
+
+**Cuándo usarla**:
+
+- Un usuario reporta que está stuck con el navbar mostrando un email pero el dashboard diciendo "Inicia sesión" — guiarlo a `https://www.inmogrid.cl/auth/force-signout`.
+- Estás debuggeando localmente y querés limpiar todo el estado de Supabase sin tocar DevTools.
+- Después de rotar el JWT secret de Supabase (todos los tokens existentes quedan inválidos instantáneamente, todos los usuarios necesitan esta ruta).
+
+**Alternativa manual** equivalente (para usuarios sin acceso a la ruta): DevTools → `Application` → `Storage` → click derecho en el dominio → **`Clear site data`**. Más agresivo — limpia también IndexedDB, cache y service workers. Útil como último recurso.
 
 ---
 

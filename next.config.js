@@ -82,7 +82,7 @@ const nextConfig = {
       default-src 'self';
       script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com https://vercel.live;
       style-src 'self' 'unsafe-inline';
-      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://inmogrid.cl https://www.inmogrid.cl https://images.unsplash.com https://ui-avatars.com https://*.supabase.co https://blog-assets.pantojapropiedades.cl;
+      img-src 'self' blob: data: https://*.googleusercontent.com https://*.tile.openstreetmap.org https://inmogrid.cl https://www.inmogrid.cl https://images.unsplash.com https://ui-avatars.com https://*.supabase.co https://blog-assets.pantojapropiedades.cl https://www.googletagmanager.com https://www.google-analytics.com;
       font-src 'self' data:;
       object-src 'none';
       base-uri 'self';
