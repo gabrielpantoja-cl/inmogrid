@@ -76,7 +76,8 @@ scripts/migrations/
 .mcp.json
 .env.backup.*
 
-# Claude local configuration
+# Claude Code — personal/local files (gitignored)
+CLAUDE.local.md
 .claude/settings.local.json
 
 # Archive (large/legacy files)
