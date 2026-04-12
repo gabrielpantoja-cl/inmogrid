@@ -189,7 +189,6 @@ Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. Missing either cau
 | `frontend-agent` | UI components, Next.js pages, hooks |
 | `data-ingestion-agent` | Chilean real estate data pipelines, CBR validation |
 | `security-auditor-agent` | OWASP audits, Ley 19.628 compliance |
-| `infrastructure-agent` | VPS/Docker/Nginx, N8N workflows |
 
 ## Chilean Domain Knowledge
 
