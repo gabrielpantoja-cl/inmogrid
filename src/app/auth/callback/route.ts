@@ -33,25 +33,37 @@ export async function GET(request: Request) {
         }
       }
 
-      // Notify login via n8n webhook (fire-and-forget — must not block the redirect).
-      // The callback only runs on real OAuth exchanges, so this fires once per login,
-      // not on cookie-based session rehydration.
+      // Notify login via n8n webhook. We must `await` this (with a short timeout)
+      // instead of fire-and-forget, because Vercel serverless functions terminate
+      // immediately after the response is sent — any pending I/O is cancelled.
+      // The workflow typically completes in ~600ms, so the added login latency is
+      // negligible; the 3s timeout ensures login never hangs if n8n is unreachable.
       const webhookUrl = process.env.N8N_LOGIN_WEBHOOK_URL
       if (webhookUrl) {
-        fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userName: data.user.user_metadata?.full_name ?? data.user.email,
-            userEmail: data.user.email,
-            userImage: data.user.user_metadata?.avatar_url ?? '',
-            userId: data.user.id,
-            provider: data.user.app_metadata?.provider ?? 'unknown',
-            timestamp: new Date().toISOString(),
-          }),
-        }).catch((err) => {
+        const ac = new AbortController()
+        const timeoutId = setTimeout(() => ac.abort(), 3000)
+        try {
+          const res = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userName: data.user.user_metadata?.full_name ?? data.user.email,
+              userEmail: data.user.email,
+              userImage: data.user.user_metadata?.avatar_url ?? '',
+              userId: data.user.id,
+              provider: data.user.app_metadata?.provider ?? 'unknown',
+              timestamp: new Date().toISOString(),
+            }),
+            signal: ac.signal,
+          })
+          console.log('[AUTH-CALLBACK] n8n login webhook status:', res.status, 'user:', data.user.email)
+        } catch (err) {
           console.error('[AUTH-CALLBACK] n8n login webhook failed:', err)
-        })
+        } finally {
+          clearTimeout(timeoutId)
+        }
+      } else {
+        console.warn('[AUTH-CALLBACK] N8N_LOGIN_WEBHOOK_URL not set — skipping notification')
       }
 
       return NextResponse.redirect(`${origin}${next}`)
