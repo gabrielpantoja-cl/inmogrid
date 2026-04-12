@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import {
   AccountMenu,
-  DeleteAccountDialog,
   useAccountActions,
 } from '@/shared/components/layout/common/account-menu';
 import { useAuth } from '@/shared/hooks/useAuth';
@@ -75,12 +74,10 @@ export function PublicHeader() {
                   avatarUrl={actions.avatarUrl}
                   isOpen={actions.isUserMenuOpen}
                   isSigningOut={actions.isSigningOut}
-                  isDeleting={actions.isDeleting}
                   onToggle={() =>
                     actions.setIsUserMenuOpen(!actions.isUserMenuOpen)
                   }
                   onSignOut={actions.handleSignOut}
-                  onDeleteAccount={actions.handleDeleteAccount}
                   onCloseDropdown={() => actions.setIsUserMenuOpen(false)}
                 />
               </>
@@ -109,13 +106,6 @@ export function PublicHeader() {
           aria-label="Cerrar menú"
         />
       )}
-
-      <DeleteAccountDialog
-        open={actions.showModal}
-        isDeleting={actions.isDeleting}
-        onClose={() => actions.setShowModal(false)}
-        onConfirm={actions.handleConfirmDelete}
-      />
     </>
   );
 }

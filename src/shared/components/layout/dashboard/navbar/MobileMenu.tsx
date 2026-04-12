@@ -1,9 +1,7 @@
 'use client';
 
-import {
-  PowerIcon,
-  ExclamationTriangleIcon,
-} from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { PowerIcon, UserIcon } from '@heroicons/react/24/outline';
 import { NavbarLink } from './NavbarLink';
 import { navigationLinks } from './constants';
 
@@ -12,24 +10,25 @@ interface MobileMenuProps {
   displayName?: string | null;
   isSignedIn: boolean;
   isSigningOut: boolean;
-  isDeleting: boolean;
   onLinkClick: () => void;
   onSignOut: () => void;
-  onDeleteAccount: () => void;
 }
 
 /**
  * Menú móvil colapsable del Navbar (visible solo cuando isMobileMenuOpen).
+ *
+ * La eliminación de cuenta no vive acá — es un flow destructivo que
+ * requiere confirmación GitHub-style y solo está disponible desde el
+ * `DangerZone` de `/dashboard/perfil`. Acá linkeamos a "Mi Perfil" para
+ * que el usuario llegue naturalmente si busca borrar su cuenta.
  */
 export function MobileMenu({
   pathname,
   displayName,
   isSignedIn,
   isSigningOut,
-  isDeleting,
   onLinkClick,
   onSignOut,
-  onDeleteAccount,
 }: MobileMenuProps) {
   return (
     <div className="md:hidden border-t border-gray-200 bg-white shadow-lg">
@@ -51,7 +50,17 @@ export function MobileMenu({
             </div>
           )}
 
+          <Link
+            href="/dashboard/perfil"
+            onClick={onLinkClick}
+            className="w-full flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-primary/10 transition-colors duration-200"
+          >
+            <UserIcon className="w-5 h-5 mr-3" />
+            Mi Perfil
+          </Link>
+
           <button
+            type="button"
             onClick={onSignOut}
             disabled={isSigningOut}
             className={`w-full flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-primary/10 transition-colors duration-200 ${
@@ -60,19 +69,6 @@ export function MobileMenu({
           >
             <PowerIcon className={`w-5 h-5 mr-3 ${isSigningOut ? 'animate-spin' : ''}`} />
             {isSigningOut ? 'Cerrando...' : 'Cerrar Sesión'}
-          </button>
-
-          <button
-            onClick={onDeleteAccount}
-            disabled={isDeleting}
-            className={`w-full flex items-center px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 transition-colors duration-200 ${
-              isDeleting ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-          >
-            <ExclamationTriangleIcon
-              className={`w-5 h-5 mr-3 ${isDeleting ? 'animate-pulse' : ''}`}
-            />
-            {isDeleting ? 'Eliminando...' : 'Eliminar Cuenta'}
           </button>
         </div>
       </div>

@@ -4,7 +4,7 @@
 import { requireAuth } from '@/shared/lib/supabase/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/shared/lib/prisma';
-import { ProfileEditForm } from '@/features/profiles';
+import { ProfileEditForm, DangerZone } from '@/features/profiles';
 
 export const metadata = {
   title: 'Editar Perfil | inmogrid.cl',
@@ -55,6 +55,8 @@ export default async function ProfileEditPage() {
       </div>
 
       <ProfileEditForm user={profile} />
+
+      {authUser.email && <DangerZone userEmail={authUser.email} />}
     </div>
   );
 }

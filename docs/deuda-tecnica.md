@@ -305,14 +305,13 @@ Estas rutas están rotas por el issue **P0 #1** y cada una necesita ser parchada
 | `src/app/(public)/[username]/page.tsx` | `prisma.post.findMany({where:{userId,published:true}})` | Perfil público no carga posts del autor |
 | `src/app/(public)/[username]/notas/page.tsx` | idem | Listado de notas del perfil no carga |
 | `src/app/(public)/[username]/notas/[slug]/page.tsx` | `prisma.post.findFirst({where:{slug,published:true,author:{username}}})` | Nota individual en perfil 404 |
-| `src/app/api/delete-account/route.ts` | `prisma.post.count({where:{userId}})` | Flujo de baja de cuenta falla |
 | `src/app/api/public/health/route.ts` | `prisma.post.count()` + `prisma.post.findFirst()` | Health endpoint retorna 500 |
 | `src/app/api/public/profiles/[username]/posts/route.ts` | `prisma.post.findMany` | API pública de posts por perfil 500 |
 | `src/app/sitemap.ts` | `prisma.post.findMany({where:{published:true}})` | Sitemap SEO sin URLs de posts |
 
 **Estrategia recomendada**: **no arreglar individualmente**. Resolver P0 #1 (Opción A — migrar schema) de una y todos estos se desbloquean juntos.
 
-**Si un ítem puntual bloquea a un usuario antes de que P0 #1 se resuelva**: parchar con `$queryRaw` siguiendo el patrón de `src/app/dashboard/(overview)/page.tsx` o `src/app/api/public/posts/route.ts`. **No** rebajar el Prisma schema localmente — rompe el tipo cliente compartido.
+**Si un ítem puntual bloquea a un usuario antes de que P0 #1 se resuelva**: parchar con `$queryRaw` siguiendo el patrón de `src/app/dashboard/(overview)/page.tsx`, `src/app/api/public/posts/route.ts`, o `src/app/api/delete-account/route.ts` (este último usa `$executeRaw` dentro de una `prisma.$transaction`). **No** rebajar el Prisma schema localmente — rompe el tipo cliente compartido.
 
 ---
 
@@ -434,6 +433,22 @@ Se borró `src/shared/components/layout/common/SignOutTestComponent.tsx` (panel 
 ---
 
 ## Resuelto recientemente (para trazabilidad)
+
+### [✅ 2026-04-11] Flujo de "Eliminar cuenta" roto + rediseño de confirmación GitHub-style
+
+- `/api/delete-account/route.ts` usaba `prisma.post.count({where:{userId}})` (roto por P0 #1 — el schema divergente) y `prisma.profile.delete({where:{id:authUser.id}})` (**siempre fallaba** porque `profiles.id` es una PK sintética, no el `auth.users.id`).
+- Además, el endpoint nunca borraba `auth.users` ni las filas de `inmogrid_*` — el user quedaba con data huérfana y el account seguía logueable.
+- El dropdown del `AccountMenu` exponía "Eliminar Cuenta" con solo 2 clicks — demasiado fácil de disparar por accidente.
+- **Fix**:
+  - Reescrita la ruta con `prisma.$transaction` + `$executeRaw` que valida `{ confirmation: string }` contra el email del user, borra todas las filas de `public.*` que le pertenecen y finalmente `DELETE FROM auth.users` (que cascadea `auth.identities`/`auth.sessions`/`auth.refresh_tokens`).
+  - Nuevo componente `DangerZone` en `src/features/profiles/components/DangerZone.tsx` — zona de peligro GitHub-style al final de `/dashboard/perfil`, con botón inicial que despliega un input donde el usuario debe escribir **su email exacto**; el botón "Eliminar mi cuenta para siempre" queda deshabilitado hasta que matchee carácter por carácter.
+  - `AccountMenu` y `useAccountActions` simplificados: ya no manejan lógica de delete. Solo cerrar sesión + links legales.
+  - Borrados `src/shared/components/layout/common/account-menu/DeleteAccountDialog.tsx` y `src/shared/hooks/useDeleteAccount.ts` (deuda técnica cerrada, reemplazados por el flujo nuevo).
+
+### [✅ 2026-04-11] CSP bloqueaba el cliente Supabase del browser
+
+- `next.config.js` tenía `connect-src 'self' ... https://api.openai.com ...` pero **sin** `https://*.supabase.co`. El hook `useAuth` del cliente (que llama `supabase.from('inmogrid_profiles').select('*').eq('id',...)`) era bloqueado por la política — el `profile` quedaba en `null` y el navbar mostraba el email crudo en vez del `full_name`.
+- **Fix**: agregado `https://*.supabase.co wss://*.supabase.co` al `connect-src` del header CSP en `next.config.js`.
 
 ### [✅ 2026-04-11] Triggers rotos en `auth.users` bloqueaban todo signup
 

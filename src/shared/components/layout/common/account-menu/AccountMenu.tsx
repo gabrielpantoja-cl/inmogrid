@@ -2,40 +2,40 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  PowerIcon,
-  ExclamationTriangleIcon,
-  UserIcon,
-} from '@heroicons/react/24/outline';
+import { PowerIcon, UserIcon } from '@heroicons/react/24/outline';
 
 interface AccountMenuProps {
   avatarUrl?: string | null;
   isOpen: boolean;
   isSigningOut: boolean;
-  isDeleting: boolean;
   onToggle: () => void;
   onSignOut: () => void;
-  onDeleteAccount: () => void;
   onCloseDropdown: () => void;
 }
 
 /**
- * Dropdown de cuenta reutilizable: avatar + menú con cerrar sesión,
- * eliminar cuenta y links legales.
+ * Dropdown de cuenta reutilizable: avatar + menú con cerrar sesión y links
+ * legales.
  *
  * Usado tanto por el navbar del dashboard como por el `PublicHeader` de las
  * rutas públicas para garantizar una experiencia de sesión consistente en
  * toda la app. Los handlers se inyectan como props para que el componente
  * siga siendo presentacional — la lógica vive en `useAccountActions`.
+ *
+ * **Importante**: este dropdown intencionalmente **no incluye "Eliminar
+ * cuenta"**. La eliminación es una acción irreversible y vive únicamente en
+ * la zona de peligro de `/dashboard/perfil` (componente `DangerZone` de
+ * `features/profiles`), detrás de un flujo de confirmación GitHub-style
+ * que obliga a escribir el email del usuario para habilitar el botón.
+ * Poner ese flow en un dropdown global sería demasiado fácil de disparar
+ * por accidente.
  */
 export function AccountMenu({
   avatarUrl,
   isOpen,
   isSigningOut,
-  isDeleting,
   onToggle,
   onSignOut,
-  onDeleteAccount,
   onCloseDropdown,
 }: AccountMenuProps) {
   return (
@@ -76,23 +76,6 @@ export function AccountMenu({
           >
             <PowerIcon className={`w-4 h-4 mr-3 ${isSigningOut ? 'animate-spin' : ''}`} />
             {isSigningOut ? 'Cerrando...' : 'Cerrar Sesión'}
-          </button>
-
-          <div className="border-t border-gray-100" />
-
-          <button
-            type="button"
-            onClick={onDeleteAccount}
-            disabled={isDeleting}
-            className={`w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 ${
-              isDeleting ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-            role="menuitem"
-          >
-            <ExclamationTriangleIcon
-              className={`w-4 h-4 mr-3 ${isDeleting ? 'animate-pulse' : ''}`}
-            />
-            {isDeleting ? 'Eliminando...' : 'Eliminar Cuenta'}
           </button>
 
           <div className="border-t border-gray-100 mt-1 pt-1">

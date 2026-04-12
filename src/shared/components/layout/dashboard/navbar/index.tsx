@@ -6,7 +6,6 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import AcmeLogo from '@/shared/components/layout/common/AcmeLogo';
 import {
   AccountMenu,
-  DeleteAccountDialog,
   useAccountActions,
 } from '@/shared/components/layout/common/account-menu';
 import { navigationLinks } from './constants';
@@ -22,8 +21,11 @@ import { MobileMenu } from './MobileMenu';
  * - NavbarLink.tsx       — link individual (desktop/mobile)
  * - MobileMenu.tsx       — drawer móvil (dashboard-specific)
  * - AccountMenu          — dropdown compartido con rutas públicas (common/)
- * - DeleteAccountDialog  — modal compartido (common/)
  * - useAccountActions    — hook compartido de estado de cuenta (common/)
+ *
+ * La acción de "Eliminar cuenta" **no** vive en este navbar — es un flow
+ * destructivo irreversible que requiere confirmación GitHub-style y vive
+ * en el `DangerZone` de `/dashboard/perfil`.
  */
 export default function Navbar() {
   const pathname = usePathname();
@@ -69,10 +71,8 @@ export default function Navbar() {
                 avatarUrl={actions.avatarUrl}
                 isOpen={actions.isUserMenuOpen}
                 isSigningOut={actions.isSigningOut}
-                isDeleting={actions.isDeleting}
                 onToggle={() => actions.setIsUserMenuOpen(!actions.isUserMenuOpen)}
                 onSignOut={actions.handleSignOut}
-                onDeleteAccount={actions.handleDeleteAccount}
                 onCloseDropdown={() => actions.setIsUserMenuOpen(false)}
               />
             </div>
@@ -99,10 +99,8 @@ export default function Navbar() {
             displayName={actions.displayName}
             isSignedIn={!!actions.user}
             isSigningOut={actions.isSigningOut}
-            isDeleting={actions.isDeleting}
             onLinkClick={() => actions.setIsMobileMenuOpen(false)}
             onSignOut={actions.handleSignOut}
-            onDeleteAccount={actions.handleDeleteAccount}
           />
         )}
       </nav>
@@ -118,13 +116,6 @@ export default function Navbar() {
           aria-label="Cerrar menú"
         />
       )}
-
-      <DeleteAccountDialog
-        open={actions.showModal}
-        isDeleting={actions.isDeleting}
-        onClose={() => actions.setShowModal(false)}
-        onConfirm={actions.handleConfirmDelete}
-      />
     </>
   );
 }
