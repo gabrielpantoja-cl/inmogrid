@@ -213,6 +213,25 @@ Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. `NEON_DATABASE_URL
 - **Supabase project**: `SUPABASE_PROJECT_REF` (shared with pantojapropiedades.cl)
 - **N8N**: accessible at `N8N_HOST_REDACTED` (VPS DigitalOcean) — separate from Vercel web app
 
+## Sofia RAG Chatbot (ADR-006)
+
+Public page at `/sofia`. RAG-powered assistant for Chilean real estate.
+
+- **LLM**: Gemini 2.5 Flash (free tier, 500 req/day)
+- **Embeddings**: Gemini text-embedding-004 (768 dim, free)
+- **Vector DB**: Supabase pgvector with HNSW index
+- **Streaming**: SSE via `POST /api/sofia/chat`
+- **Auth**: Optional (anonymous via localStorage sessionId + authenticated via Supabase)
+- **No source attribution** — RAG improves answers but never cites documents (copyright)
+- **Status**: UI + API + DB ready. Knowledge base seeding pending (Phase 4).
+- **Env var**: `GEMINI_API_KEY` (from https://aistudio.google.com/apikey)
+
+Key files:
+- `src/shared/lib/gemini.ts` — Gemini API client (embeddings + streaming chat)
+- `src/features/sofia/lib/rag.ts` — RAG pipeline (multi-threshold vector search)
+- `src/features/sofia/lib/persistence.ts` — Conversation storage
+- `src/app/api/sofia/chat/route.ts` — SSE streaming endpoint
+
 ## Specialized Agents (`.claude/agents/`)
 
 | Agent | Use for |
