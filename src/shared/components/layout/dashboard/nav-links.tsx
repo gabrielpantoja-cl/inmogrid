@@ -17,7 +17,7 @@ const links = [
     icon: UserCircleIcon,
   },
   {
-    name: 'Mis Notas',
+    name: 'Mis Publicaciones',
     href: '/dashboard/notas',
     icon: DocumentTextIcon,
   },

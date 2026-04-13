@@ -95,7 +95,7 @@ export default function DashboardContent({
             </div>
             <div>
               <h3 className="font-semibold text-gray-800 group-hover:text-primary transition-colors">
-                Mis Notas
+                Mis Publicaciones
               </h3>
               <p className="text-sm text-gray-500">
                 Crea y gestiona tus publicaciones

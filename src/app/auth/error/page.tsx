@@ -128,10 +128,8 @@ function AuthErrorContent() {
       <div className="max-w-md w-full space-y-8">
         {/* Logo */}
         <div className="text-center">
-          <div className="mx-auto h-20 w-48 flex items-center justify-center bg-primary rounded-lg p-4">
-            <div className="text-white">
-              <AcmeLogo />
-            </div>
+          <div className="mx-auto flex items-center justify-center">
+            <AcmeLogo />
           </div>
           <div className="mt-6">
             <div className="text-red-500 mb-4">

@@ -1,14 +1,7 @@
-// Ubicación: components/ui/common/Footer.tsx
 import React from 'react';
 import Link from 'next/link';
 
 interface FooterProps {
-  /**
-   * Slot opcional para renderizar un indicador de estrellas de GitHub
-   * junto al enlace al repositorio. Se recibe por inyección para respetar
-   * la regla de boundaries: shared/ no puede depender de features/.
-   * El layout superior (app/layout.tsx) inyecta `<GitHubStarsSimple ... />`.
-   */
   githubStarsSlot?: React.ReactNode;
 }
 
@@ -16,22 +9,19 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
   const githubRepoUrl = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/inmogrid';
 
   return (
-    // Aumentado margen superior (mt-16) y padding vertical (py-12) para más "aire"
     <footer className="mt-16 py-12 border-t border-gray-200">
-      {/* Contenedor principal con padding horizontal y más gap vertical en móvil (gap-y-8) */}
-      {/* Nuevo layout: grid para mejor control de columnas en desktop */}
-      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 items-center gap-y-8 md:gap-x-8">
-        {/* Columna 1: Botón/Enlace a inicio + copyright */}
+      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-y-8 md:gap-x-8">
+        {/* Col 1: Brand + copyright */}
         <div className="flex flex-col items-center md:items-start gap-1">
           <Link href="/" className="text-lg font-semibold text-foreground hover:text-primary transition-colors">
             inmogrid.cl
           </Link>
-          <span className="text-xs text-gray-400">
-            © 2011–{new Date().getFullYear()} inmogrid &middot; Powered by coffee ⚡
+          <span className="text-xs text-gray-600">
+            &copy; 2011&ndash;{new Date().getFullYear()} inmogrid
           </span>
         </div>
 
-        {/* Columna 2: Proyecto open source — link a GitHub + stars */}
+        {/* Col 2: Open source */}
         <div className="flex flex-col items-center gap-2">
           <a
             href={githubRepoUrl}
@@ -52,15 +42,30 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
             <span>Ver en GitHub</span>
             {githubStarsSlot}
           </a>
-          <span className="text-xs text-gray-400">Proyecto open source &middot; MIT</span>
+          <span className="text-xs text-gray-600">Proyecto open source &middot; MIT</span>
         </div>
 
-        {/* Columna 3: Enlaces Legales */}
-        <div className="flex flex-col items-center md:items-end justify-center gap-y-1 text-center md:text-right">
-          <Link href="/terms" className="text-sm text-gray-600 hover:text-gray-900">
-            Términos
+        {/* Col 3: Producto */}
+        <div className="flex flex-col items-center md:items-start gap-y-1">
+          <span className="text-sm font-semibold text-foreground mb-1">Producto</span>
+          <Link href="/sofia" className="text-sm text-gray-600 hover:text-primary transition-colors">
+            Chat Sof&iacute;a
           </Link>
-          <Link href="/privacy" className="text-sm text-gray-600 hover:text-gray-900">
+          <Link href="/referenciales" className="text-sm text-gray-600 hover:text-primary transition-colors">
+            Referenciales
+          </Link>
+          <Link href="/referenciales#conservadores" className="text-sm text-gray-600 hover:text-primary transition-colors">
+            Conservadores
+          </Link>
+        </div>
+
+        {/* Col 4: Legal */}
+        <div className="flex flex-col items-center md:items-end gap-y-1">
+          <span className="text-sm font-semibold text-foreground mb-1">Legal</span>
+          <Link href="/terms" className="text-sm text-gray-600 hover:text-primary transition-colors">
+            T&eacute;rminos
+          </Link>
+          <Link href="/privacy" className="text-sm text-gray-600 hover:text-primary transition-colors">
             Privacidad
           </Link>
         </div>

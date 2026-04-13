@@ -3,6 +3,8 @@ import { getUser } from '@/shared/lib/supabase/auth';
 import { prisma } from '@/shared/lib/prisma';
 import { ContributionInputSchema } from '@/shared/lib/schemas/contribution';
 import { sanitizeInput } from '@/shared/lib/sanitize';
+import { awardPoints } from '@/features/gamification/lib/points';
+import { PointReason } from '@prisma/client';
 
 export async function POST(request: NextRequest) {
   try {
@@ -56,6 +58,12 @@ export async function POST(request: NextRequest) {
       },
       select: { id: true, status: true, createdAt: true },
     });
+
+    // Gamification: award points for bug reports/corrections on submission
+    if (data.contributionType === 'report' || data.contributionType === 'correction') {
+      awardPoints(user.id, 5, PointReason.BUG_REPORT, contribution.id)
+        .catch((err) => console.error('[Gamification] contribute points error:', err));
+    }
 
     return NextResponse.json(
       {

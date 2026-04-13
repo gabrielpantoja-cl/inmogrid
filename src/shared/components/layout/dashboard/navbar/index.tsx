@@ -39,12 +39,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
                 <Link href="/dashboard" className="flex items-center">
-                  <div className="w-8 h-8 text-primary">
-                    <AcmeLogo />
-                  </div>
-                  <span className="ml-2 text-xl font-bold text-gray-900 hidden sm:block">
-                    inmogrid.cl
-                  </span>
+                  <AcmeLogo />
                 </Link>
               </div>
 

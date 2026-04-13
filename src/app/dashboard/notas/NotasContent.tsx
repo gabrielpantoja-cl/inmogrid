@@ -107,7 +107,7 @@ export default function NotasContent({
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className={`${lusitana.className} text-2xl md:text-3xl text-gray-800`}>
-            Mis Notas
+            Mis Publicaciones
           </h1>
           <p className="text-gray-600 mt-1">
             Gestiona tus publicaciones y comparte tu conocimiento con la comunidad

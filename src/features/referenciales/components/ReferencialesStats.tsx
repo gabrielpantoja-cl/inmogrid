@@ -36,15 +36,6 @@ export default function ReferencialesStats({ referenciales }: Props) {
       ? superficies.reduce((a, b) => a + b, 0) / superficies.length
       : 0;
 
-    // Distribución por año
-    const byYear = new Map<number, number>();
-    for (const r of referenciales) {
-      if (typeof r.anio === 'number') byYear.set(r.anio, (byYear.get(r.anio) ?? 0) + 1);
-    }
-    const yearData = Array.from(byYear.entries())
-      .sort(([a], [b]) => a - b)
-      .map(([year, count]) => ({ year: String(year), count }));
-
     // Top comunas
     const byComuna = new Map<string, number>();
     for (const r of referenciales) {
@@ -55,7 +46,7 @@ export default function ReferencialesStats({ referenciales }: Props) {
       .slice(0, 8)
       .map(([comuna, count]) => ({ comuna, count }));
 
-    return { total, avgMonto, medianMonto, avgSuperficie, yearData, topComunas };
+    return { total, avgMonto, medianMonto, avgSuperficie, topComunas };
   }, [referenciales]);
 
   const Metric = ({ label, value }: { label: string; value: string }) => (
@@ -76,23 +67,6 @@ export default function ReferencialesStats({ referenciales }: Props) {
         <Metric label="Monto promedio" value={stats.avgMonto ? formatCLP(stats.avgMonto) : '—'} />
         <Metric label="Monto mediano" value={stats.medianMonto ? formatCLP(stats.medianMonto) : '—'} />
       </div>
-
-      {stats.yearData.length > 0 && (
-        <div className="rounded-lg border border-gray-200 bg-white p-4">
-          <div className="text-sm font-medium text-gray-900 mb-2">Registros por año</div>
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.yearData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="year" fontSize={11} />
-                <YAxis fontSize={11} />
-                <Tooltip />
-                <Bar dataKey="count" fill="#eab308" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )}
 
       {stats.topComunas.length > 0 && (
         <div className="rounded-lg border border-gray-200 bg-white p-4">

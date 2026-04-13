@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUser, getProfile } from '@/shared/lib/supabase/auth';
 import { prisma } from '@/shared/lib/prisma';
 import { ReviewInputSchema } from '@/shared/lib/schemas/contribution';
+import { awardPoints } from '@/features/gamification/lib/points';
+import { evaluateBadges } from '@/features/gamification/lib/badges';
+import { PointReason } from '@prisma/client';
 
 export async function PATCH(
   request: NextRequest,
@@ -31,7 +34,7 @@ export async function PATCH(
 
     const contribution = await prisma.contribution.findUnique({
       where: { id },
-      select: { id: true, status: true },
+      select: { id: true, status: true, userId: true, contributionType: true },
     });
 
     if (!contribution) {
@@ -55,6 +58,20 @@ export async function PATCH(
       },
       select: { id: true, status: true, reviewedAt: true },
     });
+
+    // Gamification: award points based on review result
+    if (contribution.userId) {
+      const contributorId = contribution.userId;
+      if (parsed.data.status === 'approved') {
+        const pts = contribution.contributionType === 'correction' ? 10 : 20;
+        const reason = contribution.contributionType === 'correction'
+          ? PointReason.CORRECTION_APPROVED
+          : PointReason.CONTRIBUTION_APPROVED;
+        awardPoints(contributorId, pts, reason, id)
+          .then(() => evaluateBadges(contributorId))
+          .catch((err) => console.error('[Gamification] review points error:', err));
+      }
+    }
 
     return NextResponse.json({
       success: true,

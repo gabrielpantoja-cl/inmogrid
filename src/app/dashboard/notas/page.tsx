@@ -4,7 +4,7 @@ import NotasContent from './NotasContent';
 import { prisma } from '@/shared/lib/prisma';
 
 export const metadata = {
-  title: 'Mis Notas - inmogrid.cl',
+  title: 'Mis Publicaciones - inmogrid.cl',
   description: 'Gestiona tus publicaciones y contenido',
 };
 

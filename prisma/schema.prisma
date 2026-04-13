@@ -338,3 +338,70 @@ enum ContributionStatus {
   approved
   rejected
 }
+
+// ─── Gamification ────────────────────────────────────────────
+
+enum BadgeCategory {
+  CONTENT
+  DATA
+  COMMUNITY
+  SPECIAL
+}
+
+enum BadgeTier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum PointReason {
+  POST_PUBLISHED
+  CONTRIBUTION_APPROVED
+  CORRECTION_APPROVED
+  BUG_REPORT
+  BADGE_EARNED
+  MANUAL_ADJUSTMENT
+}
+
+model InmogridBadge {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  name          String
+  description   String
+  iconUrl       String?       @map("icon_url")
+  category      BadgeCategory
+  tier          BadgeTier
+  threshold     Int           @default(1)
+  pointsAwarded Int           @default(0) @map("points_awarded")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  userBadges InmogridUserBadge[]
+
+  @@map("inmogrid_badges")
+}
+
+model InmogridUserBadge {
+  id       String   @id @default(cuid())
+  userId   String   @db.Uuid @map("user_id")
+  badgeId  String   @map("badge_id")
+  earnedAt DateTime @default(now()) @map("earned_at")
+
+  badge InmogridBadge @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+  @@map("inmogrid_user_badges")
+}
+
+model InmogridPointsLedger {
+  id          String      @id @default(cuid())
+  userId      String      @db.Uuid @map("user_id")
+  points      Int
+  reason      PointReason
+  referenceId String?     @map("reference_id")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([userId, createdAt])
+  @@map("inmogrid_points_ledger")
+}

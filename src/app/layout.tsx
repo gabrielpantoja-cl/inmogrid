@@ -67,13 +67,7 @@ export const metadata: Metadata = {
     apple: [
       { url: '/images/ios/180.png', sizes: '180x180', type: 'image/png' },
     ],
-    other: [
-      {
-        rel: 'mask-icon',
-        url: '/images/safari-pinned-tab.svg',
-        color: '#000000',
-      },
-    ],
+    other: [],
   },
   manifest: '/manifest.json',
   openGraph: {

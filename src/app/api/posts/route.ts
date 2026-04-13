@@ -10,6 +10,9 @@ import {
   createPostForUser,
   createPostSchema,
 } from '@/features/posts';
+import { awardPoints } from '@/features/gamification/lib/points';
+import { evaluateBadges } from '@/features/gamification/lib/badges';
+import { PointReason } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   try {
@@ -52,6 +55,12 @@ export async function POST(request: NextRequest) {
     }
 
     const post = await createPostForUser(authUser.id, parsed.data);
+
+    if (parsed.data.published) {
+      awardPoints(authUser.id, 15, PointReason.POST_PUBLISHED, post.id)
+        .then(() => evaluateBadges(authUser.id))
+        .catch((err) => console.error('[Gamification] post points error:', err));
+    }
 
     return NextResponse.json({ success: true, post });
   } catch (error) {
