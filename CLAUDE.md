@@ -10,6 +10,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Current Phase**: Phase 1 (User Profiles + Posts) — in progress
 
+## Dual-Backend Architecture (ADR-005)
+
+inmogrid.cl operates with **two backends**:
+
+| Backend | Engine | Client | Purpose | Access |
+|---------|--------|--------|---------|--------|
+| **Supabase** | PostgreSQL | Prisma ORM | Profiles, posts, connections, events, chat, contributions | Read/Write |
+| **Neon** | PostgreSQL + PostGIS | postgres.js (raw SQL) | Verified real estate transactions (6,600+ records) | **Read-only** |
+
+**Key rules**:
+- Neon queries are **read-only** — all SQL lives in `src/shared/lib/queries/referenciales.ts`
+- `monto` (transaction amounts) are **always String** in API responses — never `Number` (BigInt precision)
+- PostGIS coordinates use `ST_X(geom)`/`ST_Y(geom)` with fallback to `lat`/`lng` columns
+- User contributions go to Supabase staging (`inmogrid_contributions`) → admin review → pipeline to Neon
+- Full decision record: `docs/adr/ADR-005-dual-backend-supabase-neon.md`
+
 ## Shared Database (Important)
 
 inmogrid.cl and **pantojapropiedades.cl share the same Supabase database** during this transition/transformation period. Tables like `posts` are read by both platforms. This means:
@@ -118,11 +134,17 @@ ChatMessage         → inmogrid_chat_messages table
 ## API Structure
 
 ```
-/api/public/              → No auth required
-  health/                 → System health
+/api/v1/                  → Public (Neon data, rate-limited, CORS *)
+  map-data/               → GET referenciales with ?comuna=&anio=&limit=
+  map-data/comunas/       → GET available comunas with counts
+  map-config/             → GET map configuration (static)
+  health/                 → GET dual-backend health (Supabase + Neon)
+  docs/                   → GET API documentation (JSON)
+
+/api/public/              → Public (Supabase data, no auth)
+  health/                 → System health (Supabase only)
   posts/                  → Published posts feed
   profiles/[username]/    → Public profile by username
-  docs/                   → API docs
 
 /api/                     → Auth required (middleware enforces)
   users/profile           → GET/PUT current user's profile
@@ -131,6 +153,11 @@ ChatMessage         → inmogrid_chat_messages table
   chat/                   → Sofia AI chat
   delete-account/         → Account deletion
   revalidate/             → Next.js cache revalidation
+  referenciales/
+    contribute/           → POST new contribution (auth)
+    my-contributions/     → GET user's contributions (auth)
+    contributions/        → GET all contributions (admin)
+    contributions/[id]/review → PATCH approve/reject (admin)
 ```
 
 **Standard API pattern**:
@@ -156,13 +183,20 @@ PROTECTED_PATHS = ['/dashboard']
 ## Environment Variables
 
 ```env
-# Prisma / Supabase PostgreSQL
+# Prisma / Supabase PostgreSQL (required)
 DATABASE_URL="postgresql://...@pooler.supabase.com:6543/postgres?pgbouncer=true"
 DIRECT_URL="postgresql://...@pooler.supabase.com:5432/postgres"
+
+# Neon PostgreSQL — referenciales read-only (required for /api/v1/)
+NEON_DATABASE_URL="postgresql://...@ep-xxx.aws.neon.tech/referenciales?sslmode=require"
 
 # Supabase Auth (public — safe in browser)
 NEXT_PUBLIC_SUPABASE_URL="https://[ref].supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJ..."
+
+# Rate limiting (optional — disabled if not set)
+UPSTASH_REDIS_REST_URL="https://xxx.upstash.io"
+UPSTASH_REDIS_REST_TOKEN="AXxx..."
 
 # Optional
 NEXT_PUBLIC_BASE_URL="https://inmogrid.cl"
@@ -170,7 +204,7 @@ OPENAI_API_KEY="..."
 RESEND_API_KEY="..."
 ```
 
-Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. Missing either causes `P1012` errors. Both must also be set in Vercel environment variables for production.
+Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. `NEON_DATABASE_URL` is required for the `/api/v1/` referenciales endpoints. All three must be set in Vercel environment variables for production.
 
 ## Infrastructure
 
