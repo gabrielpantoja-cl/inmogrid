@@ -165,7 +165,7 @@ const nextConfig = {
           },
         ],
       },
-      // Headers para API pública (cache corto con revalidación)
+      // Headers para API pública legacy (cache corto con revalidación)
       {
         source: '/api/public/:path*',
         headers: [
@@ -179,9 +179,31 @@ const nextConfig = {
           },
         ],
       },
+      // Headers para API v1 (cache + CORS)
+      {
+        source: '/api/v1/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, OPTIONS',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, X-API-Key',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
+        ],
+      },
       // Headers para APIs privadas (no cachear)
       {
-        source: '/api/:path((?!public).*)*',
+        source: '/api/:path((?!public|v1).*)*',
         headers: [
           {
             key: 'Cache-Control',

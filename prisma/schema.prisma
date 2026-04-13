@@ -161,6 +161,43 @@ model ProfessionalProfile {
 }
 
 // ============================================================
+// REFERENCIALES CONTRIBUTIONS (staging area)
+// Users submit data here; admins review; approved → pipeline to Neon
+// ============================================================
+
+model Contribution {
+  id               String            @id @default(cuid())
+  userId           String            @db.Uuid @map("user_id")
+  sourceId         String?           @map("source_id") // Neon referencial ID (for corrections/reports)
+  contributionType ContributionType  @default(new) @map("contribution_type")
+  lat              Float
+  lng              Float
+  fojas            String?
+  numero           Int?
+  anio             Int?
+  cbr              String?
+  predio           String?
+  comuna           String?
+  rol              String?
+  fechaescritura   DateTime?
+  superficie       Float?
+  monto            BigInt?
+  observaciones    String?
+  status           ContributionStatus @default(pending)
+  reviewerId       String?           @db.Uuid @map("reviewer_id")
+  reviewNote       String?           @map("review_note")
+  reviewedAt       DateTime?         @map("reviewed_at")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([status])
+  @@index([sourceId])
+  @@index([comuna])
+  @@map("inmogrid_contributions")
+}
+
+// ============================================================
 // SYSTEM
 // ============================================================
 
@@ -245,4 +282,16 @@ enum OrganizerType {
   UNIVERSITARIO
   GREMIAL
   COMERCIAL
+}
+
+enum ContributionType {
+  new
+  correction
+  report
+}
+
+enum ContributionStatus {
+  pending
+  approved
+  rejected
 }

@@ -9,8 +9,13 @@
  * Docs: https://referenciales.cl/api/v1/docs
  */
 
+/**
+ * Default: use internal API (/api/v1) which queries Neon directly.
+ * Override via NEXT_PUBLIC_REFERENCIALES_API_BASE to fallback to external API
+ * (e.g., 'https://referenciales.cl/api/v1') if the internal API has issues.
+ */
 export const REFERENCIALES_API_BASE =
-  process.env.NEXT_PUBLIC_REFERENCIALES_API_BASE ?? 'https://referenciales.cl/api/v1';
+  process.env.NEXT_PUBLIC_REFERENCIALES_API_BASE ?? '/api/v1';
 
 export interface Referencial {
   id: string;
@@ -59,7 +64,22 @@ function buildUrl(
   path: string,
   params?: Record<string, string | number | undefined>
 ): string {
-  const url = new URL(`${REFERENCIALES_API_BASE}${path}`);
+  const base = `${REFERENCIALES_API_BASE}${path}`;
+
+  // For relative URLs (/api/v1/...), use string concatenation + URLSearchParams
+  if (!base.startsWith('http')) {
+    const sp = new URLSearchParams();
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        if (v !== undefined && v !== null && v !== '') sp.set(k, String(v));
+      }
+    }
+    const qs = sp.toString();
+    return qs ? `${base}?${qs}` : base;
+  }
+
+  // For absolute URLs (external API fallback)
+  const url = new URL(base);
   if (params) {
     for (const [k, v] of Object.entries(params)) {
       if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, String(v));
