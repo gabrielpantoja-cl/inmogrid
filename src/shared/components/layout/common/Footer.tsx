@@ -9,14 +9,14 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
   const githubRepoUrl = process.env.NEXT_PUBLIC_GITHUB_REPO_URL || 'https://github.com/gabrielpantoja-cl/inmogrid';
 
   return (
-    <footer className="mt-16 py-12 border-t border-border bg-muted/30">
+    <footer className="mt-16 py-12 bg-gray-900 border-t-2 border-primary/50">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-y-8 md:gap-x-8">
         {/* Col 1: Brand + copyright */}
         <div className="flex flex-col items-center md:items-start gap-1">
-          <Link href="/" className="text-lg font-semibold text-foreground hover:text-primary transition-colors">
+          <Link href="/" className="text-lg font-semibold text-white hover:text-primary transition-colors">
             inmogrid.cl
           </Link>
-          <span className="text-xs text-gray-700">
+          <span className="text-xs text-gray-400">
             &copy; 2011&ndash;{new Date().getFullYear()} inmogrid
           </span>
         </div>
@@ -28,7 +28,7 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
             target="_blank"
             rel="noopener noreferrer"
             title="Ver el código fuente en GitHub"
-            className="inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-primary transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -42,30 +42,30 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
             <span>Ver en GitHub</span>
             {githubStarsSlot}
           </a>
-          <span className="text-xs text-gray-700">Proyecto open source &middot; MIT</span>
+          <span className="text-xs text-gray-400">Proyecto open source &middot; MIT</span>
         </div>
 
         {/* Col 3: Producto */}
         <div className="flex flex-col items-center md:items-start gap-y-1">
-          <span className="text-sm font-semibold text-foreground mb-1">Producto</span>
-          <Link href="/sofia" className="text-sm text-gray-700 hover:text-primary transition-colors">
+          <span className="text-sm font-semibold text-gray-100 mb-1">Producto</span>
+          <Link href="/sofia" className="text-sm text-gray-400 hover:text-primary transition-colors">
             Chat Sof&iacute;a
           </Link>
-          <Link href="/referenciales" className="text-sm text-gray-700 hover:text-primary transition-colors">
+          <Link href="/referenciales" className="text-sm text-gray-400 hover:text-primary transition-colors">
             Referenciales
           </Link>
-          <Link href="/referenciales#conservadores" className="text-sm text-gray-700 hover:text-primary transition-colors">
+          <Link href="/referenciales#conservadores" className="text-sm text-gray-400 hover:text-primary transition-colors">
             Conservadores
           </Link>
         </div>
 
         {/* Col 4: Legal */}
         <div className="flex flex-col items-center md:items-start gap-y-1">
-          <span className="text-sm font-semibold text-foreground mb-1">Legal</span>
-          <Link href="/terms" className="text-sm text-gray-700 hover:text-primary transition-colors">
+          <span className="text-sm font-semibold text-gray-100 mb-1">Legal</span>
+          <Link href="/terms" className="text-sm text-gray-400 hover:text-primary transition-colors">
             T&eacute;rminos
           </Link>
-          <Link href="/privacy" className="text-sm text-gray-700 hover:text-primary transition-colors">
+          <Link href="/privacy" className="text-sm text-gray-400 hover:text-primary transition-colors">
             Privacidad
           </Link>
         </div>
