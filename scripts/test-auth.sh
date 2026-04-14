@@ -158,7 +158,7 @@ if [ "$MODE" = "vps" ]; then
   echo "📜 Test 8: Últimos logs de autenticación..."
   echo "--------------------------------------------"
 
-  echo "Ejecutando en VPS: ssh gabriel@VPS_IP_REDACTED 'docker logs inmogrid-web --tail 50 2>&1 | grep AUTH'"
+  echo "Ejecutando en VPS: ssh gabriel@<VPS_HOST> 'docker logs inmogrid-web --tail 50 2>&1 | grep AUTH'"
   echo ""
   echo "Nota: Debes tener acceso SSH al VPS para ver logs"
   echo ""

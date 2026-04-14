@@ -53,7 +53,7 @@ export default function ForceSignOutPage() {
 
       // 2. Limpiar localStorage y sessionStorage de cualquier clave sb-*.
       //    El SDK de Supabase persiste el JWT en localStorage bajo una
-      //    clave como `sb-SUPABASE_PROJECT_REF-auth-token`.
+      //    clave como `sb-<SUPABASE_PROJECT_REF>-auth-token`.
       if (typeof window !== 'undefined') {
         try {
           const localKeys = Object.keys(window.localStorage);

@@ -52,42 +52,14 @@ You are the data ingestion specialist for the **inmogrid.cl** project (P&P Techn
 
 ## N8N Workflow Architecture
 
-### VPS Infrastructure
+### N8N Infrastructure
 
-**N8N Stack on VPS:**
-```yaml
-# Docker Compose Services
-n8n-db:
-  image: postgres:15
-  container_name: n8n-db
-  ports:
-    - "5432:5432"  # Shared PostgreSQL (n8n and inmogrid databases)
-
-n8n:
-  image: n8nio/n8n:latest
-  container_name: n8n
-  ports:
-    - "5678:5678"  # N8N web interface
-  environment:
-    DB_TYPE: postgresdb
-    DB_POSTGRESDB_HOST: n8n-db
-    N8N_BASIC_AUTH_ACTIVE: "true"
-
-n8n-redis:
-  image: redis:alpine
-  container_name: n8n-redis
-```
+N8N runs at `https://N8N_HOST_REDACTED` — separate from the inmogrid.cl Vercel app.
+Access credentials are in the private repo (`infra/privado/`).
 
 **Access Points:**
-- **N8N Interface**: http://VPS_IP_REDACTED:5678
-- **Database**: PostgreSQL on port 5432 (shared container: n8n and inmogrid databases)
-- **N8N DB**: Database `n8n` (user: n8n)
-- **inmogrid.cl DB**: Database `inmogrid` (user: inmogrid_user)
-
-**Isolation Strategy:**
-- N8N workflows write to N8N database (`n8n`)
-- Scheduled jobs process and transfer validated data to inmogrid database (`inmogrid`)
-- Database-level isolation: Separate databases within shared PostgreSQL container
+- **N8N Interface**: https://N8N_HOST_REDACTED
+- **Database**: Supabase (inmogrid.cl) + Neon (referenciales) — N8N connects via webhooks
 
 ---
 

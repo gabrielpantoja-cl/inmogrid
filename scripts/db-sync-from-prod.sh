@@ -17,7 +17,7 @@ echo "=================================="
 echo ""
 
 # Variables de configuración
-VPS_HOST="VPS_IP_REDACTED"
+VPS_HOST="<VPS_HOST>"
 VPS_USER="root"
 VPS_CONTAINER="inmogrid-db"  # Ajustar al nombre real del contenedor
 VPS_DB_NAME="inmogrid"       # Ajustar al nombre real de la DB

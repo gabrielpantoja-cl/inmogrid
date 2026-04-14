@@ -16,7 +16,7 @@
 //    (ver `docs/deuda-tecnica.md` P0 #1). Usamos `$executeRaw` con
 //    parámetros posicionales en todas las tablas para evitar cualquier
 //    dependencia del mapping de columnas.
-//  - El role `postgres.SUPABASE_PROJECT_REF` con el que corre Prisma tiene
+//  - El role `postgres.<SUPABASE_PROJECT_REF>` con el que corre Prisma tiene
 //    permisos sobre `auth.users` (lo verificamos en la consolidación de
 //    usuarios del 2026-04-11), así que no necesitamos un admin client con
 //    `SUPABASE_SERVICE_ROLE_KEY` separado.

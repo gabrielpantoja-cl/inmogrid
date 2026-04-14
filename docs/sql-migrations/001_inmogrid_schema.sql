@@ -1,6 +1,6 @@
 -- =============================================================
 -- INMOGRID.CL — Migration 001: Initial Schema (Supabase Auth)
--- Project ref: SUPABASE_PROJECT_REF
+-- Project ref: <SUPABASE_PROJECT_REF>
 -- Apply manually in Supabase Studio > SQL Editor
 -- =============================================================
 -- SAFETY NOTES:

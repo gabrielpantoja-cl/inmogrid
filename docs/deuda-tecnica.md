@@ -116,7 +116,7 @@ Reemplazar cada `prisma.post.*` por una query SQL cruda, como ya hicimos en `das
 
 ### 2. Base compartida con pantojapropiedades.cl
 
-**Contexto.** El proyecto Supabase `SUPABASE_PROJECT_REF` aloja al mismo tiempo los datos de pantojapropiedades.cl (en vida útil residual) y de inmogrid.cl. La base tiene ~36 tablas, de las cuales ~20 son legacy exclusivas de pantoja (`crm_*`, `teams`, `team_members`, `team_notifications`, `external_portals`, `blog_guidelines_versions`, `legal_page_versions`, `property_portal_listings`, `property_videos`, `property_images`, `seo_metrics`, `site_*`, `chat_*`, `documents`, `user_google_tokens`, `user_notification_preferences`, `profiles`, `degux_posts`, `inmobloques_scores`, `cotizaciones`).
+**Contexto.** El proyecto Supabase compartido (ver `CLAUDE.local.md`) aloja al mismo tiempo los datos de pantojapropiedades.cl (en vida útil residual) y de inmogrid.cl. La base tiene ~36 tablas, de las cuales ~20 son legacy exclusivas de pantoja (`crm_*`, `teams`, `team_members`, `team_notifications`, `external_portals`, `blog_guidelines_versions`, `legal_page_versions`, `property_portal_listings`, `property_videos`, `property_images`, `seo_metrics`, `site_*`, `chat_*`, `documents`, `user_google_tokens`, `user_notification_preferences`, `profiles`, `degux_posts`, `inmobloques_scores`, `cotizaciones`).
 
 **Impacto.**
 - Cada operación destructiva sobre `auth.users`, `profiles` o cualquier tabla "transversal" tiene **blast radius en ambos proyectos**. Ya nos pasó con el trigger huérfano de `degux` que bloqueó todo signup nuevo (ver post-mortem privado `auth-triggers-fix-2026-04-11.md`).

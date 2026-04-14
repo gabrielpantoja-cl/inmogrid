@@ -3,7 +3,7 @@
 # ========================================
 # Quick Fix - Reinicio Rápido de inmogrid.cl
 # Este script debe ejecutarse DENTRO del VPS
-# Uso: ssh gabriel@VPS_IP_REDACTED < quick-fix-vps.sh
+# Uso: ssh gabriel@<VPS_HOST> < quick-fix-vps.sh
 # O: copiar y pegar en terminal SSH del VPS
 # ========================================
 

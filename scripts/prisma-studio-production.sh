@@ -6,9 +6,9 @@
 echo "🔍 Verificando túnel SSH al VPS..."
 
 # Verificar si el túnel SSH ya está activo
-if ! pgrep -f "ssh.*5433:localhost:5433.*gabriel@VPS_IP_REDACTED" > /dev/null; then
+if ! pgrep -f "ssh.*5433:localhost:5433.*gabriel@<VPS_HOST>" > /dev/null; then
     echo "📡 Creando túnel SSH al puerto 5433..."
-    ssh -L 5433:localhost:5433 gabriel@VPS_IP_REDACTED -N -f
+    ssh -L 5433:localhost:5433 gabriel@<VPS_HOST> -N -f
 
     if [ $? -eq 0 ]; then
         echo "✅ Túnel SSH creado exitosamente"
@@ -22,7 +22,7 @@ fi
 
 echo ""
 echo "🚀 Iniciando Prisma Studio con base de datos de PRODUCCIÓN..."
-echo "📊 Base de datos: inmogrid_core (VPS: VPS_IP_REDACTED)"
+echo "📊 Base de datos: inmogrid_core (VPS: <VPS_HOST>)"
 echo "🌐 Prisma Studio estará disponible en: http://localhost:5555"
 echo ""
 echo "⚠️  ADVERTENCIA: Estás conectado a la base de datos de PRODUCCIÓN"
@@ -37,6 +37,6 @@ echo ""
 read -p "¿Deseas cerrar el túnel SSH? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    pkill -f "ssh.*5433:localhost:5433.*gabriel@VPS_IP_REDACTED"
+    pkill -f "ssh.*5433:localhost:5433.*gabriel@<VPS_HOST>"
     echo "✅ Túnel SSH cerrado"
 fi

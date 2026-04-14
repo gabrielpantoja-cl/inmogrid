@@ -31,7 +31,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Variables
-VPS_HOST="gabriel@VPS_IP_REDACTED"
+VPS_HOST="gabriel@<VPS_HOST>"
 DB_CONTAINER="n8n-db"
 DB_USER="inmogrid_user"
 DB_NAME="inmogrid"

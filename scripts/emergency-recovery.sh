@@ -16,7 +16,7 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Variables
-VPS_HOST="gabriel@VPS_IP_REDACTED"
+VPS_HOST="gabriel@<VPS_HOST>"
 VPS_DIR_APP="/home/gabriel/inmogrid.cl"
 VPS_DIR_DOCKER="/home/gabriel/vps-do"
 CONTAINER_NAME="inmogrid-web"
@@ -50,7 +50,7 @@ else
     echo -e "${RED}❌ No se puede conectar al VPS${NC}"
     echo -e "${RED}Verifica:${NC}"
     echo -e "  - Tu conexión a internet"
-    echo -e "  - La IP del VPS (VPS_IP_REDACTED)"
+    echo -e "  - La IP del VPS (<VPS_HOST>)"
     echo -e "  - Tus credenciales SSH"
     exit 1
 fi
@@ -239,5 +239,5 @@ echo -e "  3. Para monitoreo continuo:"
 echo -e "     ${YELLOW}ssh $VPS_HOST 'docker logs -f $CONTAINER_NAME'${NC}"
 echo -e "  4. Para acceder al contenedor:"
 echo -e "     ${YELLOW}ssh $VPS_HOST 'docker exec -it $CONTAINER_NAME sh'${NC}"
-echo -e "\n${BLUE}📊 Dashboard de monitoreo: https://VPS_IP_REDACTED:9443 (Portainer)${NC}"
+echo -e "\n${BLUE}📊 Dashboard de monitoreo: https://<VPS_HOST>:9443 (Portainer)${NC}"
 echo ""

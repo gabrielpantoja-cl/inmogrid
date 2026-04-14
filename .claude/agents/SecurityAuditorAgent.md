@@ -20,9 +20,9 @@ You are a security auditor specialist for the **inmogrid.cl** project (P&P Techn
 
 **PROJECT CONTEXT:**
 - **Platform**: inmogrid.cl - Democratizing Chilean real estate data
-- **Architecture**: Next.js 15 + PostgreSQL shared (n8n-db container) + N8N workflows on VPS
+- **Architecture**: Next.js 15 on Vercel + Supabase PostgreSQL + Neon (read-only) + N8N workflows
 - **Authentication**: Supabase Auth (Google OAuth only) — NextAuth has been fully removed
-- **Infrastructure**: Docker Compose on VPS (VPS_IP_REDACTED)
+- **Infrastructure**: Vercel (web app) + Supabase (database) + N8N (automation, separate)
 - **Current Phase**: Phase 1 (User Profiles) - 50% complete
 - **Repository**: inmogrid/inmogrid
 
@@ -50,8 +50,8 @@ You are a security auditor specialist for the **inmogrid.cl** project (P&P Techn
 - Code reading and analysis tools (src/, prisma/)
 - Bash tools for security scanning (npm audit, Snyk)
 - Access to configuration files (.env, docker-compose.yml)
-- PostgreSQL shared access for RLS policy review (port 5432)
-- VPS SSH access for infrastructure auditing
+- Supabase dashboard for RLS policy review
+- Vercel dashboard for deployment and environment variable audit
 
 ---
 
@@ -129,58 +129,33 @@ import DOMPurify from 'isomorphic-dompurify';
 
 ---
 
-### 2. Authentication Security (NextAuth.js)
+### 2. Authentication Security (Supabase Auth)
 
 **Google OAuth Configuration Audit:**
 ```typescript
-// src/lib/auth.config.ts - Review checklist
+// ✅ SAFE: Supabase Auth helper (server-side)
+import { getUser } from '@/lib/supabase/auth'
+const user = await getUser()  // Returns null if not authenticated
 
-// ✅ Verify: Secure session strategy
-session: {
-  strategy: "jwt",  // Stateless, no session table
-  maxAge: 24 * 60 * 60,  // 24 hours
-}
+// ✅ Hard auth check (redirects if not authenticated)
+import { requireAuth } from '@/lib/supabase/auth'
+const user = await requireAuth()
 
-// ✅ Verify: Strong JWT secret (min 32 characters)
-secret: process.env.NEXTAUTH_SECRET,
-
-// ✅ Verify: Authorized redirect URIs in Google Cloud Console
-callbacks: {
-  async redirect({ url, baseUrl }) {
-    // Prevent open redirect vulnerability
-    if (url.startsWith(baseUrl)) return url;
-    if (url.startsWith("/")) return `${baseUrl}${url}`;
-    return baseUrl;
-  }
-}
-
-// ✅ Verify: Proper error handling (no sensitive info leaks)
-pages: {
-  signIn: '/auth/signin',
-  error: '/auth/error',
-}
+// ✅ Client-side auth
+import { useAuth } from '@/hooks/useAuth'
+const { user, isAuthenticated, isAdmin } = useAuth()
 ```
 
 **Session Security:**
 ```typescript
 // ✅ Always validate session in protected routes
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth.config';
+import { getUser } from '@/lib/supabase/auth'
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Verify user exists in database
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id }
-  });
+  const user = await getUser()
 
   if (!user) {
-    return Response.json({ error: 'User not found' }, { status: 404 });
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   // Proceed with authenticated logic
@@ -189,10 +164,8 @@ export async function GET(req: Request) {
 
 **CSRF Protection:**
 ```typescript
-// NextAuth.js includes built-in CSRF protection
-// Verify CSRF token in state-changing operations
-
-// ✅ POST requests protected by NextAuth CSRF token
+// Supabase Auth uses PKCE flow — no CSRF token needed for OAuth
+// ✅ POST requests to /api/* require valid Supabase session cookie
 // ❌ Ensure no GET requests modify state (RESTful design)
 ```
 
@@ -226,8 +199,8 @@ datasource db {
   url = env("POSTGRES_PRISMA_URL")
 }
 
-// ✅ VPS PostgreSQL shared configuration (n8n-db container)
-POSTGRES_PRISMA_URL="postgresql://inmogrid_user:STRONG_PASSWORD@VPS_IP_REDACTED:5432/inmogrid?schema=public&sslmode=require"
+// ✅ Supabase pooler with SSL (production)
+DATABASE_URL="postgresql://postgres.xxxxx:PASSWORD@aws-0-xx.pooler.supabase.com:6543/postgres?pgbouncer=true&sslmode=require"
 
 // 🔒 Enforce SSL connections in production
 // 🔒 Use strong password (min 16 chars, alphanumeric + symbols)
@@ -478,129 +451,35 @@ npm update @prisma/client prisma
 
 ---
 
-## VPS Infrastructure Security
+## Vercel & Supabase Security
 
-### Docker Security
+### Environment Variables Audit
 
-**Docker Compose Configuration Audit:**
-```yaml
-# ✅ Verify: No privileged containers
-n8n-db:
-  image: postgis/postgis:15-3.4
-  container_name: n8n-db
-  privileged: false  # ✅ Must be false
-
-# ✅ Verify: Resource limits
-  deploy:
-    resources:
-      limits:
-        cpus: '1.0'
-        memory: 512M
-
-# ✅ Verify: No host network mode
-  network_mode: bridge  # ✅ Isolated network
-
-# ✅ Verify: Secrets not in environment
-  environment:
-    POSTGRES_PASSWORD: ${N8N_DB_PASSWORD}  # ✅ From .env
-    # ❌ POSTGRES_PASSWORD: "hardcoded-password"
-```
-
-**Container Isolation:**
 ```bash
-# ✅ Verify: Containers run as non-root user
-docker exec n8n-db whoami
-# Expected: postgres (not root)
-
-# ✅ Verify: Read-only root filesystem (where possible)
-docker inspect n8n-db | grep ReadonlyRootfs
-# Expected: "ReadonlyRootfs": true (for production)
-
-# ✅ Verify: No unnecessary capabilities
-docker inspect n8n-db | grep CapAdd
-# Expected: Empty or minimal capabilities
+# Verify no secrets in public env vars
+# NEXT_PUBLIC_* vars are visible in browser — never put secrets there
+# ✅ Safe: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
+# ❌ Never: NEXT_PUBLIC_DATABASE_URL, NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
 ```
 
----
+### Supabase Security Checklist
 
-### PostgreSQL Shared Security (n8n-db container)
+```sql
+-- Verify RLS is enabled on all user-owned tables
+SELECT tablename, rowsecurity
+FROM pg_tables
+WHERE schemaname = 'public'
+ORDER BY tablename;
 
-**Port Isolation:**
+-- All tables with user data should show rowsecurity = true
+```
+
+### Vercel Deployment Security
+
 ```bash
-# ✅ Verify: Port 5432 not exposed to internet
-sudo iptables -L -n | grep 5432
-# Expected: ACCEPT from specific IPs only, DROP all others
-
-# ✅ Verify: Database isolation within shared container
-# N8N database (n8n) and inmogrid database (inmogrid) isolated by user permissions
-```
-
-**PostgreSQL Configuration (postgresql.conf):**
-```ini
-# ✅ Enforce SSL connections
-ssl = on
-ssl_cert_file = '/var/lib/postgresql/server.crt'
-ssl_key_file = '/var/lib/postgresql/server.key'
-
-# ✅ Restrict listen addresses
-listen_addresses = 'localhost,VPS_IP_REDACTED'
-
-# ✅ Enable logging
-log_connections = on
-log_disconnections = on
-log_statement = 'ddl'  # Log schema changes
-
-# ✅ Password encryption
-password_encryption = scram-sha-256
-```
-
-**PostgreSQL Access Control (pg_hba.conf):**
-```
-# ✅ REQUIRED: SSL connections only
-# TYPE  DATABASE        USER            ADDRESS                 METHOD
-hostssl inmogrid      inmogrid_user      127.0.0.1/32            scram-sha-256
-hostssl inmogrid      inmogrid_user      ::1/128                 scram-sha-256
-hostssl inmogrid      inmogrid_user      0.0.0.0/0               scram-sha-256 # Production: Restrict to app server IP
-
-# ❌ UNSAFE: Allow all without SSL
-# host  inmogrid      inmogrid_user      0.0.0.0/0               md5
-```
-
----
-
-### Nginx Security
-
-**Nginx Configuration Audit:**
-```nginx
-# ✅ HTTPS enforcement
-server {
-  listen 80;
-  server_name inmogrid.cl;
-  return 301 https://$host$request_uri;
-}
-
-# ✅ SSL/TLS configuration
-server {
-  listen 443 ssl http2;
-  server_name inmogrid.cl;
-
-  ssl_certificate /etc/letsencrypt/live/inmogrid.cl/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/inmogrid.cl/privkey.pem;
-
-  # ✅ Strong SSL ciphers
-  ssl_protocols TLSv1.2 TLSv1.3;
-  ssl_ciphers 'ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256';
-  ssl_prefer_server_ciphers on;
-
-  # ✅ HSTS header
-  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-
-  # ✅ Rate limiting
-  limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
-  location /api/ {
-    limit_req zone=api_limit burst=20 nodelay;
-  }
-}
+# Check build logs for accidental secret exposure
+# Ensure NEXT_PUBLIC_* vars contain no secrets
+# Verify .env.local is gitignored (never committed)
 ```
 
 ---

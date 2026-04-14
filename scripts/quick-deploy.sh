@@ -14,7 +14,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # VPS connection details
-VPS_HOST="gabriel@VPS_IP_REDACTED"
+VPS_HOST="gabriel@<VPS_HOST>"
 VPS_DIR_APP="/home/gabriel/inmogrid.cl"
 VPS_DIR_DOCKER="/home/gabriel/vps-do"
 
