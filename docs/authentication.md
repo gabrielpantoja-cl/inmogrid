@@ -17,7 +17,7 @@ Para la decisión de tener un proyecto Google Cloud dedicado ver [ADR-002](adr/A
                                      2. 302 a accounts.google.com
                                                   │
 ┌──────────────┐  1. click       ┌────────────────┴───────────────┐
-│ inmogrid.cl  ├────────────────▶│  SUPABASE_PROJECT_REF.          │
+│ inmogrid.cl  ├────────────────▶│  <SUPABASE_PROJECT_REF>.          │
 │ /auth/login  │  signInWith     │  supabase.co/auth/v1/authorize  │
 └──────┬───────┘     OAuth       └────────────────┬───────────────┘
        │                                          │
@@ -73,7 +73,7 @@ El `redirectTo` que el cliente pasa a Supabase es siempre `${window.location.ori
 | Proyecto GCP | `inmogrid` | [console.cloud.google.com](https://console.cloud.google.com) — seleccionar en el selector superior |
 | OAuth Consent Screen | App name: `inmogrid`, Audience: External | GCP → Google Auth Platform → Información de la marca |
 | OAuth Client | Tipo: Web application, nombre: `Supabase Auth Client - inmogrid` | GCP → APIs y servicios → Credenciales |
-| Proyecto Supabase | `SUPABASE_PROJECT_REF` (compartido con pantojapropiedades.cl durante la transición) | [supabase.com/dashboard](https://supabase.com/dashboard) |
+| Proyecto Supabase | `<SUPABASE_PROJECT_REF>` (compartido con pantojapropiedades.cl durante la transición) | [supabase.com/dashboard](https://supabase.com/dashboard) |
 | Google provider en Supabase | Enabled, con Client ID/Secret del OAuth Client de arriba | Supabase → Authentication → Sign In / Providers → Google |
 | Site URL | `https://www.inmogrid.cl` | Supabase → Authentication → URL Configuration |
 | Redirect URLs allowlist | `https://www.inmogrid.cl/**`, `https://inmogrid.cl/**`, `http://localhost:3000/auth/callback` | Supabase → Authentication → URL Configuration |
@@ -85,7 +85,7 @@ Los valores sensibles (Project ID completo, Client ID, ubicación del Client Sec
 El OAuth Client de Google solo debe tener **una** entrada en "Authorized redirect URIs":
 
 ```
-https://SUPABASE_PROJECT_REF.supabase.co/auth/v1/callback
+https://<SUPABASE_PROJECT_REF>.supabase.co/auth/v1/callback
 ```
 
 Esto es intencional. Google no redirige directamente al dominio de la app: redirige al callback de Supabase, y Supabase a su vez redirige al `redirect_to` que le pasamos (validado contra la allowlist de Supabase). Por eso la allowlist vive en Supabase, no en Google.
@@ -101,7 +101,7 @@ En local corremos con `npm run dev` (puerto 3000 por default). Para que el login
 3. Las variables de entorno en `.env.local` deben apuntar al proyecto Supabase correcto:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://SUPABASE_PROJECT_REF.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://<SUPABASE_PROJECT_REF>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<ver repo privado>
 ```
 
@@ -118,12 +118,12 @@ node scripts/diagnose-auth-flow.mjs
 Salida esperada en un flujo sano:
 
 ```
-Supabase project host: SUPABASE_PROJECT_REF.supabase.co
+Supabase project host: <SUPABASE_PROJECT_REF>.supabase.co
 provider:               google
 redirect_to:            https://www.inmogrid.cl/auth/callback
 
-client_id:    546723795340-<resto>.apps.googleusercontent.com
-redirect_uri: https://SUPABASE_PROJECT_REF.supabase.co/auth/v1/callback
+client_id:    <GCP_PROJECT_NUMBER>-<...>.apps.googleusercontent.com
+redirect_uri: https://<SUPABASE_PROJECT_REF>.supabase.co/auth/v1/callback
 ```
 
 Si el `client_id` **no** empieza con el project number de `inmogrid`, es que el Google provider en Supabase está apuntando al OAuth Client equivocado.

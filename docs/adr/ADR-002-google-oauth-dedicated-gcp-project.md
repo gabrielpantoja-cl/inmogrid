@@ -9,9 +9,9 @@
 
 ## Contexto
 
-Hasta 2026-04-11 la autenticación Google de inmogrid.cl usaba el OAuth Client del proyecto Google Cloud `degux-cl` (project number `GCP_PROJECT_NUMBER_REDACTED`), heredado del ecosistema ancestor. Consecuencias observadas:
+Hasta 2026-04-11 la autenticación Google de inmogrid.cl usaba el OAuth Client del proyecto Google Cloud `degux-cl` (project number `<OLD_GCP_PROJECT_NUMBER>`), heredado del ecosistema ancestor. Consecuencias observadas:
 
-1. **Branding incorrecto en la consent screen**. Google mostraba un hostname técnico (`SUPABASE_PROJECT_REF.supabase.co`) o el nombre de proyectos vecinos en el diálogo "Acceder con Google" cuando el usuario venía de inmogrid.cl.
+1. **Branding incorrecto en la consent screen**. Google mostraba un hostname técnico (`<SUPABASE_PROJECT_REF>.supabase.co`) o el nombre de proyectos vecinos en el diálogo "Acceder con Google" cuando el usuario venía de inmogrid.cl.
 2. **Cliente con warning en GCP Console**. El "Cliente web degux.cl" aparecía con triángulo amarillo — deuda técnica heredada de una configuración previa.
 3. **OAuth Consent Screen único por proyecto**. Cada proyecto GCP tiene un solo consent screen; rebrandearlo a "inmogrid" habría roto la experiencia de los otros sitios que compartían el mismo Client ID.
 4. **Project ID inmutable**. No se puede renombrar el Project ID (`degux-cl` queda para siempre, solo el display name se puede editar).
@@ -28,7 +28,7 @@ Parámetros de la decisión:
 
 - **Proyecto GCP**:
   - Display name: `inmogrid`
-  - Organización: `gabrielpantoja.cl`
+  - Organización: (ver repo privado)
 - **OAuth Consent Screen**:
   - Audience: **External**
   - App name: `inmogrid`
@@ -36,8 +36,8 @@ Parámetros de la decisión:
   - App home / privacy / terms: `https://inmogrid.cl`, `/privacy`, `/terms`
 - **OAuth Client** (tipo Web application):
   - JavaScript origins: `https://inmogrid.cl`, `https://www.inmogrid.cl`
-  - Redirect URIs: `https://SUPABASE_PROJECT_REF.supabase.co/auth/v1/callback`
-- **Supabase URL Configuration** (proyecto `SUPABASE_PROJECT_REF`):
+  - Redirect URIs: `https://<SUPABASE_PROJECT_REF>.supabase.co/auth/v1/callback`
+- **Supabase URL Configuration** (proyecto `<SUPABASE_PROJECT_REF>`):
   - Site URL: `https://www.inmogrid.cl`
   - Redirect URLs allowlist: `https://www.inmogrid.cl/**`, `https://inmogrid.cl/**`, `http://localhost:3000/auth/callback`
 
@@ -58,7 +58,7 @@ Los IDs numéricos (Project ID, Client ID, Client Secret) no se documentan en es
 
 - **Ruptura intencional de auth en pantojapropiedades.cl y degux.cl**. Al reasignar el Site URL y limpiar la allowlist, estos sitios dejan de poder loguearse contra el proyecto Supabase compartido. Tradeoff aceptado: estos dominios serán dados de baja en días.
 - **El Client Secret del OAuth Client viejo de `degux-cl` sigue siendo técnicamente válido** hasta que se elimine manualmente. No representa riesgo porque ya nadie lo usa, pero queda como tarea de limpieza cuando se elimine el proyecto `degux-cl`.
-- **La separación de Supabase queda pendiente**. inmogrid todavía comparte el proyecto Supabase `SUPABASE_PROJECT_REF`. Cuando se cree un proyecto Supabase propio de inmogrid, hay que actualizar el redirect URI del OAuth Client para apuntar al nuevo hostname.
+- **La separación de Supabase queda pendiente**. inmogrid todavía comparte el proyecto Supabase `<SUPABASE_PROJECT_REF>`. Cuando se cree un proyecto Supabase propio de inmogrid, hay que actualizar el redirect URI del OAuth Client para apuntar al nuevo hostname.
 
 ## Alternativas consideradas
 

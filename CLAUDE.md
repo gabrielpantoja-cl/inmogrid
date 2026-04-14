@@ -210,8 +210,8 @@ Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. `NEON_DATABASE_URL
 
 - **Production**: Vercel (auto-deploy on push to `main`)
 - **DNS**: Cloudflare — `inmogrid.cl` A→`76.76.21.21`, `www` CNAME→`cname.vercel-dns.com`, proxy OFF
-- **Supabase project**: `SUPABASE_PROJECT_REF` (shared with pantojapropiedades.cl)
-- **N8N**: accessible at `N8N_HOST_REDACTED` (VPS DigitalOcean) — separate from Vercel web app
+- **Supabase project**: see `CLAUDE.local.md` (shared with pantojapropiedades.cl during transition)
+- **N8N**: accessible at `N8N_HOST_REDACTED` — separate from Vercel web app
 
 ## Sofia RAG Chatbot (ADR-006)
 
