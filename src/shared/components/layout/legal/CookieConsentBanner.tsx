@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Settings, Shield } from 'lucide-react';
 import { Button } from '@/shared/components/ui/primitives/button';
-import { Card } from '@/shared/components/ui/primitives/card';
 import { useCookieConsent } from './CookieConsentProvider';
 import { CookieCategoriesList } from './cookies/CookieCategoriesList';
 import { CookieModalShell } from './cookies/CookieModalShell';
@@ -46,46 +45,48 @@ export default function CookieConsentBanner() {
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 z-[100] p-4 bg-white border-t border-gray-200 shadow-lg">
-        <Card className="max-w-6xl mx-auto p-6">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <Shield className="h-5 w-5 text-yellow-600" />
-              <h3 className="font-semibold text-gray-900">inmogrid.cl usa cookies</h3>
-            </div>
-            <p className="text-sm text-gray-600 mb-4">
-              Utilizamos cookies esenciales para el funcionamiento del sitio y cookies
-              opcionales para análisis y mejoras. Puedes configurar tus preferencias o
-              aceptar todas las cookies.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Button
-                onClick={handleAcceptAll}
-                className="bg-yellow-500 hover:bg-yellow-400 text-white px-6"
-              >
-                Aceptar todas
-              </Button>
-              <Button onClick={handleRejectAll} variant="outline" className="px-6">
-                Solo esenciales
-              </Button>
-              <Button
-                onClick={() => setShowPreferences(true)}
-                variant="outline"
-                className="px-6"
-              >
-                <Settings className="h-4 w-4 mr-2" />
-                Configurar
-              </Button>
-            </div>
-            <p className="text-xs text-gray-500 mt-3">
-              Al usar este sitio, acepta nuestras{' '}
-              <Link href="/privacy" className="text-yellow-600 hover:underline">
-                Políticas de Privacidad
-              </Link>{' '}
-              conforme a la Ley 21.719 de Chile.
-            </p>
+      <div className="fixed bottom-0 left-0 right-0 z-[100] bg-background border-t-2 border-primary/40 shadow-xl">
+        <div className="max-w-6xl mx-auto px-4 py-4 md:px-6 md:py-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Shield className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-foreground">inmogrid.cl usa cookies</h3>
           </div>
-        </Card>
+          <p className="text-sm text-foreground/75 mb-4">
+            Utilizamos cookies esenciales para el funcionamiento del sitio y cookies
+            opcionales para análisis y mejoras. Puedes configurar tus preferencias o
+            aceptar todas las cookies.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={handleAcceptAll}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
+            >
+              Aceptar todas
+            </Button>
+            <Button
+              onClick={handleRejectAll}
+              variant="outline"
+              className="px-6 border-foreground/30 hover:border-foreground/50 hover:bg-foreground/5"
+            >
+              Solo esenciales
+            </Button>
+            <Button
+              onClick={() => setShowPreferences(true)}
+              variant="outline"
+              className="px-6 border-foreground/30 hover:border-foreground/50 hover:bg-foreground/5"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Configurar
+            </Button>
+          </div>
+          <p className="text-xs text-foreground/60 mt-3">
+            Al usar este sitio, acepta nuestras{' '}
+            <Link href="/privacy" className="text-primary hover:underline font-medium">
+              Políticas de Privacidad
+            </Link>{' '}
+            conforme a la Ley 21.719 de Chile.
+          </p>
+        </div>
       </div>
 
       {showPreferences && (
@@ -98,19 +99,19 @@ export default function CookieConsentBanner() {
               <div className="flex gap-3">
                 <Button
                   onClick={handleSavePreferences}
-                  className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-white py-3 font-semibold"
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground py-3 font-semibold"
                 >
                   Guardar Preferencias
                 </Button>
                 <Button
                   onClick={() => setShowPreferences(false)}
                   variant="outline"
-                  className="px-8 py-3 border-gray-300 hover:bg-gray-100"
+                  className="px-8 py-3 border-foreground/30 hover:bg-foreground/5"
                 >
                   Cancelar
                 </Button>
               </div>
-              <p className="text-xs text-gray-500 mt-3 text-center">
+              <p className="text-xs text-foreground/60 mt-3 text-center">
                 Puede cambiar estas preferencias en cualquier momento desde el footer.
               </p>
             </>
