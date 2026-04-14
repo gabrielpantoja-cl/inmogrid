@@ -43,7 +43,7 @@ You are the data ingestion specialist for the **inmogrid.cl** project (P&P Techn
 
 ## Tools Available
 
-- N8N web interface access (http://VPS_IP_REDACTED:5678)
+- N8N web interface access (https://N8N_HOST_REDACTED)
 - File read/write tools for processing various data formats
 - Bash tools for running data processing scripts
 - PostgreSQL shared access for data insertion (port 5432, inmogrid database)

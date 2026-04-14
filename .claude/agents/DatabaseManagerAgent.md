@@ -19,7 +19,7 @@ You are a database specialist for the **inmogrid.cl** project. Your primary resp
 
 **PROJECT CONTEXT:**
 - **Platform**: inmogrid.cl - Personal branding + professional networking ecosystem
-- **Database**: Supabase PostgreSQL (project: `SUPABASE_PROJECT_REF`)
+- **Database**: Supabase PostgreSQL (see CLAUDE.local.md for project ref)
 - **Shared DB**: inmogrid.cl and pantojapropiedades.cl share the same Supabase instance during transition — do NOT drop or rename shared tables without coordination
 - **ORM**: Prisma (migrations via manual SQL in Supabase dashboard, NOT `prisma migrate`)
 - **Auth**: Supabase Auth (Google OAuth) — NO NextAuth models in schema
@@ -48,52 +48,14 @@ You are a database specialist for the **inmogrid.cl** project. Your primary resp
 - Docker Compose management (coordination with Infrastructure Agent)
 - Backup scripts and cron configuration
 
-## PostgreSQL Shared Architecture
+## Database Architecture
 
-### Infrastructure Setup
+inmogrid.cl uses **two backends**:
+- **Supabase**: Primary database via Prisma ORM (profiles, posts, connections, events, chat)
+- **Neon**: Read-only PostgreSQL + PostGIS for verified referenciales (6,600+ records)
 
-**VPS Configuration:**
-```yaml
-# Docker Compose Service (Shared with N8N)
-n8n-db:
-  image: postgis/postgis:15-3.4
-  container_name: n8n-db
-  ports:
-    - "5432:5432"  # Port 5432 shared
-  volumes:
-    - n8n_db_data:/var/lib/postgresql/data
-    - ./backups:/backups
-  environment:
-    POSTGRES_USER: n8n
-    POSTGRES_PASSWORD: ${N8N_DB_PASSWORD}
-  networks:
-    - vps_network
-  restart: unless-stopped
-  healthcheck:
-    test: ["CMD-SHELL", "pg_isready -U n8n"]
-    interval: 10s
-    timeout: 5s
-    retries: 5
-```
-
-**Database Isolation Strategy:**
-- **Container**: `n8n-db` (shared PostgreSQL server)
-- **Port 5432**: Single PostgreSQL instance
-- **Database `n8n`**: N8N workflows and scrapers (owner: `n8n`)
-- **Database `inmogrid`**: inmogrid.cl application data (owner: `inmogrid_user`)
-- **User isolation**: Each database has its own owner with restricted permissions
-
-**Resource Allocation:**
-- Shared PostgreSQL instance (efficient resource usage)
-- PostGIS extension available for `inmogrid` database
-- Automated daily backups at 3 AM (cron) - both databases
-- Backup retention: 7 daily, 4 weekly, 6 monthly
-
-**Connection String:**
-```env
-# inmogrid database connection
-POSTGRES_PRISMA_URL="postgresql://inmogrid_user:PASSWORD@VPS_IP_REDACTED:5432/inmogrid?schema=public"
-```
+Migrations: edit `prisma/schema.prisma` → `prisma:generate` → paste SQL in Supabase dashboard.
+No `prisma migrate` commands. No VPS/Docker database.
 
 ---
 
@@ -102,11 +64,14 @@ POSTGRES_PRISMA_URL="postgresql://inmogrid_user:PASSWORD@VPS_IP_REDACTED:5432/in
 ### Phase-Based Schema Evolution
 
 **Current State (Phase 1):**
-- ✅ NextAuth.js models (User, Account, Session, VerificationToken)
-- ✅ User profile extensions (bio, profession, company, linkedin, etc.)
-- ✅ Property model (multi-tenant properties linked to users)
-- ✅ Connection model (networking between professionals)
-- ✅ Existing referenciales table (CBR transaction data)
+- ✅ Profile model (inmogrid_profiles) — Supabase Auth user data
+- ✅ Post model (shared with pantojapropiedades.cl)
+- ✅ Connection model (inmogrid_connections)
+- ✅ Event model (inmogrid_events)
+- ✅ ChatMessage model (inmogrid_chat_messages)
+- ✅ AuditLog model (inmogrid_audit_logs)
+- ✅ ProfessionalProfile model
+- ✅ Contribution model (inmogrid_contributions — user submissions)
 
 **Phase 1 Models (User Profiles):**
 ```prisma
@@ -575,72 +540,26 @@ LIMIT 20;
 
 ---
 
-## Backup and Recovery Strategy
+## Backup Strategy
 
-### Automated Backup Configuration
-
-**Cron Job (3 AM daily):**
-```bash
-#!/bin/bash
-# /home/gabriel/vps-do/inmogrid/scripts/backup-db.sh
-
-TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-BACKUP_DIR="/home/gabriel/vps-do/inmogrid/backups"
-CONTAINER="n8n-db"
-
-# Create backup (inmogrid database only)
-docker exec $CONTAINER pg_dump -U inmogrid_user inmogrid | gzip > \
-  "$BACKUP_DIR/inmogrid_$TIMESTAMP.sql.gz"
-
-# Retention policy: Keep 7 daily, 4 weekly, 6 monthly
-find "$BACKUP_DIR" -name "inmogrid_*.sql.gz" -mtime +7 -delete
-```
-
-**Crontab Entry:**
-```cron
-0 3 * * * /home/gabriel/vps-do/inmogrid/scripts/backup-db.sh >> /var/log/inmogrid-backup.log 2>&1
-```
-
-**Restore Procedure:**
-```bash
-# Restore from backup
-gunzip -c backups/inmogrid_20250930_030000.sql.gz | \
-  docker exec -i n8n-db psql -U inmogrid_user inmogrid
-```
+- **Supabase**: Automatic point-in-time recovery via Supabase dashboard (free tier: 7 days)
+- **Neon**: Automatic backups via Neon dashboard
+- No manual backup scripts needed — managed services handle this
 
 ---
 
 ## Migration Management
 
-### Prisma Migrations for Production
-
 **Development Workflow:**
 ```bash
 # Schema changes in prisma/schema.prisma
-npx prisma db push  # Apply to development DB
-
-# Test changes locally
-npm run dev
-
-# Generate migration for production
-npx prisma migrate dev --name add_property_geom_column
+npx prisma generate   # Regenerate client
+# Paste generated SQL in Supabase SQL editor (no prisma migrate)
+npm run dev           # Test changes locally
 ```
 
 **Production Deployment:**
-```bash
-# On VPS, apply migrations
-cd ~/vps-do/inmogrid
-docker-compose exec inmogrid-app npx prisma migrate deploy
-
-# Verify migration
-docker-compose exec n8n-db psql -U inmogrid_user inmogrid -c "\dt"
-```
-
-**Migration Best Practices:**
-- Always backup before migrations
-- Test migrations on development database first
-- Use transactions for data transformations
-- Document breaking changes in migration files
+Vercel auto-deploys on push to main. Run `prisma generate` in build step (already configured).
 
 ---
 
