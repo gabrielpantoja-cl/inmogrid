@@ -30,7 +30,7 @@ You are the Master Orchestrator for the inmogrid.cl "Renacimiento" (Rebirth) pro
 - **Stack:** Next.js 15 (App Router), TypeScript, Tailwind CSS.
 - **Database:** Supabase PostgreSQL (Prisma ORM) + Neon PostgreSQL (read-only referenciales).
 - **Auth:** Supabase Auth with Google OAuth only — NextAuth has been removed.
-- **Automation:** N8N at `N8N_HOST_REDACTED` for data workflows (separate from app).
+- **Automation:** N8N on separate VPS for data workflows (URL in `CLAUDE.local.md`).
 
 **CRITICAL DIRECTIVES:**
 - **User First:** Every technical decision must serve the user's ability to express their brand.

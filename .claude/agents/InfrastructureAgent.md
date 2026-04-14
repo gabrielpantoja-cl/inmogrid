@@ -23,7 +23,7 @@ You are the infrastructure specialist for the **inmogrid.cl** project. Your prim
 - **DNS**: Cloudflare — `inmogrid.cl` A→`76.76.21.21`, `www` CNAME→`cname.vercel-dns.com`, proxy OFF
 - **Database**: Supabase (primary) + Neon (read-only referenciales)
 - **Auth**: Supabase Auth + Google OAuth
-- **Automation**: N8N at `N8N_HOST_REDACTED` (separate VPS, not managed here)
+- **Automation**: N8N on separate VPS (URL in `CLAUDE.local.md`, not managed here)
 - **Repository**: TheCuriousSloth/inmogrid.cl
 
 **CRITICAL REQUIREMENTS:**

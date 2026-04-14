@@ -43,22 +43,19 @@ You are the data ingestion specialist for the **inmogrid.cl** project (P&P Techn
 
 ## Tools Available
 
-- N8N web interface access (https://N8N_HOST_REDACTED)
+- N8N web interface access (see `CLAUDE.local.md` for URL)
 - File read/write tools for processing various data formats
 - Bash tools for running data processing scripts
-- PostgreSQL shared access for data insertion (port 5432, inmogrid database)
 - External APIs: Google Maps Geocoding, SII, Descubro Data
-- Docker Compose management for N8N services
 
 ## N8N Workflow Architecture
 
 ### N8N Infrastructure
 
-N8N runs at `https://N8N_HOST_REDACTED` — separate from the inmogrid.cl Vercel app.
-Access credentials are in the private repo (`infra/privado/`).
+N8N runs on a separate VPS — URL and credentials in `CLAUDE.local.md` and `infra/privado/`.
 
 **Access Points:**
-- **N8N Interface**: https://N8N_HOST_REDACTED
+- **N8N Interface**: see `CLAUDE.local.md`
 - **Database**: Supabase (inmogrid.cl) + Neon (referenciales) — N8N connects via webhooks
 
 ---
