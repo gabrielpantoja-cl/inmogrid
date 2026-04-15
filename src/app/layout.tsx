@@ -19,6 +19,7 @@ import {
 } from '@/shared/components/layout/legal/ConditionalAnalytics';
 import Footer from '@/shared/components/layout/common/Footer';
 import { GitHubStarsSimple } from '@/features/github-stars/components';
+import VersionChecker from '@/shared/components/VersionChecker';
 
 // Configuración del Viewport
 export const viewport: Viewport = {
@@ -178,6 +179,9 @@ export default function RootLayout({
 
           {/* Banner de consentimiento de cookies */}
           <CookieConsentBanner />
+
+          {/* Detecta deploys nuevos y prompt de reload — ver VersionChecker.tsx */}
+          <VersionChecker />
 
         </CookieConsentProvider>
       </body>
