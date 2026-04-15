@@ -28,28 +28,56 @@ export function useAuth() {
   const supabase = createClient()
 
   useEffect(() => {
-    // Subscribe to auth state changes (covers initial load + login/logout events)
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    let mounted = true
+
+    // Helper: resuelve user + profile a partir de una sesión (o null) y apaga
+    // el loader. Se usa tanto en el bootstrap inicial como en cambios de auth.
+    const applySession = async (session: Awaited<ReturnType<typeof supabase.auth.getSession>>['data']['session']) => {
+      if (!mounted) return
       const currentUser = session?.user ?? null
       setUser(currentUser)
 
       if (currentUser) {
-        const { data } = await supabase
-          .from('inmogrid_profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single()
-        setProfile(data ?? null)
+        try {
+          const { data } = await supabase
+            .from('inmogrid_profiles')
+            .select('*')
+            .eq('id', currentUser.id)
+            .single()
+          if (mounted) setProfile(data ?? null)
+        } catch {
+          if (mounted) setProfile(null)
+        }
       } else {
         setProfile(null)
       }
 
-      setIsLoading(false)
+      if (mounted) setIsLoading(false)
+    }
+
+    // 1. Bootstrap inmediato con getSession(). No confiamos solo en
+    //    onAuthStateChange porque su evento INITIAL_SESSION no dispara
+    //    confiablemente en algunos escenarios (tabs múltiples, hydration
+    //    con storage stale). Sin esto, el skeleton se queda colgado.
+    supabase.auth.getSession().then(({ data }) => applySession(data.session))
+
+    // 2. Red de seguridad: si nada resuelve en 3s asumimos sin sesión y
+    //    apagamos el loader. Mejor un botón de login que un skeleton
+    //    infinito si hay un bug del SDK o problemas de red.
+    const safetyTimeout = setTimeout(() => {
+      if (mounted) setIsLoading(false)
+    }, 3000)
+
+    // 3. Suscripción a cambios futuros (login/logout/refresh en otra tab).
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      void applySession(session)
     })
 
     return () => {
+      mounted = false
+      clearTimeout(safetyTimeout)
       subscription.unsubscribe()
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
