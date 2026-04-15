@@ -40,6 +40,8 @@ export interface MapDataResponse {
   data: Referencial[];
   metadata: {
     total: number;
+    /** Total real de registros en la BD (sin LIMIT aplicado) */
+    dbTotal?: number;
     filters: { comuna: string | null; anio: number | null; limit: number | null };
     timestamp: string;
     center: [number, number];

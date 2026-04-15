@@ -33,6 +33,7 @@ export default function ReferencialesPage() {
   const [comunas, setComunas] = useState<Comuna[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dbTotal, setDbTotal] = useState<number | null>(null);
 
   const [selectedComuna, setSelectedComuna] = useState<string>('');
   const [selectedAnio, setSelectedAnio] = useState<string>('');
@@ -59,6 +60,7 @@ export default function ReferencialesPage() {
         limit: 20000,
       });
       setReferenciales(res.data ?? []);
+      if (res.metadata.dbTotal != null) setDbTotal(res.metadata.dbTotal);
     } catch (e) {
       setError(
         e instanceof Error
@@ -142,10 +144,22 @@ export default function ReferencialesPage() {
           </div>
         </div>
 
-        <div className="mt-3 text-xs text-gray-500">
-          {loading
-            ? 'Cargando datos…'
-            : `${referenciales.length.toLocaleString('es-CL')} registros de todo Chile`}
+        <div className="mt-3 text-xs text-gray-500 space-y-0.5">
+          {loading ? (
+            <span>Cargando datos…</span>
+          ) : (
+            <>
+              <span>
+                Mostrando{' '}
+                <strong>{referenciales.length.toLocaleString('es-CL')}</strong> registros
+                {dbTotal != null && dbTotal > referenciales.length && (
+                  <> de un total de{' '}
+                    <strong>{dbTotal.toLocaleString('es-CL')}</strong> en la base de datos
+                  </>
+                )}
+              </span>
+            </>
+          )}
         </div>
 
         {error && (

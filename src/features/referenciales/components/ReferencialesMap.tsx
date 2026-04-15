@@ -10,6 +10,7 @@ interface Props {
   referenciales: Referencial[];
   center?: [number, number];
   zoom?: number;
+  onReport?: (r: Referencial) => void;
 }
 
 /** Ajusta el viewport del mapa a los datos cargados */
@@ -30,7 +31,13 @@ function FitBounds({ points }: { points: Referencial[] }) {
 
 type PointProps = { referencial: Referencial };
 
-function ClusteredMarkers({ points }: { points: Referencial[] }) {
+function ClusteredMarkers({
+  points,
+  onReport,
+}: {
+  points: Referencial[];
+  onReport?: (r: Referencial) => void;
+}) {
   const map = useMap();
 
   const [viewport, setViewport] = useState(() => {
@@ -142,6 +149,14 @@ function ClusteredMarkers({ points }: { points: Referencial[] }) {
                 {r.fechaescritura && (
                   <div className="text-xs text-gray-500">Escritura: {r.fechaescritura}</div>
                 )}
+                {onReport && (
+                  <button
+                    onClick={() => onReport(r)}
+                    className="mt-2 w-full rounded border border-red-200 bg-red-50 px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-100"
+                  >
+                    ⚠ Reportar dato dudoso
+                  </button>
+                )}
               </div>
             </Popup>
           </CircleMarker>
@@ -155,6 +170,7 @@ export default function ReferencialesMap({
   referenciales,
   center = [-33.4489, -70.6693],
   zoom = 10,
+  onReport,
 }: Props) {
   const valid = useMemo(
     () => referenciales.filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lng)),
@@ -173,7 +189,7 @@ export default function ReferencialesMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <FitBounds points={valid} />
-      <ClusteredMarkers points={valid} />
+      <ClusteredMarkers points={valid} onReport={onReport} />
     </MapContainer>
   );
 }

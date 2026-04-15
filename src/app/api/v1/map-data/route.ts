@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { comuna, anio, limit } = parsed.data;
-    const { data, total } = await queryMapData({ comuna, anio, limit });
+    const { data, total, dbTotal } = await queryMapData({ comuna, anio, limit });
 
     return NextResponse.json(
       {
@@ -39,6 +39,7 @@ export async function GET(request: NextRequest) {
         data,
         metadata: {
           total,
+          dbTotal,
           filters: {
             comuna: comuna ?? null,
             anio: anio ?? null,

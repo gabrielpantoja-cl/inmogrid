@@ -65,34 +65,49 @@ export async function queryMapData(params: {
   comuna?: string;
   anio?: number;
   limit?: number;
-}): Promise<{ data: MapPointResponse[]; total: number }> {
+}): Promise<{ data: MapPointResponse[]; total: number; dbTotal: number }> {
   const { comuna, anio, limit = 20000 } = params;
 
   const sql = getNeonDb();
-  const rows = await sql`
-    SELECT
-      id,
-      COALESCE(ST_Y(geom), lat) as lat,
-      COALESCE(ST_X(geom), lng) as lng,
-      fojas, numero, anio, cbr, predio, comuna, rol,
-      fechaescritura, superficie,
-      monto::text as monto,
-      observaciones
-    FROM referenciales
-    WHERE (COALESCE(ST_Y(geom), lat)) IS NOT NULL
-      AND (COALESCE(ST_X(geom), lng)) IS NOT NULL
-      AND COALESCE(ST_Y(geom), lat) BETWEEN -90 AND 90
-      AND COALESCE(ST_X(geom), lng) BETWEEN -180 AND 180
-      AND (${comuna ?? null}::text IS NULL OR LOWER(comuna) = LOWER(${comuna ?? null}))
-      AND (${anio ?? null}::int IS NULL OR anio = ${anio ?? null})
-    ORDER BY fechaescritura DESC
-    LIMIT ${limit}
-  `;
+
+  // Run data query and total count in parallel for performance
+  const [rows, countRows] = await Promise.all([
+    sql`
+      SELECT
+        id,
+        COALESCE(ST_Y(geom), lat) as lat,
+        COALESCE(ST_X(geom), lng) as lng,
+        fojas, numero, anio, cbr, predio, comuna, rol,
+        fechaescritura, superficie,
+        monto::text as monto,
+        observaciones
+      FROM referenciales
+      WHERE (COALESCE(ST_Y(geom), lat)) IS NOT NULL
+        AND (COALESCE(ST_X(geom), lng)) IS NOT NULL
+        AND COALESCE(ST_Y(geom), lat) BETWEEN -90 AND 90
+        AND COALESCE(ST_X(geom), lng) BETWEEN -180 AND 180
+        AND (${comuna ?? null}::text IS NULL OR LOWER(comuna) = LOWER(${comuna ?? null}))
+        AND (${anio ?? null}::int IS NULL OR anio = ${anio ?? null})
+      ORDER BY fechaescritura DESC
+      LIMIT ${limit}
+    `,
+    sql`
+      SELECT COUNT(*)::int as total
+      FROM referenciales
+      WHERE (COALESCE(ST_Y(geom), lat)) IS NOT NULL
+        AND (COALESCE(ST_X(geom), lng)) IS NOT NULL
+        AND COALESCE(ST_Y(geom), lat) BETWEEN -90 AND 90
+        AND COALESCE(ST_X(geom), lng) BETWEEN -180 AND 180
+        AND (${comuna ?? null}::text IS NULL OR LOWER(comuna) = LOWER(${comuna ?? null}))
+        AND (${anio ?? null}::int IS NULL OR anio = ${anio ?? null})
+    `,
+  ]);
 
   const validated = rows.map((row) => MapPointRowSchema.parse(row));
   const data = validated.map(toResponsePoint);
+  const dbTotal = (countRows[0]?.total as number) ?? 0;
 
-  return { data, total: data.length };
+  return { data, total: data.length, dbTotal };
 }
 
 /**

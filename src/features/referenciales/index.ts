@@ -3,6 +3,7 @@
 
 export { default as ReferencialesMap } from './components/ReferencialesMap';
 export { default as ReferencialesStats } from './components/ReferencialesStats';
+export { default as ReportModal } from './components/ReportModal';
 export {
   fetchReferenciales,
   fetchComunas,

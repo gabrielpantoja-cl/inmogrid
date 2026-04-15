@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import {
   fetchReferenciales,
   fetchComunas,
+  ReportModal,
   type Referencial,
 } from '@/features/referenciales';
 import { ReferencialesStats } from '@/features/referenciales';
@@ -58,6 +59,7 @@ export default function DashboardReferencialesContent() {
   const [comunas, setComunas] = useState<Comuna[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dbTotal, setDbTotal] = useState<number | null>(null);
   const [selectedComuna, setSelectedComuna] = useState('');
   const [selectedAnio, setSelectedAnio] = useState('');
 
@@ -82,6 +84,7 @@ export default function DashboardReferencialesContent() {
         limit: 20000,
       });
       setReferenciales(res.data ?? []);
+      if (res.metadata.dbTotal != null) setDbTotal(res.metadata.dbTotal);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error al cargar datos.');
       setReferenciales([]);
@@ -118,11 +121,20 @@ export default function DashboardReferencialesContent() {
     if (activeTab === 'mis-contribuciones') loadContributions();
   }, [activeTab, loadContributions]);
 
-  // ─── Modal ──────────────────────────────────────────────────
+  // ─── Modal contribución ─────────────────────────────────────
   const [showModal, setShowModal] = useState(false);
 
   const handleSuccess = () => {
     setShowModal(false);
+    loadContributions();
+    setActiveTab('mis-contribuciones');
+  };
+
+  // ─── Modal reporte ──────────────────────────────────────────
+  const [reportTarget, setReportTarget] = useState<Referencial | null>(null);
+
+  const handleReportSuccess = () => {
+    setReportTarget(null);
     loadContributions();
     setActiveTab('mis-contribuciones');
   };
@@ -217,9 +229,19 @@ export default function DashboardReferencialesContent() {
               </div>
             </div>
             <div className="mt-3 text-xs text-gray-500">
-              {loading
-                ? 'Cargando datos…'
-                : `${referenciales.length.toLocaleString('es-CL')} registros de todo Chile`}
+              {loading ? (
+                <span>Cargando datos…</span>
+              ) : (
+                <span>
+                  Mostrando{' '}
+                  <strong>{referenciales.length.toLocaleString('es-CL')}</strong> registros
+                  {dbTotal != null && dbTotal > referenciales.length && (
+                    <> de un total de{' '}
+                      <strong>{dbTotal.toLocaleString('es-CL')}</strong> en la base de datos
+                    </>
+                  )}
+                </span>
+              )}
             </div>
             {error && (
               <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
@@ -232,7 +254,7 @@ export default function DashboardReferencialesContent() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <div className="relative h-[600px] overflow-hidden rounded-xl border border-gray-200 bg-white">
-                <ReferencialesMap referenciales={referenciales} />
+                <ReferencialesMap referenciales={referenciales} onReport={setReportTarget} />
                 {loading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
                     <div className="text-sm font-medium text-gray-700">Cargando…</div>
@@ -373,6 +395,15 @@ export default function DashboardReferencialesContent() {
         <ContributeModal
           onClose={() => setShowModal(false)}
           onSuccess={handleSuccess}
+        />
+      )}
+
+      {/* Modal reporte */}
+      {reportTarget && (
+        <ReportModal
+          referencial={reportTarget}
+          onClose={() => setReportTarget(null)}
+          onSuccess={handleReportSuccess}
         />
       )}
     </div>
