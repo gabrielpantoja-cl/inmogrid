@@ -5,6 +5,7 @@ import {
   UserCircleIcon,
   DocumentTextIcon,
   UsersIcon,
+  MapIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -15,6 +16,11 @@ const links = [
     name: 'Mi Perfil',
     href: '/dashboard/perfil',
     icon: UserCircleIcon,
+  },
+  {
+    name: 'Referenciales',
+    href: '/dashboard/referenciales',
+    icon: MapIcon,
   },
   {
     name: 'Mis Publicaciones',

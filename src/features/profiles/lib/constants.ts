@@ -7,13 +7,17 @@
 
 export const PROFESSION_OPTIONS = [
   { value: '', label: 'Selecciona una opción' },
-  { value: 'CORREDOR', label: 'Corredor de Propiedades' },
-  { value: 'TASADOR', label: 'Tasador / Perito' },
+  { value: 'TASADOR_PERITO', label: 'Tasador / Perito' },
+  { value: 'PERITO_JUDICIAL', label: 'Perito Judicial' },
+  { value: 'CORREDOR_PROPIEDADES', label: 'Corredor de Propiedades' },
+  { value: 'ADMINISTRADOR_PROP', label: 'Administrador de Propiedades' },
+  { value: 'ABOGADO_INMOBILIARIO', label: 'Abogado Inmobiliario' },
   { value: 'ARQUITECTO', label: 'Arquitecto' },
-  { value: 'CONSTRUCTOR', label: 'Constructor' },
-  { value: 'INGENIERO', label: 'Ingeniero' },
+  { value: 'INGENIERO_CIVIL', label: 'Ingeniero Civil' },
+  { value: 'ACADEMICO', label: 'Académico' },
+  { value: 'FUNCIONARIO_PUBLICO', label: 'Funcionario Público' },
   { value: 'INVERSIONISTA', label: 'Inversionista' },
-  { value: 'ABOGADO', label: 'Abogado' },
+  { value: 'PROPIETARIO', label: 'Propietario' },
   { value: 'OTRO', label: 'Otro' },
 ] as const;
 
