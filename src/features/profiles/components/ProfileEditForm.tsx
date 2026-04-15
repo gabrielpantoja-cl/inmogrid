@@ -107,8 +107,8 @@ export default function ProfileEditForm({ user }: ProfileEditFormProps) {
 
   return (
     <div className="space-y-8">
-      {/* Banner de perfil público — siempre visible arriba */}
-      <ProfileUrlBanner username={user.username} isPublic={formData.isPublicProfile} />
+      {/* Banner de perfil público — usa el username del form para preview en tiempo real */}
+      <ProfileUrlBanner username={formData.username || user.username} isPublic={formData.isPublicProfile} />
 
       <AvatarUpload
         userId={user.id}

@@ -1,6 +1,41 @@
 import { createClient } from '@/shared/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+/**
+ * Genera un username único a partir del nombre completo o email del usuario.
+ * Intenta hasta maxAttempts veces añadiendo sufijos aleatorios si hay colisión.
+ */
+async function generateUniqueUsername(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  fullName: string | null,
+  email: string,
+  maxAttempts = 5
+): Promise<string> {
+  const base = (fullName ?? email.split('@')[0])
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // quitar tildes
+    .replace(/[^a-z0-9]/g, '')       // solo alfanumérico
+    .slice(0, 18) || 'usuario';
+
+  for (let i = 0; i < maxAttempts; i++) {
+    const suffix = Math.random().toString(36).slice(2, 6); // 4 chars aleatorios
+    const candidate = i === 0 ? base : `${base}${suffix}`;
+    if (candidate.length < 3) continue;
+
+    const { data } = await supabase
+      .from('inmogrid_profiles')
+      .select('id')
+      .eq('username', candidate)
+      .maybeSingle();
+
+    if (!data) return candidate; // libre
+  }
+
+  // Fallback garantizado con timestamp
+  return `user${Date.now().toString(36).slice(-6)}`;
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
@@ -19,10 +54,17 @@ export async function GET(request: Request) {
         .single()
 
       if (!existingProfile) {
+        const username = await generateUniqueUsername(
+          supabase,
+          data.user.user_metadata?.full_name ?? null,
+          data.user.email ?? 'usuario'
+        )
+
         const { error: insertError } = await supabase
           .from('inmogrid_profiles')
           .insert({
             id: data.user.id,
+            username,
             full_name: data.user.user_metadata?.full_name ?? null,
             avatar_url: data.user.user_metadata?.avatar_url ?? null,
           })

@@ -8,7 +8,26 @@ import { getUser } from '@/shared/lib/supabase/auth';
 import { z } from 'zod';
 import { ProfessionType } from '@prisma/client';
 
+const USERNAME_RESERVED = new Set([
+  'referenciales', 'sofia', 'notas', 'terms', 'privacy',
+  'dashboard', 'api', 'auth', 'admin', 'login', 'logout',
+  'settings', 'register', 'explorar', 'comunidad', 'feed',
+  'perfil', 'about', 'blog', 'help', 'support', 'contact',
+  'inmogrid', 'root', 'www', 'mail', 'email',
+]);
+
 const profileUpdateSchema = z.object({
+  username: z
+    .string()
+    .min(3, 'El username debe tener al menos 3 caracteres')
+    .max(30, 'El username no puede exceder 30 caracteres')
+    .toLowerCase()
+    .regex(
+      /^[a-z0-9][a-z0-9_-]{1,28}[a-z0-9]$/,
+      'Solo letras minúsculas, números, guiones y guiones bajos. No puede empezar ni terminar con guión.'
+    )
+    .refine((v) => !USERNAME_RESERVED.has(v), { message: 'Este username está reservado' })
+    .optional(),
   fullName: z.string().min(1, 'El nombre es requerido').max(100).optional(),
   bio: z.string().max(500, 'La biografía no puede exceder 500 caracteres').nullable().optional(),
   tagline: z.string().max(100, 'El tagline no puede exceder 100 caracteres').nullable().optional(),

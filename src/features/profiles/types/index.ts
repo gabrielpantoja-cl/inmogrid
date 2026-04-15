@@ -20,6 +20,7 @@ export interface ProfileUser {
 }
 
 export interface ProfileFormData {
+  username: string;
   fullName: string;
   bio: string;
   tagline: string;

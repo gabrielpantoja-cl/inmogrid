@@ -6,6 +6,7 @@ import type { ProfileUser, ProfileFormData } from '../types';
 
 function initialFormData(user: ProfileUser): ProfileFormData {
   return {
+    username: user.username || '',
     fullName: user.fullName || '',
     bio: user.bio || '',
     tagline: user.tagline || '',
