@@ -44,23 +44,41 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   }
 
   // Obtener posts recientes (solo publicados)
-  const posts = await prisma.post.findMany({
-    where: {
-      userId: profile.id,
-      published: true,
-    },
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      excerpt: true,
-      coverImageUrl: true,
-      tags: true,
-      publishedAt: true,
-    },
-    orderBy: { publishedAt: 'desc' },
-    take: 3,
-  });
+  // Guard: la tabla `posts` es compartida con pantojapropiedades.cl y puede
+  // estar desincronizada con el schema de Prisma (columnas faltantes). Si la
+  // consulta falla por P2022 (column does not exist), se devuelve [] para que
+  // el perfil se muestre igualmente sin la sección de notas.
+  let posts: {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    coverImageUrl: string | null;
+    tags: string[];
+    publishedAt: Date | null;
+  }[] = [];
+  try {
+    posts = await prisma.post.findMany({
+      where: {
+        userId: profile.id,
+        published: true,
+      },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        coverImageUrl: true,
+        tags: true,
+        publishedAt: true,
+      },
+      orderBy: { publishedAt: 'desc' },
+      take: 3,
+    });
+  } catch (err) {
+    // Columnas del schema aún no migradas — la página se muestra sin notas
+    console.error('[ProfilePage] posts query failed:', err instanceof Error ? err.message : err);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
