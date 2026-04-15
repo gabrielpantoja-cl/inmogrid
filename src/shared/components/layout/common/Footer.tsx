@@ -17,7 +17,15 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
             inmogrid.cl
           </Link>
           <span className="text-xs text-gray-400">
-            &copy; 2011&ndash;{new Date().getFullYear()} inmogrid
+            Desarrollado por{' '}
+            <a
+              href="https://www.loxos.cl/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-gray-200 transition-colors"
+            >
+              Loxos
+            </a>
           </span>
         </div>
 
