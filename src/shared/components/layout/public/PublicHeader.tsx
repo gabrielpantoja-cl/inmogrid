@@ -72,6 +72,7 @@ export function PublicHeader() {
                 </div>
                 <AccountMenu
                   avatarUrl={actions.avatarUrl}
+                  username={actions.profile?.username}
                   isOpen={actions.isUserMenuOpen}
                   isSigningOut={actions.isSigningOut}
                   onToggle={() =>

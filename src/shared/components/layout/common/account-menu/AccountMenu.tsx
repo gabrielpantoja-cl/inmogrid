@@ -2,10 +2,18 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { PowerIcon, UserIcon } from '@heroicons/react/24/outline';
+import {
+  PowerIcon,
+  UserIcon,
+  UserCircleIcon,
+  PencilSquareIcon,
+  DocumentTextIcon,
+  MapIcon,
+} from '@heroicons/react/24/outline';
 
 interface AccountMenuProps {
   avatarUrl?: string | null;
+  username?: string | null;
   isOpen: boolean;
   isSigningOut: boolean;
   onToggle: () => void;
@@ -14,24 +22,26 @@ interface AccountMenuProps {
 }
 
 /**
- * Dropdown de cuenta reutilizable: avatar + menú con cerrar sesión y links
- * legales.
+ * Dropdown de cuenta reutilizable: avatar + accesos rápidos del usuario.
  *
  * Usado tanto por el navbar del dashboard como por el `PublicHeader` de las
  * rutas públicas para garantizar una experiencia de sesión consistente en
- * toda la app. Los handlers se inyectan como props para que el componente
- * siga siendo presentacional — la lógica vive en `useAccountActions`.
+ * toda la app. Los handlers se inyectan como props — la lógica vive en
+ * `useAccountActions`.
  *
- * **Importante**: este dropdown intencionalmente **no incluye "Eliminar
- * cuenta"**. La eliminación es una acción irreversible y vive únicamente en
- * la zona de peligro de `/dashboard/perfil` (componente `DangerZone` de
- * `features/profiles`), detrás de un flujo de confirmación GitHub-style
- * que obliga a escribir el email del usuario para habilitar el botón.
- * Poner ese flow en un dropdown global sería demasiado fácil de disparar
- * por accidente.
+ * **No incluye links legales** (Términos / Privacidad) porque ya viven en
+ * el footer global y llenar el dropdown con ellos le roba espacio a los
+ * accesos útiles (perfil, publicaciones, referenciales).
+ *
+ * **No incluye "Eliminar cuenta"**. Esa acción es irreversible y vive solo
+ * en la zona de peligro de `/dashboard/perfil` (`DangerZone`), detrás de
+ * un flujo de confirmación GitHub-style que obliga a escribir el email
+ * del usuario. Ponerla en un dropdown global sería demasiado fácil de
+ * disparar por accidente.
  */
 export function AccountMenu({
   avatarUrl,
+  username,
   isOpen,
   isSigningOut,
   onToggle,
@@ -62,39 +72,64 @@ export function AccountMenu({
 
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-[60]"
+          className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-[60]"
           role="menu"
         >
-          <button
-            type="button"
-            onClick={onSignOut}
-            disabled={isSigningOut}
-            className={`w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 ${
-              isSigningOut ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+          {username && (
+            <Link
+              href={`/${username}`}
+              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+              onClick={onCloseDropdown}
+              role="menuitem"
+            >
+              <UserCircleIcon className="w-4 h-4 mr-3 text-gray-500" />
+              Ver mi perfil público
+            </Link>
+          )}
+
+          <Link
+            href="/dashboard/perfil"
+            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+            onClick={onCloseDropdown}
             role="menuitem"
           >
-            <PowerIcon className={`w-4 h-4 mr-3 ${isSigningOut ? 'animate-spin' : ''}`} />
-            {isSigningOut ? 'Cerrando...' : 'Cerrar Sesión'}
-          </button>
+            <PencilSquareIcon className="w-4 h-4 mr-3 text-gray-500" />
+            Editar perfil
+          </Link>
+
+          <Link
+            href="/dashboard/notas"
+            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+            onClick={onCloseDropdown}
+            role="menuitem"
+          >
+            <DocumentTextIcon className="w-4 h-4 mr-3 text-gray-500" />
+            Mis publicaciones
+          </Link>
+
+          <Link
+            href="/dashboard/referenciales"
+            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+            onClick={onCloseDropdown}
+            role="menuitem"
+          >
+            <MapIcon className="w-4 h-4 mr-3 text-gray-500" />
+            Referenciales
+          </Link>
 
           <div className="border-t border-gray-100 mt-1 pt-1">
-            <Link
-              href="/terms"
-              className="block px-4 py-1 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
-              onClick={onCloseDropdown}
+            <button
+              type="button"
+              onClick={onSignOut}
+              disabled={isSigningOut}
+              className={`w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 ${
+                isSigningOut ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
               role="menuitem"
             >
-              Términos de Servicio
-            </Link>
-            <Link
-              href="/privacy"
-              className="block px-4 py-1 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200"
-              onClick={onCloseDropdown}
-              role="menuitem"
-            >
-              Política de Privacidad
-            </Link>
+              <PowerIcon className={`w-4 h-4 mr-3 text-gray-500 ${isSigningOut ? 'animate-spin' : ''}`} />
+              {isSigningOut ? 'Cerrando...' : 'Cerrar sesión'}
+            </button>
           </div>
         </div>
       )}

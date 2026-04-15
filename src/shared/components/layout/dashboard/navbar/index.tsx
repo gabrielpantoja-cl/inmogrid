@@ -64,6 +64,7 @@ export default function Navbar() {
 
               <AccountMenu
                 avatarUrl={actions.avatarUrl}
+                username={actions.profile?.username}
                 isOpen={actions.isUserMenuOpen}
                 isSigningOut={actions.isSigningOut}
                 onToggle={() => actions.setIsUserMenuOpen(!actions.isUserMenuOpen)}
