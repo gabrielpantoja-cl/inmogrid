@@ -50,7 +50,6 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
             <span>Ver en GitHub</span>
             {githubStarsSlot}
           </a>
-          <span className="text-xs text-gray-400">Proyecto open source &middot; MIT</span>
         </div>
 
         {/* Col 3: Producto */}

@@ -41,31 +41,26 @@ export function SocialPrivacySection({ formData, user, onChange }: Props) {
       <FormSection title="🔒 Privacidad">
         <div className="space-y-4">
           {/* Toggle de visibilidad */}
-          <label
-            htmlFor="isPublicProfile"
-            className="flex items-start gap-3 cursor-pointer group"
-          >
-            <div className="mt-0.5">
-              <input
-                id="isPublicProfile"
-                name="isPublicProfile"
-                type="checkbox"
-                checked={formData.isPublicProfile}
-                onChange={onChange}
-                className="w-4 h-4 text-yellow-500 border-gray-300 rounded focus:ring-yellow-400"
-              />
-            </div>
+          <div className="flex items-start gap-3">
+            <input
+              id="isPublicProfile"
+              name="isPublicProfile"
+              type="checkbox"
+              checked={formData.isPublicProfile}
+              onChange={onChange}
+              className="mt-0.5 w-4 h-4 text-yellow-500 border-gray-300 rounded focus:ring-yellow-400"
+            />
             <div>
-              <span className="font-medium text-gray-700 group-hover:text-gray-900">
+              <label htmlFor="isPublicProfile" className="font-medium text-gray-700 cursor-pointer">
                 Perfil público
-              </span>
+              </label>
               <p className="text-sm text-gray-500 mt-0.5">
                 {formData.isPublicProfile
                   ? 'Tu perfil es visible para cualquier persona con el enlace.'
                   : 'Tu perfil está oculto. Solo tú puedes verlo mientras estés conectado.'}
               </p>
             </div>
-          </label>
+          </div>
 
           {/* URL del perfil — siempre visible para que el usuario sepa la URL */}
           <div className="rounded-lg bg-gray-50 border border-gray-200 px-4 py-3">
