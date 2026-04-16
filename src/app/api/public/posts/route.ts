@@ -1,5 +1,4 @@
 // GET /api/public/posts - Feed público de posts publicados (sin autenticación)
-// Filtra por status='published' (pantojapropiedades.cl) OR published=true (inmogrid.cl)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';

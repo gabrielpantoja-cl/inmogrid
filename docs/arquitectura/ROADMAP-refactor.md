@@ -92,12 +92,11 @@ Objetivo: migrar features de menor acoplamiento a mayor, sin big-bang.
    - Mover a `features/referenciales/{components,lib,page}/`
    - El page.tsx actual se queda como `app/referenciales/page.tsx` pero importa desde `@/features/referenciales`
 
-2. **`posts`** (relativamente aislado, pero comparte tabla con pantojapropiedades.cl)
+2. **`posts`** (relativamente aislado — la tabla tiene columnas legacy fuera del Prisma schema)
    - Extraer `generateSlug` y helpers inline de `api/posts/route.ts` → `features/posts/lib/`
    - Crear `features/posts/lib/queries.ts` con funciones Prisma reutilizables
    - Crear `features/posts/lib/validations.ts` (Zod)
    - Mover componentes de posts desde `components/` → `features/posts/components/`
-   - **⚠️ Cuidado**: NO cambiar el schema de la tabla `posts` — es compartida con pantojapropiedades.cl
 
 3. **`networking`** (romper acoplamiento con `app/actions/`)
    - Mover `components/networking/` → `features/networking/components/`
@@ -159,7 +158,7 @@ Cada feature migrado debe:
 |---|---|
 | Romper imports durante moves | Codemods con `jscodeshift` + tests CI en cada PR |
 | Conflictos con PRs en vuelo | Migración incremental por feature, no big-bang |
-| Romper pantojapropiedades.cl al tocar `posts` | No modificar schema, solo código; coordinar con equipo |
+| Breaking changes en tabla `posts` | Migrar columnas legacy con cuidado; verificar queries raw |
 | Tiempo de CI crece con boundaries lint | Warning-only en Sprint 1-2, error en Sprint 3 |
 
 ---

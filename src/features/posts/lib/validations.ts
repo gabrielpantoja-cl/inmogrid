@@ -2,8 +2,7 @@ import { z } from 'zod';
 
 /**
  * Schema para crear un post. Mantener sincronizado con el modelo `Post`
- * en `prisma/schema.prisma` — recordar que la tabla es compartida con
- * pantojapropiedades.cl.
+ * en `prisma/schema.prisma`.
  */
 export const createPostSchema = z.object({
   title: z.string().min(1, 'El título es requerido').max(200),

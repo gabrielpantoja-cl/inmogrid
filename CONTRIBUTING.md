@@ -7,7 +7,7 @@ Gracias por tu interés en contribuir. Este proyecto es open source y todas las 
 ## Antes de empezar
 
 1. Leé el [manifiesto](docs/manifesto.md) y la [visión](docs/vision.md). Lo que construimos tiene una identidad clara: **no vendemos propiedades, no intermediamos transacciones, no cobramos por posicionamiento**. Las contribuciones deben respetar esa identidad.
-2. Revisá los [issues abiertos](https://github.com/inmogrid/inmogrid/issues). Si vas a trabajar en algo, comentá en el issue correspondiente o abrí uno nuevo para discutir el enfoque antes de mandar código.
+2. Revisá los [issues abiertos](https://github.com/gabrielpantoja-cl/inmogrid/issues). Si vas a trabajar en algo, comentá en el issue correspondiente o abrí uno nuevo para discutir el enfoque antes de mandar código.
 3. Leé el [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
 
 ---

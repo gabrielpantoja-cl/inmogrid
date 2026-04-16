@@ -3,9 +3,6 @@
  * - Normaliza acentos
  * - Reemplaza no-alfanuméricos por guiones
  * - Añade sufijo temporal (base36) para garantizar unicidad
- *
- * La tabla `posts` es compartida con pantojapropiedades.cl, así que
- * cualquier cambio a este algoritmo debe coordinarse con ese proyecto.
  */
 export function generateSlug(title: string): string {
   const baseSlug = title

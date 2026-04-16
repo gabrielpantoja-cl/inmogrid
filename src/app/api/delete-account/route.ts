@@ -1,25 +1,13 @@
 // DELETE /api/delete-account
 //
-// Elimina **definitivamente** la cuenta del usuario autenticado:
-//  1. Valida que el body contenga `{ confirmation }` y que `confirmation`
-//     matchee exactamente el email del usuario (protección tipo GitHub).
-//  2. En una transacción Postgres, borra todas las filas que el usuario
-//     poseía en las tablas de `public.*` (posts, inmogrid_*, profiles legacy
-//     de pantojapropiedades.cl) y finalmente borra la fila de `auth.users`.
-//  3. Devuelve 200 si todo fue atómico. El cliente es responsable de
-//     hacer un hard reload a `/` — las cookies stale las limpia el
-//     middleware en el siguiente request.
+// Elimina definitivamente la cuenta del usuario autenticado:
+//  1. Valida que el body contenga `{ confirmation }` matcheando el email.
+//  2. En una transacción, borra filas de public.* (posts, inmogrid_*,
+//     profiles legacy) y auth.users.
+//  3. Devuelve 200 si todo fue atómico.
 //
-// Notas importantes:
-//  - NO usamos `prisma.post.*` ni `prisma.profile.delete` tipados porque
-//    el schema `public.posts` tiene columnas divergentes del Prisma schema
-//    (ver `docs/deuda-tecnica.md` P0 #1). Usamos `$executeRaw` con
-//    parámetros posicionales en todas las tablas para evitar cualquier
-//    dependencia del mapping de columnas.
-//  - El role `postgres.<SUPABASE_PROJECT_REF>` con el que corre Prisma tiene
-//    permisos sobre `auth.users` (lo verificamos en la consolidación de
-//    usuarios del 2026-04-11), así que no necesitamos un admin client con
-//    `SUPABASE_SERVICE_ROLE_KEY` separado.
+// Usamos `$executeRaw` porque la tabla `posts` tiene columnas legacy
+// fuera del Prisma schema.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -88,14 +76,13 @@ export async function DELETE(request: NextRequest) {
 
   // 4. Borrado transaccional. Orden:
   //    - Data de public.* que referencia al user (posts, inmogrid_*)
-  //    - Tabla profiles legacy de pantojapropiedades.cl (no-op si no existe fila)
-  //    - Finalmente auth.users (al último para que si algo falla antes, el
-  //      usuario pueda reintentar — auth.users sigue vivo)
+  //    - Tabla profiles legacy (no-op si no existe fila)
+  //    - auth.users al final (si algo falla antes, el usuario puede reintentar)
   const userId = authUser.id;
 
   try {
     await prisma.$transaction([
-      // Posts (schema compartido con pantojapropiedades.cl — columna `author_id`)
+      // Posts (columna `author_id`)
       prisma.$executeRaw`DELETE FROM public.posts WHERE author_id = ${userId}::uuid`,
 
       // Tablas de inmogrid — columna `user_id` o `id`
@@ -109,10 +96,7 @@ export async function DELETE(request: NextRequest) {
       `,
       prisma.$executeRaw`DELETE FROM public.inmogrid_profiles              WHERE id = ${userId}::uuid`,
 
-      // Profiles legacy de pantojapropiedades.cl (FK a auth.users con ON
-      // DELETE CASCADE, así que el DELETE de auth.users de abajo también
-      // limpiaría esto — pero lo hacemos explícito para ser defensivos
-      // contra schemas futuros que pierdan el cascade)
+      // Profiles legacy (explícito para ser defensivos contra schemas sin cascade)
       prisma.$executeRaw`DELETE FROM public.profiles WHERE user_id = ${userId}::uuid`,
 
       // auth.users (al final — si algo explotó antes, el usuario sigue

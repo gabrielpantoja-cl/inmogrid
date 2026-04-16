@@ -45,7 +45,7 @@ You are the Master Orchestrator for the inmogrid.cl "Renacimiento" (Rebirth) pro
     - **Task:** Ensure Vercel deployment, environment variables, and build health are solid.
     - **New Priority:** Optimize asset delivery (images for portfolios/plants).
     - **Responsibility:** Deploy the Next.js 15 app via Docker Compose.
-    - **Constraint:** Never break the shared Supabase database with pantojapropiedades.cl.
+    - **Constraint:** Schema changes must be safe and backward-compatible.
 
 2.  **Frontend & UX Agent (frontend-agent) - HIGH PRIORITY**
     - **Focus:** The "Visual Experience" (The Flowers)

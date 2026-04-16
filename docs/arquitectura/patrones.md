@@ -281,7 +281,7 @@ npm run test:e2e            # Playwright
 4. Actualizar los tipos en `src/shared/types/index.ts` si el cambio afecta enums re-exportados
 5. Commit tanto el `schema.prisma` como los cambios en código que usen el nuevo schema
 
-**⚠️ La tabla `posts` es compartida con pantojapropiedades.cl** — cualquier cambio debe ser backward-compatible y coordinado con ese proyecto.
+**Nota:** La tabla `posts` tiene columnas legacy fuera del Prisma schema — verificar queries raw al hacer cambios.
 
 ---
 

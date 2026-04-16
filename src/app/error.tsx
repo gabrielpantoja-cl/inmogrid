@@ -103,7 +103,7 @@ export default function Error({
               <p>
                 Si el problema persiste, por favor{' '}
                 <a
-                  href="https://github.com/inmogrid/inmogrid/issues"
+                  href="https://github.com/gabrielpantoja-cl/inmogrid/issues"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary underline hover:text-primary/80"

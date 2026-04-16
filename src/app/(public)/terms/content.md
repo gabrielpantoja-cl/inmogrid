@@ -6,7 +6,7 @@
 
 **inmogrid.cl** es un ecosistema digital abierto y colaborativo para la comunidad inmobiliaria chilena. Es un espacio libre donde tasadores, peritos judiciales, corredores de propiedades, abogados inmobiliarios, arquitectos, administradores de propiedad y otros profesionales del rubro pueden publicar su trabajo, compartir conocimiento y conectar entre sí.
 
-El proyecto es **código abierto bajo licencia MIT** y su código fuente está disponible en [github.com/inmogrid/inmogrid](https://github.com/inmogrid/inmogrid). Cualquier persona puede auditar el código, reportar problemas o contribuir con mejoras.
+El proyecto es **código abierto bajo licencia MIT** y su código fuente está disponible en [github.com/gabrielpantoja-cl/inmogrid](https://github.com/gabrielpantoja-cl/inmogrid). Cualquier persona puede auditar el código, reportar problemas o contribuir con mejoras.
 
 inmogrid.cl se encuentra en fase de desarrollo activo. Las funcionalidades pueden cambiar, ampliarse o descontinuarse a medida que madure el proyecto.
 
@@ -40,7 +40,7 @@ Eres responsable del contenido que publicas. inmogrid.cl no revisa previamente e
 
 ## 5. Propiedad intelectual del proyecto
 
-El **código fuente** de inmogrid.cl está licenciado bajo [MIT License](https://github.com/inmogrid/inmogrid/blob/main/LICENSE) y puede reutilizarse conforme a los términos de esa licencia.
+El **código fuente** de inmogrid.cl está licenciado bajo [MIT License](https://github.com/gabrielpantoja-cl/inmogrid/blob/main/LICENSE) y puede reutilizarse conforme a los términos de esa licencia.
 
 El **nombre, marca, logotipo e identidad visual** de inmogrid.cl están reservados y no forman parte de la licencia MIT del código.
 
@@ -83,7 +83,7 @@ Estos términos se rigen por las leyes de la República de Chile. Cualquier cont
 
 Para consultas sobre estos términos, reportes de incidentes o solicitudes formales, puedes:
 
-- Abrir un issue público en [github.com/inmogrid/inmogrid/issues](https://github.com/inmogrid/inmogrid/issues)
+- Abrir un issue público en [github.com/gabrielpantoja-cl/inmogrid/issues](https://github.com/gabrielpantoja-cl/inmogrid/issues)
 - Contactar al mantenedor del proyecto en GitHub: [@gabrielpantoja-cl](https://github.com/gabrielpantoja-cl)
 
 ---

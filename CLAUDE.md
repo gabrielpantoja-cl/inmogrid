@@ -26,12 +26,10 @@ inmogrid.cl operates with **two backends**:
 - User contributions go to Supabase staging (`inmogrid_contributions`) → admin review → pipeline to Neon
 - Full decision record: `docs/adr/ADR-005-dual-backend-supabase-neon.md`
 
-## Shared Database (Important)
+## Database Notes
 
-inmogrid.cl and **pantojapropiedades.cl share the same Supabase database** during this transition/transformation period. Tables like `posts` are read by both platforms. This means:
-- Do NOT drop or rename shared tables without coordinating with pantojapropiedades.cl
-- Schema migrations must be backward-compatible with the existing pantojapropiedades.cl data model
-- The `posts` table (and potentially others) contain data used by both sites
+- The `posts` table has legacy columns that do not match the current Prisma schema — use `$queryRaw` / `$executeRaw` when needed
+- Schema migrations: run SQL manually in the Supabase dashboard (no `prisma migrate`)
 
 ## Development Commands
 
@@ -110,7 +108,7 @@ The primary user model is **Profile** (not User). `Profile.id` is a UUID matchin
 
 ```
 Profile             → inmogrid_profiles table
-Post                → posts table              (shared with pantojapropiedades.cl)
+Post                → posts table              (has legacy columns outside Prisma schema)
 Connection          → inmogrid_connections table
 Event               → inmogrid_events table
 ProfessionalProfile → inmogrid_professional_profiles table
@@ -214,7 +212,7 @@ Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. `NEON_DATABASE_URL
 
 - **Production**: Vercel (auto-deploy on push to `main`)
 - **DNS**: Cloudflare — `inmogrid.cl` A→`76.76.21.21`, `www` CNAME→`cname.vercel-dns.com`, proxy OFF
-- **Supabase project**: see `CLAUDE.local.md` (shared with pantojapropiedades.cl during transition)
+- **Supabase project**: see `CLAUDE.local.md`
 - **N8N**: separate VPS service (URL in `CLAUDE.local.md`)
 
 ## Sofia RAG Chatbot ([ADR-006](docs/adr/ADR-006-sofia-rag-gemini-integration.md))

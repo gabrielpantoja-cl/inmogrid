@@ -4,9 +4,8 @@ import { prisma } from '@/shared/lib/prisma';
 import { Suspense } from 'react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
-// La tabla `posts` es compartida con pantojapropiedades.cl y tiene columnas
-// propias (status, author_id, image, created_at). No coincide con el schema
-// Prisma actual, por eso usamos $queryRaw en lugar de prisma.post.findMany.
+// La tabla `posts` tiene columnas legacy fuera del Prisma schema,
+// por eso usamos $queryRaw en lugar de prisma.post.findMany.
 interface LatestPostRow {
   id: string;
   title: string;

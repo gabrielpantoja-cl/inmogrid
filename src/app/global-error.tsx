@@ -214,7 +214,7 @@ export default function GlobalError({
           <div className="footer">
             Si el problema persiste, repórtalo en{' '}
             <a
-              href="https://github.com/inmogrid/inmogrid/issues"
+              href="https://github.com/gabrielpantoja-cl/inmogrid/issues"
               target="_blank"
               rel="noopener noreferrer"
             >

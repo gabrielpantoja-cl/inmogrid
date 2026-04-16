@@ -44,10 +44,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   }
 
   // Obtener posts recientes (solo publicados)
-  // Guard: la tabla `posts` es compartida con pantojapropiedades.cl y puede
-  // estar desincronizada con el schema de Prisma (columnas faltantes). Si la
-  // consulta falla por P2022 (column does not exist), se devuelve [] para que
-  // el perfil se muestre igualmente sin la sección de notas.
+  // Guard: la tabla `posts` puede tener columnas legacy fuera del schema Prisma.
+  // Si la consulta falla por P2022, se devuelve [] para que el perfil se muestre
+  // igualmente sin la sección de notas.
   let posts: {
     id: string;
     title: string;

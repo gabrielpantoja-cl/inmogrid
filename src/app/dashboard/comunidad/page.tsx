@@ -17,7 +17,7 @@ export default function ComunidadPage() {
 
         <div className="mt-6 space-y-4">
           <a
-            href="https://github.com/inmogrid/inmogrid/discussions"
+            href="https://github.com/gabrielpantoja-cl/inmogrid/discussions"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 rounded-lg border border-gray-200 p-4 hover:border-primary/50 hover:shadow-sm transition-all"

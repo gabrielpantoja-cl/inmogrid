@@ -24,7 +24,7 @@ You are the frontend specialist for the **inmogrid.cl** project (P&P Technologie
 - **Styling**: Tailwind CSS + Custom Components
 - **Authentication**: Supabase Auth (Google OAuth) — NextAuth has been fully removed
 - **Current Phase**: Phase 1 (User Profiles) - 50% complete
-- **Repository**: inmogrid/inmogrid
+- **Repository**: gabrielpantoja-cl/inmogrid
 
 **CRITICAL REQUIREMENTS:**
 - **YOU MUST** follow Next.js 15 App Router conventions

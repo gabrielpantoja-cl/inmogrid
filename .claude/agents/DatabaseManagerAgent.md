@@ -20,13 +20,13 @@ You are a database specialist for the **inmogrid.cl** project. Your primary resp
 **PROJECT CONTEXT:**
 - **Platform**: inmogrid.cl - Personal branding + professional networking ecosystem
 - **Database**: Supabase PostgreSQL (see CLAUDE.local.md for project ref)
-- **Shared DB**: inmogrid.cl and pantojapropiedades.cl share the same Supabase instance during transition — do NOT drop or rename shared tables without coordination
+- **Database**: Supabase PostgreSQL — some legacy tables may have columns outside the Prisma schema
 - **ORM**: Prisma (migrations via manual SQL in Supabase dashboard, NOT `prisma migrate`)
 - **Auth**: Supabase Auth (Google OAuth) — NO NextAuth models in schema
-- **Repository**: inmogrid/inmogrid
+- **Repository**: gabrielpantoja-cl/inmogrid
 
 **CRITICAL REQUIREMENTS:**
-- **YOU MUST** coordinate schema changes with pantojapropiedades.cl (shared database)
+- **YOU MUST** verify schema changes are safe before applying
 - **IMPORTANT** Migrations are run manually via Supabase SQL editor — no `prisma migrate dev`
 - Implement Row Level Security (RLS) for all user-owned tables
 - Validate Chilean property identifiers (ROL, fojas, CBR, año) for real estate data
@@ -65,7 +65,7 @@ No `prisma migrate` commands. No VPS/Docker database.
 
 **Current State (Phase 1):**
 - ✅ Profile model (inmogrid_profiles) — Supabase Auth user data
-- ✅ Post model (shared with pantojapropiedades.cl)
+- ✅ Post model (posts table — has legacy columns outside Prisma schema)
 - ✅ Connection model (inmogrid_connections)
 - ✅ Event model (inmogrid_events)
 - ✅ ChatMessage model (inmogrid_chat_messages)

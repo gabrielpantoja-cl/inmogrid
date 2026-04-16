@@ -11,7 +11,7 @@ export const faqs: Record<string, string> = {
   '¿Cuáles son los servicios que ofrecen?':
     'Ofrecemos perfiles públicos personalizables, publicación de notas/blog inmobiliario, herramientas de referencia del mercado y networking profesional del sector.',
   '¿Cuál es el canal de contacto?':
-    'Puedes contactarnos a traves de nuestras Discusiones en GitHub: https://github.com/inmogrid/inmogrid/discussions',
+    'Puedes contactarnos a traves de nuestras Discusiones en GitHub: https://github.com/gabrielpantoja-cl/inmogrid/discussions',
 };
 
 /**

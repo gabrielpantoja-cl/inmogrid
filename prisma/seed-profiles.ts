@@ -38,7 +38,7 @@ Creo en la vida simple, en el consumo consciente y en el respeto por la tierra. 
 
       externalLinks: {
         whatsapp: '56944362760',
-        website: 'https://pantojapropiedades.cl',
+        website: 'https://inmogrid.cl',
       },
 
       role: 'user',
@@ -235,14 +235,14 @@ Fundador de inmogrid.cl, un ecosistema digital colaborativo que democratiza el a
 
       externalLinks: {
         whatsapp: '56944362760',
-        website: 'https://pantojapropiedades.cl',
+        website: 'https://inmogrid.cl',
         linkedin: 'https://linkedin.com/in/gabrielpantoja',
         github: 'gabrielpantoja-cl',
       },
 
       profession: 'TASADOR',
       company: 'Pantoja Propiedades',
-      website: 'https://pantojapropiedades.cl',
+      website: 'https://inmogrid.cl',
       linkedin: 'https://linkedin.com/in/gabrielpantoja',
 
       role: 'admin',

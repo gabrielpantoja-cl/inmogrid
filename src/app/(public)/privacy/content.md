@@ -6,7 +6,7 @@
 
 **inmogrid.cl** es un proyecto desarrollado en Valdivia, Región de Los Ríos, Chile. El mantenedor del proyecto es responsable del tratamiento de los datos personales recopilados a través de la plataforma, conforme a la Ley 19.628, la Ley 21.096 y la Ley 21.719 de Protección de Datos Personales.
 
-**Contacto para asuntos de privacidad:** [github.com/inmogrid/inmogrid/issues](https://github.com/inmogrid/inmogrid/issues). Para solicitudes que involucren datos personales sensibles, indícalo en el issue y te contactaremos por un canal seguro.
+**Contacto para asuntos de privacidad:** [github.com/gabrielpantoja-cl/inmogrid/issues](https://github.com/gabrielpantoja-cl/inmogrid/issues). Para solicitudes que involucren datos personales sensibles, indícalo en el issue y te contactaremos por un canal seguro.
 
 ## 2. Datos que recopilamos
 
@@ -99,7 +99,7 @@ Conforme a la legislación chilena de protección de datos personales, tienes lo
 - **Oposición**: oponerte al tratamiento de tus datos en casos específicos.
 - **Portabilidad**: solicitar una copia de tus datos en formato estructurado (cuando la Ley 21.719 entre en plena vigencia).
 
-Para ejercer estos derechos, envía una solicitud vía [GitHub Issues](https://github.com/inmogrid/inmogrid/issues) indicando que es una solicitud bajo Ley 19.628 / 21.719. **Plazo de respuesta: 30 días hábiles.**
+Para ejercer estos derechos, envía una solicitud vía [GitHub Issues](https://github.com/gabrielpantoja-cl/inmogrid/issues) indicando que es una solicitud bajo Ley 19.628 / 21.719. **Plazo de respuesta: 30 días hábiles.**
 
 ## 8. Seguridad
 

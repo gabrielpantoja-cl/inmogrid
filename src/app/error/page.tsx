@@ -98,7 +98,7 @@ function ErrorContent() {
         <div className="text-center border-t border-gray-200 pt-6">
           <p className="text-xs text-gray-500">
             ¿Necesitas ayuda?{' '}
-            <a href="https://github.com/inmogrid/inmogrid/discussions"
+            <a href="https://github.com/gabrielpantoja-cl/inmogrid/discussions"
                target="_blank"
                rel="noopener noreferrer"
                className="text-primary hover:text-primary/80 underline">

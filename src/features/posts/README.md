@@ -2,13 +2,9 @@
 
 Gestión de publicaciones (notas/artículos) del ecosistema inmogrid.cl.
 
-## ⚠️ Tabla compartida con pantojapropiedades.cl
+## Nota sobre la tabla `posts`
 
-La tabla `posts` en Supabase es **compartida** con pantojapropiedades.cl durante la fase de transición. Esto implica:
-
-- **NO** modificar el schema de la tabla sin coordinar con el equipo de pantojapropiedades.cl
-- Las migraciones deben ser **backward-compatible**
-- Los cambios al algoritmo de `generateSlug` afectan a ambos proyectos — evitar romper slugs existentes
+La tabla `posts` tiene columnas legacy que no coinciden con el Prisma schema actual. Por eso algunas queries usan `$queryRaw` / `$executeRaw` en lugar de los métodos tipados de Prisma.
 
 ## Scope
 
