@@ -32,9 +32,9 @@ Leé el [manifiesto](docs/manifesto.md) para entender el proyecto en profundidad
 | Framework | Next.js 15 (App Router) · React 19 · TypeScript strict |
 | Estilos | Tailwind CSS · shadcn/ui (Radix) |
 | ORM | Prisma 6 |
-| Base de datos | PostgreSQL (Supabase) |
+| Base de datos | PostgreSQL (Supabase) + Neon PostgreSQL/PostGIS (referenciales, read-only) |
 | Auth | Supabase Auth (Google OAuth) |
-| IA | OpenAI (chatbot con streaming vía `@ai-sdk/openai`) |
+| IA | Gemini 2.5 Flash (Sofia RAG chatbot) · OpenAI (legacy chat, en migración) |
 | Mapas | Leaflet + React Leaflet |
 | Hosting | Vercel |
 
@@ -54,7 +54,7 @@ Detalles completos en [docs/architecture.md](docs/architecture.md).
 ### Instalación
 
 ```bash
-git clone https://github.com/inmogrid/inmogrid.git
+git clone https://github.com/gabrielpantoja-cl/inmogrid.git
 cd inmogrid.cl
 npm install
 ```
@@ -72,9 +72,15 @@ DIRECT_URL="postgresql://...@pooler.supabase.com:5432/postgres"
 NEXT_PUBLIC_SUPABASE_URL="https://[ref].supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJ..."
 
+# Neon — referenciales read-only (requerida para /api/v1/)
+NEON_DATABASE_URL="postgresql://...@ep-xxx.aws.neon.tech/referenciales?sslmode=require"
+
+# Gemini AI — Sofia RAG chatbot
+GEMINI_API_KEY="AIza..."
+
 # Opcionales
 NEXT_PUBLIC_BASE_URL="http://localhost:3000"
-OPENAI_API_KEY="sk-..."
+OPENAI_API_KEY="sk-..."      # Legacy chat — en migración a Gemini
 RESEND_API_KEY="re_..."
 ```
 

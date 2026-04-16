@@ -17,7 +17,7 @@ inmogrid.cl operates with **two backends**:
 | Backend | Engine | Client | Purpose | Access |
 |---------|--------|--------|---------|--------|
 | **Supabase** | PostgreSQL | Prisma ORM | Profiles, posts, connections, events, chat, contributions | Read/Write |
-| **Neon** | PostgreSQL + PostGIS | postgres.js (raw SQL) | Verified real estate transactions (6,600+ records) | **Read-only** |
+| **Neon** | PostgreSQL + PostGIS | postgres.js (raw SQL) | Verified real estate transactions (~21,000 records) | **Read-only** |
 
 **Key rules**:
 - Neon queries are **read-only** — all SQL lives in `src/shared/lib/queries/referenciales.ts`
@@ -150,7 +150,8 @@ ChatMessage         → inmogrid_chat_messages table
   users/profile           → GET/PUT current user's profile
   posts/                  → GET/POST user's posts
   posts/[id]/             → GET/PUT/DELETE single post
-  chat/                   → Sofia AI chat
+  chat/                   → Sofia AI chat (legacy, OpenAI)
+  sofia/chat/             → Sofia RAG chat (Gemini, SSE streaming)
   delete-account/         → Account deletion
   revalidate/             → Next.js cache revalidation
   referenciales/
@@ -198,13 +199,16 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJ..."
 UPSTASH_REDIS_REST_URL="https://xxx.upstash.io"
 UPSTASH_REDIS_REST_TOKEN="AXxx..."
 
+# Gemini AI — Sofia RAG chatbot (required for /sofia and /api/sofia/)
+GEMINI_API_KEY="AIza..."
+
 # Optional
 NEXT_PUBLIC_BASE_URL="https://inmogrid.cl"
-OPENAI_API_KEY="..."
+OPENAI_API_KEY="..."                # Legacy chat (/api/chat) — will be removed
 RESEND_API_KEY="..."
 ```
 
-Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. `NEON_DATABASE_URL` is required for the `/api/v1/` referenciales endpoints. All three must be set in Vercel environment variables for production.
+Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. `NEON_DATABASE_URL` is required for the `/api/v1/` referenciales endpoints. `GEMINI_API_KEY` is required for the Sofia RAG chatbot. All must be set in Vercel environment variables for production.
 
 ## Infrastructure
 
@@ -213,7 +217,7 @@ Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. `NEON_DATABASE_URL
 - **Supabase project**: see `CLAUDE.local.md` (shared with pantojapropiedades.cl during transition)
 - **N8N**: separate VPS service (URL in `CLAUDE.local.md`)
 
-## Sofia RAG Chatbot (ADR-006)
+## Sofia RAG Chatbot ([ADR-006](docs/adr/ADR-006-sofia-rag-gemini-integration.md))
 
 Public page at `/sofia`. RAG-powered assistant for Chilean real estate.
 
@@ -234,14 +238,15 @@ Key files:
 
 ## Specialized Agents (`.claude/agents/`)
 
-| Agent | Use for |
+| Agent file | Use for |
 |---|---|
-| `inmogrid-orchestrator` | Multi-feature coordination, architecture decisions |
-| `api-developer-agent` | New API routes, OpenAPI docs |
-| `database-manager-agent` | Schema changes, RLS policies, query optimization |
-| `frontend-agent` | UI components, Next.js pages, hooks |
-| `data-ingestion-agent` | Chilean real estate data pipelines, CBR validation |
-| `security-auditor-agent` | OWASP audits, Ley 19.628 compliance |
+| `inmogrid-orchestrator.md` | Multi-feature coordination, architecture decisions |
+| `APIDeveloperAgent.md` | New API routes, OpenAPI docs |
+| `DatabaseManagerAgent.md` | Schema changes, RLS policies, query optimization |
+| `FrontendAgent.md` | UI components, Next.js pages, hooks |
+| `DataIngestionAgent.md` | Chilean real estate data pipelines, CBR validation |
+| `SecurityAuditorAgent.md` | OWASP audits, Ley 19.628 compliance |
+| `InfrastructureAgent.md` | Infrastructure, deployment, VPS/Vercel/DNS management |
 
 ## Chilean Domain Knowledge
 
