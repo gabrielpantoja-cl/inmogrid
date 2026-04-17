@@ -20,13 +20,15 @@ Este documento es auto-contenido: cualquier colaborador puede retomarlo desde ac
 
 - **Fase 0** (Inventario): ✅ completa. Bloques 1-5 ejecutados, sampling de tablas dudosas hecho, grep de funciones Sofia legacy confirma 0 consumidores.
 - **Fase 1** (Rotación de credenciales): 🟡 en progreso.
-  - Inventario de consumidores: ✅ hecho (ver §1 abajo).
+  - Inventario de consumidores: ✅ hecho (ver §1.1).
   - Vercel `pantojapropiedadescl` eliminado.
   - n8n VPS confirmado **NO consumidor** (vars vacías en runtime).
-  - MCP de Supabase: 🟡 migración CLI/PAT → hosted/OAuth en progreso. Ver §1.6.
+  - MCP de Supabase (§1.3): ✅ completo — CLI/PAT migrado a hosted/OAuth en 2 proyectos activos (inmogrid + gabrielpantoja), PAT limpiado de 6 archivos, inventario de PATs en Supabase saneado.
+  - Decisión sistema legacy vs nuevo de API keys: **rotar legacy ahora** (§1.1), migración al sistema nuevo diferida a [Fase 7](#fase-7--migración-al-sistema-nuevo-de-api-keys-de-supabase).
   - JWT secret, DB password, Google OAuth Client Secret: ⏳ pendientes.
 - **Fase 2** (Limpieza legacy): 🟢 pre-flight parcial — 4 backups de tablas críticas guardados en `infra/privado/inmogrid.cl/sql/backups/`. Falta `pg_dump` completo + DROP.
 - **Fases 3–6**: ⏳ no iniciadas.
+- **Fase 7** (Migración sistema nuevo de Supabase): ⏳ planificada, no iniciada. Ejecutar después de cerrar Fases 1-6.
 
 ---
 
@@ -42,9 +44,10 @@ Este documento es auto-contenido: cualquier colaborador puede retomarlo desde ac
 8. [Fase 4 — Migración del schema `posts`](#fase-4--migración-del-schema-posts)
 9. [Fase 5 — FK hard `inmogrid_profiles`](#fase-5--fk-hard-inmogrid_profiles)
 10. [Fase 6 — Prevención y monitoreo](#fase-6--prevención-y-monitoreo)
-11. [Checklist consolidado](#checklist-consolidado)
-12. [Apéndice A — SQL de inventario](#apéndice-a--sql-de-inventario)
-13. [Apéndice B — SQL de limpieza completo](#apéndice-b--sql-de-limpieza-completo)
+11. [Fase 7 — Migración al sistema nuevo de API keys de Supabase](#fase-7--migración-al-sistema-nuevo-de-api-keys-de-supabase)
+12. [Checklist consolidado](#checklist-consolidado)
+13. [Apéndice A — SQL de inventario](#apéndice-a--sql-de-inventario)
+14. [Apéndice B — SQL de limpieza completo](#apéndice-b--sql-de-limpieza-completo)
 
 ---
 
@@ -200,13 +203,18 @@ Decisión tomada el 2026-04-17 tras verificar en docs oficiales (ver [Supabase M
 - Migrar elimina el problema de raíz: no hay PAT en disco para regar, rotar, ni filtrar.
 - El hosted MCP tiene superset de tools respecto al CLI.
 
-Plan de migración (en ejecución):
+Plan de migración (✅ completado el 2026-04-17 pm):
 1. ✅ Remover `supabase` del `.mcp.json` del proyecto inmogrid.
 2. ✅ Agregar hosted MCP con `--scope project`: `https://mcp.supabase.com/mcp?project_ref=<SUPABASE_PROJECT_REF>`.
-3. ⏳ Disparar OAuth flow vía `claude mcp list`, verificar conexión.
-4. ⏳ Repetir para `soymona.cl` y `gabrielpantoja.cl` (con sus `project_ref` respectivos si cada uno tiene su propio Supabase).
-5. ⏳ Limpiar PAT de `~/.claude.json` (scope user) y `~/.config/Claude/claude_desktop_config.json` (Claude Desktop).
-6. ⏳ Revocar el PAT `sbp_0d7d…5800` en Supabase Dashboard → account/tokens.
+3. ✅ OAuth flow disparado y confirmado conexión HTTP + OAuth.
+4. ✅ Migrado en `gabrielpantoja.cl` a hosted (con su propio project_ref). `soymona.cl` no necesita Supabase (solo `.md/.mdx`) — supabase removido sin re-add.
+5. ✅ Limpieza de 5 lugares más con PAT en disco:
+   - `~/.claude.json` (user scope): no había entry activo.
+   - `~/.config/Claude/claude_desktop_config.json` (Claude Desktop): entry removido.
+   - `gabrielpantoja.cl/.claude/settings.local.json`: permission rule embebiendo el PAT removida con `sed`.
+   - `soymona.cl/.mcp.json`: supabase removido.
+   - `gabrielpantoja.cl/.mcp.json`: migrado a hosted.
+6. ✅ Revocación del PAT: hallazgo en Supabase Dashboard — el PAT `sbp_0d7d…5800` **ya estaba revocado** (probablemente post-incidente). Adicionalmente se revocaron 2 tokens "Never used" por least-privilege (uno auto-generado en un Windows distinto, otro en esta misma Linux). Queda 1 PAT activo legítimo (Win10 blog).
 
 ### 3.5 Mantener `documents` como snapshot
 
@@ -247,6 +255,18 @@ El `pg_dump` completo del cluster va aparte en Fase 2.1 (pre-DROP).
 
 Regenera `anon key` + `service_role key` en un paso. Mata la `service_role` leakeada en el incidente de 2026-04-11.
 
+**Contexto del sistema de keys de Supabase (2026-04)**
+
+Supabase está migrando de:
+- **Sistema legacy** — un JWT secret symmetric (HS256) que firma `anon` + `service_role` keys. Rotar el secret → ambas keys se invalidan a la vez → todas las sesiones activas se caen.
+- **Sistema nuevo** — JWT signing keys asymétricos + API keys separadas (`publishable` + `secret`, con scopes) que permiten rotación sin downtime.
+
+Inspección del dashboard el 2026-04-17 pm (ver screenshots del repo privado):
+- Tab "Publishable and secret API keys": **vacío** (sistema nuevo no activado).
+- Tab "JWT Keys" → "Right now your project is using the legacy JWT secret" con botón "Migrate JWT secret".
+
+**Decisión**: proceder con **rotación del legacy JWT secret** ahora (cierra el incidente 2026-04-11 al instante, sin mezclar con un cambio más grande). La migración al sistema nuevo queda documentada como [Fase 7](#fase-7--migración-al-sistema-nuevo-de-api-keys-de-supabase) para ejecutar luego con ventana propia.
+
 **Inventario previo de consumidores** (completado el 2026-04-17 pm):
 
 Lado código (grep en `src/`):
@@ -263,9 +283,12 @@ Lado infra:
 - [x] Scripts/cron locales: ninguno activo con keys de inmogrid.
 
 **Ejecución** (pendiente):
-1. [ ] Dashboard → Settings → API → JWT Settings → Generate new JWT secret.
-2. [ ] Actualizar env vars en Vercel → redeploy.
-3. [ ] Guardar en Bitwarden: `Supabase - anon key - inmogrid`, `Supabase - service role key - inmogrid` (este último solo para futuro, no se pega en Vercel).
+1. [ ] Dashboard → Settings → **API Keys** → tab "Legacy anon, service_role API keys" (o bien Settings → JWT Keys → tab "Legacy JWT Secret") → botón "Generate new secret" / "Roll secret".
+2. [ ] Copiar **nueva anon key** al instante (la muestra una vez).
+3. [ ] Actualizar `NEXT_PUBLIC_SUPABASE_ANON_KEY` en Vercel → trigger redeploy.
+4. [ ] Verificar en producción: `curl -sI https://inmogrid.cl/` + test login OAuth.
+5. [ ] Guardar en Bitwarden: `Supabase - anon key - inmogrid` (valor nuevo), `Supabase - service role key - inmogrid` (reservada, no se pega en Vercel).
+6. [ ] Avisar a los 4 usuarios que deben re-loguearse (sus sesiones quedaron invalidadas).
 
 ### 1.2 Password de la DB Postgres
 
@@ -273,18 +296,17 @@ Lado infra:
 - Actualizar `DATABASE_URL` y `DIRECT_URL` en Vercel.
 - Guardar en Bitwarden: `Supabase - DB password - inmogrid`.
 
-### 1.3 PAT de Supabase — reemplazado por migración a MCP hosted OAuth
+### 1.3 PAT de Supabase — ✅ COMPLETO (migrado a MCP hosted OAuth)
 
 **Contexto**: el inventario del 2026-04-17 encontró **1 único PAT** `sbp_0d7d…5800` (no 2 como decía la auditoría previa) propagado en 6 archivos locales. Ver [§3.4](#34-migrar-mcp-de-supabase-a-hosted-oauth-en-vez-de-rotar-pat) para la decisión de migrar en vez de rotar.
 
-Progreso (2026-04-17 pm):
+Progreso (2026-04-17 pm — completado):
 - [x] `claude mcp remove supabase -s project` ejecutado en `~/Developer/loxos/inmogrid.cl`.
 - [x] `claude mcp add --transport http --scope project supabase "https://mcp.supabase.com/mcp?project_ref=<SUPABASE_PROJECT_REF>"` ejecutado. `.mcp.json` verificado — sin PAT.
-- [ ] Disparar OAuth flow (`claude mcp list` con browser abierto).
-- [ ] Confirmar `supabase: ✓ Connected` con transport HTTP.
-- [ ] Repetir remove/add en `soymona.cl` y `gabrielpantoja.cl`.
-- [ ] Limpiar PAT de `~/.claude.json` (scope user) y `~/.config/Claude/claude_desktop_config.json`.
-- [ ] Revocar el PAT en Supabase Dashboard → account/tokens.
+- [x] OAuth flow disparado, conexión HTTP + OAuth funcionando.
+- [x] Mismo patrón aplicado a `gabrielpantoja.cl` (con su propio `project_ref`). `soymona.cl` no necesita Supabase MCP.
+- [x] PAT limpiado de los otros 3 lugares: `~/.claude.json`, `~/.config/Claude/claude_desktop_config.json`, `gabrielpantoja.cl/.claude/settings.local.json`. Verificado con `grep -c` → 0 trazas activas (1 traza en historial conversacional de `~/.claude.json`, inerte).
+- [x] Hallazgo en Supabase Dashboard: el PAT `sbp_0d7d…5800` **ya estaba revocado** (probablemente post-incidente). Se revocaron adicionalmente 2 tokens "Never used" por least-privilege. Inventario final en Supabase: 1 PAT activo legítimo (Win10 blog, a migrar en futuro cuando se use Windows).
 
 ### 1.4 Google OAuth Client Secrets
 
@@ -577,6 +599,66 @@ npx gitleaks protect --staged --verbose
 
 ---
 
+## Fase 7 — Migración al sistema nuevo de API keys de Supabase
+
+### 7.1 Motivación
+
+Supabase introdujo durante 2025 un sistema nuevo de autenticación para su API:
+- **JWT signing keys** asimétricos (ES256/RS256) en vez del secret symmetric HS256.
+- **Publishable keys** (`sb_publishable_*`) reemplazan al `anon` key — pensados para usarse en browser con RLS.
+- **Secret keys** (`sb_secret_*`) reemplazan al `service_role` — permiten scopes por proyecto.
+- **Rotación sin downtime**: se pueden tener múltiples keys activas al mismo tiempo, agregar una nueva, migrar código, luego revocar la vieja.
+
+Beneficios concretos para inmogrid:
+- Cuando toque la próxima rotación, no hay que deslogear a todos los usuarios.
+- Scopes permiten secret keys más acotadas (ej. una específica para migraciones, otra para edge functions).
+- Alineamiento con la dirección oficial de Supabase — evita obsolescencia.
+
+### 7.2 Pre-requisitos
+
+- [ ] Rotación legacy de Fase 1.1 completa (ya no estamos en modo "incidente abierto").
+- [ ] Verificar versión de `@supabase/supabase-js` en `package.json` ≥ versión que soporta publishable keys (consultar [CHANGELOG](https://github.com/supabase/supabase-js)).
+- [ ] Testear en dev con `vercel dev` antes de tocar producción.
+
+### 7.3 Plan de ejecución
+
+1. **Habilitar JWT signing keys**:
+   - Dashboard → Settings → JWT Keys → "Migrate JWT secret".
+   - Supabase crea las nuevas signing keys **sin desactivar el legacy secret** (coexisten).
+2. **Crear publishable key**:
+   - Dashboard → Settings → API Keys → "Create new API keys" → Publishable key.
+   - Naming sugerido: `inmogrid-web-publishable`.
+3. **Crear secret key** (opcional, solo si en el futuro se usa service-side):
+   - Mismo flujo, type "secret".
+   - Naming: `inmogrid-backend`.
+4. **Actualizar código de inmogrid**:
+   - En `src/shared/lib/supabase/{client,server,middleware}.ts`: cambiar `process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY` a `process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+   - En `.env.example` y `.env.local`: agregar la nueva env var; mantener la legacy hasta redeploy verificado.
+5. **Actualizar Vercel**:
+   - Agregar `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` en production.
+   - Trigger redeploy.
+   - Verificar que login OAuth, fetch de posts, referenciales, etc funcionan.
+6. **Revocar legacy**:
+   - Remover `NEXT_PUBLIC_SUPABASE_ANON_KEY` de Vercel (solo cuando la nueva esté confirmada en prod).
+   - En Supabase: Dashboard → API Keys → Legacy tab → Revoke legacy.
+   - Dashboard → JWT Keys → Legacy tab → Disable legacy secret.
+
+### 7.4 Rollback
+
+Si algo falla en paso 5:
+- Revert del commit que cambió los imports.
+- Restaurar env var legacy en Vercel.
+- Redeploy.
+- Los JWT signing keys y las publishable keys nuevas se pueden dejar creadas (no hacen daño inactivas).
+
+### 7.5 Cuándo ejecutar
+
+- **NO antes** de cerrar Fases 1-6. Migrar sobre terreno inestable es riesgoso.
+- Mejor ventana: un sábado/domingo con tráfico mínimo, con los 4 usuarios avisados.
+- Estimado: 2-3 horas incluyendo testing + redeploy + verificación.
+
+---
+
 ## Checklist consolidado
 
 ### Fase 0 — Inventario ✅
@@ -592,13 +674,12 @@ npx gitleaks protect --staged --verbose
 - [x] Vercel pantojapropiedadescl eliminado.
 - [x] Vercel degux confirmado inexistente.
 - [x] n8n VPS confirmado NO consumidor activo.
-- [x] MCP Supabase removido de `.mcp.json` de inmogrid.
-- [x] MCP Supabase hosted (OAuth) agregado con `project_ref`.
-- [ ] OAuth flow ejecutado + confirmado Connected.
-- [ ] Mismo proceso aplicado a `soymona.cl` y `gabrielpantoja.cl`.
-- [ ] PAT limpiado de `~/.claude.json` y `~/.config/Claude/claude_desktop_config.json`.
-- [ ] PAT revocado en Supabase Dashboard.
-- [ ] JWT secret rotado.
+- [x] MCP Supabase removido de `.mcp.json` de inmogrid + agregado hosted OAuth.
+- [x] OAuth flow ejecutado + confirmado Connected.
+- [x] Mismo proceso aplicado a `soymona.cl` (removido, no necesita) y `gabrielpantoja.cl` (migrado a hosted).
+- [x] PAT limpiado de `~/.claude.json`, `~/.config/Claude/claude_desktop_config.json`, `gabrielpantoja.cl/.claude/settings.local.json`.
+- [x] PAT revocado en Supabase Dashboard (ya estaba revocado + revocados 2 "Never used" tokens por least-privilege).
+- [ ] JWT secret rotado (legacy — decisión Fase 7 aparte).
 - [ ] Env vars Vercel actualizadas + redeploy OK.
 - [ ] Nuevas keys en Bitwarden.
 - [ ] DB password rotado.
@@ -607,6 +688,7 @@ npx gitleaks protect --staged --verbose
 - [x] NEXTAUTH_SECRET: verificado que no requiere rotación (no hay NextAuth en el stack).
 - [ ] Limpiar `SUPABASE_ANON_KEY` hardcodeada del `~/Developer/infra/vps-oracle/.env` (commit aparte en repo `infra/vps-oracle`).
 - [ ] Limpiar workflow `PANTOJA-RESEND` de n8n + quitar envs del `docker-compose.n8n.yml`.
+- [ ] Migrar el PAT restante de "MCP-Win10-GaboSSD-BlogPersonal" a hosted OAuth (cuando se use Windows).
 
 ### Fase 2 — Limpieza 🟢 pre-flight parcial
 - [x] 4 backups individuales de tablas críticas (§3.7).
@@ -645,6 +727,17 @@ npx gitleaks protect --staged --verbose
 - [ ] CONTRIBUTING.md actualizado con política de secrets.
 - [ ] Monitoreo semana 1 (Supabase + GCP).
 - [ ] Monitoreo semana 2.
+
+### Fase 7 — Migración a API keys nuevas de Supabase
+- [ ] Pre-requisitos de §7.2 verificados (Fases 1-6 cerradas, versión del SDK).
+- [ ] JWT signing keys habilitados (coexisten con legacy).
+- [ ] Publishable key creada + nombrada.
+- [ ] Secret key creada (si aplica) + nombrada.
+- [ ] Código migrado (`src/shared/lib/supabase/*` + `.env.example`).
+- [ ] `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` agregada en Vercel + redeploy.
+- [ ] Producción verificada (login, posts, referenciales).
+- [ ] Legacy anon key revocada en Supabase + removida de Vercel.
+- [ ] Legacy JWT secret deshabilitado.
 
 ---
 
