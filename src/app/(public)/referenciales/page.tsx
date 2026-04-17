@@ -101,7 +101,7 @@ export default function ReferencialesPage() {
               id="ref-comuna"
               value={selectedComuna}
               onChange={(e) => setSelectedComuna(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">Todas las comunas</option>
               {comunas.map((c) => (
@@ -120,7 +120,7 @@ export default function ReferencialesPage() {
               id="ref-anio"
               value={selectedAnio}
               onChange={(e) => setSelectedAnio(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">Todos los años</option>
               {years.map((y) => (
