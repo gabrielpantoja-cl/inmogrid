@@ -24,11 +24,11 @@ Este documento es auto-contenido: cualquier colaborador puede retomarlo desde ac
   - Vercel `pantojapropiedadescl` eliminado.
   - n8n VPS confirmado **NO consumidor** (vars vacías en runtime).
   - MCP de Supabase (§1.3): ✅ completo — CLI/PAT migrado a hosted/OAuth en 2 proyectos activos (inmogrid + gabrielpantoja), PAT limpiado de 6 archivos, inventario de PATs en Supabase saneado.
-  - Decisión sistema legacy vs nuevo de API keys: **rotar legacy ahora** (§1.1), migración al sistema nuevo diferida a [Fase 7](#fase-7--migración-al-sistema-nuevo-de-api-keys-de-supabase).
-  - JWT secret, DB password, Google OAuth Client Secret: ⏳ pendientes.
+  - Rotación JWT/anon/service_role: 🔄 **re-decidida** el 2026-04-17 pm tras consultar guía oficial de Supabase. En vez de rotar legacy, **migrar al sistema nuevo de API keys** (§1.1 Paso 2b) — delivera la rotación con zero-downtime.
+  - DB password, Google OAuth Client Secret: ⏳ pendientes.
 - **Fase 2** (Limpieza legacy): 🟢 pre-flight parcial — 4 backups de tablas críticas guardados en `infra/privado/inmogrid.cl/sql/backups/`. Falta `pg_dump` completo + DROP.
 - **Fases 3–6**: ⏳ no iniciadas.
-- **Fase 7** (Migración sistema nuevo de Supabase): ⏳ planificada, no iniciada. Ejecutar después de cerrar Fases 1-6.
+- **Fase 7** (antes: migración futura al sistema nuevo): 🔀 absorbida en §1.1 Paso 2b — ya no es un follow-up, es el core de la rotación actual.
 
 ---
 
@@ -251,9 +251,7 @@ El `pg_dump` completo del cluster va aparte en Fase 2.1 (pre-DROP).
 
 > **Los valores de secrets NO viven en este repo**. Se guardan en Bitwarden y el repo privado documenta los pasos forenses. Esta sección registra el *qué* y el *estado*, no los valores.
 
-### 1.1 JWT secret del proyecto Supabase
-
-Regenera `anon key` + `service_role key` en un paso. Mata la `service_role` leakeada en el incidente de 2026-04-11.
+### 1.1 Rotación vía migración al sistema nuevo de API keys (Paso 2b)
 
 **Contexto del sistema de keys de Supabase (2026-04)**
 
@@ -262,10 +260,19 @@ Supabase está migrando de:
 - **Sistema nuevo** — JWT signing keys asymétricos + API keys separadas (`publishable` + `secret`, con scopes) que permiten rotación sin downtime.
 
 Inspección del dashboard el 2026-04-17 pm (ver screenshots del repo privado):
-- Tab "Publishable and secret API keys": **vacío** (sistema nuevo no activado).
-- Tab "JWT Keys" → "Right now your project is using the legacy JWT secret" con botón "Migrate JWT secret".
+- Tab "Publishable and secret API keys" en `/settings/api-keys`: **vacío** (sistema nuevo no activado).
+- Tab "JWT Keys" en `/settings/jwt` → "Right now your project is using the legacy JWT secret" con botón "Migrate JWT secret".
 
-**Decisión**: proceder con **rotación del legacy JWT secret** ahora (cierra el incidente 2026-04-11 al instante, sin mezclar con un cambio más grande). La migración al sistema nuevo queda documentada como [Fase 7](#fase-7--migración-al-sistema-nuevo-de-api-keys-de-supabase) para ejecutar luego con ventana propia.
+**Decisión final (2026-04-17 pm)**: **NO rotar el legacy JWT secret**. En su lugar, **migrar al sistema nuevo** y al final del flujo **revocar el legacy** (eso invalida simultáneamente la `anon` y la `service_role` leakeadas en el incidente 2026-04-11).
+
+Decisión tomada tras leer la guía oficial de Supabase ("How to change your JWT secret?"):
+- Zero-downtime: los 4 usuarios siguen logueados durante la transición.
+- Reversible: legacy y nuevo coexisten hasta que se revoque explícitamente.
+- Los private keys del sistema nuevo no son visibles para miembros de la organización (imposible leak por UI).
+- Mejor performance: JWTs se verifican localmente con public key en vez de llamar `getUser()` via HTTP.
+- Kill switch al final del flujo: revocar el legacy mata ambas keys viejas simultáneamente.
+
+**Reframing importante**: el incidente 2026-04-11 expuso el `service_role` (crítico) y la `anon` (pública por diseño — va en el bundle Next.js al browser). La rotación real que nos importa es matar el `service_role` viejo. Eso ocurre cuando revocamos la legacy al final del flujo (paso 2b.7).
 
 **Inventario previo de consumidores** (completado el 2026-04-17 pm):
 
@@ -282,13 +289,29 @@ Lado infra:
 - [x] `scraper-chile`: solo Neon, no afecta.
 - [x] Scripts/cron locales: ninguno activo con keys de inmogrid.
 
-**Ejecución** (pendiente):
-1. [ ] Dashboard → Settings → **API Keys** → tab "Legacy anon, service_role API keys" (o bien Settings → JWT Keys → tab "Legacy JWT Secret") → botón "Generate new secret" / "Roll secret".
-2. [ ] Copiar **nueva anon key** al instante (la muestra una vez).
-3. [ ] Actualizar `NEXT_PUBLIC_SUPABASE_ANON_KEY` en Vercel → trigger redeploy.
-4. [ ] Verificar en producción: `curl -sI https://inmogrid.cl/` + test login OAuth.
-5. [ ] Guardar en Bitwarden: `Supabase - anon key - inmogrid` (valor nuevo), `Supabase - service role key - inmogrid` (reservada, no se pega en Vercel).
-6. [ ] Avisar a los 4 usuarios que deben re-loguearse (sus sesiones quedaron invalidadas).
+**Ejecución — Paso 2b** (pendiente):
+
+- **2b.1** Verificar versión de `@supabase/supabase-js` y `@supabase/ssr` en `package.json`. Publishable keys requieren SDK reciente (típicamente ≥ `@supabase/supabase-js@2.44`, `@supabase/ssr@0.5`).
+- **2b.2** Dashboard → Settings → JWT Keys → "Migrate JWT secret". Crea JWT signing keys asymétricos. **Legacy secret coexiste** — nada se rompe.
+- **2b.3** Dashboard → Settings → API Keys → tab "Publishable and secret API keys" → "Create new API keys" → publishable key. Naming sugerido: `inmogrid-web-publishable`. Guardar en Bitwarden.
+- **2b.4** Update código: 3 archivos en `src/shared/lib/supabase/{client,server,middleware}.ts` — cambiar `NEXT_PUBLIC_SUPABASE_ANON_KEY` a `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (o mantener el nombre de la env var y solo cambiar el valor, según convención que se adopte). Actualizar `.env.example` + `.env.local`.
+- **2b.5** Vercel → Settings → Environment Variables → agregar `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` con el valor del paso 2b.3. **Dejar** `NEXT_PUBLIC_SUPABASE_ANON_KEY` temporalmente para rollback.
+- **2b.6** Trigger redeploy → verificar en producción: `curl -sI https://inmogrid.cl/`, test login OAuth, fetch de `/api/public/posts`, mapa de referenciales, chat Sofia.
+- **2b.7** **El momento de la rotación real**: Dashboard → API Keys → Legacy tab → Revoke legacy anon+service_role. Eso mata las keys del incidente 2026-04-11.
+- **2b.8** Dashboard → JWT Keys → Legacy tab → Disable legacy JWT secret. Cierre definitivo.
+- **2b.9** Remover `NEXT_PUBLIC_SUPABASE_ANON_KEY` de Vercel (ahora inerte).
+- **2b.10** Guardar en Bitwarden: `Supabase - publishable key - inmogrid`, notar project_ref, fecha de rotación.
+
+**Rollback** (aplica entre 2b.4 y 2b.7):
+- Revert del commit que cambió los imports en `src/shared/lib/supabase/*`.
+- Restaurar `NEXT_PUBLIC_SUPABASE_ANON_KEY` en Vercel si se había removido.
+- Redeploy.
+- Los JWT signing keys y publishable keys ya creadas se pueden dejar (no hacen daño inactivas).
+
+**Validación post-rotación**:
+- Los 4 usuarios **siguen logueados** (zero downtime esperado).
+- Auth logs en Supabase sin errores 401 sobre la nueva key.
+- `curl -H "apikey: <anon viejo>" https://<SUPABASE_PROJECT_REF>.supabase.co/rest/v1/...` debe retornar 401 después del paso 2b.7.
 
 ### 1.2 Password de la DB Postgres
 
@@ -599,63 +622,19 @@ npx gitleaks protect --staged --verbose
 
 ---
 
-## Fase 7 — Migración al sistema nuevo de API keys de Supabase
+## Fase 7 — (absorbida en §1.1)
 
-### 7.1 Motivación
+**Nota histórica (2026-04-17 pm)**: inicialmente esta fase estaba pensada como migración *opcional futura* al sistema nuevo de API keys de Supabase, a ejecutarse después de rotar el legacy secret en §1.1.
 
-Supabase introdujo durante 2025 un sistema nuevo de autenticación para su API:
-- **JWT signing keys** asimétricos (ES256/RS256) en vez del secret symmetric HS256.
-- **Publishable keys** (`sb_publishable_*`) reemplazan al `anon` key — pensados para usarse en browser con RLS.
-- **Secret keys** (`sb_secret_*`) reemplazan al `service_role` — permiten scopes por proyecto.
-- **Rotación sin downtime**: se pueden tener múltiples keys activas al mismo tiempo, agregar una nueva, migrar código, luego revocar la vieja.
+Tras leer la guía oficial de Supabase ("How to change your JWT secret?") que explícitamente recomienda **no rotar el legacy secret** y migrar al sistema nuevo como la forma correcta de rotar, el plan se reunificó:
 
-Beneficios concretos para inmogrid:
-- Cuando toque la próxima rotación, no hay que deslogear a todos los usuarios.
-- Scopes permiten secret keys más acotadas (ej. una específica para migraciones, otra para edge functions).
-- Alineamiento con la dirección oficial de Supabase — evita obsolescencia.
+- La migración al sistema nuevo **es** la rotación, hecha con zero-downtime.
+- Revocar el legacy al final del flujo mata simultáneamente la `anon` y la `service_role` leakeadas en el incidente 2026-04-11.
+- Los beneficios originales de Fase 7 (scopes, visibilidad reducida, verificación local de JWTs) llegan "gratis" en esa misma operación.
 
-### 7.2 Pre-requisitos
+→ El plan detallado vive ahora en [§1.1 — Paso 2b](#11-rotación-vía-migración-al-sistema-nuevo-de-api-keys-paso-2b).
 
-- [ ] Rotación legacy de Fase 1.1 completa (ya no estamos en modo "incidente abierto").
-- [ ] Verificar versión de `@supabase/supabase-js` en `package.json` ≥ versión que soporta publishable keys (consultar [CHANGELOG](https://github.com/supabase/supabase-js)).
-- [ ] Testear en dev con `vercel dev` antes de tocar producción.
-
-### 7.3 Plan de ejecución
-
-1. **Habilitar JWT signing keys**:
-   - Dashboard → Settings → JWT Keys → "Migrate JWT secret".
-   - Supabase crea las nuevas signing keys **sin desactivar el legacy secret** (coexisten).
-2. **Crear publishable key**:
-   - Dashboard → Settings → API Keys → "Create new API keys" → Publishable key.
-   - Naming sugerido: `inmogrid-web-publishable`.
-3. **Crear secret key** (opcional, solo si en el futuro se usa service-side):
-   - Mismo flujo, type "secret".
-   - Naming: `inmogrid-backend`.
-4. **Actualizar código de inmogrid**:
-   - En `src/shared/lib/supabase/{client,server,middleware}.ts`: cambiar `process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY` a `process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
-   - En `.env.example` y `.env.local`: agregar la nueva env var; mantener la legacy hasta redeploy verificado.
-5. **Actualizar Vercel**:
-   - Agregar `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` en production.
-   - Trigger redeploy.
-   - Verificar que login OAuth, fetch de posts, referenciales, etc funcionan.
-6. **Revocar legacy**:
-   - Remover `NEXT_PUBLIC_SUPABASE_ANON_KEY` de Vercel (solo cuando la nueva esté confirmada en prod).
-   - En Supabase: Dashboard → API Keys → Legacy tab → Revoke legacy.
-   - Dashboard → JWT Keys → Legacy tab → Disable legacy secret.
-
-### 7.4 Rollback
-
-Si algo falla en paso 5:
-- Revert del commit que cambió los imports.
-- Restaurar env var legacy en Vercel.
-- Redeploy.
-- Los JWT signing keys y las publishable keys nuevas se pueden dejar creadas (no hacen daño inactivas).
-
-### 7.5 Cuándo ejecutar
-
-- **NO antes** de cerrar Fases 1-6. Migrar sobre terreno inestable es riesgoso.
-- Mejor ventana: un sábado/domingo con tráfico mínimo, con los 4 usuarios avisados.
-- Estimado: 2-3 horas incluyendo testing + redeploy + verificación.
+Esta sección se mantiene como placeholder para trazabilidad del cambio de enfoque.
 
 ---
 
@@ -679,9 +658,20 @@ Si algo falla en paso 5:
 - [x] Mismo proceso aplicado a `soymona.cl` (removido, no necesita) y `gabrielpantoja.cl` (migrado a hosted).
 - [x] PAT limpiado de `~/.claude.json`, `~/.config/Claude/claude_desktop_config.json`, `gabrielpantoja.cl/.claude/settings.local.json`.
 - [x] PAT revocado en Supabase Dashboard (ya estaba revocado + revocados 2 "Never used" tokens por least-privilege).
-- [ ] JWT secret rotado (legacy — decisión Fase 7 aparte).
-- [ ] Env vars Vercel actualizadas + redeploy OK.
-- [ ] Nuevas keys en Bitwarden.
+
+**Rotación JWT/anon/service_role (Paso 2b — migración al sistema nuevo)**
+- [ ] 2b.1 Verificar versión de `@supabase/supabase-js` y `@supabase/ssr` (compat con publishable keys).
+- [ ] 2b.2 Enable JWT signing keys (`Migrate JWT secret`).
+- [ ] 2b.3 Create publishable key (`inmogrid-web-publishable`).
+- [ ] 2b.4 Update código en `src/shared/lib/supabase/{client,server,middleware}.ts` + `.env.example`.
+- [ ] 2b.5 Agregar `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` a Vercel (sin remover la legacy aún).
+- [ ] 2b.6 Redeploy + verificación en producción.
+- [ ] 2b.7 Revocar legacy anon + service_role (mata las keys del incidente).
+- [ ] 2b.8 Disable legacy JWT secret.
+- [ ] 2b.9 Remover `NEXT_PUBLIC_SUPABASE_ANON_KEY` de Vercel.
+- [ ] 2b.10 Guardar nueva publishable key en Bitwarden.
+
+**Otras rotaciones pendientes**
 - [ ] DB password rotado.
 - [ ] 3 Client Secrets OAuth rotados o eliminados.
 - [ ] Google Provider en Supabase con secret nuevo de inmogrid.
@@ -728,16 +718,8 @@ Si algo falla en paso 5:
 - [ ] Monitoreo semana 1 (Supabase + GCP).
 - [ ] Monitoreo semana 2.
 
-### Fase 7 — Migración a API keys nuevas de Supabase
-- [ ] Pre-requisitos de §7.2 verificados (Fases 1-6 cerradas, versión del SDK).
-- [ ] JWT signing keys habilitados (coexisten con legacy).
-- [ ] Publishable key creada + nombrada.
-- [ ] Secret key creada (si aplica) + nombrada.
-- [ ] Código migrado (`src/shared/lib/supabase/*` + `.env.example`).
-- [ ] `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` agregada en Vercel + redeploy.
-- [ ] Producción verificada (login, posts, referenciales).
-- [ ] Legacy anon key revocada en Supabase + removida de Vercel.
-- [ ] Legacy JWT secret deshabilitado.
+### Fase 7 — (absorbida en Fase 1 § Paso 2b)
+Ver checklist "Rotación JWT/anon/service_role (Paso 2b)" en Fase 1 arriba.
 
 ---
 
