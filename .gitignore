@@ -86,3 +86,6 @@ CLAUDE.local.md
 # Installers and binaries
 *.deb
 .vercel
+
+# Root-level zips (reference material, design mocks, etc.)
+/*.zip
