@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { prisma } from '@/shared/lib/prisma';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Explorar | inmogrid.cl',
   description: 'Descubre perfiles y notas de la comunidad inmogrid.cl',
