@@ -458,7 +458,7 @@ npm update @prisma/client prisma
 ```bash
 # Verify no secrets in public env vars
 # NEXT_PUBLIC_* vars are visible in browser — never put secrets there
-# ✅ Safe: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY
+# ✅ Safe: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 # ❌ Never: NEXT_PUBLIC_DATABASE_URL, NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
 ```
 

@@ -191,7 +191,7 @@ NEON_DATABASE_URL="postgresql://...@ep-xxx.aws.neon.tech/referenciales?sslmode=r
 
 # Supabase Auth (public — safe in browser)
 NEXT_PUBLIC_SUPABASE_URL="https://[ref].supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJ..."
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_..."
 
 # Rate limiting (optional — disabled if not set)
 UPSTASH_REDIS_REST_URL="https://xxx.upstash.io"

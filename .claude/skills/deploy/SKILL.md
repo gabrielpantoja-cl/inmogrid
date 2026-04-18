@@ -17,7 +17,7 @@ Run the pre-deployment checklist and deploy inmogrid.cl to Vercel.
 2. **Lint**: Run `npm run lint` — no errors allowed
 3. **Tests**: Run `npm run test:public-api` — public API health must pass
 4. **TypeScript**: Verify no type errors in build output
-5. **Environment**: Confirm required env vars are set in Vercel (`DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
+5. **Environment**: Confirm required env vars are set in Vercel (`DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`)
 6. **Git status**: Ensure working tree is clean and on `main` branch
 
 ## Deploy

@@ -253,7 +253,7 @@ DIRECT_URL="postgresql://...@pooler.supabase.com:5432/postgres"
 
 # Supabase (públicas — seguras en el browser)
 NEXT_PUBLIC_SUPABASE_URL="https://[ref].supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJ..."
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_..."
 
 # Opcionales
 NEXT_PUBLIC_BASE_URL="https://inmogrid.cl"

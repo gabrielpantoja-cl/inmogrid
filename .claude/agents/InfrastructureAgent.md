@@ -55,7 +55,7 @@ NEON_DATABASE_URL
 
 # Supabase Auth
 NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
 # Google OAuth (GCP Console)
 GOOGLE_CLIENT_ID
@@ -128,7 +128,7 @@ Common build failures:
 
 ### Auth issues after deploy
 
-1. Verify `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are set in Vercel
+1. Verify `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` are set in Vercel
 2. Check Supabase Auth → URL Configuration:
    - Site URL: `https://www.inmogrid.cl`
    - Redirect URLs: includes `https://www.inmogrid.cl/**`
