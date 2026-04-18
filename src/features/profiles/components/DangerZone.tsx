@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-hot-toast';
+import { createClient } from '@/shared/lib/supabase/client';
 
 interface DangerZoneProps {
   /**
@@ -60,10 +61,28 @@ export function DangerZone({ userEmail }: DangerZoneProps) {
         { id: toastId, duration: 2000 }
       );
 
-      // Hard reload a la landing. El middleware limpia cualquier cookie
-      // stale que haya quedado (fix de orphan cookies).
+      // Cerrar la sesión del cliente ANTES del redirect. El DELETE borró
+      // `auth.users` server-side, pero el SDK del browser sigue con el JWT
+      // cacheado en localStorage — sin este `signOut` el `useAuth` hook
+      // reanimaría el email del usuario via `getSession()` (que decodifica
+      // el JWT local sin validar contra el server). `scope: 'local'` evita
+      // pegarle a /auth/v1/logout (sesión ya inválida, colgaría).
+      // Timeout 500ms: si el SDK se cuelga, forzamos redirect igual.
+      const supabase = createClient();
+      try {
+        await Promise.race([
+          supabase.auth.signOut({ scope: 'local' }),
+          new Promise<void>((resolve) => setTimeout(resolve, 500)),
+        ]);
+      } catch (signOutError) {
+        console.error('[DangerZone] signOut after delete failed:', signOutError);
+      }
+
+      // Hard reload a la landing con ?farewell=1 para el mensaje de
+      // despedida. El middleware limpia cookies huérfanas por si quedara
+      // algo stale (defensa en profundidad).
       setTimeout(() => {
-        window.location.href = '/';
+        window.location.href = '/?farewell=1';
       }, 1000);
     } catch (error) {
       console.error('[DangerZone] Delete failed:', error);
