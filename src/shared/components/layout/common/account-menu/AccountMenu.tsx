@@ -114,7 +114,7 @@ export function AccountMenu({
             role="menuitem"
           >
             <MapIcon className="w-4 h-4 mr-3 text-gray-500" />
-            Referenciales
+            Mapa
           </Link>
 
           <div className="border-t border-gray-100 mt-1 pt-1">

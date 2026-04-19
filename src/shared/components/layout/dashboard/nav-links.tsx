@@ -18,7 +18,7 @@ const links = [
     icon: UserCircleIcon,
   },
   {
-    name: 'Referenciales',
+    name: 'Mapa',
     href: '/dashboard/referenciales',
     icon: MapIcon,
   },

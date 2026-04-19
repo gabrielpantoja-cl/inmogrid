@@ -17,7 +17,7 @@ export interface NavLinkItem {
 export const navigationLinks: NavLinkItem[] = [
   { name: 'Feed', href: '/dashboard', icon: HomeIcon },
   { name: 'Mi Perfil', href: '/dashboard/perfil', icon: UserIcon },
-  { name: 'Referenciales', href: '/dashboard/referenciales', icon: MapIcon },
+  { name: 'Mapa', href: '/dashboard/referenciales', icon: MapIcon },
   { name: 'Mis Publicaciones', href: '/dashboard/notas', icon: DocumentDuplicateIcon },
   { name: 'Explorar', href: '/dashboard/explorar', icon: MagnifyingGlassIcon },
   { name: 'Comunidad', href: '/dashboard/comunidad', icon: UserGroupIcon },
