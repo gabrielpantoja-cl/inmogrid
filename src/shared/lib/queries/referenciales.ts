@@ -36,8 +36,14 @@ export function formatFechaEscritura(fecha: Date | null | undefined): string | u
  * - monto: BigInt string → CLP formatted string
  * - fechaescritura: Date → DD/MM/YYYY
  * - Nulls become undefined (omitted from JSON)
+ *
+ * Cuando `includeRawMonto` es true, el campo `montoRaw` (string numérico
+ * sin formato) viaja junto con `monto` — solo la API autenticada lo activa.
  */
-function toResponsePoint(row: MapPointRow): MapPointResponse {
+function toResponsePoint(
+  row: MapPointRow,
+  options: { includeRawMonto?: boolean } = {}
+): MapPointResponse {
   return {
     id: row.id,
     lat: row.lat,
@@ -52,6 +58,7 @@ function toResponsePoint(row: MapPointRow): MapPointResponse {
     ...(row.fechaescritura && { fechaescritura: formatFechaEscritura(row.fechaescritura) }),
     ...(row.superficie != null && { superficie: row.superficie }),
     ...(row.monto && { monto: formatMontoCLP(row.monto) }),
+    ...(options.includeRawMonto && row.monto && { montoRaw: row.monto }),
     ...(row.observaciones && { observaciones: row.observaciones }),
   };
 }
@@ -104,7 +111,149 @@ export async function queryMapData(params: {
   ]);
 
   const validated = rows.map((row) => MapPointRowSchema.parse(row));
-  const data = validated.map(toResponsePoint);
+  const data = validated.map((r) => toResponsePoint(r));
+  const dbTotal = (countRows[0]?.total as number) ?? 0;
+
+  return { data, total: data.length, dbTotal };
+}
+
+/**
+ * Query map data from Neon con filtros avanzados — uso exclusivo de la
+ * API autenticada (`/api/referenciales/map-data`).
+ *
+ * Extiende `queryMapData` añadiendo:
+ *   - `fechaDesde` / `fechaHasta`: rango sobre `fechaescritura`.
+ *   - `montoMin` / `montoMax`: rango sobre `monto::bigint`.
+ *   - `superficieMin` / `superficieMax`: rango sobre `superficie`.
+ *   - `bbox`: [minLng, minLat, maxLng, maxLat] — filtra geométricamente
+ *     vía `ST_MakeEnvelope` + `ST_Contains`, con fallback a comparación
+ *     directa sobre `lat`/`lng` si `geom IS NULL` (manteniendo el patrón
+ *     COALESCE del resto del módulo).
+ *   - `q`: match parcial case-insensitive sobre `predio` o `rol`.
+ *   - `includeRawMonto`: si true, cada punto incluye `montoRaw` (string
+ *     numérico sin formato) para analíticas/export sin re-parseo.
+ *
+ * Todos los filtros son opcionales; el patrón `${value ?? null}::type IS
+ * NULL OR …` permite dejarlos sin bindear en el template tag sin romper
+ * el parsing del query.
+ */
+export async function queryMapDataExtended(params: {
+  comuna?: string;
+  anio?: number;
+  limit?: number;
+  fechaDesde?: Date;
+  fechaHasta?: Date;
+  montoMin?: number;
+  montoMax?: number;
+  superficieMin?: number;
+  superficieMax?: number;
+  q?: string;
+  bbox?: [number, number, number, number];
+  includeRawMonto?: boolean;
+}): Promise<{ data: MapPointResponse[]; total: number; dbTotal: number }> {
+  const {
+    comuna,
+    anio,
+    limit = 50000,
+    fechaDesde,
+    fechaHasta,
+    montoMin,
+    montoMax,
+    superficieMin,
+    superficieMax,
+    q,
+    bbox,
+    includeRawMonto = false,
+  } = params;
+
+  const sql = getNeonDb();
+
+  // Extraer bbox a 4 bindings individuales para que postgres.js los trate
+  // como `float8` explícitos; el pattern `(${minLng ?? null}::float8 IS NULL …)`
+  // desactiva la cláusula entera cuando bbox no viene.
+  const minLng = bbox?.[0] ?? null;
+  const minLat = bbox?.[1] ?? null;
+  const maxLng = bbox?.[2] ?? null;
+  const maxLat = bbox?.[3] ?? null;
+
+  // `q` se usa con ILIKE → escapamos los comodines `%` y `_` para que
+  // un input del usuario no arme una query de prefix/wildcard no deseada.
+  const qPattern = q
+    ? `%${q.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_')}%`
+    : null;
+
+  const [rows, countRows] = await Promise.all([
+    sql`
+      SELECT
+        id,
+        COALESCE(ST_Y(geom), lat) as lat,
+        COALESCE(ST_X(geom), lng) as lng,
+        fojas, numero, anio, cbr, predio, comuna, rol,
+        fechaescritura, superficie,
+        monto::text as monto,
+        observaciones
+      FROM referenciales
+      WHERE (COALESCE(ST_Y(geom), lat)) IS NOT NULL
+        AND (COALESCE(ST_X(geom), lng)) IS NOT NULL
+        AND COALESCE(ST_Y(geom), lat) BETWEEN -90 AND 90
+        AND COALESCE(ST_X(geom), lng) BETWEEN -180 AND 180
+        AND (${comuna ?? null}::text IS NULL OR LOWER(comuna) = LOWER(${comuna ?? null}))
+        AND (${anio ?? null}::int IS NULL OR anio = ${anio ?? null})
+        AND (${fechaDesde ?? null}::timestamp IS NULL OR fechaescritura >= ${fechaDesde ?? null})
+        AND (${fechaHasta ?? null}::timestamp IS NULL OR fechaescritura <= ${fechaHasta ?? null})
+        AND (${montoMin ?? null}::bigint IS NULL OR monto >= ${montoMin ?? null})
+        AND (${montoMax ?? null}::bigint IS NULL OR monto <= ${montoMax ?? null})
+        AND (${superficieMin ?? null}::numeric IS NULL OR superficie >= ${superficieMin ?? null})
+        AND (${superficieMax ?? null}::numeric IS NULL OR superficie <= ${superficieMax ?? null})
+        AND (
+          ${qPattern}::text IS NULL
+          OR predio ILIKE ${qPattern}
+          OR rol ILIKE ${qPattern}
+        )
+        AND (
+          ${minLng}::float8 IS NULL
+          OR COALESCE(ST_X(geom), lng) BETWEEN ${minLng ?? null} AND ${maxLng ?? null}
+        )
+        AND (
+          ${minLat}::float8 IS NULL
+          OR COALESCE(ST_Y(geom), lat) BETWEEN ${minLat ?? null} AND ${maxLat ?? null}
+        )
+      ORDER BY fechaescritura DESC
+      LIMIT ${limit}
+    `,
+    sql`
+      SELECT COUNT(*)::int as total
+      FROM referenciales
+      WHERE (COALESCE(ST_Y(geom), lat)) IS NOT NULL
+        AND (COALESCE(ST_X(geom), lng)) IS NOT NULL
+        AND COALESCE(ST_Y(geom), lat) BETWEEN -90 AND 90
+        AND COALESCE(ST_X(geom), lng) BETWEEN -180 AND 180
+        AND (${comuna ?? null}::text IS NULL OR LOWER(comuna) = LOWER(${comuna ?? null}))
+        AND (${anio ?? null}::int IS NULL OR anio = ${anio ?? null})
+        AND (${fechaDesde ?? null}::timestamp IS NULL OR fechaescritura >= ${fechaDesde ?? null})
+        AND (${fechaHasta ?? null}::timestamp IS NULL OR fechaescritura <= ${fechaHasta ?? null})
+        AND (${montoMin ?? null}::bigint IS NULL OR monto >= ${montoMin ?? null})
+        AND (${montoMax ?? null}::bigint IS NULL OR monto <= ${montoMax ?? null})
+        AND (${superficieMin ?? null}::numeric IS NULL OR superficie >= ${superficieMin ?? null})
+        AND (${superficieMax ?? null}::numeric IS NULL OR superficie <= ${superficieMax ?? null})
+        AND (
+          ${qPattern}::text IS NULL
+          OR predio ILIKE ${qPattern}
+          OR rol ILIKE ${qPattern}
+        )
+        AND (
+          ${minLng}::float8 IS NULL
+          OR COALESCE(ST_X(geom), lng) BETWEEN ${minLng ?? null} AND ${maxLng ?? null}
+        )
+        AND (
+          ${minLat}::float8 IS NULL
+          OR COALESCE(ST_Y(geom), lat) BETWEEN ${minLat ?? null} AND ${maxLat ?? null}
+        )
+    `,
+  ]);
+
+  const validated = rows.map((row) => MapPointRowSchema.parse(row));
+  const data = validated.map((r) => toResponsePoint(r, { includeRawMonto }));
   const dbTotal = (countRows[0]?.total as number) ?? 0;
 
   return { data, total: data.length, dbTotal };

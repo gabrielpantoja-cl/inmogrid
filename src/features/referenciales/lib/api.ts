@@ -32,6 +32,12 @@ export interface Referencial {
   superficie?: number;
   /** Monto ya formateado como string en CLP, ej: "$150.000.000" */
   monto?: string;
+  /**
+   * Monto sin formato (string numérico, ej "150000000"). Solo presente
+   * cuando la respuesta viene de la API autenticada — habilita analíticas
+   * cliente sin re-parsear la cadena formateada.
+   */
+  montoRaw?: string;
   observaciones?: string;
 }
 
@@ -60,6 +66,26 @@ export type MapDataFilters = {
   comuna?: string;
   anio?: number;
   limit?: number;
+};
+
+/**
+ * Filtros extendidos — solo para la API autenticada
+ * (`/api/referenciales/map-data`). Todas las props opcionales: si no se
+ * incluyen, el servidor no aplica esa condición.
+ *
+ * `fechaDesde`/`fechaHasta` aceptan tanto `Date` como `string` ISO — se
+ * serializan a ISO para el query string.
+ * `bbox` = `[minLng, minLat, maxLng, maxLat]`.
+ */
+export type MapDataExtendedFilters = MapDataFilters & {
+  fechaDesde?: Date | string;
+  fechaHasta?: Date | string;
+  montoMin?: number;
+  montoMax?: number;
+  superficieMin?: number;
+  superficieMax?: number;
+  q?: string;
+  bbox?: [number, number, number, number];
 };
 
 function buildUrl(
@@ -124,6 +150,99 @@ export async function fetchComunas(init?: RequestInit): Promise<ComunasResponse>
   if (!res.ok) {
     if (res.status === 429) throw new Error('Demasiadas solicitudes a referenciales.cl. Intenta en unos segundos.');
     throw new Error(`referenciales.cl /map-data/comunas respondió ${res.status}`);
+  }
+  return (await res.json()) as ComunasResponse;
+}
+
+/**
+ * Base URL de la API autenticada (interna, same-origin). No se configura
+ * por env var porque vive dentro del mismo Next.js — no hay fallback a
+ * un host externo (a diferencia de REFERENCIALES_API_BASE).
+ */
+const REFERENCIALES_AUTH_API_BASE = '/api/referenciales';
+
+/**
+ * Serializa filtros extendidos a query string. `Date` se convierte a ISO;
+ * `bbox` se junta con coma; valores vacíos se omiten.
+ */
+function buildAuthUrl(
+  path: string,
+  params?: MapDataExtendedFilters
+): string {
+  const sp = new URLSearchParams();
+  if (params) {
+    const entries: Array<[string, string | number | undefined | null]> = [
+      ['comuna', params.comuna],
+      ['anio', params.anio],
+      ['limit', params.limit],
+      ['montoMin', params.montoMin],
+      ['montoMax', params.montoMax],
+      ['superficieMin', params.superficieMin],
+      ['superficieMax', params.superficieMax],
+      ['q', params.q],
+      [
+        'fechaDesde',
+        params.fechaDesde
+          ? params.fechaDesde instanceof Date
+            ? params.fechaDesde.toISOString()
+            : params.fechaDesde
+          : undefined,
+      ],
+      [
+        'fechaHasta',
+        params.fechaHasta
+          ? params.fechaHasta instanceof Date
+            ? params.fechaHasta.toISOString()
+            : params.fechaHasta
+          : undefined,
+      ],
+      ['bbox', params.bbox ? params.bbox.join(',') : undefined],
+    ];
+    for (const [k, v] of entries) {
+      if (v !== undefined && v !== null && v !== '') sp.set(k, String(v));
+    }
+  }
+  const qs = sp.toString();
+  return qs ? `${REFERENCIALES_AUTH_API_BASE}${path}?${qs}` : `${REFERENCIALES_AUTH_API_BASE}${path}`;
+}
+
+/**
+ * Fetch autenticado — golpea la API privada. Usa `credentials: 'include'`
+ * para mandar la cookie de sesión de Supabase. Si el server devuelve 401,
+ * tiramos un error descriptivo para que la UI pueda prompt de login.
+ *
+ * Mantenemos el wrapper `fetchWithRetry` (429-safe) por consistencia,
+ * aunque bajo auth no se espera rate-limit.
+ */
+export async function fetchReferencialesAuth(
+  filters: MapDataExtendedFilters = {},
+  init?: RequestInit
+): Promise<MapDataResponse> {
+  const res = await fetchWithRetry(buildAuthUrl('/map-data', filters), {
+    ...init,
+    credentials: 'include',
+    cache: 'no-store',
+  });
+  if (res.status === 401) {
+    throw new Error('Sesión requerida para acceder a los datos completos.');
+  }
+  if (!res.ok) {
+    throw new Error(`API autenticada /map-data respondió ${res.status}`);
+  }
+  return (await res.json()) as MapDataResponse;
+}
+
+export async function fetchComunasAuth(init?: RequestInit): Promise<ComunasResponse> {
+  const res = await fetchWithRetry(buildAuthUrl('/map-data/comunas'), {
+    ...init,
+    credentials: 'include',
+    cache: 'no-store',
+  });
+  if (res.status === 401) {
+    throw new Error('Sesión requerida para acceder a los datos completos.');
+  }
+  if (!res.ok) {
+    throw new Error(`API autenticada /map-data/comunas respondió ${res.status}`);
   }
   return (await res.json()) as ComunasResponse;
 }
