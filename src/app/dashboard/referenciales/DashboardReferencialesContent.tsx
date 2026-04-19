@@ -1,27 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import dynamic from 'next/dynamic';
+import { useCallback, useEffect, useState } from 'react';
 import {
-  fetchReferenciales,
-  fetchComunas,
+  ReferencialesExplorer,
   ReportModal,
   type Referencial,
 } from '@/features/referenciales';
-import { ReferencialesStats } from '@/features/referenciales';
 import ContributeModal from './ContributeModal';
-
-const ReferencialesMap = dynamic(
-  () => import('@/features/referenciales/components/ReferencialesMap'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-full w-full items-center justify-center bg-gray-100 text-sm text-gray-500">
-        Cargando mapa…
-      </div>
-    ),
-  }
-);
 
 type Tab = 'explorar' | 'mis-contribuciones';
 
@@ -46,56 +31,8 @@ const STATUS_LABELS: Record<string, { label: string; className: string }> = {
   rejected: { label: 'Rechazado', className: 'bg-red-100 text-red-800' },
 };
 
-interface Comuna {
-  comuna: string;
-  count: number;
-}
-
 export default function DashboardReferencialesContent() {
   const [activeTab, setActiveTab] = useState<Tab>('explorar');
-
-  // ─── Explorar ───────────────────────────────────────────────
-  const [referenciales, setReferenciales] = useState<Referencial[]>([]);
-  const [comunas, setComunas] = useState<Comuna[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [dbTotal, setDbTotal] = useState<number | null>(null);
-  const [selectedComuna, setSelectedComuna] = useState('');
-  const [selectedAnio, setSelectedAnio] = useState('');
-
-  const years = useMemo(() => {
-    const current = new Date().getFullYear();
-    return Array.from({ length: 15 }, (_, i) => current - i);
-  }, []);
-
-  useEffect(() => {
-    fetchComunas()
-      .then((res) => setComunas(res.data ?? []))
-      .catch(() => setComunas([]));
-  }, []);
-
-  const loadReferenciales = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetchReferenciales({
-        comuna: selectedComuna || undefined,
-        anio: selectedAnio ? Number(selectedAnio) : undefined,
-        limit: 20000,
-      });
-      setReferenciales(res.data ?? []);
-      if (res.metadata.dbTotal != null) setDbTotal(res.metadata.dbTotal);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Error al cargar datos.');
-      setReferenciales([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedComuna, selectedAnio]);
-
-  useEffect(() => {
-    loadReferenciales();
-  }, [loadReferenciales]);
 
   // ─── Mis contribuciones ─────────────────────────────────────
   const [contributions, setContributions] = useState<Contribution[]>([]);
@@ -124,13 +61,13 @@ export default function DashboardReferencialesContent() {
   // ─── Modal contribución ─────────────────────────────────────
   const [showModal, setShowModal] = useState(false);
 
-  const handleSuccess = () => {
+  const handleContributeSuccess = () => {
     setShowModal(false);
     loadContributions();
     setActiveTab('mis-contribuciones');
   };
 
-  // ─── Modal reporte ──────────────────────────────────────────
+  // ─── Modal reporte (disparado desde el popup del mapa) ──────
   const [reportTarget, setReportTarget] = useState<Referencial | null>(null);
 
   const handleReportSuccess = () => {
@@ -144,9 +81,10 @@ export default function DashboardReferencialesContent() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Referenciales</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Mapa</h1>
           <p className="mt-1 text-gray-600">
-            Explora transacciones inmobiliarias verificadas y contribuye datos a la comunidad.
+            Transacciones inmobiliarias verificadas. Filtros avanzados, export y
+            contribuciones a la comunidad.
           </p>
         </div>
         <button
@@ -181,143 +119,7 @@ export default function DashboardReferencialesContent() {
 
       {/* ── Tab: Explorar ── */}
       {activeTab === 'explorar' && (
-        <>
-          {/* Filtros */}
-          <section className="rounded-xl border border-gray-200 bg-white p-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div>
-                <label htmlFor="dash-ref-comuna" className="block text-xs font-medium text-gray-700 mb-1">
-                  Comuna
-                </label>
-                <select
-                  id="dash-ref-comuna"
-                  value={selectedComuna}
-                  onChange={(e) => setSelectedComuna(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                >
-                  <option value="">Todas las comunas</option>
-                  {comunas.map((c) => (
-                    <option key={c.comuna} value={c.comuna}>
-                      {c.comuna} ({c.count})
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="dash-ref-anio" className="block text-xs font-medium text-gray-700 mb-1">
-                  Año
-                </label>
-                <select
-                  id="dash-ref-anio"
-                  value={selectedAnio}
-                  onChange={(e) => setSelectedAnio(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                >
-                  <option value="">Todos los años</option>
-                  {years.map((y) => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex items-end">
-                <button
-                  onClick={() => { setSelectedComuna(''); setSelectedAnio(''); }}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                >
-                  Limpiar filtros
-                </button>
-              </div>
-            </div>
-            <div className="mt-3 text-xs text-gray-500">
-              {loading ? (
-                <span>Cargando datos…</span>
-              ) : (
-                <span>
-                  Mostrando{' '}
-                  <strong>{referenciales.length.toLocaleString('es-CL')}</strong> registros
-                  {dbTotal != null && dbTotal > referenciales.length && (
-                    <> de un total de{' '}
-                      <strong>{dbTotal.toLocaleString('es-CL')}</strong> en la base de datos
-                    </>
-                  )}
-                </span>
-              )}
-            </div>
-            {error && (
-              <div className="mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-                {error}
-              </div>
-            )}
-          </section>
-
-          {/* Mapa + Stats */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <div className="relative h-[600px] overflow-hidden rounded-xl border border-gray-200 bg-white">
-                <ReferencialesMap referenciales={referenciales} onReport={setReportTarget} />
-                {loading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm">
-                    <div className="text-sm font-medium text-gray-700">Cargando…</div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <aside className="lg:col-span-1">
-              <ReferencialesStats referenciales={referenciales} />
-            </aside>
-          </div>
-
-          {/* Tabla con observaciones */}
-          <section>
-            <h2 className="text-xl font-semibold text-gray-900 mb-3">Últimos registros</h2>
-            <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white">
-              <table className="min-w-full divide-y divide-gray-200 text-sm">
-                <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
-                  <tr>
-                    <th className="px-4 py-2 text-left">Comuna</th>
-                    <th className="px-4 py-2 text-left">Predio</th>
-                    <th className="px-4 py-2 text-left">ROL</th>
-                    <th className="px-4 py-2 text-right">Superficie</th>
-                    <th className="px-4 py-2 text-right">Monto</th>
-                    <th className="px-4 py-2 text-left">Escritura</th>
-                    <th className="px-4 py-2 text-left">Observaciones</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {referenciales.slice(0, 50).map((r) => (
-                    <tr key={r.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-2 text-gray-900">{r.comuna ?? '—'}</td>
-                      <td className="px-4 py-2 text-gray-700">{r.predio ?? '—'}</td>
-                      <td className="px-4 py-2 text-gray-700">{r.rol ?? '—'}</td>
-                      <td className="px-4 py-2 text-right text-gray-700">
-                        {typeof r.superficie === 'number' ? `${r.superficie} m²` : '—'}
-                      </td>
-                      <td className="px-4 py-2 text-right text-gray-900 font-medium">
-                        {r.monto ?? '—'}
-                      </td>
-                      <td className="px-4 py-2 text-gray-600">{r.fechaescritura ?? '—'}</td>
-                      <td className="px-4 py-2 text-gray-500 max-w-[200px] truncate">
-                        {r.observaciones ?? '—'}
-                      </td>
-                    </tr>
-                  ))}
-                  {!loading && referenciales.length === 0 && (
-                    <tr>
-                      <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
-                        No hay registros para los filtros seleccionados.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-            {referenciales.length > 50 && (
-              <p className="mt-2 text-xs text-gray-500">
-                Mostrando los primeros 50 de {referenciales.length.toLocaleString('es-CL')} registros.
-              </p>
-            )}
-          </section>
-        </>
+        <ReferencialesExplorer mode="authenticated" onReport={setReportTarget} />
       )}
 
       {/* ── Tab: Mis contribuciones ── */}
@@ -394,7 +196,7 @@ export default function DashboardReferencialesContent() {
       {showModal && (
         <ContributeModal
           onClose={() => setShowModal(false)}
-          onSuccess={handleSuccess}
+          onSuccess={handleContributeSuccess}
         />
       )}
 

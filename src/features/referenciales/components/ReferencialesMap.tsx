@@ -11,6 +11,12 @@ interface Props {
   center?: [number, number];
   zoom?: number;
   onReport?: (r: Referencial) => void;
+  /**
+   * Callback con el bbox actual del viewport `[minLng, minLat, maxLng, maxLat]`.
+   * Se invoca en `moveend`/`zoomend` y en el mount inicial. Solo el consumidor
+   * autenticado lo usa (para el filtro "solo área visible").
+   */
+  onBoundsChange?: (bbox: [number, number, number, number]) => void;
 }
 
 /** Ajusta el viewport del mapa a los datos cargados */
@@ -34,9 +40,11 @@ type PointProps = { referencial: Referencial };
 function ClusteredMarkers({
   points,
   onReport,
+  onBoundsChange,
 }: {
   points: Referencial[];
   onReport?: (r: Referencial) => void;
+  onBoundsChange?: (bbox: [number, number, number, number]) => void;
 }) {
   const map = useMap();
 
@@ -47,6 +55,14 @@ function ClusteredMarkers({
       zoom: Math.round(map.getZoom()),
     };
   });
+
+  // Publicar el bbox inicial y en cada cambio. El consumidor decide si lo
+  // consume (solo el modo autenticado lo usa para el filtro "solo área
+  // visible"). Disparamos una vez en mount para no requerir que el usuario
+  // mueva el mapa antes de aplicar el filtro.
+  useEffect(() => {
+    onBoundsChange?.(viewport.bounds);
+  }, [viewport.bounds, onBoundsChange]);
 
   useMapEvents({
     moveend: () => {
@@ -171,6 +187,7 @@ export default function ReferencialesMap({
   center = [-33.4489, -70.6693],
   zoom = 10,
   onReport,
+  onBoundsChange,
 }: Props) {
   const valid = useMemo(
     () => referenciales.filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lng)),
@@ -189,7 +206,11 @@ export default function ReferencialesMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <FitBounds points={valid} />
-      <ClusteredMarkers points={valid} onReport={onReport} />
+      <ClusteredMarkers
+        points={valid}
+        onReport={onReport}
+        onBoundsChange={onBoundsChange}
+      />
     </MapContainer>
   );
 }

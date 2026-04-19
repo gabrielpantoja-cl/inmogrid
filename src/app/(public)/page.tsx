@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { createClient } from '@/shared/lib/supabase/client';
 import { PostCard, type PostCardData } from '@/shared/components/posts/PostCard';
@@ -10,8 +9,6 @@ import { EcosystemSidebar } from '@/shared/components/layout/public/EcosystemSid
 
 export default function Page() {
   const { isAuthenticated } = useAuth();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [posts, setPosts] = useState<PostCardData[]>([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [showFarewell, setShowFarewell] = useState(false);
@@ -24,15 +21,23 @@ export default function Page() {
       .finally(() => setPostsLoading(false));
   }, []);
 
-  // Banner de despedida tras eliminación de cuenta. Limpiamos el query
-  // param con replace (no push) para que un F5 o una URL compartida no
-  // reviva el banner inadvertidamente.
+  // Banner de despedida tras eliminación de cuenta. Leemos `window.location`
+  // directamente (en lugar de `useSearchParams()`) para evitar que esta
+  // página requiera un `<Suspense>` wrapper durante el SSG build. El
+  // efecto corre solo client-side, así que `window` está garantizado.
+  // Usamos `history.replaceState` para limpiar el query sin forzar un
+  // re-render del router — así un F5 o una URL compartida no reviven el
+  // banner inadvertidamente.
   useEffect(() => {
-    if (searchParams.get('farewell') === '1') {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('farewell') === '1') {
       setShowFarewell(true);
-      router.replace('/', { scroll: false });
+      params.delete('farewell');
+      const qs = params.toString();
+      const clean = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+      window.history.replaceState({}, '', clean);
     }
-  }, [searchParams, router]);
+  }, []);
 
   const handleGoogleSignIn = async () => {
     const supabase = createClient();

@@ -4,9 +4,13 @@
 export { default as ReferencialesMap } from './components/ReferencialesMap';
 export { default as ReferencialesStats } from './components/ReferencialesStats';
 export { default as ReportModal } from './components/ReportModal';
+export { default as ReferencialesExplorer } from './components/ReferencialesExplorer';
+export type { ExplorerMode } from './components/ReferencialesExplorer';
 export {
   fetchReferenciales,
   fetchComunas,
+  fetchReferencialesAuth,
+  fetchComunasAuth,
   parseMontoCLP,
   formatCLP,
   REFERENCIALES_API_BASE,
@@ -15,5 +19,7 @@ export type {
   Referencial,
   MapDataResponse,
   MapDataFilters,
+  MapDataExtendedFilters,
   ComunasResponse,
 } from './lib/api';
+export { toCSV, downloadCSV } from './lib/csv';
