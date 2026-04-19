@@ -36,7 +36,9 @@ export async function getPostByIdForUser(id: string, userId: string) {
 }
 
 export async function createPostForUser(userId: string, input: CreatePostInput) {
-  const slug = generateSlug(input.title);
+  let slug = generateSlug(input.title);
+  const existing = await prisma.post.findUnique({ where: { slug } });
+  if (existing) slug = `${slug}-${Date.now()}`;
   const readTime = estimateReadTime(input.content);
   const now = new Date();
 

@@ -280,6 +280,20 @@ export async function queryComunas(): Promise<ComunaCount[]> {
 }
 
 /**
+ * Query CBR directory with transaction counts from Neon (read-only).
+ */
+export async function queryCBRDirectory(): Promise<{ cbr: string; count: number }[]> {
+  const sql = getNeonDb();
+  const rows = await sql`
+    SELECT cbr, COUNT(*)::int as count
+    FROM referenciales
+    WHERE cbr IS NOT NULL AND cbr <> ''
+    GROUP BY cbr ORDER BY count DESC
+  `;
+  return rows.map((r) => ({ cbr: r.cbr as string, count: r.count as number }));
+}
+
+/**
  * Query aggregate stats for the referenciales dataset.
  */
 export async function queryReferencialStats(): Promise<{

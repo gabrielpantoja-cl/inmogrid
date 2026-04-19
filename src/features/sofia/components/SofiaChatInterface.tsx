@@ -43,7 +43,7 @@ export default function SofiaChatInterface() {
             S
           </div>
           <div>
-            <h2 className="font-semibold text-gray-900 dark:text-white">Sofia</h2>
+            <h1 className="font-semibold text-gray-900 dark:text-white">Sofia</h1>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Asistente inmobiliario IA
             </p>

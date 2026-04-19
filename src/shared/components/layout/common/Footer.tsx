@@ -10,7 +10,7 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
 
   return (
     <footer className="mt-16 py-12 bg-gray-900 border-t-2 border-primary/50">
-      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-y-8 md:gap-x-8">
+      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-x-8">
         {/* Col 1: Brand + copyright */}
         <div className="flex flex-col items-center md:items-start gap-1">
           <Link href="/" className="text-lg font-semibold text-white hover:text-primary transition-colors">
@@ -52,23 +52,17 @@ const Footer: React.FC<FooterProps> = ({ githubStarsSlot }) => {
           </a>
         </div>
 
-        {/* Col 3: Producto */}
+        {/* Col 3: Links */}
         <div className="flex flex-col items-center md:items-start gap-y-1">
-          <span className="text-sm font-semibold text-gray-100 mb-1">Producto</span>
           <Link href="/sofia" className="text-sm text-gray-400 hover:text-primary transition-colors">
             Chat Sof&iacute;a
           </Link>
           <Link href="/referenciales" className="text-sm text-gray-400 hover:text-primary transition-colors">
             Referenciales
           </Link>
-          <Link href="/referenciales#conservadores" className="text-sm text-gray-400 hover:text-primary transition-colors">
+          <Link href="/conservadores" className="text-sm text-gray-400 hover:text-primary transition-colors">
             Conservadores
           </Link>
-        </div>
-
-        {/* Col 4: Legal */}
-        <div className="flex flex-col items-center md:items-start gap-y-1">
-          <span className="text-sm font-semibold text-gray-100 mb-1">Legal</span>
           <Link href="/terms" className="text-sm text-gray-400 hover:text-primary transition-colors">
             T&eacute;rminos
           </Link>

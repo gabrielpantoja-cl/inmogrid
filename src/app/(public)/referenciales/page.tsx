@@ -1,7 +1,7 @@
 import { ReferencialesExplorer } from '@/features/referenciales';
 
 export const metadata = {
-  title: 'Mapa | inmogrid.cl',
+  title: 'Mapa',
   description:
     'Mapa público de transacciones inmobiliarias verificadas en Chile — datos abiertos con fuente CBR.',
 };

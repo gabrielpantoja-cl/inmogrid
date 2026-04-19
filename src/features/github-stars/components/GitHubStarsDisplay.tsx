@@ -63,11 +63,7 @@ export function GitHubStarsDisplay({
         
         {isLoading ? (
           <span className="animate-pulse">...</span>
-        ) : error ? (
-          <span className="text-red-500 text-sm" title={error}>
-            Error
-          </span>
-        ) : stars !== null ? (
+        ) : error ? null : stars !== null ? (
           <span className="font-semibold">
             {formatNumber(stars)}
           </span>
