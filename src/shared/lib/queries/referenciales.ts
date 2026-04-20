@@ -279,18 +279,55 @@ export async function queryComunas(): Promise<ComunaCount[]> {
   return rows.map((row) => ComunaCountSchema.parse(row));
 }
 
+export type ConservadorEntry = {
+  id: string;
+  nombre: string;
+  direccion: string | null;
+  comuna: string;
+  region: string;
+  telefono: string | null;
+  email: string | null;
+  sitioWeb: string | null;
+  jurisdiccion: string[];
+  transacciones: number;
+};
+
 /**
- * Query CBR directory with transaction counts from Neon (read-only).
+ * Query conservadores directory from Neon with transaction counts joined from referenciales.
+ * Ordered by transaction count desc, then alphabetically.
  */
-export async function queryCBRDirectory(): Promise<{ cbr: string; count: number }[]> {
+export async function queryConservadoresDirectory(): Promise<ConservadorEntry[]> {
   const sql = getNeonDb();
   const rows = await sql`
-    SELECT cbr, COUNT(*)::int as count
-    FROM referenciales
-    WHERE cbr IS NOT NULL AND cbr <> ''
-    GROUP BY cbr ORDER BY count DESC
+    SELECT
+      c.id,
+      c.nombre,
+      c.direccion,
+      c.comuna,
+      c.region,
+      c.telefono,
+      c.email,
+      c."sitioWeb"    AS "sitioWeb",
+      c.jurisdiccion,
+      COUNT(r.id)::int AS transacciones
+    FROM conservadores c
+    LEFT JOIN referenciales r ON LOWER(r.cbr) = LOWER(c.nombre)
+    GROUP BY c.id, c.nombre, c.direccion, c.comuna, c.region,
+             c.telefono, c.email, c."sitioWeb", c.jurisdiccion
+    ORDER BY transacciones DESC, c.nombre
   `;
-  return rows.map((r) => ({ cbr: r.cbr as string, count: r.count as number }));
+  return rows.map((r) => ({
+    id: r.id as string,
+    nombre: r.nombre as string,
+    direccion: r.direccion as string | null,
+    comuna: r.comuna as string,
+    region: r.region as string,
+    telefono: r.telefono as string | null,
+    email: r.email as string | null,
+    sitioWeb: (r.sitioWeb as string | null) || null,
+    jurisdiccion: (r.jurisdiccion as string[]) ?? [],
+    transacciones: (r.transacciones as number) ?? 0,
+  }));
 }
 
 /**
