@@ -17,10 +17,11 @@ inmogrid.cl operates with **two backends**:
 | Backend | Engine | Client | Purpose | Access |
 |---------|--------|--------|---------|--------|
 | **Supabase** | PostgreSQL | Prisma ORM | Profiles, posts, connections, events, chat, contributions | Read/Write |
-| **Neon** | PostgreSQL + PostGIS | postgres.js (raw SQL) | Verified real estate transactions (~21,000 records) | **Read-only** |
+| **Neon** | PostgreSQL + PostGIS | postgres.js (raw SQL) | Real estate transactions (`referenciales` ~21k records) + CBR directory (`conservadores` 91 records) | **Read-only** |
 
 **Key rules**:
-- Neon queries are **read-only** — all SQL lives in `src/shared/lib/queries/referenciales.ts`
+- Neon queries are **read-only** — all SQL lives in `src/shared/lib/queries/referenciales.ts` (covers both `referenciales` and `conservadores` tables)
+- **Always check Neon tables first** with `mcp__neon__get_database_tables` before assuming a table doesn't exist — Neon holds more than just `referenciales`
 - `monto` (transaction amounts) are **always String** in API responses — never `Number` (BigInt precision)
 - PostGIS coordinates use `ST_X(geom)`/`ST_Y(geom)` with fallback to `lat`/`lng` columns
 - User contributions go to Supabase staging (`inmogrid_contributions`) → admin review → pipeline to Neon
@@ -28,8 +29,8 @@ inmogrid.cl operates with **two backends**:
 
 ## Database Notes
 
-- The `posts` table has legacy columns that do not match the current Prisma schema — use `$queryRaw` / `$executeRaw` when needed
-- Schema migrations: run SQL manually in the Supabase dashboard (no `prisma migrate`)
+- The `posts` table has legacy columns (`author_id`, `status`, `image`) that coexist with the Prisma schema columns (`user_id`, `published`, `cover_image_url`). The `/api/public/posts` route uses `$queryRaw` against the legacy columns; `features/posts/lib/queries.ts` uses Prisma against the new columns. Both sets of columns are populated via a one-time migration (run 2026-04-19).
+- Schema migrations: run SQL manually in the Supabase dashboard (no `prisma migrate`, no `db pull`). Workflow: edit `prisma/schema.prisma` → `prisma:generate` → paste SQL in Supabase SQL editor.
 
 ## Development Commands
 
@@ -211,8 +212,9 @@ Both `DATABASE_URL` and `DIRECT_URL` are required for Prisma. `NEON_DATABASE_URL
 ## Infrastructure
 
 - **Production**: Vercel (auto-deploy on push to `main`)
-- **DNS**: Cloudflare — `inmogrid.cl` A→`76.76.21.21`, `www` CNAME→`cname.vercel-dns.com`, proxy OFF
+- **DNS**: Cloudflare (proxy OFF) — see `CLAUDE.local.md` for specific records
 - **Supabase project**: see `CLAUDE.local.md`
+- **Neon project**: see `CLAUDE.local.md`
 - **N8N**: separate VPS service (URL in `CLAUDE.local.md`)
 
 ## Sofia RAG Chatbot ([ADR-006](docs/adr/ADR-006-sofia-rag-gemini-integration.md))
